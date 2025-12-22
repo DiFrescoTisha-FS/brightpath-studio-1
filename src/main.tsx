@@ -3,20 +3,20 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-// import RootLayout from "./components/ui/RootLayout.tsx"; // <-- REMOVE THIS LINE
-import App from "./App.tsx"; // <-- ADD THIS LINE
-import HomePage from "./pages/HomePage.tsx";
-import ContactPage from "./pages/ContactPage.tsx";
-import AboutPage from "./pages/AboutPage.tsx";
-import TermsPage from "./pages/TermsPage.tsx";
-import PrivacyPage from "./pages/PrivacyPage.tsx";
-import ReviewsList from "./components/ui/ReviewsList.tsx";
-import ServicesPage from "./pages/ServicesPage.tsx";
+import App from "./App.tsx";
+const HomePage = React.lazy(() => import('./pages/HomePage'));
+const ContactPage = React.lazy(() => import('./pages/ContactPage'));
+const AboutPage = React.lazy(() => import('./pages/AboutPage'));
+const TermsPage = React.lazy(() => import('./pages/TermsPage'));
+const PrivacyPage = React.lazy(() => import('./pages/PrivacyPage'));
+const ReviewsList = React.lazy(() => import('./components/ui/ReviewsList'));
+const ServicesPage = React.lazy(() => import('./pages/ServicesPage'));
+const ReviewsPage = React.lazy(() => import('./pages/ReviewsPage'));
+const AngelCityCaseStudy = React.lazy(() => import('./components/features/AngelCityMassageCaseStudy'));
+const PortfolioDemoPage = React.lazy(() => import('./pages/PortfolioDemoPage'));
 import "./index.css";
 import { initializeTheme } from "./store/appStore";
-import ReviewsPage from "./pages/ReviewsPage.tsx";
-import AngelCityCaseStudy from "./components/features/AngelCityMassageCaseStudy.tsx";
-import PortfolioProject from "./pages/PortfolioProject.tsx";
+// import PortfolioProject from "./pages/PortfolioProject.tsx";
 
 // Call the theme initialization function here, before the router is created
 initializeTheme();
@@ -44,7 +44,7 @@ const router = createBrowserRouter([
       },
       {
         path: "portfolio",
-        element: <PortfolioProject />,
+        element: <PortfolioDemoPage />,
       },
       {
         path: "contact",
