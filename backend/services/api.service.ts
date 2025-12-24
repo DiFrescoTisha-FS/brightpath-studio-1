@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 // Base URL for our backend server.
-const API_BASE_URL = 'http://localhost:5001/api';
+const API_BASE_URL = 'http://localhost:3002/api';
 
 // This function fetches the flip card data from our backend server.
 export const getFlipCardPhases = async () => {

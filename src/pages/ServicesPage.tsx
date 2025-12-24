@@ -6,6 +6,7 @@ import { getFlipCardPhases } from "../../backend/services/api.service";
 import { motion } from "framer-motion";
 import { PhaseCard } from "../types/phaseCard";
 import { useAppStore } from '@/store/appStore';
+import BrightPathGradientButton from "@/components/BrightPathGradientButton";
 
 const ServicesPage: React.FC = () => {
   const { theme } = useAppStore();
@@ -49,7 +50,7 @@ const ServicesPage: React.FC = () => {
 
   return (
     <div
-      className={`py-20 mt-20 px-8 min-h-screen relative overflow-hidden`}
+      className={`py-12 sm:py-20 mt-20 px-4 sm:px-8 min-h-screen relative overflow-hidden`}
       style={{
         backgroundImage: "url('/images/BG-Lighthouse-Desktop.jpeg')",
         backgroundSize: "cover",
@@ -67,7 +68,7 @@ const ServicesPage: React.FC = () => {
         transition={{ duration: 0.8 }}
       >
         {/* Main grid container with two columns on large screens */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8 lg:gap-12 items-center">
           {/* Left Column: Text Content with constrained width */}
           <div className="text-white">
             <h2 className="text-4xl font-bold mb-4">
@@ -82,13 +83,13 @@ const ServicesPage: React.FC = () => {
               Our six-phase approach ensures each project is thoughtfully
               planned, beautifully designed, and built to perform.
             </p>
-            <button className="mt-8 bg-yellow-500 text-white text-shadow-md font-bold py-3 px-6 rounded-md hover:bg-yellow-400 transition-colors">
+            <BrightPathGradientButton className="mt-8 text-white text-shadow-md font-bold py-3 px-6 rounded-md hover:bg-yellow-400 transition-colors">
               Start Your Project
-            </button>
+            </BrightPathGradientButton>
           </div>
 
-          {/* Right Column: Cards with a 3-column grid layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Right Column: Cards with responsive grid layout */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             <FlipCardContainer cards={cards} />
           </div>
         </div>

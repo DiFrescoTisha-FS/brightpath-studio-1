@@ -3,7 +3,7 @@ import axios from 'axios';
 import { WpReviewPost, Review } from '@/types'; 
 
 // https://vite.dev/guide/
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/dev';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002';
 const API_REVIEWS_PATH = '/api/reviews';
 const FULL_API_URL = `${API_BASE_URL}${API_REVIEWS_PATH}`;
 

@@ -14,15 +14,19 @@ import {
   XCircle,
   ChevronLeft,
   ChevronRight,
+  Bot,
+  Moon,
+  Sun,
 } from 'lucide-react';
 import BrightPathGradientTitle from '../BrightPathGradientTitle';
 import BrightPathGradientButton from '../BrightPathGradientButton';
 
 interface DaleTiffanyCaseStudyProps {
   onBack?: () => void;
+  theme?: 'light' | 'dark';
 }
 
-export function DaleTiffanyCaseStudy({ onBack }: DaleTiffanyCaseStudyProps) {
+export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCaseStudyProps) {
   const [beforeAfterPosition, setBeforeAfterPosition] = useState(50);
   const [activeScreenshot, setActiveScreenshot] = useState(0);
 
@@ -33,6 +37,9 @@ export function DaleTiffanyCaseStudy({ onBack }: DaleTiffanyCaseStudyProps) {
     { before: '/dale-tiffany/before-retailer.png', after: '/dale-tiffany/after-retailer-logos.png', label: 'Retailer Logos' },
     { before: '/dale-tiffany/before-catalog.png', after: '/dale-tiffany/after-retailer-portal.png', label: 'Retailer Portal' },
     { before: null, after: '/dale-tiffany/after-admin-crm.png', label: 'CRM (New)' },
+    { before: null, after: '/dale-tiffany/after-ai-chatbot-public.png', label: 'AI Assistant' },
+    { before: null, after: '/dale-tiffany/after-ai-chatbot-retailer.png', label: 'Retailer AI' },
+    { before: '/dale-tiffany/after-home.png', after: '/dale-tiffany/after-home-light.png', label: 'Dark/Light Theme' },
   ];
 
   const techStack = [
@@ -44,6 +51,7 @@ export function DaleTiffanyCaseStudy({ onBack }: DaleTiffanyCaseStudyProps) {
     { name: 'Netlify Functions', category: 'Backend' },
     { name: 'WordPress Headless', category: 'CMS' },
     { name: 'Zustand', category: 'State' },
+    { name: 'Claude AI', category: 'AI' },
   ];
 
   const beforeProblems = [
@@ -60,15 +68,15 @@ export function DaleTiffanyCaseStudy({ onBack }: DaleTiffanyCaseStudyProps) {
     'Fully responsive design',
     'Working B2B retailer portal',
     'Custom CRM with pipeline',
-    'Full e-commerce capabilities',
-    'Smooth, animated UX',
+    'AI-powered chatbots',
+    'Dark/Light theme support',
   ];
 
   return (
     <div className="min-h-screen bg-background">
       {/* Back Button */}
       {onBack && (
-        <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
+        <div className="sticky top-20 z-40 bg-background/80 backdrop-blur-sm border-b border-border">
           <div className="container mx-auto px-4 py-3">
             <button
               onClick={onBack}
@@ -82,7 +90,7 @@ export function DaleTiffanyCaseStudy({ onBack }: DaleTiffanyCaseStudyProps) {
       )}
 
       {/* Hero Section */}
-      <section className="relative py-16 lg:py-24 overflow-hidden">
+      <section className="relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-12">
             {/* Badge */}
@@ -92,11 +100,8 @@ export function DaleTiffanyCaseStudy({ onBack }: DaleTiffanyCaseStudyProps) {
             </div>
 
             {/* Title */}
-            <BrightPathGradientTitle
-                as="h1"
-                className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-poppins">
-              Dale Tiffany
-            </BrightPathGradientTitle>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-poppins"><span className={theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}> Dale Tiffany</span>
+            </h1>
 
             {/* Subtitle */}
             <p className="text-xl text-muted-foreground font-lato max-w-2xl mx-auto">
@@ -286,7 +291,7 @@ export function DaleTiffanyCaseStudy({ onBack }: DaleTiffanyCaseStudyProps) {
             A complete digital ecosystem replacing outdated systems with modern solutions
           </p>
 
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {/* B2B Portal */}
             <div className="p-6 rounded-lg bg-card border border-primary/50 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
@@ -376,6 +381,71 @@ export function DaleTiffanyCaseStudy({ onBack }: DaleTiffanyCaseStudyProps) {
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3 h-3 text-primary" />
                   Fast load times
+                </li>
+              </ul>
+            </div>
+
+            {/* AI Chatbots */}
+            <div className="p-6 rounded-lg bg-card border border-primary/50 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                <Bot className="w-6 h-6 text-primary" />
+              </div>
+              <BrightPathGradientTitle
+                as="h3"
+                className="text-lg font-semibold mb-2 font-poppins">AI-Powered Chatbots</BrightPathGradientTitle>
+              <p className="text-sm text-muted-foreground mb-4 font-lato">
+                Intelligent assistants for both public visitors and B2B retailers.
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3 h-3 text-primary" />
+                  Public visitor assistant
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3 h-3 text-primary" />
+                  Retailer portal assistant
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3 h-3 text-primary" />
+                  Product recommendations
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3 h-3 text-primary" />
+                  24/7 support availability
+                </li>
+              </ul>
+            </div>
+
+            {/* Dark/Light Theme */}
+            <div className="p-6 rounded-lg bg-card border border-primary/50 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                <div className="relative">
+                  <Sun className="w-6 h-6 text-primary absolute -left-1 -top-1" />
+                  <Moon className="w-5 h-5 text-primary absolute left-1 top-1" />
+                </div>
+              </div>
+              <BrightPathGradientTitle
+                as="h3"
+                className="text-lg font-semibold mb-2 font-poppins">Dark/Light Theme</BrightPathGradientTitle>
+              <p className="text-sm text-muted-foreground mb-4 font-lato">
+                User-preferred theming with seamless transitions between modes.
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3 h-3 text-primary" />
+                  System preference detection
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3 h-3 text-primary" />
+                  Persistent user choice
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3 h-3 text-primary" />
+                  Smooth transitions
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3 h-3 text-primary" />
+                  Accessible contrast
                 </li>
               </ul>
             </div>

@@ -3,7 +3,7 @@
 import axios from 'axios';
 // This is the correct Vite method to access the VITE_API_URL set in Netlify.
 // We include the fallback for local development convenience.
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/dev';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002';
 
 // Note: The base URL from our Serverless deployment is:
 // https://4hutktucbj.execute-api.us-east-1.amazonaws.com/dev

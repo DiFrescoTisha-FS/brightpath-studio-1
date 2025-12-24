@@ -11,7 +11,7 @@ interface FormData {
 }
 
 // === FIX APPLIED HERE: Define the API URL ===
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/dev';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002';
 const CONTACT_FORM_URL = `${API_BASE_URL}/api/submit-contact-form`;
 // ===========================================
 

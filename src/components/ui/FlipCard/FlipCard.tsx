@@ -2,10 +2,11 @@
 
 import React from 'react';
 import './FlipCard.css';
+import BrightPathGradientTitle from '@/components/BrightPathGradientTitle';
 
 // Define the type for a single bullet point object
 interface BulletPoint {
-  list_item_text: string;
+  text: string;
 }
 
 interface FlipCardProps {
@@ -33,24 +34,26 @@ const FlipCard: React.FC<FlipCardProps> = ({
   console.log('FlipCard props received:', { mainHeading, subheading, iconUrl, iconAlt });
 
   return (
-    <div className="flip-card-container w-64 h-[24rem] perspective mx-auto">
+    <div className="flip-card-container w-full max-w-64 h-[22rem] sm:h-[24rem] perspective mx-auto">
       <div className="flip-card relative w-full h-full transition-transform duration-700 transform-style-3d group-hover:rotate-y-180">
 
         {/* FRONT SIDE OF CARD */}
-        <div className="flip-card-front absolute w-full h-full backface-hidden rounded-xl p-8 flex flex-col items-center justify-center text-white bg-[linear-gradient(to_right,#243B55,#141E30)] border border-primary shadow-glow-primary">
+        <div className="flip-card-front absolute w-full h-full backface-hidden rounded-xl p-4 sm:p-8 flex flex-col items-center justify-center text-white bg-[linear-gradient(to_right,#243B55,#141E30)] border border-primary shadow-glow-primary">
           {/* Icon */}
-          <div className="mb-6">
+          <div className="mb-4 sm:mb-6">
             <img
               src={iconUrl}
               alt={iconAlt}
-              className="w-24 h-24 object-contain drop-shadow-lg"
+              className="w-full max-w-[200px] h-20 sm:h-24 object-contain drop-shadow-lg"
             />
           </div>
 
           <div className="flex flex-col items-center">
-            <h3 className="text-sm font-bold mb-2 text-white text-shadow-md">
+            <BrightPathGradientTitle
+              as="h3"
+              className="text-[18px] font-bold mb-2 text-center leading-tight">
               {mainHeading}
-            </h3>
+            </BrightPathGradientTitle>
             <p className="text-2xl text-primary text-center text-shadow-md">
               {subheading}
             </p>
@@ -61,7 +64,7 @@ const FlipCard: React.FC<FlipCardProps> = ({
         </div>
 
         {/* BACK SIDE OF CARD */}
-        <div className="flip-card-back absolute w-full h-full backface-hidden bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl p-8 flex flex-col justify-center text-[#1A2238] rotate-y-180 shadow-glow-primary">
+        <div className="flip-card-back absolute w-full h-full backface-hidden bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl p-4 sm:p-8 flex flex-col justify-center text-[#1A2238] rotate-y-180 shadow-glow-primary">
         <div 
     className="absolute inset-0 z-0 opacity-10"
     style={{ 
@@ -69,12 +72,12 @@ const FlipCard: React.FC<FlipCardProps> = ({
       backgroundSize: 'cover' 
     }} 
   />
-          <h3 className="text-2xl font-bold text-center mb-4 text-[#1A2238] text-shadow-md">
+          <h3 className="text-xl font-bold text-center mb-4 text-[#1A2238] text-shadow-md leading-tight">
             {backCardTitle}
           </h3>
-          <ul className="space-y-3 list-disc list-inside text-[#1A2238]">
+          <ul className="space-y-2 list-disc list-inside text-[#1A2238] relative z-10">
             {bulletPoints.map((point, index) => (
-              <li key={index} className="text-sm leading-relaxed">{point.list_item_text}</li>
+              <li key={index} className="text-sm leading-relaxed">{point.text}</li>
             ))}
           </ul>
           <div className="mt-8 text-center">

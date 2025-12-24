@@ -6,7 +6,7 @@ import ReviewCard from './ReviewCard';
 import { Review, MyReviewsResponse } from '@/types/index';
 
 // === FIX APPLIED HERE: Define the API URL ===
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/dev';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002';
 const REVIEWS_URL = `${API_BASE_URL}/api/reviews`;
 // ===========================================
 

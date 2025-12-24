@@ -14,7 +14,7 @@ const AboutPage = () => {
       highlightColor: "#F2C94C",
     },
     {
-      title: "The Lighthouse That Started It, All",
+      title: "The Lighthouse That Started It All",
       description:
         "At my graduation, one of my instructors gifted me a lighthouse, symbolizing guidance, resilience, and perseverance. It was a reminder that even in the darkest times, we can find our way forward. This symbol became the foundation for BrightPath Web Studio LLC, inspiring me to help businesses navigate the digital world with confidence and clarity.",
       imageUrl: "/images/lighthouse-gift.png",
@@ -33,7 +33,7 @@ const AboutPage = () => {
     <div className="min-h-screen">
       {/* --- HERO SECTION --- */}
       <motion.section
-        className="min-h-screen flex items-center justify-center p-8 bg-cover bg-center"
+        className="min-h-screen flex items-center justify-center p-8 bg-cover bg-center relative"
         // 🌟 RESTORED ORIGINAL STYLES 🌟
         style={{
           backgroundImage: "url('/images/Mountains.jpeg')",
@@ -47,7 +47,15 @@ const AboutPage = () => {
           ease: "easeInOut",
         }}
       >
-        <div className="container mx-auto grid md:grid-cols-2 gap-8 items-center">
+        {/* Bottom fade gradient to blend into timeline section */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none z-10"
+          style={{
+            background: 'linear-gradient(to bottom, transparent 0%, #1A2238 100%)',
+          }}
+        />
+
+        <div className="container mx-auto grid md:grid-cols-2 gap-8 items-center relative z-0">
           {/* Left Column: Text Content */}
           <div className="text-white text-center md:text-left">
             <p className="font-lato text-lg mb-2 tracking-wider">ABOUT ME</p>
@@ -91,11 +99,19 @@ const AboutPage = () => {
         className="relative py-20 px-8 min-h-screen flex flex-col justify-center bg-cover bg-center bg-fixed"
         style={{
           // This remains correct based on your initial intention for the timeline background
-          backgroundImage: theme === 'light' 
-    ? 'var(--timeline-bg-light)' 
+          backgroundImage: theme === 'light'
+    ? 'var(--timeline-bg-light)'
     : 'var(--timeline-bg-dark)',
         }}
       >
+        {/* Top fade gradient to blend from hero section */}
+        <div
+          className="absolute top-0 left-0 right-0 h-24 pointer-events-none z-20"
+          style={{
+            background: 'linear-gradient(to bottom, #1A2238, transparent)',
+          }}
+        />
+
         {/* Dark Overlay for better text readability */}
         <div className="absolute inset-0 bg-midnight/60 z-10"></div>
 
@@ -174,7 +190,7 @@ const AboutPage = () => {
                   />
 
                   <div className="p-8 text-[#F2C94C] text-center">
-                    <h3 className="font-poppins text-xl md:text-2xl font-bold mb-3 text-brightpath-blue drop-shadow-lg">
+                    <h3 className="font-poppins text-xl md:text-2xl font-bold mb-3 gradient-text-dark drop-shadow-lg">
                       {event.title}
                     </h3>
                     <p className="font-lato text- md:text-md text-white leading-[1.6em] text-stone-200">
