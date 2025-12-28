@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { FlipCardContainer } from "../components/ui/FlipCard";
-import { getFlipCardPhases } from "../../backend/services/api.service";
+import { getFlipCardPhases } from "../services/api.service";
 import { motion } from "framer-motion";
 import { PhaseCard } from "../types/phaseCard";
 import { useAppStore } from '@/store/appStore';
