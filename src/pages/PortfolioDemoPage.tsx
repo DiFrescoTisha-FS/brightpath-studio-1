@@ -25,27 +25,6 @@ export default function PortfolioDemoPage() {
         <div className="max-w-md mx-auto">
           <DaleTiffanyCard onViewCaseStudy={() => setView('case-study')} />
         </div>
-
-        {/* Note about images */}
-        <div className="mt-12 p-6 rounded-lg bg-muted/50 border border-border max-w-2xl mx-auto">
-          <h3 className="font-semibold text-foreground mb-2">Image Setup Required</h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            To see the before/after images, add your screenshots to:
-          </p>
-          <code className="block p-3 bg-background rounded text-xs text-muted-foreground overflow-x-auto">
-            public/dale-tiffany/<br />
-            ├── before-home.png<br />
-            ├── before-retailer.png<br />
-            ├── before-about.png<br />
-            ├── before-contact.png<br />
-            ├── before-catalog.png<br />
-            ├── after-home.png<br />
-            ├── after-portal.png<br />
-            ├── after-about.png<br />
-            ├── after-contact.png<br />
-            └── after-crm.png
-          </code>
-        </div>
       </div>
     </div>
   );

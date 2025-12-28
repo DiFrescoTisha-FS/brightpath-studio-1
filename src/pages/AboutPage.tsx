@@ -117,19 +117,19 @@ const AboutPage = () => {
 
         {/* Vertical Timeline Line (Positioned to start below the title block) */}
         <div
-          className="absolute left-1/2 w-2 
-            top-32 h-[calc(100%-8rem)]                 
-            bg-gradient-to-b 
-            from-primary              
-            via-primary  
-            to-transparent 
+          className="absolute left-1/2 w-2
+            top-72 h-[calc(100%-18rem)]
+            bg-gradient-to-b
+            from-primary
+            via-primary
+            to-transparent
             transform -translate-x-1/2 z-10"
         ></div>
 
-        <div className="container mx-auto space-y-16 relative z-20">
+        <div className="container mx-auto space-y-4 relative z-20">
           {/* H2 Title with Theme Awareness */}
 
-          <h2 className={`text-4xl md:text-5xl font-extrabold text-left mb-12 pt-0 font-poppins ${theme === 'light' ? 'text-gray-900' : 'text-white'}`}
+          <h2 className={`text-4xl md:text-5xl font-extrabold text-center mb-12 pt-0 font-poppins ${theme === 'light' ? 'text-gray-900' : 'text-white'}`}
           >My <span 
                 // Apply the custom class based on the theme state
                 // 🌟 FIX 1: ADD SPACE BEFORE "Digital" 🌟
@@ -156,8 +156,8 @@ const AboutPage = () => {
             >
               {/* Timeline dot (Position fixed for line start) */}
               <div
-                className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-brightpath-blue rounded-full border-4 border-white shadow-lg z-30 top-1/2 -translate-y-1/2"
-                style={{ top: "40px" }}
+                className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-brightpath-blue rounded-full border-4 border-white shadow-lg z-30"
+                style={{ top: "280px" }}
               ></div>
 
               <div

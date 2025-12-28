@@ -10,10 +10,12 @@ interface FormData {
   message: string;
 }
 
-// === FIX APPLIED HERE: Define the API URL ===
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002';
+// API URL Configuration:
+// - In production (Netlify): Uses relative paths which get redirected via netlify.toml
+// - In development: Falls back to localhost:3002 for the local Express server
+const API_BASE_URL = import.meta.env.VITE_API_URL ||
+  (import.meta.env.PROD ? '' : 'http://localhost:3002');
 const CONTACT_FORM_URL = `${API_BASE_URL}/api/submit-contact-form`;
-// ===========================================
 
 
 const ContactPage: React.FC = () => {
@@ -77,7 +79,7 @@ const ContactPage: React.FC = () => {
       {/* Header Section */}
       <div className="text-center pt-28 pb-12 px-4">
         <h1 className={`text-4xl md:text-5xl font-poppins font-bold ${themeClasses.text} mb-4`}>
-          <span className={theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-dark'}>Contact</span> Us
+          <span className={theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}>Contact</span> Us
         </h1>
         <p className={`text-lg font-lato ${themeClasses.textMuted} max-w-2xl mx-auto`}>
           Ready to illuminate your digital presence? Let's start a conversation about bringing your vision to life.

@@ -5,10 +5,12 @@ import axios from 'axios';
 import ReviewCard from './ReviewCard';
 import { Review, MyReviewsResponse } from '@/types/index';
 
-// === FIX APPLIED HERE: Define the API URL ===
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002';
+// API Base URL Configuration:
+// - In production (Netlify): Uses relative paths which get redirected via netlify.toml
+// - In development: Falls back to localhost:3002 for the local Express server
+const API_BASE_URL = import.meta.env.VITE_API_URL ||
+  (import.meta.env.PROD ? '' : 'http://localhost:3002');
 const REVIEWS_URL = `${API_BASE_URL}/api/reviews`;
-// ===========================================
 
 const ReviewWidget: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([]);

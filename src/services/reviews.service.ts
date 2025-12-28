@@ -1,9 +1,12 @@
 // src/services/api/reviews.service.ts
 import axios from 'axios';
-import { WpReviewPost, Review } from '@/types'; 
+import { WpReviewPost, Review } from '@/types';
 
-// https://vite.dev/guide/
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002';
+// API Base URL Configuration:
+// - In production (Netlify): Uses relative paths which get redirected via netlify.toml
+// - In development: Falls back to localhost:3002 for the local Express server
+const API_BASE_URL = import.meta.env.VITE_API_URL ||
+  (import.meta.env.PROD ? '' : 'http://localhost:3002');
 const API_REVIEWS_PATH = '/api/reviews';
 const FULL_API_URL = `${API_BASE_URL}${API_REVIEWS_PATH}`;
 
