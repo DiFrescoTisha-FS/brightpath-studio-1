@@ -29,9 +29,9 @@ const ReviewWidget: React.FC = () => {
           id: item.id,
           author: item.acf.reviewer_name,
           quote: item.acf.review_text,
-          rating: item.acf.star_rating,
-          photoUrl: '', // This field isn't in our current API, so we use a placeholder.
-          reviewDate: item.date, // Map the review date for a consistent type.
+          rating: item.acf.rating,
+          photoUrl: item.acf.client_headshot?.url || '',
+          reviewDate: item.acf.review_date || item.date,
         }));
 
         setReviews(formattedReviews);

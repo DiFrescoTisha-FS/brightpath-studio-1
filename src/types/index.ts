@@ -88,7 +88,12 @@ export interface MyReviewsResponse {
   acf: {
     reviewer_name: string;
     review_text: string;
-    star_rating: number;
+    rating: number;
+    review_date?: string;
+    client_headshot?: {
+      url: string;
+      alt?: string;
+    };
   };
   date: string;
 }

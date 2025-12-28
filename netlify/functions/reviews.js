@@ -24,7 +24,7 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    const fullUrl = `${process.env.WORDPRESS_API_URL}/wp-json/wp/v2/reviews`;
+    const fullUrl = `${process.env.WORDPRESS_API_URL}/wp-json/wp/v2/reviews?acf_format=standard`;
 
     const response = await axios.get(fullUrl);
 
