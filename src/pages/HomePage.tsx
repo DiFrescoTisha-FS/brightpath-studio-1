@@ -26,10 +26,10 @@ const HeroSection = ({ theme }: SectionProps) => (
     </video>
     <div className={`absolute top-0 left-0 w-full h-full ${theme === 'dark' ? 'bg-background/60' : 'bg-background/60'} z-10`}></div>
     <div className="relative z-20 text-center max-w-4xl mx-auto px-4">
-      <h1 className="text-4xl md:text-6xl font-poppins font-bold mb-4">
+      <h1 className="text-4xl md:text-3xl sm:text-lg font-poppins font-bold mb-4 mt-24">
         Guiding Your Business to <span className={theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}>Shine Bright Online</span>
       </h1>
-      <p className="text-lg md:text-xl text-muted-foreground font-lato mb-8 text-shadow-md">
+      <p className="text-sm md:text-lg text-muted-foreground font-lato mb-8 text-shadow-md">
         We are the beacon in the digital fog, crafting brilliant web experiences
         that navigate your brand to success.
       </p>
@@ -115,7 +115,7 @@ const BrandStorySection = ({ theme }: SectionProps) => (
         <h2 className="text-3xl md:text-4xl font-poppins font-bold text-foreground mb-4">
           A <span className={`text-shadow-none ${theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}`}>Beacon</span> in the Digital Fog
         </h2>
-        <p className="font-lato text-muted-foreground leading-relaxed text-lg mb-6">
+        <p className="font-lato text-muted-foreground leading-relaxed text-sm md:text-lg mb-6">
           In a crowded online world, clarity is everything. Like a lighthouse on
           a rocky coast, BrightPath provides unwavering guidance. We cut through
           the complexity with clear strategy and brilliant design, ensuring your

@@ -74,12 +74,12 @@ const ServicesPage: React.FC = () => {
             <h2 className="text-4xl font-bold mb-4">
               Our <span className={theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-dark'}>Process</span>
             </h2>
-            <p className="text-lg mb-6 text-shadow-md">
+            <p className="text-sm md:text-lg mb-6 text-shadow-md">
               At BrightPath Web Studio, every website we create follows a clear,
               purposeful path—from the first spark of an idea to a seamless,
               fully launched experience.
             </p>
-            <p className="text-lg text-shadow-md">
+            <p className="text-sm md:text-lg text-shadow-md">
               Our six-phase approach ensures each project is thoughtfully
               planned, beautifully designed, and built to perform.
             </p>

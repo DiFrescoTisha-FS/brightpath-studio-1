@@ -31,7 +31,7 @@ const FlipCard: React.FC<FlipCardProps> = ({
   frontCardDescription,
 }) => {
   // Add this line to see the data
-  console.log('FlipCard props received:', { mainHeading, subheading, iconUrl, iconAlt });
+  console.log('FlipCard props received:', { mainHeading, subheading, iconUrl, iconAlt, bulletPoints });
 
   return (
     <div className="flip-card-container w-full max-w-64 h-[22rem] sm:h-[24rem] perspective mx-auto">
@@ -76,9 +76,14 @@ const FlipCard: React.FC<FlipCardProps> = ({
             {backCardTitle}
           </h3>
           <ul className="space-y-2 list-disc list-inside text-[#1A2238] relative z-10">
-            {bulletPoints.map((point, index) => (
-              <li key={index} className="text-sm leading-relaxed">{point.text}</li>
-            ))}
+            {bulletPoints.map((point, index) => {
+              const p = point as any;
+              return (
+                <li key={index} className="text-sm leading-relaxed text-[#1A2238]">
+                  {p.text || p.list_item_text || p.bullet_point || p.bullet_text || JSON.stringify(point)}
+                </li>
+              );
+            })}
           </ul>
           <div className="mt-8 text-center">
             <button className="bg-[#1A2238] text-primary font-bold py-2 px-6 rounded-md transition-all duration-300 ease-in-out hover:bg-[#222c48] shadow-md">
