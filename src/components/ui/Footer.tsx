@@ -12,7 +12,7 @@ interface FooterProps {
 
 const Footer: React.FC<FooterProps> = ({ theme }) => {
   const footerClasses = theme === 'dark' ? 'bg-[#1A2238] text-white' : 'bg-gray-100 text-gray-800';
-  const textClasses = theme === 'dark' ? 'text-white' : 'text-gray-800';
+  // const textClasses = theme === 'dark' ? 'text-white' : 'text-gray-800';
   const linkClasses = theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black';
 
   return (
