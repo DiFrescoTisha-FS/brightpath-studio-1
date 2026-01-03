@@ -26,7 +26,7 @@ const HeroSection = ({ theme }: SectionProps) => (
     </video>
     <div className={`absolute top-0 left-0 w-full h-full ${theme === 'dark' ? 'bg-background/60' : 'bg-background/60'} z-10`}></div>
     <div className="relative z-20 text-center max-w-4xl mx-auto px-4">
-      <h1 className="text-4xl md:text-3xl sm:text-lg font-poppins font-bold mb-4 mt-24">
+      <h1 className="text-lg md:text-3xl lg:text-6xl sm:text-lg font-poppins font-bold mb-4 mt-24">
         Guiding Your Business to <span className={theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}>Shine Bright Online</span>
       </h1>
       <p className="text-sm md:text-lg text-muted-foreground font-lato mb-8 text-shadow-md">

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import axios from 'axios';
 import { useAppStore } from '@/store/appStore'; // Import the store
+import BrightPathGradientTitle from '@/components/BrightPathGradientTitle';
 
 // Define the shape of the form data
 interface FormData {
@@ -61,15 +62,15 @@ const ContactPage: React.FC = () => {
 
   const themeClasses = {
     bg: theme === 'dark' ? 'bg-background' : 'bg-white',
-    text: theme === 'dark' ? 'text-primary' : 'text-slate-600',
-    textMuted: theme === 'dark' ? 'text-secondary' : 'text-slate-600',
+    text: theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light',
+    textMuted: theme === 'dark' ? 'text-secondary' : 'text-gray-600',
     cardBg: theme === 'dark' ? 'bg-gray-200' : 'bg-gray-50',
     cardBorder: theme === 'dark' ? 'border-primary' : 'border-gray-200',
     inputBg: theme === 'dark' ? 'bg-midnight' : 'bg-gray-100',
     inputBorder: theme === 'dark' ? 'border-stone/30' : 'border-gray-300',
-    inputPlaceholder: theme === 'dark' ? 'placeholder-stone/60' : 'placeholder-gray-400',
+    inputPlaceholder: theme === 'dark' ? 'placeholder:text-secondary' : 'placeholder:text-gray-600',
     iconColor: theme === 'dark' ? 'text-primary' : 'text-primary',
-    goldText: theme === 'dark' ? 'text-primary' : 'text-primary',
+    goldText: theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light',
     textBoxBG: theme === 'dark' ? 'bg-gray-700' : 'bg-[#f9fafb]'
   };
 
@@ -93,20 +94,29 @@ const ContactPage: React.FC = () => {
           {/* Left Column - Contact Info */}
           <div className="space-y-8">
             <div className={`${themeClasses.cardBg} p-8 rounded-lg border ${themeClasses.cardBorder}`}>
-              <h2 className={`text-2xl font-poppins font-semibold text-primary mb-6 text-shadow-md`}>
+              <BrightPathGradientTitle as="h2" className="text-2xl font-poppins font-semibold mb-6"
+                textColor="text-neutral-800 dark:gray-200"
+                gradientWords={["Touch"]}
+              >
                 Get In Touch
-              </h2>
+              </BrightPathGradientTitle>
               
               <div className="space-y-6">
                 {/* Business Name */}
-                <div className="flex items-start space-x-4">
-                  <div className={`w-6 h-6 mt-1 flex-shrink-0`}>
-                    <div className={`w-full h-full bg-gold rounded-full`}></div>
-                  </div>
+                <div className="flex items-center space-x-4">
+                  <img
+                    src="/images/brightpath-logo-light.png"
+                    alt="BrightPath Web Studio Logo"
+                    className="h-16 w-auto flex-shrink-0"
+                  />
                   <div>
-                    <h3 className="font-poppins font-semibold text-lg text-primary">
+                    <BrightPathGradientTitle
+                      className="font-poppins font-semibold text-lg"
+                      textColor="text-neutral-800"
+                      gradientWords={["BrightPath"]}
+                    >
                       BrightPath Web Studio, LLC
-                    </h3>
+                    </BrightPathGradientTitle>
                     <p className={`font-lato ${themeClasses.textMuted}`}>
                       Your beacon in the digital landscape
                     </p>
@@ -157,7 +167,7 @@ const ContactPage: React.FC = () => {
 
             {/* Additional Info Box */}
             <div className={`p-6 rounded-lg border border-gold/20 ${themeClasses.textBoxBG}`}>
-              <h3 className={`font-poppins font-semibold text-shadow-md ${themeClasses.goldText} mb-3`}>
+              <h3 className={`font-poppins font-semibold ${themeClasses.goldText} mb-3`}>
                 Why Choose BrightPath?
               </h3>
               <p className={`font-lato text-sm leading-relaxed ${themeClasses.textMuted}`}>
@@ -169,14 +179,16 @@ const ContactPage: React.FC = () => {
 
           {/* Right Column - Contact Form */}
           <div className={`${themeClasses.cardBg} p-8 rounded-lg border ${themeClasses.cardBorder}`}>
-            <h2 className={`text-2xl font-poppins font-semibold text-shadow-md ${themeClasses.goldText} mb-6`}>
+            <BrightPathGradientTitle as="h2" className="text-2xl font-poppins font-semibold mb-6"
+              textColor='text-neutral-800'
+              gradientWords={["Message"]}>
               Send Us a Message
-            </h2>
+            </BrightPathGradientTitle>
             
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Full Name */}
               <div>
-                <label htmlFor="fullName" className={`block font-lato font-semibold ${themeClasses.text} mb-2`}>
+                <label htmlFor="fullName" className={`font-poppins font-semibold text-lg ${themeClasses.text} mb-1`}>
                   Full Name
                 </label>
                 <input
@@ -186,14 +198,14 @@ const ContactPage: React.FC = () => {
                   value={formData.fullName}
                   onChange={handleInputChange}
                   required
-                  className={`w-full px-4 py-3 ${themeClasses.inputBg} border ${themeClasses.inputBorder} rounded-lg ${themeClasses.text} font-lato ${themeClasses.inputPlaceholder} focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors`}
+                  className={`w-full px-4 py-3 ${themeClasses.inputBg} border ${themeClasses.inputBorder} rounded-lg ${themeClasses.textMuted} font-lato ${themeClasses.inputPlaceholder} focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors`}
                   placeholder="Enter your full name"
                 />
               </div>
 
               {/* Email Address */}
               <div>
-                <label htmlFor="email" className={`block font-lato font-semibold ${themeClasses.text} mb-2`}>
+                <label htmlFor="email" className={`font-poppins font-semibold text-lg ${themeClasses.text} mb-1`}>
                   Email Address
                 </label>
                 <input
@@ -210,7 +222,7 @@ const ContactPage: React.FC = () => {
 
               {/* Message */}
               <div>
-                <label htmlFor="message" className={`block font-lato font-semibold ${themeClasses.text} mb-2`}>
+                <label htmlFor="message" className={`font-poppins font-semibold text-lg ${themeClasses.text} mb-1`}>
                   Message
                 </label>
                 <textarea
@@ -220,7 +232,7 @@ const ContactPage: React.FC = () => {
                   onChange={handleInputChange}
                   required
                   rows={6}
-                  className={`w-full px-4 py-3 ${themeClasses.inputBg} border ${themeClasses.inputBorder} rounded-lg ${themeClasses.text} font-lato ${themeClasses.inputPlaceholder} focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors resize-vertical`}
+                  className={`w-full px-4 py-3 ${themeClasses.inputBg} border ${themeClasses.inputBorder} rounded-lg ${themeClasses.textMuted} font-lato ${themeClasses.inputPlaceholder} focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors resize-vertical`}
                   placeholder="Tell us about your project and how we can help illuminate your path to success..."
                 />
               </div>

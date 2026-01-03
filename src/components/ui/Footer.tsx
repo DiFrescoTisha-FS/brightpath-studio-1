@@ -3,6 +3,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import type { Theme } from '@/store/appStore';
+import BrightPathGradientTitle from '../BrightPathGradientTitle';
 
 // The Footer component now includes the "Inspired" section content
 interface FooterProps {
@@ -18,9 +19,14 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
     <footer className={`py-12 border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'} ${footerClasses}`}>
       <div className="container mx-auto px-4 text-center">
         {/* === START OF THE NEW CONSOLIDATED SECTION === */}
-        <h3 className={`text-xl font-poppins font-bold text-shadow-md ${textClasses} mb-2`}>
-          Bright Path Web Studio LLC
-        </h3>
+        <BrightPathGradientTitle
+          as="h3"
+          className="text-xl font-poppins font-bold mb-2"
+          textColor='text-neutral-700 dark:text-gray-200'
+          gradientWords={["BrightPath"]}
+        >
+          BrightPath Web Studio LLC
+        </BrightPathGradientTitle>
         
         {/* Lighthouse Image */}
         <div className="my-4 inline-block">
@@ -32,9 +38,14 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
         </div>
         
         {/* Inspired By Text */}
-        <p className={`font-lato ${theme === 'dark' ? 'text-shadow-md' : ''} ${textClasses} mt-2`}>
+        <BrightPathGradientTitle
+          as="p"
+          className="font-lato mt-2"
+          textColor='text-neutral-700 dark:text-gray-200'
+          gradientWords={["Edward", "Almeida"]}
+        >
           Inspired by Edward Almeida
-        </p>
+        </BrightPathGradientTitle>
         {/* === END OF THE NEW CONSOLIDATED SECTION === */}
 
         <div className="flex justify-center space-x-4 mt-8">

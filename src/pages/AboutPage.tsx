@@ -33,15 +33,13 @@ const AboutPage = () => {
     <div className="min-h-screen">
       {/* --- HERO SECTION --- */}
       <motion.section
-        className="min-h-screen flex items-center justify-center p-8 bg-cover bg-center relative"
-        // 🌟 RESTORED ORIGINAL STYLES 🌟
+        className="min-h-screen flex items-center justify-center p-8 pt-28 bg-cover bg-center relative"
         style={{
           backgroundImage: "url('/images/Mountains.jpeg')",
-          filter: "grayscale(100%)",
         }}
-        whileHover={{
-          filter: "grayscale(0%)",
-        }}
+        initial={{ filter: "grayscale(100%)" }}
+        animate={{ filter: "grayscale(100%)" }}
+        whileHover={{ filter: "grayscale(0%)" }}
         transition={{
           duration: 0.8,
           ease: "easeInOut",
