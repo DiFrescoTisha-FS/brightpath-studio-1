@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Star } from 'lucide-react';
 import type { Review } from '@/types';
+import BrightPathGradientTitle from '@/components/BrightPathGradientTitle';
 
 // Helper component for a single review card
 const ReviewCard = ({ review }: { review: Review }) => { // FIX 1: Use curly braces { } for an explicit return
@@ -71,9 +72,9 @@ const ReviewsPage = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="text-4xl md:text-6xl font-poppins font-bold mb-4">
-            What Our <span className={theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}>Clients</span> Say
-          </h1>
+          <BrightPathGradientTitle as="h1" className="text-4xl md:text-6xl font-poppins font-bold mb-4" gradientWords={["Clients"]}>
+            What Our Clients Say
+          </BrightPathGradientTitle>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Hearing from our clients is the ultimate reward. Their success stories
             are the foundation of our mission to illuminate the digital world.

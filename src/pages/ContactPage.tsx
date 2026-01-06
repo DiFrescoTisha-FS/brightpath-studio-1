@@ -62,26 +62,28 @@ const ContactPage: React.FC = () => {
 
   const themeClasses = {
     bg: theme === 'dark' ? 'bg-background' : 'bg-white',
+    pageText: theme === 'dark' ? 'text-gray-100' : 'text-neutral-900',
     text: theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light',
-    textMuted: theme === 'dark' ? 'text-secondary' : 'text-gray-600',
+    textMuted: theme === 'dark' ? 'text-gray-200' : 'text-gray-600',
     cardBg: theme === 'dark' ? 'bg-gray-200' : 'bg-gray-50',
     cardBorder: theme === 'dark' ? 'border-primary' : 'border-gray-200',
     inputBg: theme === 'dark' ? 'bg-midnight' : 'bg-gray-100',
     inputBorder: theme === 'dark' ? 'border-stone/30' : 'border-gray-300',
     inputPlaceholder: theme === 'dark' ? 'placeholder:text-secondary' : 'placeholder:text-gray-600',
     iconColor: theme === 'dark' ? 'text-primary' : 'text-primary',
-    goldText: theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light',
+    goldText: theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-dark',
     textBoxBG: theme === 'dark' ? 'bg-gray-700' : 'bg-[#f9fafb]'
   };
 
   return (
-    
+
     <div className={`min-h-screen ${themeClasses.bg} ${themeClasses.text} p-4`}>
       {/* Header Section */}
       <div className="text-center pt-28 pb-12 px-4">
-        <h1 className={`text-4xl md:text-5xl font-poppins font-bold ${themeClasses.text} mb-4`}>
-          <span className={theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}>Contact</span> Us
-        </h1>
+        <BrightPathGradientTitle as="h1" className="text-4xl md:text-5xl font-poppins font-bold mb-4"
+          gradientWords={["Contact"]}
+        >Contact Us
+        </BrightPathGradientTitle>
         <p className={`text-lg font-lato ${themeClasses.textMuted} max-w-2xl mx-auto`}>
           Ready to illuminate your digital presence? Let's start a conversation about bringing your vision to life.
         </p>
@@ -90,17 +92,17 @@ const ContactPage: React.FC = () => {
       {/* Main Content Grid */}
       <div className="max-w-6xl mx-auto px-4 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          
+
           {/* Left Column - Contact Info */}
           <div className="space-y-8">
             <div className={`${themeClasses.cardBg} p-8 rounded-lg border ${themeClasses.cardBorder}`}>
-              <BrightPathGradientTitle as="h2" className="text-2xl font-poppins font-semibold mb-6"
+              <BrightPathGradientTitle as="h2" className="gradient-text-dark text-2xl font-poppins font-semibold mb-6"
                 textColor="text-neutral-800 dark:gray-200"
                 gradientWords={["Touch"]}
               >
                 Get In Touch
               </BrightPathGradientTitle>
-              
+
               <div className="space-y-6">
                 {/* Business Name */}
                 <div className="flex items-center space-x-4">
@@ -117,7 +119,7 @@ const ContactPage: React.FC = () => {
                     >
                       BrightPath Web Studio, LLC
                     </BrightPathGradientTitle>
-                    <p className={`font-lato ${themeClasses.textMuted}`}>
+                    <p className={`font-lato ${theme === 'dark' ? 'text-gray-700' : 'text-gray-700'}`}>
                       Your beacon in the digital landscape
                     </p>
                   </div>
@@ -127,10 +129,13 @@ const ContactPage: React.FC = () => {
                 <div className="flex items-start space-x-4">
                   <MapPin className={`w-6 h-6 ${themeClasses.iconColor} mt-1 flex-shrink-0`} />
                   <div>
-                    <h3 className={`font-poppins font-semibold text-lg ${themeClasses.text} mb-1`}>
+                    <BrightPathGradientTitle
+                      as="h3"
+                      className="font-poppins font-semibold text-lg mb-1"
+                    >
                       Address
-                    </h3>
-                    <p className={`font-lato ${themeClasses.textMuted}`}>
+                    </BrightPathGradientTitle>
+                    <p className={`font-lato ${theme === 'dark' ? 'text-gray-700' : 'text-gray-700'}`}>
                       129 Maybin Rd.<br />
                       Zirconia, NC 28790
                     </p>
@@ -141,10 +146,10 @@ const ContactPage: React.FC = () => {
                 <div className="flex items-start space-x-4">
                   <Phone className={`w-6 h-6 ${themeClasses.iconColor} mt-1 flex-shrink-0`} />
                   <div>
-                    <h3 className={`font-poppins font-semibold text-lg ${themeClasses.text} mb-1`}>
+                    <BrightPathGradientTitle as="h3" className="font-poppins font-semibold text-lg mb-1">
                       Phone
-                    </h3>
-                    <p className={`font-lato ${themeClasses.textMuted}`}>
+                    </BrightPathGradientTitle>
+                    <p className={`font-lato ${theme === 'dark' ? 'text-gray-700' : 'text-gray-700'}`}>
                       (704) 453-3973
                     </p>
                   </div>
@@ -154,10 +159,10 @@ const ContactPage: React.FC = () => {
                 <div className="flex items-start space-x-4">
                   <Mail className={`w-6 h-6 ${themeClasses.iconColor} mt-1 flex-shrink-0`} />
                   <div>
-                    <h3 className={`font-poppins font-semibold text-lg ${themeClasses.text} mb-1`}>
+                    <BrightPathGradientTitle as="h3" className="font-poppins font-semibold text-lg mb-1">
                       Email
-                    </h3>
-                    <p className={`font-lato ${themeClasses.textMuted}`}>
+                    </BrightPathGradientTitle>
+                    <p className={`font-lato ${theme === 'dark' ? 'text-gray-700' : 'text-gray-700'}`}>
                       tishdifresco@brightpathstudio.com
                     </p>
                   </div>
@@ -167,11 +172,11 @@ const ContactPage: React.FC = () => {
 
             {/* Additional Info Box */}
             <div className={`p-6 rounded-lg border border-gold/20 ${themeClasses.textBoxBG}`}>
-              <h3 className={`font-poppins font-semibold ${themeClasses.goldText} mb-3`}>
+              <BrightPathGradientTitle as="h3" className="font-poppins font-semibold text-2xl mb-1" gradientWords={["BrightPath"]}>
                 Why Choose BrightPath?
-              </h3>
+              </BrightPathGradientTitle>
               <p className={`font-lato text-sm leading-relaxed ${themeClasses.textMuted}`}>
-                We're not just another web agency. We're your strategic partner in navigating the digital landscape, 
+                We're not just another web agency. We're your strategic partner in navigating the digital landscape,
                 providing clear direction and brilliant solutions that help your business shine bright online.
               </p>
             </div>
@@ -184,12 +189,17 @@ const ContactPage: React.FC = () => {
               gradientWords={["Message"]}>
               Send Us a Message
             </BrightPathGradientTitle>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Full Name */}
               <div>
-                <label htmlFor="fullName" className={`font-poppins font-semibold text-lg ${themeClasses.text} mb-1`}>
-                  Full Name
+                <label htmlFor="fullName" className="mb-1">
+                  <BrightPathGradientTitle
+                    as="span"
+                    className="font-poppins font-semibold text-lg"
+                  >
+                    Full Name
+                  </BrightPathGradientTitle>
                 </label>
                 <input
                   type="text"
@@ -205,8 +215,13 @@ const ContactPage: React.FC = () => {
 
               {/* Email Address */}
               <div>
-                <label htmlFor="email" className={`font-poppins font-semibold text-lg ${themeClasses.text} mb-1`}>
-                  Email Address
+              <label htmlFor="email" className="mb-1">
+                  <BrightPathGradientTitle
+                    as="span"
+                    className="font-poppins font-semibold text-lg"
+                  >
+                    Email
+                  </BrightPathGradientTitle>
                 </label>
                 <input
                   type="email"
@@ -222,8 +237,13 @@ const ContactPage: React.FC = () => {
 
               {/* Message */}
               <div>
-                <label htmlFor="message" className={`font-poppins font-semibold text-lg ${themeClasses.text} mb-1`}>
-                  Message
+              <label htmlFor="message" className="mb-1">
+                  <BrightPathGradientTitle
+                    as="span"
+                    className="font-poppins font-semibold text-lg"
+                  >
+                    Message
+                  </BrightPathGradientTitle>
                 </label>
                 <textarea
                   id="message"

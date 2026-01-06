@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { PhaseCard } from "../types/phaseCard";
 import { useAppStore } from '@/store/appStore';
 import BrightPathGradientButton from "@/components/BrightPathGradientButton";
+import { BrightPathGradientTitle } from "@/components/portfolio";
 
 const ServicesPage: React.FC = () => {
   const { theme } = useAppStore();
@@ -71,9 +72,9 @@ const ServicesPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8 lg:gap-12 items-center">
           {/* Left Column: Text Content with constrained width */}
           <div className="text-white">
-            <h2 className="text-4xl font-bold mb-4">
-              Our <span className={theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-dark'}>Process</span>
-            </h2>
+            <BrightPathGradientTitle as="h2" className="text-4xl font-bold mb-4" gradientWords={["Process"]}>
+              Our Process
+            </BrightPathGradientTitle>
             <p className="text-sm md:text-lg mb-6 text-shadow-md">
               At BrightPath Web Studio, every website we create follows a clear,
               purposeful path—from the first spark of an idea to a seamless,

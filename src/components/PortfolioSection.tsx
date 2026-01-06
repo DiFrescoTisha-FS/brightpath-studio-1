@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useAppStore } from '@/store/appStore'; // Importing the global state for theme
+import BrightPathGradientTitle from './BrightPathGradientTitle';
 
 // Portfolio data structure - each item represents a project showcase
 interface PortfolioItem {
@@ -37,9 +38,11 @@ const PortfolioSection = () => {
   return (
     <section className={`py-20 ${theme === 'dark' ? 'bg-[#273442]' : 'bg-gray-100'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-3xl md:text-4xl font-poppins font-bold mb-12 text-foreground">
-          My <span className={theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}>Work</span>
-        </h2>
+        <BrightPathGradientTitle className="text-3xl md:text-4xl font-poppins font-bold mb-12 text-foreground"
+          gradientWords={["Work"]}
+        >
+          My Work
+        </BrightPathGradientTitle>
         {/*
           This is the grid container for the portfolio cards.
           It uses CSS Grid to create a responsive layout that goes from a single column

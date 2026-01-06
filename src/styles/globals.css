@@ -93,11 +93,11 @@
     @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
   }
   .gradient-text-dark {
-    @apply bg-gradient-to-r from-yellow-500 to-orange-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-yellow-500 via-[##FACC14] to-yellow-600 bg-clip-text text-transparent;
   }
 
   .gradient-bg-dark {
-    @apply bg-gradient-to-r from-yellow-500 to-orange-400
+    @apply bg-gradient-to-r from-yellow-500 to-yellow-800
   }
 
   .card-hover {

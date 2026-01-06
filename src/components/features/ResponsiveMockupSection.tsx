@@ -1,5 +1,6 @@
 // src/components/ResponsiveMockupSection.tsx
 import React from 'react';
+import BrightPathGradientTitle from '../BrightPathGradientTitle';
 
 
 interface ResponsiveMockupSectionProps {
@@ -13,7 +14,7 @@ interface ResponsiveMockupSectionProps {
 const ResponsiveMockupSection: React.FC<ResponsiveMockupSectionProps> = ({ theme }) => {
   
     // 💡 STEP 2: Use the theme prop inside the component
-    const textColorClass = theme === 'dark' ? 'text-gray-200' : 'text-gray-800';
+    // const textColorClass = theme === 'dark' ? 'text-gray-200' : 'text-gray-800';
     const subtextColorClass = theme === 'light' ? 'text-gray-600' : 'text-gray-400';
   
     return (
@@ -22,11 +23,14 @@ const ResponsiveMockupSection: React.FC<ResponsiveMockupSectionProps> = ({ theme
         <div className="max-w-7xl mx-auto text-center mb-16">
           
           {/* Using dynamic text color classes */}
-          <h2 className={`text-4xl md:text-5xl font-bold ${textColorClass} mb-4 font-poppins`}>
+          <BrightPathGradientTitle as="h2" className="text-4xl md:text-5xl font-bold mb-4 font-poppins"
+            textColor='text-gray-900 dark:text-gray-200'
+            gradientWords={["Responsive"]}
+          >
             
-        The <span className={`text-shadow-none ${theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}`}> Responsive </span> 
-          Solution
-          </h2>
+        The Responsive Solution
+          
+          </BrightPathGradientTitle>
           <p className={`${subtextColorClass} font-lato`}>Ensuring an optimal experience on every screen size.</p>
         </div>
   

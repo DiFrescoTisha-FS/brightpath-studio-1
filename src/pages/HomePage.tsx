@@ -3,6 +3,7 @@ import { useAppStore } from '@/store/appStore';
 import { Link } from 'react-router-dom';
 import ReviewWidget from '../components/ReviewWidget';
 import PortfolioSection from '../components/PortfolioSection';
+import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
 
 // Define a single props type for all sections that will receive the 'theme' prop
 type SectionProps = {
@@ -26,9 +27,9 @@ const HeroSection = ({ theme }: SectionProps) => (
     </video>
     <div className={`absolute top-0 left-0 w-full h-full ${theme === 'dark' ? 'bg-background/60' : 'bg-background/60'} z-10`}></div>
     <div className="relative z-20 text-center max-w-4xl mx-auto px-4">
-      <h1 className="text-lg md:text-3xl lg:text-6xl sm:text-lg font-poppins font-bold mb-4 mt-24">
-        Guiding Your Business to <span className={theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}>Shine Bright Online</span>
-      </h1>
+      <BrightPathGradientTitle as="h1" className="text-lg md:text-3xl lg:text-6xl sm:text-lg font-poppins font-bold mb-4 mt-24" gradientWords={["Shine", "Bright", "Online"]}>
+        Guiding Your Business to Shine Bright Online
+      </BrightPathGradientTitle>
       <p className="text-sm md:text-lg text-muted-foreground font-lato mb-8 text-shadow-md">
         We are the beacon in the digital fog, crafting brilliant web experiences
         that navigate your brand to success.
@@ -70,9 +71,9 @@ const ServicesSection = ({ theme }: SectionProps) => {
     
     <section className="bg-services-bg py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-3xl md:text-4xl font-poppins font-bold text-services-h2 mb-12">
-          Our <span className={theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}>Services</span>
-        </h2>
+        <BrightPathGradientTitle as="h2" className="text-3xl md:text-4xl font-poppins font-bold text-services mb-12" gradientWords={["Services"]}>
+          Our Services
+        </BrightPathGradientTitle>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <div
@@ -81,9 +82,9 @@ const ServicesSection = ({ theme }: SectionProps) => {
             >
               <div className="flex justify-center">{service.icon}</div>
 
-              <h3 className={`font-poppins text-2xl font-semibold mb-4 text-shadow-md ${theme === 'dark' ? 'text-white' : 'text-secondary/80'}`}>
+              <BrightPathGradientTitle as="h3" className="font-poppins text-2xl font-semibold mb-4">
                 {service.title}
-              </h3>
+              </BrightPathGradientTitle>
 
               <p className={`font-lato ${theme === 'dark' ? 'text-white' : 'text-secondary'}`}>{service.description}</p>
             </div>
@@ -112,9 +113,11 @@ const BrandStorySection = ({ theme }: SectionProps) => (
         </div>
       </div>
       <div>
-        <h2 className="text-3xl md:text-4xl font-poppins font-bold text-foreground mb-4">
-          A <span className={`text-shadow-none ${theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}`}>Beacon</span> in the Digital Fog
-        </h2>
+        <BrightPathGradientTitle as="h2" className="text-3xl md:text-4xl font-poppins font-bold text-foreground mb-4"
+        gradientWords={["Beacon"]}
+        >
+ A Beacon in the Digital Fog
+        </BrightPathGradientTitle>
         <p className="font-lato text-muted-foreground leading-relaxed text-sm md:text-lg mb-6">
           In a crowded online world, clarity is everything. Like a lighthouse on
           a rocky coast, BrightPath provides unwavering guidance. We cut through
@@ -149,9 +152,11 @@ const HomePage = () => {
         <PortfolioSection />
         <section id="reviews" className="py-20">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold font-poppins mb-12">
-              Client <span className={theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}>Testimonials</span>
-            </h2>
+            <BrightPathGradientTitle as="h2" className="text-3xl md:text-4xl font-bold font-poppins mb-12"
+              gradientWords={["Testimonials"]}
+            >
+              Client Testimonials
+            </BrightPathGradientTitle>
             <ReviewWidget />
            
           </div>

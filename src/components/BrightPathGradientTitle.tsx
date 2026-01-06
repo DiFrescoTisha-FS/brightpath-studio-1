@@ -61,7 +61,7 @@ interface BrightPathGradientTitleProps {
 export default function BrightPathGradientTitle({
   children,
   gradientWords = [],
-  className = 'text-4xl font-bold font-poppins',
+  className = 'text-4xl md:text-3xl sm:text-2xl font-bold font-poppins',
   textColor = 'text-foreground',
   gradientStyle = 'gold',
   as: Tag = 'h2',
@@ -69,8 +69,8 @@ export default function BrightPathGradientTitle({
 }: BrightPathGradientTitleProps) {
   // Gradient classes based on style
   const gradientClasses = {
-    gold: 'bg-gradient-to-r from-yellow-500 to-orange-400 bg-clip-text text-transparent',
-    primary: 'bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent dark:from-yellow-500 dark:to-orange-400',
+    gold: 'bg-gradient-to-r from-yellow-500 via-yellow-500 to-yellow-600 bg-clip-text text-transparent',
+    primary: 'bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent dark:from-yellow-500 dark:to-yellow-600',
   };
 
   const gradientClass = gradientClasses[gradientStyle];
@@ -119,7 +119,7 @@ export default function BrightPathGradientTitle({
  */
 export function BrightPathGradientTitleFromHTML({
   html,
-  className = 'text-4xl font-bold font-poppins',
+  className = 'text-4xl md:text-3xl sm:text-2xl font-bold font-poppins',
   as: Tag = 'h2',
   id,
 }: {

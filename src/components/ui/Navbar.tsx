@@ -41,7 +41,6 @@ const Navbar = ({ theme }: NavbarProps) => {
               <Link to="/services" className={`px-3 py-2 rounded-md text-sm font-lato transition-colors ${menuItemColorClass}`}>Services</Link>
               <Link to="/about" className={`px-3 py-2 rounded-md text-sm font-lato transition-colors ${menuItemColorClass}`}>About</Link>
               <Link to="/review" className={`px-3 py-2 rounded-md text-sm font-lato transition-colors ${menuItemColorClass}`}>Reviews</Link>
-              <Link to="/case-study" className={`px-3 py-2 rounded-md text-sm font-lato transition-colors ${menuItemColorClass}`}>Case Study</Link>
               <Link to="/portfolio" className={`px-3 py-2 rounded-md text-sm font-lato transition-colors ${menuItemColorClass}`}>Portfolio</Link>
               <Link to="/contact" className="bg-primary text-primary-foreground font-bold font-lato px-4 py-2 rounded-md text-sm hover:bg-yellow-400 transition-colors">Contact Us</Link>
               <ModeToggle />
@@ -70,7 +69,6 @@ const Navbar = ({ theme }: NavbarProps) => {
             <Link to="/services" onClick={closeMenu} className={`block px-4 py-3 rounded-md text-base font-lato transition-colors ${mobileMenuItemClass}`}>Services</Link>
             <Link to="/about" onClick={closeMenu} className={`block px-4 py-3 rounded-md text-base font-lato transition-colors ${mobileMenuItemClass}`}>About</Link>
             <Link to="/review" onClick={closeMenu} className={`block px-4 py-3 rounded-md text-base font-lato transition-colors ${mobileMenuItemClass}`}>Reviews</Link>
-            <Link to="/case-study" onClick={closeMenu} className={`block px-4 py-3 rounded-md text-base font-lato transition-colors ${mobileMenuItemClass}`}>Case Study</Link>
             <Link to="/portfolio" onClick={closeMenu} className={`block px-4 py-3 rounded-md text-base font-lato transition-colors ${mobileMenuItemClass}`}>Portfolio</Link>
             <Link to="/contact" onClick={closeMenu} className="block px-4 py-3 rounded-md text-base font-lato font-bold bg-primary text-primary-foreground hover:bg-yellow-400 transition-colors text-center mt-4">Contact Us</Link>
           </div>

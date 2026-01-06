@@ -3,6 +3,7 @@ import { Sun, Moon } from 'lucide-react';
 import ResponsiveMockupSection from '../features/ResponsiveMockupSection';
 import StyleGuideSection from '../features/StyleGuideSection';
 import MultiPageFlowSection from './MultiPageFlowSection';
+import BrightPathGradientTitle from '../BrightPathGradientTitle';
 
 /**
  * AngelCityCaseStudy Component
@@ -66,9 +67,14 @@ const AngelCityCaseStudy = () => {
       <section className="relative pt-32 pb-16 z-10">
       <div className="max-w-4xl mx-auto px-4 text-left">
           {/* Text color uses the inverse text color (white/light) */}
-          <h1 className={`text-5xl md:text-7xl font-bold mb-6 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-secondary'}`}>
-                       Website Design & Development <span className={`text-shadow-none ${theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}`}>Case Study</span>
-          </h1>
+          <BrightPathGradientTitle
+            as="h1"
+            className="text-5xl md:text-7xl font-bold mb-6 tracking-tight"
+            textColor='text-gray-900 dark:text-gray-200'
+            gradientWords={["Case", "Study"]}
+          >
+            Website Design & Development Case Study
+          </BrightPathGradientTitle>
           {/* CTA Button uses bp-primary for color */}
           <button className="px-8 py-4 bg-primary dark:bg-primary hover:opacity-80 text-[#1a2238] font-semibold rounded-lg shadow-xl transition-all duration-200 transform hover:scale-105">
             angelcitymassage.com
@@ -94,9 +100,12 @@ const AngelCityCaseStudy = () => {
       <section className="relative z-10 bg-bp-light-bg-light dark:bg-bp-light-bg-dark pt-24 pb-16 px-4 transition-colors duration-300">
         <div className="max-w-4xl mx-auto">
           {/* Text color uses the default text color (dark) */}
-          <h2 className="text-4xl md:text-5xl font-bold text-bp-text dark:text-bp-text-dark mb-6 text-shadow-md">
-          The Angel City Massge <span className={`text-shadow-md ${theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}`}>Experience</span>
-          </h2>
+          <BrightPathGradientTitle as="h2" className="text-4xl md:text-5xl font-bold text-bp-text dark:text-bp-text-dark mb-6"
+            textColor='text-gray-900 dark:text-gray-200'
+            gradientWords={["Experience"]}
+          >
+          The Angel City Massge Experience
+          </BrightPathGradientTitle>
           <div className="space-y-6 text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
             <p>
             Angel City Massage website was designed with a focus on <span><strong><strong>elegance, functionality, and user experience. </strong></strong></span>

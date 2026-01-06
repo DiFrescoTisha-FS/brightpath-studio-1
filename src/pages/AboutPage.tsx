@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import useTheme from "../hooks/useTheme";
+import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
 
 const AboutPage = () => {
   // Fetch theme internally via the custom hook
@@ -127,19 +128,10 @@ const AboutPage = () => {
         <div className="container mx-auto space-y-4 relative z-20">
           {/* H2 Title with Theme Awareness */}
 
-          <h2 className={`text-4xl md:text-5xl font-extrabold text-center mb-12 pt-0 font-poppins ${theme === 'light' ? 'text-gray-900' : 'text-white'}`}
-          >My <span 
-                // Apply the custom class based on the theme state
-                // 🌟 FIX 1: ADD SPACE BEFORE "Digital" 🌟
-                className={theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}
-            > Digital
-            </span> Journey <span 
-                // Apply the custom class based on the theme state
-                // 🌟 FIX 2: ADD SPACE BEFORE "Timeline" 🌟
-                className={theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}
-            > Timeline
-            </span>
-          </h2>
+          <BrightPathGradientTitle as="h2" className="text-4xl md:text-5xl font-extrabold text-center mb-12 pt-0 font-poppins" gradientWords={["Journey"]}
+          >My Digital Journey Timeline
+
+          </BrightPathGradientTitle>
 
           {timelineEvents.map((event, index) => (
             <motion.div
@@ -188,9 +180,9 @@ const AboutPage = () => {
                   />
 
                   <div className="p-8 text-[#F2C94C] text-center">
-                    <h3 className="font-poppins text-xl md:text-2xl font-bold mb-3 gradient-text-dark drop-shadow-lg">
+                    <BrightPathGradientTitle as="h3" className="font-poppins text-xl md:text-2xl font-bold mb-3 gradient-text-dark drop-shadow-lg">
                       {event.title}
-                    </h3>
+                    </BrightPathGradientTitle>
                     <p className="font-lato text- md:text-md text-white leading-[1.6em] text-stone-200">
                       {event.description}
                     </p>

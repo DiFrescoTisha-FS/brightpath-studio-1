@@ -27,6 +27,7 @@ interface DaleTiffanyCaseStudyProps {
 }
 
 export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCaseStudyProps) {
+  const pageBg = theme === 'dark' ? 'bg-background text-foreground' : 'bg-white text-neutral-900';
   const [beforeAfterPosition, setBeforeAfterPosition] = useState(50);
   const [activeScreenshot, setActiveScreenshot] = useState(0);
 
@@ -73,7 +74,7 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className={`min-h-screen ${pageBg}`}>
       {/* Back Button */}
       {onBack && (
         <div className="sticky top-20 z-40 bg-background/80 backdrop-blur-sm border-b border-border">
@@ -100,8 +101,8 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
             </div>
 
             {/* Title */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-poppins"><span className={theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light'}> Dale Tiffany</span>
-            </h1>
+            <BrightPathGradientTitle as="h1" className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-poppins">Dale Tiffany
+            </BrightPathGradientTitle>
 
             {/* Subtitle */}
             <p className="text-xl text-muted-foreground font-lato max-w-2xl mx-auto">
