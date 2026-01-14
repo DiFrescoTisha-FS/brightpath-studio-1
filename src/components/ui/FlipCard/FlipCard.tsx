@@ -6,7 +6,10 @@ import BrightPathGradientTitle from '@/components/BrightPathGradientTitle';
 
 // Define the type for a single bullet point object
 interface BulletPoint {
-  text: string;
+  text?: string;
+  list_item_text?: string;
+  bullet_point?: string;
+  bullet_text?: string;
 }
 
 interface FlipCardProps {
@@ -34,27 +37,28 @@ const FlipCard: React.FC<FlipCardProps> = ({
   console.log('FlipCard props received:', { mainHeading, subheading, iconUrl, iconAlt, bulletPoints });
 
   return (
-    <div className="flip-card-container w-full max-w-64 h-[22rem] sm:h-[24rem] perspective mx-auto">
+    <div className="flip-card-container w-full mx-auto">
+
       <div className="flip-card relative w-full h-full transition-transform duration-700 transform-style-3d group-hover:rotate-y-180">
 
         {/* FRONT SIDE OF CARD */}
         <div className="flip-card-front absolute w-full h-full backface-hidden rounded-xl p-4 sm:p-8 flex flex-col items-center justify-center text-white bg-[linear-gradient(to_right,#243B55,#141E30)] border border-primary shadow-glow-primary">
           {/* Icon */}
-          <div className="mb-4 sm:mb-6">
+          <div className="mb-1 sm:mb-3">
             <img
               src={iconUrl}
               alt={iconAlt}
-              className="w-full max-w-[200px] h-20 sm:h-24 object-contain drop-shadow-lg"
+              className="w-full max-w-[200px] h-12 object-contain drop-shadow-lg pb-0"
             />
           </div>
 
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center justify-start">
             <BrightPathGradientTitle
               as="h3"
-              className="text-[18px] font-bold mb-2 text-center leading-tight">
+              className="text-[18px] font-bold mb-1 text-center leading-tight">
               {mainHeading}
             </BrightPathGradientTitle>
-            <p className="text-2xl text-primary text-center text-shadow-md">
+            <p className="text-sm uppercase tracking-wide text-primary text-center mb-1 text-shadow-md">
               {subheading}
             </p>
             {frontCardDescription && (
@@ -64,33 +68,42 @@ const FlipCard: React.FC<FlipCardProps> = ({
         </div>
 
         {/* BACK SIDE OF CARD */}
-        <div className="flip-card-back absolute w-full h-full backface-hidden bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl p-4 sm:p-8 flex flex-col justify-center text-[#1A2238] rotate-y-180 shadow-glow-primary">
-        <div 
-    className="absolute inset-0 z-0 opacity-10"
-    style={{ 
-      backgroundImage: `url('/images/back-texture-overlay.jpg')`,
-      backgroundSize: 'cover' 
-    }} 
-  />
-          <h3 className="text-xl font-bold text-center mb-4 text-[#1A2238] text-shadow-md leading-tight">
+        {/* BACK SIDE OF CARD */}
+        <div className="flip-card-back absolute inset-0 backface-hidden bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl p-4 sm:p-5 flex flex-col justify-start text-[#1A2238] rotate-y-180 shadow-glow-primary overflow-hidden">
+          <div
+            className="absolute inset-0 z-0 opacity-10"
+            style={{
+              backgroundImage: `url('/images/back-texture-overlay.jpg')`,
+              backgroundSize: "cover",
+            }}
+          />
+
+          <h3 className="text-lg font-bold text-center mb-2 text-[#1A2238] text-shadow-md leading-tight relative z-10">
             {backCardTitle}
           </h3>
-          <ul className="space-y-2 list-disc list-inside text-[#1A2238] relative z-10">
-            {bulletPoints.map((point, index) => {
-              const p = point as any;
+
+          <ul className="mt-0 space-y-1 list-disc list-inside text-[#1A2238] text-[12px] leading-snug relative z-10">
+            {bulletPoints.slice(0, 2).map((point, index) => {
+              const p = point;
               return (
-                <li key={index} className="text-sm leading-relaxed text-[#1A2238]">
-                  {p.text || p.list_item_text || p.bullet_point || p.bullet_text || JSON.stringify(point)}
+                <li key={index} className="text-[12px] leading-snug text-[#1A2238]">
+                  {p.text || p.list_item_text || p.bullet_point || p.bullet_text || ""}
                 </li>
               );
             })}
           </ul>
-          <div className="mt-8 text-center">
-            <button className="bg-[#1A2238] text-primary font-bold py-2 px-6 rounded-md transition-all duration-300 ease-in-out hover:bg-[#222c48] shadow-md">
+
+          <p className="text-[11px] opacity-80 mt-1 relative z-10">
+            Tap to flip back →
+          </p>
+
+          <div className="mt-auto pt-3 relative z-10">
+            <button className="w-full bg-[#1A2238] text-primary font-bold py-2 rounded-md transition-all duration-300 ease-in-out hover:bg-[#222c48] shadow-md">
               {backCardButtonText}
             </button>
           </div>
         </div>
+
       </div>
     </div>
   );
