@@ -38,7 +38,7 @@ const PortfolioSection = () => {
   return (
     <section className={`py-20 ${theme === 'dark' ? 'bg-[#273442]' : 'bg-gray-100'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <BrightPathGradientTitle className="text-3xl md:text-4xl font-poppins font-bold mb-12 text-foreground"
+        <BrightPathGradientTitle as="h2" className="text-3xl md:text-4xl font-poppins font-bold mb-12 text-foreground"
           gradientWords={["Work"]}
         >
           My Work
@@ -54,8 +54,8 @@ const PortfolioSection = () => {
             <motion.div
               key={item.id}
               className={`relative rounded-2xl overflow-hidden cursor-pointer
-                          transition-all duration-300 hover:shadow-2xl hover:scale-[1.02]
-                          ${theme === 'dark' ? 'bg-[#273442] border border-primary/30 shadow-glow-primary' : 'bg-white border-2 border-secondary/20'}`}
+              transition-all duration-300 hover:shadow-2xl hover:scale-[0.25px]
+              ${theme === 'dark' ? 'bg-[#273442] border-primary/20 border-[0.25px] shadow-glow-primary' : 'bg-white border-[0.25px] border-primary/50'}`}
               // Framer Motion's whileHover prop is perfect for this effect
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -78,9 +78,11 @@ const PortfolioSection = () => {
 
               {/* Card content with a gradient overlay for better readability */}
               <div className="p-6">
-                <h3 className={`text-2xl font-poppins font-semibold mb-2 text-shadow-md ${theme === 'dark' ? 'text-primary' : 'text-secondary/80'}`}>
+                <BrightPathGradientTitle 
+                  as="h3"
+                  className={`text-2xl font-poppins font-semibold mb-2 ${theme === 'dark' ? 'text-primary' : 'text-secondary/80'}`}>
                   {item.title}
-                </h3>
+                </BrightPathGradientTitle>
                 <p className={`font-lato text-base ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>
                   {item.description}
                 </p>

@@ -1,0 +1,589 @@
+import { useState } from 'react';
+import {
+  ArrowLeft,
+  TrendingUp,
+  Eye,
+  Users,
+  Heart,
+  Share2,
+  MessageCircle,
+  Target,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Play,
+  X,
+  Instagram,
+  Facebook,
+  Youtube,
+  Linkedin
+} from 'lucide-react';
+import BrightPathGradientTitle from './BrightPathGradientTitle';
+import BrightPathGradientButton from './BrightPathGradientButton';
+import type { SocialMediaCaseStudy, ContentSample } from '@/types/caseStudy';
+
+interface SocialMediaCaseStudyPageProps {
+  caseStudy: SocialMediaCaseStudy;
+  onBack?: () => void;
+  theme?: 'light' | 'dark';
+}
+
+const platformIcons: Record<string, React.ElementType> = {
+  instagram: Instagram,
+  facebook: Facebook,
+  linkedin: Linkedin,
+  youtube: Youtube,
+  tiktok: Share2,
+};
+
+const metricIcons: Record<string, React.ElementType> = {
+  impressions: Eye,
+  accountsReached: Users,
+  nonFollowerReach: TrendingUp,
+  reach: Users,
+  engagement: Heart,
+  followers: Users,
+  growth: TrendingUp,
+  views: Eye,
+  likes: Heart,
+  shares: Share2,
+  comments: MessageCircle,
+  profileVisits: Users,
+  linkTaps: Share2,
+};
+
+const metricLabels: Record<string, string> = {
+  impressions: 'Impressions',
+  accountsReached: 'Accounts Reached',
+  nonFollowerReach: 'Non-Follower Reach',
+  reach: 'Reach',
+  engagement: 'Engagement',
+  followers: 'Followers',
+  growth: 'Growth',
+  views: 'Views',
+  likes: 'Likes',
+  shares: 'Shares',
+  comments: 'Comments',
+  profileVisits: 'Profile Visits',
+  linkTaps: 'Link Taps',
+};
+
+export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: SocialMediaCaseStudyPageProps) {
+  const pageBg = theme === 'dark' ? 'bg-background text-foreground' : 'bg-white text-neutral-900';
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxContent, setLightboxContent] = useState<ContentSample | null>(null);
+
+  // Filter content by type
+  const images = caseStudy.contentSamples.filter((c) => c.type === 'image');
+  const videos = caseStudy.contentSamples.filter((c) => c.type === 'video');
+
+  // Get metrics as array for display (excluding reportingPeriod from main display)
+  const metricsArray = Object.entries(caseStudy.metrics)
+    .filter(([key, value]) => value && key !== 'reportingPeriod')
+    .map(([key, value]) => ({
+      key,
+      value,
+      icon: metricIcons[key] || TrendingUp,
+      label: metricLabels[key] || key.charAt(0).toUpperCase() + key.slice(1),
+    }));
+
+  // Get primary metrics (first 3) for hero display
+  const primaryMetrics = metricsArray.slice(0, 3);
+  const reportingPeriod = caseStudy.metrics.reportingPeriod;
+
+  const openLightbox = (content: ContentSample) => {
+    setLightboxContent(content);
+    setLightboxOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+    setLightboxContent(null);
+  };
+
+  const nextImage = () => {
+    setActiveImageIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setActiveImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  return (
+    <div className={`min-h-screen ${pageBg}`}>
+      {/* Back Button */}
+      {onBack && (
+        <div className="sticky top-20 z-40 bg-background/80 backdrop-blur-sm border-b border-border">
+          <div className="container mx-auto px-4 py-3">
+            <button
+              onClick={onBack}
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="text-sm font-medium">Back to Portfolio</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+{/* Hero Section */}
+<section
+  className="relative overflow-hidden min-h-[70vh] lg:min-h-[80vh] flex items-center pt-24 pb-16 lg:pt-32 lg:pb-24"
+  style={
+    caseStudy.heroBackground
+      ? {
+          backgroundImage: `url(${caseStudy.heroBackground})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }
+      : undefined
+  }
+>
+  {/* Overlays */}
+  <div className="absolute inset-0 bg-black/55" aria-hidden="true" />
+  <div
+    className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/35 to-background/95"
+    aria-hidden="true"
+  />
+
+  {/* Content must be ABOVE overlays */}
+  <div className="relative z-10 w-full">
+    <div className="container mx-auto px-4">
+      <div className="max-w-4xl mx-auto text-center mb-12">
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 text-white rounded-full text-sm font-medium mb-6 border border-white/10">
+          <TrendingUp className="w-4 h-4" />
+          Social Media Content
+        </div>
+
+        {/* Title */}
+        <BrightPathGradientTitle
+          as="h1"
+          className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-poppins"
+        >
+          {caseStudy.title}
+        </BrightPathGradientTitle>
+
+        {/* Subtitle */}
+        <p className="text-xl text-white/90 font-lato max-w-2xl mx-auto">
+          {caseStudy.description}
+        </p>
+
+        {/* Platforms */}
+        <div className="flex justify-center gap-3 mt-6 flex-wrap">
+  {caseStudy.platforms.map((platform) => {
+    const Icon = platformIcons[platform];
+
+    return (
+      <div
+        key={platform}
+        className="flex items-center gap-2 px-3 py-1.5 bg-white/10 border border-white/15 rounded-full text-white"
+      >
+        {Icon ? <Icon className="w-4 h-4 text-primary" /> : null}
+        <span className="text-sm capitalize">{platform}</span>
+      </div>
+    );
+  })}
+</div>
+
+
+        {/* Quick Stats */}
+        <div className="flex flex-wrap justify-center gap-8 mt-8">
+          {primaryMetrics.map((metric) => {
+            const Icon = metric.icon;
+            return (
+              <div key={metric.key} className="text-center">
+                <div className="flex items-center justify-center gap-2">
+                  <Icon className="w-5 h-5 text-primary" />
+                  <div className="text-3xl font-bold text-primary">{metric.value}</div>
+                </div>
+                <div className="text-sm text-white/75">{metric.label}</div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Reporting Period Caption */}
+        {reportingPeriod && (
+          <p className="text-sm text-white/70 mt-4">
+            Reporting period: {reportingPeriod}
+          </p>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+      {/* Overview Section */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <BrightPathGradientTitle
+              as="h2"
+              className="text-3xl font-bold text-center mb-8 font-poppins"
+              gradientWords={['Overview']}
+            >
+              Project Overview
+            </BrightPathGradientTitle>
+            <p className="text-lg text-muted-foreground text-center font-lato leading-relaxed">
+              {caseStudy.overview}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Goals Section */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <BrightPathGradientTitle
+              as="h2"
+              className="text-3xl font-bold text-center mb-8 font-poppins"
+              gradientWords={['Goals']}
+            >
+              Project Goals
+            </BrightPathGradientTitle>
+            <div className="grid md:grid-cols-2 gap-4">
+              {caseStudy.goals.map((goal, index) => (
+                <div
+                  key={index}
+                  className="flex items-start gap-3 p-4 rounded-lg bg-card border border-primary/20"
+                >
+                  <Target className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <span className="text-muted-foreground font-lato">{goal}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Deliverables Section */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <BrightPathGradientTitle
+            as="h2"
+            className="text-3xl font-bold text-center mb-8 font-poppins"
+            gradientWords={['Deliverables']}
+          >
+            Key Deliverables
+          </BrightPathGradientTitle>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {caseStudy.deliverables.map((deliverable, index) => (
+              <div
+                key={index}
+                className="p-6 rounded-lg bg-card border border-primary/50 hover:shadow-lg transition-shadow"
+              >
+                <BrightPathGradientTitle
+                  as="h3"
+                  className="text-lg font-semibold mb-2 font-poppins"
+                >
+                  {deliverable.title}
+                </BrightPathGradientTitle>
+                <p className="text-sm text-muted-foreground font-lato">
+                  {deliverable.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Process Section */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <BrightPathGradientTitle
+            as="h2"
+            className="text-3xl font-bold text-center mb-12 font-poppins"
+            gradientWords={['Process']}
+          >
+            Our Process
+          </BrightPathGradientTitle>
+          <div className="max-w-4xl mx-auto">
+            <div className="relative">
+              {/* Timeline line */}
+              <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-primary/30 -translate-x-1/2" />
+
+              {caseStudy.process.map((step, index) => (
+                <div
+                  key={step.step}
+                  className={`relative flex items-start gap-6 mb-8 ${
+                    index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                  }`}
+                >
+                  {/* Step number */}
+                  <div className="absolute left-4 md:left-1/2 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold -translate-x-1/2 z-10">
+                    {step.step}
+                  </div>
+
+                  {/* Content */}
+                  <div
+                    className={`ml-12 md:ml-0 md:w-[calc(50%-2rem)] p-4 rounded-lg bg-card border border-border ${
+                      index % 2 === 0 ? 'md:mr-auto md:pr-8' : 'md:ml-auto md:pl-8'
+                    }`}
+                  >
+                    <BrightPathGradientTitle
+                      as="h3"
+                      className="text-lg font-semibold mb-2 font-poppins"
+                    >
+                      {step.title}
+                    </BrightPathGradientTitle>
+                    {/* <p className="text-sm text-muted-foreground font-lato">{step.description}
+                    </p> */}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Results Section */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <BrightPathGradientTitle
+            as="h2"
+            className="text-3xl font-bold text-center mb-8 font-poppins"
+            gradientWords={['Results']}
+          >
+            Results & Metrics
+          </BrightPathGradientTitle>
+
+          {/* Metrics Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
+            {metricsArray.map((metric) => {
+              const Icon = metric.icon;
+              return (
+                <div
+                  key={metric.key}
+                  className="p-4 rounded-lg bg-card border border-primary/20 text-center"
+                >
+                  <Icon className="w-6 h-6 text-primary mx-auto mb-2" />
+                  <div className="text-2xl font-bold text-foreground">{metric.value}</div>
+                  <div className="text-xs text-muted-foreground">{metric.label}</div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Results List */}
+          <div className="max-w-3xl mx-auto">
+            <div className="space-y-3">
+              {caseStudy.results.map((result, index) => (
+                <div
+                  key={index}
+                  className="flex items-start gap-3 p-4 rounded-lg bg-primary/5 border border-primary/20"
+                >
+                  <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <span className="text-muted-foreground font-lato">{result}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Content Samples - Image Carousel */}
+      {images.length > 0 && (
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <BrightPathGradientTitle
+              as="h2"
+              className="text-3xl font-bold text-center mb-8 font-poppins"
+              gradientWords={['Samples']}
+            >
+              Content Samples
+            </BrightPathGradientTitle>
+
+            {/* Main Carousel */}
+            <div className="max-w-4xl mx-auto">
+              <div className="relative aspect-[4/5] max-w-md mx-auto rounded-lg overflow-hidden border border-border shadow-xl mb-4">
+                <img
+                  src={images[activeImageIndex].src}
+                  alt={images[activeImageIndex].alt}
+                  className="w-full h-full object-cover cursor-pointer"
+                  onClick={() => openLightbox(images[activeImageIndex])}
+                />
+
+                {/* Platform badge */}
+                {images[activeImageIndex].platform && (
+                  <div className="absolute top-4 left-4 px-3 py-1 bg-background/80 backdrop-blur-sm rounded-full flex items-center gap-1.5">
+                    {(() => {
+                      const Icon = platformIcons[images[activeImageIndex].platform!];
+                      return Icon ? <Icon className="w-4 h-4 text-primary" /> : null;
+                    })()}
+                    <span className="text-sm capitalize">{images[activeImageIndex].platform}</span>
+                  </div>
+                )}
+
+                {/* Navigation arrows */}
+                {images.length > 1 && (
+                  <>
+                    <button
+                      onClick={prevImage}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-colors"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={nextImage}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-colors"
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  </>
+                )}
+
+                {/* Caption */}
+                {images[activeImageIndex].caption && (
+                  <div className="absolute bottom-4 left-4 right-4 px-4 py-2 bg-background/80 backdrop-blur-sm rounded-lg">
+                    <p className="text-sm text-center">{images[activeImageIndex].caption}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Thumbnail strip */}
+              {images.length > 1 && (
+                <div className="flex gap-2 overflow-x-auto pb-2">
+                  {images.map((image, index) => (
+                    <button
+                      key={image.id}
+                      onClick={() => setActiveImageIndex(index)}
+                      className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                        index === activeImageIndex
+                          ? 'border-primary scale-105'
+                          : 'border-transparent opacity-60 hover:opacity-100'
+                      }`}
+                    >
+                      <img
+                        src={image.src}
+                        alt={image.alt}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Video Reels Section */}
+      {videos.length > 0 && (
+        <section className="py-16 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <BrightPathGradientTitle
+              as="h2"
+              className="text-3xl font-bold text-center mb-8 font-poppins"
+              gradientWords={['Reels']}
+            >
+              Video Reels
+            </BrightPathGradientTitle>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-8xl mx-auto">
+              {videos.map((video) => (
+                <button
+                  key={video.id}
+                  onClick={() => openLightbox(video)}
+                  className="relative  rounded-lg overflow-hidden border border-border group"
+                >
+                  <img
+                    src={video.thumbnail || video.src}
+                    alt={video.alt}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/50 transition-colors">
+                    <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
+                      <Play className="w-5 h-5 text-primary-foreground ml-0.5" />
+                    </div>
+                  </div>
+                  {video.platform && (
+                    <div className="absolute top-2 left-2 w-6 h-6 rounded-full bg-background/80 flex items-center justify-center">
+                      {(() => {
+                        const Icon = platformIcons[video.platform];
+                        return Icon ? <Icon className="w-3 h-3 text-primary" /> : null;
+                      })()}
+                    </div>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Testimonial */}
+      {caseStudy.testimonial && (
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center">
+              <blockquote className="text-xl md:text-2xl text-muted-foreground italic mb-6 font-lato">
+                "{caseStudy.testimonial.quote}"
+              </blockquote>
+              <div>
+                <div className="font-semibold text-foreground">{caseStudy.testimonial.author}</div>
+                <div className="text-sm text-muted-foreground">{caseStudy.testimonial.role}</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* CTA Section */}
+      <section className="py-16 bg-primary/5">
+        <div className="container mx-auto px-4 text-center">
+          <BrightPathGradientTitle
+            as="h2"
+            className="text-2xl font-bold text-foreground mb-4 font-poppins"
+            gradientWords={['Social', 'Media', 'Presence']}
+          >
+            Ready to Elevate Your Social Media Presence?
+          </BrightPathGradientTitle>
+          <p className="text-muted-foreground mb-8 max-w-xl mx-auto font-lato">
+            Let's discuss how we can create engaging content that grows your audience and builds your brand.
+          </p>
+          <BrightPathGradientButton className="px-8 py-3 text-primary-foreground font-medium rounded-md hover:bg-primary/90 transition-colors">
+            Get in Touch
+          </BrightPathGradientButton>
+        </div>
+      </section>
+
+      {/* Lightbox */}
+      {lightboxOpen && lightboxContent && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+          onClick={closeLightbox}
+        >
+          <button
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-background/20 flex items-center justify-center hover:bg-background/40 transition-colors"
+          >
+            <X className="w-5 h-5 text-white" />
+          </button>
+          <div
+            className="max-w-4xl max-h-[90vh] overflow-hidden rounded-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {lightboxContent.type === 'image' ? (
+              <img
+                src={lightboxContent.src}
+                alt={lightboxContent.alt}
+                className="max-w-full max-h-[90vh] object-contain"
+              />
+            ) : (
+              <video
+                src={lightboxContent.src}
+                controls
+                autoPlay
+                className="max-w-full max-h-[90vh]"
+              />
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

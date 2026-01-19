@@ -22,6 +22,11 @@
   status = 200
 
 [[redirects]]
+  from = "/api/case-studies"
+  to = "/.netlify/functions/get-case-studies"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

@@ -69,7 +69,7 @@ export default function BrightPathGradientTitle({
 }: BrightPathGradientTitleProps) {
   // Gradient classes based on style
   const gradientClasses = {
-    gold: 'bg-gradient-to-r from-primary via-yellow-500 to-orange-400 bg-clip-text text-transparent',
+    gold: 'bg-gradient-to-r from-primary via-yellow-500 to-yellow-600 bg-clip-text text-transparent',
     primary: 'bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent dark:from-yellow-500 dark:to-orange-400',
   };
 

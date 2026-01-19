@@ -14,6 +14,7 @@ const ServicesPage = React.lazy(() => import('./pages/ServicesPage'));
 const ReviewsPage = React.lazy(() => import('./pages/ReviewsPage'));
 const AngelCityCaseStudy = React.lazy(() => import('./components/features/AngelCityMassageCaseStudy'));
 const PortfolioDemoPage = React.lazy(() => import('./pages/PortfolioDemoPage'));
+const CaseStudyPage = React.lazy(() => import('./pages/CaseStudyPage'));
 import "./index.css";
 import { initializeTheme } from "./store/appStore";
 // import PortfolioProject from "./pages/PortfolioProject.tsx";
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "portfolio",
         element: <PortfolioDemoPage />,
+      },
+      {
+        path: "portfolio/:slug",
+        element: <CaseStudyPage />,
       },
       {
         path: "contact",

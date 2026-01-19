@@ -78,11 +78,13 @@ const ServicesSection = ({ theme }: SectionProps) => {
           {services.map((service, index) => (
             <div
               key={index}
-              className={`p-8 rounded-lg hover:transform hover:scale-105 transition-all duration-300 hover:shadow-2xl ${theme === 'dark' ? 'bg-[#1A2238] border border-primary shadow-glow-primary' : 'bg-gray-50 border border-secondary/20 shadow-2xl'}`}
+              className={`p-8 rounded-lg hover:transform hover:scale-105 transition-all duration-300 hover:shadow-2xl ${theme === 'dark' ? 'bg-[#1A2238] border border-primary/20 shadow-glow-primary' : 'bg-gray-50 border border-primary/50 shadow-2xl'}`}
             >
               <div className="flex justify-center">{service.icon}</div>
 
-              <BrightPathGradientTitle as="h3" className="font-poppins text-2xl font-semibold mb-4">
+              <BrightPathGradientTitle as="h3" className="font-poppins text-2xl font-semibold mb-4"
+              gradientWords={["Design", "Development", "Strategy", "Brand"]}
+              >
                 {service.title}
               </BrightPathGradientTitle>
 
