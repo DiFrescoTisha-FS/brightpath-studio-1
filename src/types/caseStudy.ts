@@ -91,6 +91,7 @@ export interface SocialMediaCaseStudy extends BaseCaseStudy {
   campaignPeriod?: string;
   postFrequency?: string;
   heroBackground?: string;
+  heroBackgroundPosition?: string;
 }
 
 // Web Project Case Study

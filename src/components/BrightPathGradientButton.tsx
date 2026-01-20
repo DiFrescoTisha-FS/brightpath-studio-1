@@ -106,7 +106,7 @@ export default function BrightPathGradientButton({
       disabled={disabled}
       className={`
         relative
-        bg-gradient-to-r from-primary via-yellow-500 to-orange-400
+        bg-gradient-to-r from-primary via-yellow-500 to-yellow-400
         ${getHoverClasses()}
         text-primary-foreground font-semibold font-poppins
         rounded-lg

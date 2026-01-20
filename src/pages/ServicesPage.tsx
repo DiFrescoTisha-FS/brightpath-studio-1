@@ -63,7 +63,7 @@ const ServicesPage: React.FC = () => {
       {/* <div className="absolute inset-0 bg-slate-900 opacity-80 z-0"></div> */}
 
       <motion.div
-        className="container mx-auto relative z-10"
+        className="container mx-auto mt-36 relative z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import ReviewWidget from '../components/ReviewWidget';
 import PortfolioSection from '../components/PortfolioSection';
 import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
+import BrightPathGradientButton from "@/components/BrightPathGradientButton";
 
 // Define a single props type for all sections that will receive the 'theme' prop
 type SectionProps = {
@@ -34,9 +35,9 @@ const HeroSection = ({ theme }: SectionProps) => (
         We are the beacon in the digital fog, crafting brilliant web experiences
         that navigate your brand to success.
       </p>
-      <button className="mt-8 bg-primary text-primary-foreground font-bold font-lato py-2 px-6 rounded-md text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl text-shadow-md">
+      <BrightPathGradientButton className="mt-8 bg-primary text-primary-foreground font-bold font-lato py-2 px-6 rounded-md text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl text-shadow-md">
         Begin Your Journey
-      </button>
+      </BrightPathGradientButton>
     </div>
   </section>
 );

@@ -135,7 +135,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
       ? {
           backgroundImage: `url(${caseStudy.heroBackground})`,
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundPosition: caseStudy.heroBackgroundPosition || 'center',
           backgroundRepeat: 'no-repeat',
         }
       : undefined
@@ -222,7 +222,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
           <div className="max-w-4xl mx-auto">
             <BrightPathGradientTitle
               as="h2"
-              className="text-3xl font-bold text-center mb-8 font-poppins"
+              className="font-bold text-center mb-8 font-poppins"
               gradientWords={['Overview']}
             >
               Project Overview
@@ -240,7 +240,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
           <div className="max-w-4xl mx-auto">
             <BrightPathGradientTitle
               as="h2"
-              className="text-3xl font-bold text-center mb-8 font-poppins"
+              className="font-bold text-center mb-8 font-poppins"
               gradientWords={['Goals']}
             >
               Project Goals
@@ -265,7 +265,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         <div className="container mx-auto px-4">
           <BrightPathGradientTitle
             as="h2"
-            className="text-3xl font-bold text-center mb-8 font-poppins"
+            className="font-bold text-center mb-8 font-poppins"
             gradientWords={['Deliverables']}
           >
             Key Deliverables
@@ -279,6 +279,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                 <BrightPathGradientTitle
                   as="h3"
                   className="text-lg font-semibold mb-2 font-poppins"
+                  gradientWords={["Calendar", "Photography", "Reels", "Story", "Community", "Performance"]}
                 >
                   {deliverable.title}
                 </BrightPathGradientTitle>
@@ -296,7 +297,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         <div className="container mx-auto px-4">
           <BrightPathGradientTitle
             as="h2"
-            className="text-3xl font-bold text-center mb-12 font-poppins"
+            className="font-bold text-center mb-12 font-poppins"
             gradientWords={['Process']}
           >
             Our Process
@@ -304,7 +305,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
           <div className="max-w-4xl mx-auto">
             <div className="relative">
               {/* Timeline line */}
-              <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-primary/30 -translate-x-1/2" />
+              <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-primary/20 -translate-x-1/2" />
 
               {caseStudy.process.map((step, index) => (
                 <div
@@ -314,7 +315,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                   }`}
                 >
                   {/* Step number */}
-                  <div className="absolute left-4 md:left-1/2 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold -translate-x-1/2 z-10">
+                  <div className="absolute left-4 md:left-1/2 w-8 h-8 rounded-full bg-primary/50 text-primary-foreground flex items-center justify-center text-sm font-bold -translate-x-1/2 z-10">
                     {step.step}
                   </div>
 
@@ -327,6 +328,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                     <BrightPathGradientTitle
                       as="h3"
                       className="text-lg font-semibold mb-2 font-poppins"
+                      gradientWords={["Brand", "Strategy", "Creative", "Publishing", "Community", "Optimization"]}
                     >
                       {step.title}
                     </BrightPathGradientTitle>
@@ -345,7 +347,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         <div className="container mx-auto px-4">
           <BrightPathGradientTitle
             as="h2"
-            className="text-3xl font-bold text-center mb-8 font-poppins"
+            className="font-bold text-center mb-8 font-poppins"
             gradientWords={['Results']}
           >
             Results & Metrics
@@ -391,7 +393,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
           <div className="container mx-auto px-4">
             <BrightPathGradientTitle
               as="h2"
-              className="text-3xl font-bold text-center mb-8 font-poppins"
+              className="font-bold text-center mb-8 font-poppins"
               gradientWords={['Samples']}
             >
               Content Samples
@@ -477,34 +479,34 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
           <div className="container mx-auto px-4">
             <BrightPathGradientTitle
               as="h2"
-              className="text-3xl font-bold text-center mb-8 font-poppins"
+              className="font-bold text-center mb-8 font-poppins"
               gradientWords={['Reels']}
             >
               Video Reels
             </BrightPathGradientTitle>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-8xl mx-auto">
+            <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
               {videos.map((video) => (
                 <button
                   key={video.id}
                   onClick={() => openLightbox(video)}
-                  className="relative  rounded-lg overflow-hidden border border-border group"
+                  className="relative w-32 h-32 md:w-40 md:h-40 rounded-lg overflow-hidden border border-border group flex-shrink-0"
                 >
                   <img
                     src={video.thumbnail || video.src}
                     alt={video.alt}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-center"
                   />
-                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/50 transition-colors">
-                    <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
-                      <Play className="w-5 h-5 text-primary-foreground ml-0.5" />
+                  <div className="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/40 transition-colors">
+                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center shadow-lg">
+                      <Play className="w-4 h-4 text-white ml-0.5 drop-shadow-sm" />
                     </div>
                   </div>
                   {video.platform && (
-                    <div className="absolute top-2 left-2 w-6 h-6 rounded-full bg-background/80 flex items-center justify-center">
+                    <div className="absolute top-2 left-2 w-5 h-5 rounded-full bg-background/80 flex items-center justify-center">
                       {(() => {
                         const Icon = platformIcons[video.platform];
-                        return Icon ? <Icon className="w-3 h-3 text-primary" /> : null;
+                        return Icon ? <Icon className="w-2.5 h-2.5 text-primary" /> : null;
                       })()}
                     </div>
                   )}
