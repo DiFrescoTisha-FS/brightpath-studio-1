@@ -35,7 +35,7 @@ const MultiPageFlowSection: React.FC<MultiPageFlowSectionProps> = ({ theme }) =>
                     {/* Adjusted text colors to ensure readability against the dark overlay */}
                     <div className="w-full md:w-1/3">
 
-                        <BrightPathGradientTitle as="h2" className="text-3xl md:text-4xl font-bold header-foreground mb-6 font-poppins leading-tight"
+                        <BrightPathGradientTitle as="h2" className="font-bold header-foreground mb-6 font-poppins leading-tight"
                             textColor='text-gray-900 dark:text-gray-200'
                             gradientWords={["Flow"]}
                         >

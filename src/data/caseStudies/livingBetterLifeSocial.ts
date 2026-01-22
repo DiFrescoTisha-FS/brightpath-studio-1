@@ -118,6 +118,13 @@ export const livingBetterLifeSocialCaseStudy: SocialMediaCaseStudy = {
       platform: 'instagram',
     },
     {
+      id: 'lbl-social-21',
+      type: 'image',
+      src: '/social-media/living-better-life/post-21.jpg',
+      alt: 'Mindshifts that pull you back',
+      platform: 'instagram',
+    },
+    {
       id: 'lbl-social-1',
       type: 'image',
       src: '/social-media/living-better-life/post-1.png',
@@ -167,11 +174,18 @@ export const livingBetterLifeSocialCaseStudy: SocialMediaCaseStudy = {
       platform: 'linkedin',
     },
     {
-      id: 'lbl-social-video-10',
+      id: 'lbl-social-20',
+      type: 'image',
+      src: '/social-media/living-better-life/post-20.jpg',
+      alt: 'Clarity changes everything',
+      platform: 'linkedin',
+    },
+    {
+      id: 'lbl-social-video-20',
       type: 'video',
-      src: '/social-media/living-better-life/reel-10.mp4',
-      thumbnail: '/social-media/living-better-life/reel-10-thumb.png',
-      alt: 'Mindset Shift',
+      src: '/social-media/living-better-life/reel-20.mp4',
+      thumbnail: '/social-media/living-better-life/reel-20-thumb.png',
+      alt: 'MEDWEEK Guest speaker Althea',
       platform: 'instagram',
     },
     {
@@ -179,7 +193,7 @@ export const livingBetterLifeSocialCaseStudy: SocialMediaCaseStudy = {
       type: 'video',
       src: '/social-media/living-better-life/reel-11.mp4',
       thumbnail: '/social-media/living-better-life/reel-11-thumb.png',
-      alt: '12-week accelerator program in action',
+      alt: 'MED Week Events',
       platform: 'facebook',
     },
     {
@@ -187,7 +201,7 @@ export const livingBetterLifeSocialCaseStudy: SocialMediaCaseStudy = {
       type: 'video',
       src: '/social-media/living-better-life/reel-3.mp4',
       thumbnail: '/social-media/living-better-life/reel-3-thumb.png',
-      alt: 'Quick desk stretches',
+      alt: '12-week Accelerator program in action',
       platform: 'tiktok',
     },
     {
@@ -195,7 +209,7 @@ export const livingBetterLifeSocialCaseStudy: SocialMediaCaseStudy = {
       type: 'video',
       src: '/social-media/living-better-life/reel-5.mp4',
       thumbnail: '/social-media/living-better-life/reel-5-thumb.png',
-      alt: 'MedWeek Event',
+      alt: 'Pitch Contest',
       platform: 'youtube',
     },
     {
@@ -203,7 +217,7 @@ export const livingBetterLifeSocialCaseStudy: SocialMediaCaseStudy = {
       type: 'video',
       src: '/social-media/living-better-life/reel-6.mp4',
       thumbnail: '/social-media/living-better-life/reel-6-thumb.jpg',
-      alt: 'Summit event',
+      alt: 'Pitch Contest',
       platform: 'tiktok',
     },
     {
@@ -211,7 +225,7 @@ export const livingBetterLifeSocialCaseStudy: SocialMediaCaseStudy = {
       type: 'video',
       src: '/social-media/living-better-life/reel-7.mp4',
       thumbnail: '/social-media/living-better-life/reel-7-thumb.png',
-      alt: 'Summit event',
+      alt: 'MED WEEK',
       platform: 'youtube',
     },
     {
@@ -219,7 +233,7 @@ export const livingBetterLifeSocialCaseStudy: SocialMediaCaseStudy = {
       type: 'video',
       src: '/social-media/living-better-life/reel-8.mp4',
       thumbnail: '/social-media/living-better-life/reel-8-thumb.png',
-      alt: 'Summit event',
+      alt: 'Summit event Bridget guest speaker',
       platform: 'youtube',
     },
     {
@@ -227,7 +241,7 @@ export const livingBetterLifeSocialCaseStudy: SocialMediaCaseStudy = {
       type: 'video',
       src: '/social-media/living-better-life/reel-9.mp4',
       thumbnail: '/social-media/living-better-life/reel-9-thumb.png',
-      alt: 'Summit event',
+      alt: 'Med Week event',
       platform: 'youtube',
     },
     {
@@ -235,8 +249,16 @@ export const livingBetterLifeSocialCaseStudy: SocialMediaCaseStudy = {
       type: 'video',
       src: '/social-media/living-better-life/reel-12.mp4',
       thumbnail: '/social-media/living-better-life/reel-12-thumb.png',
-      alt: 'Summit event',
+      alt: 'Veterans Day Thank you to our vets',
       platform: 'youtube',
+    },
+    {
+      id: 'lbl-social-video-10',
+      type: 'video',
+      src: '/social-media/living-better-life/reel-10.mp4',
+      thumbnail: '/social-media/living-better-life/reel-10-thumb.png',
+      alt: 'MEDWEEK Guest speaker Althea',
+      platform: 'instagram',
     },
   ],
 

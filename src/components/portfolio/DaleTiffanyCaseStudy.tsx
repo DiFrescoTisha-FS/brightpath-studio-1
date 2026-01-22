@@ -105,7 +105,7 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
             </BrightPathGradientTitle>
 
             {/* Subtitle */}
-            <p className="text-xl text-muted-foreground font-lato max-w-2xl mx-auto">
+            <p className="text-muted-foreground font-lato max-w-2xl mx-auto">
               Transforming a 20-year-old legacy PHP site into a modern, responsive e-commerce platform with B2B portal and integrated CRM.
             </p>
 
@@ -133,7 +133,7 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
         <div className="container mx-auto px-4">
           <BrightPathGradientTitle
             as="h2"
-            className="text-2xl font-semibold text-center mb-8 font-poppins"
+            className="font-semibold text-center mb-8 font-poppins"
             gradientWords={["After"]}
           >
             
@@ -159,7 +159,7 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
               /* Before/After Comparison Mode */
               <>
                 <div
-                  className="relative aspect-[16/10] rounded-lg overflow-hidden border border-border shadow-xl"
+                  className="relative aspect-[16/10] rounded-lg overflow-hidden border border-primary/50 dark:shadow-glow-primary shadow-xl"
                   onMouseMove={(e) => {
                     const rect = e.currentTarget.getBoundingClientRect();
                     const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -217,7 +217,7 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
             ) : (
               /* New Feature Mode (no before image) */
               <>
-                <div className="relative aspect-[16/10] rounded-lg overflow-hidden border border-border shadow-xl">
+                <div className="relative aspect-[16/10] rounded-lg overflow-hidden border border-primary/50 dark:shadow-glow-primary shadow-xl">
                   <img
                     src={screenshots[activeScreenshot].after}
                     alt="New Feature"
@@ -243,10 +243,10 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {/* Before - Problems */}
-            <div className="p-6 rounded-lg bg-destructive/5 border border-primary/30">
+            <div className="p-6 rounded-lg bg-destructive/5 border border-primary/50 dark:shadow-glow-primary">
               <BrightPathGradientTitle
-                as="h3"
-                className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2 font-poppins">
+                as="h4"
+                className="font-semibold text-foreground mb-4 flex items-center gap-2 font-poppins">
                 The Challenge
               </BrightPathGradientTitle>
               <ul className="space-y-3">
@@ -260,10 +260,10 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
             </div>
 
             {/* After - Solutions */}
-            <div className="p-6 rounded-lg bg-primary/5 border border-primary/20">
+            <div className="p-6 rounded-lg bg-primary/5 border border-primary/50 dark:shadow-glow-primary">
               <BrightPathGradientTitle 
-              as="h3"
-              className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2 font-poppins">                
+              as="h4"
+              className="font-semibold text-foreground mb-4 flex items-center gap-2 font-poppins">                
                 The Solution
               </BrightPathGradientTitle>
               <ul className="space-y-3">
@@ -284,7 +284,7 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
         <div className="container mx-auto px-4">
           <BrightPathGradientTitle
             as="h2"
-            className="text-3xl font-bold text-center mb-4 font-poppins"
+            className="font-bold text-center mb-4 font-poppins"
             gradientWords={["Delivered"]}>
             Key Features Delivered
           </BrightPathGradientTitle>
@@ -294,17 +294,19 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {/* B2B Portal */}
-            <div className="p-6 rounded-lg bg-card border border-primary/50 hover:shadow-lg transition-shadow">
+            <div className="p-6 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                 <Users className="w-6 h-6 text-primary" />
               </div>
               <BrightPathGradientTitle
-                as="h3"
-                className="text-lg font-semibold text-foreground mb-2 font-poppins">B2B Retailer Portal</BrightPathGradientTitle>
-              <p className="text-sm text-muted-foreground mb-4 font-lato">
+                as="h4"
+                className="font-semibold text-foreground mb-2 font-poppins"
+                gradientWords={["Portal", "B2B"]}
+              >B2B Retailer Portal</BrightPathGradientTitle>
+              <p className="text-muted-foreground mb-4 font-lato">
                 Secure wholesale ordering platform replacing the broken legacy catalog system.
               </p>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+              <ul className="space-y-2 text-muted-foreground">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3 h-3 text-primary" />
                   Retailer authentication
@@ -325,14 +327,16 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
             </div>
 
             {/* CRM System */}
-            <div className="p-6 rounded-lg bg-card border border-primary/50 hover:shadow-lg transition-shadow">
+            <div className="p-6 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                 <BarChart3 className="w-6 h-6 text-primary" />
               </div>
               <BrightPathGradientTitle
-                as="h3"
-                className="text-lg font-semibold mb-2 font-poppins">Custom CRM System</BrightPathGradientTitle>
-              <p className="text-sm text-muted-foreground mb-4 font-lato">
+                as="h4"
+                className="font-semibold mb-2 font-poppins"
+                gradientWords={["CRM", "System"]}
+              >Custom CRM System</BrightPathGradientTitle>
+              <p className="text-muted-foreground mb-4 font-lato">
                 Full-featured CRM replacing their outdated legacy system with modern capabilities.
               </p>
               <ul className="space-y-2 text-sm text-muted-foreground">
@@ -356,17 +360,18 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
             </div>
 
             {/* Responsive Design */}
-            <div className="p-6 rounded-lg bg-card border border-primary/50 hover:shadow-lg transition-shadow">
+            <div className="p-6 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                 <Smartphone className="w-6 h-6 text-primary" />
               </div>
               <BrightPathGradientTitle
-                as="h3"
-                className="text-lg font-semibold mb-2 font-poppins">Responsive Design</BrightPathGradientTitle>
-              <p className="text-sm text-muted-foreground mb-4 font-lato">
+                as="h4"
+                gradientWords={["Responsive"]}
+                className="font-semibold mb-2 font-poppins">Responsive Design</BrightPathGradientTitle>
+              <p className="text-muted-foreground mb-4 font-lato">
                 Mobile-first approach ensuring perfect display across all devices.
               </p>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+              <ul className="space-y-2 text-muted-foreground">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3 h-3 text-primary" />
                   Mobile-first CSS
@@ -387,17 +392,18 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
             </div>
 
             {/* AI Chatbots */}
-            <div className="p-6 rounded-lg bg-card border border-primary/50 hover:shadow-lg transition-shadow">
+            <div className="p-6 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                 <Bot className="w-6 h-6 text-primary" />
               </div>
               <BrightPathGradientTitle
-                as="h3"
-                className="text-lg font-semibold mb-2 font-poppins">AI-Powered Chatbots</BrightPathGradientTitle>
-              <p className="text-sm text-muted-foreground mb-4 font-lato">
+                as="h4"
+                gradientWords={["Chatbots"]}
+                className="font-semibold mb-2 font-poppins">AI-Powered Chatbots</BrightPathGradientTitle>
+              <p className="text-muted-foreground mb-4 font-lato">
                 Intelligent assistants for both public visitors and B2B retailers.
               </p>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+              <ul className="space-y-2 text-muted-foreground">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3 h-3 text-primary" />
                   Public visitor assistant
@@ -418,7 +424,7 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
             </div>
 
             {/* Dark/Light Theme */}
-            <div className="p-6 rounded-lg bg-card border border-primary/50 hover:shadow-lg transition-shadow">
+            <div className="p-6 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                 <div className="relative">
                   <Sun className="w-6 h-6 text-primary absolute -left-1 -top-1" />
@@ -426,12 +432,13 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
                 </div>
               </div>
               <BrightPathGradientTitle
-                as="h3"
-                className="text-lg font-semibold mb-2 font-poppins">Dark/Light Theme</BrightPathGradientTitle>
-              <p className="text-sm text-muted-foreground mb-4 font-lato">
+                as="h4"
+                gradientWords={["Theme"]}
+                className="font-semibold mb-2 font-poppins">Dark/Light Theme</BrightPathGradientTitle>
+              <p className="text-muted-foreground mb-4 font-lato">
                 User-preferred theming with seamless transitions between modes.
               </p>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+              <ul className="space-y-2 text-muted-foreground">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3 h-3 text-primary" />
                   System preference detection
@@ -454,25 +461,33 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
 
           {/* Additional Features Row */}
           <div className="grid md:grid-cols-4 gap-4 max-w-5xl mx-auto mt-6">
-            <div className="p-4 rounded-lg bg-card border border-border text-center">
+            <div className="p-4 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary text-center">
               <Globe className="w-6 h-6 text-primary mx-auto mb-2" />
-              <div className="text-sm font-medium text-foreground">Headless WordPress</div>
-              <div className="text-xs text-muted-foreground">Content management</div>
+              <BrightPathGradientTitle
+                as="h4"
+                gradientWords={["Headless"]}
+                className="font-medium text-foreground">Headless WordPress</BrightPathGradientTitle>
+              <p className=" text-muted-foreground">Content management</p>
             </div>
-            <div className="p-4 rounded-lg bg-card border border-border text-center">
+            <div className="p-4 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary text-center">
               <Database className="w-6 h-6 text-primary mx-auto mb-2" />
-              <div className="text-sm font-medium text-foreground">Supabase</div>
-              <div className="text-xs text-muted-foreground">Real-time database</div>
+              <BrightPathGradientTitle
+               as="h4"
+               className="font-medium text-foreground">Supabase</BrightPathGradientTitle>
+              <p className="text-muted-foreground">Real-time database</p>
             </div>
-            <div className="p-4 rounded-lg bg-card border border-border text-center">
+            <div className="p-4 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary text-center">
               <ShoppingCart className="w-6 h-6 text-primary mx-auto mb-2" />
-              <div className="text-sm font-medium text-foreground">E-Commerce</div>
-              <div className="text-xs text-muted-foreground">Product catalog</div>
+              <BrightPathGradientTitle as="h4"
+                className="font-medium text-foreground">E-Commerce</BrightPathGradientTitle>
+              <p className="text-muted-foreground">Product catalog</p>
             </div>
-            <div className="p-4 rounded-lg bg-card border border-border text-center">
+            <div className="p-4 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary text-center">
               <Mail className="w-6 h-6 text-primary mx-auto mb-2" />
-              <div className="text-sm font-medium text-foreground">Email System</div>
-              <div className="text-xs text-muted-foreground">Resend integration</div>
+              <BrightPathGradientTitle as="h4"
+                gradientWords={["Email"]}
+                className="font-medium text-foreground">Email System</BrightPathGradientTitle>
+              <p className="text-muted-foreground">Resend integration</p>
             </div>
           </div>
         </div>
@@ -483,7 +498,7 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
         <div className="container mx-auto px-4">
           <BrightPathGradientTitle
             as="h2"
-            className="text-3xl font-bold text-center text-foreground mb-4 font-poppins" gradientWords={["Technology"]}>
+            className="font-bold text-center text-foreground mb-4 font-poppins" gradientWords={["Technology"]}>
             Technology Stack
           </BrightPathGradientTitle>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto font-lato">
@@ -494,7 +509,7 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
             {techStack.map((tech) => (
               <div
                 key={tech.name}
-                className="px-4 py-2 rounded-full bg-card border border-primary/30 hover:border-primary transition-colors"
+                className="px-4 py-2 rounded-full bg-card border border-primary/50 dark:shadow-glow-primary hover:border-primary transition-colors"
               >
                 <span className="text-sm font-medium text-foreground">{tech.name}</span>
                 <span className="text-xs text-muted-foreground ml-2">({tech.category})</span>
@@ -509,7 +524,7 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
         <div className="container mx-auto px-4 text-center">
           <BrightPathGradientTitle
             as="h2"
-            className="text-2xl font-bold text-foreground mb-4 font-poppins"
+            className="font-bold text-foreground mb-4 font-poppins"
             gradientWords={["Transform", "Digital", "Presence"]}>
             Ready to Transform Your Digital Presence?
           </BrightPathGradientTitle>

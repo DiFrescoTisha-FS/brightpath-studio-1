@@ -28,7 +28,7 @@ export function SocialMediaCard({ caseStudy, onViewCaseStudy, className = '' }: 
 
   return (
     <div
-      className={`group relative overflow-hidden rounded-lg bg-card border border-primary/20 shadow-glow-primary transition-all duration-300 hover:shadow-xl hover:-translate-y-2 ${className}`}
+      className={`group relative overflow-hidden rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary transition-all duration-300 hover:shadow-xl hover:-translate-y-2 ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

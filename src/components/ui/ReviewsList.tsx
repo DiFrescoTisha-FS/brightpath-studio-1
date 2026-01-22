@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import ReviewCard from "../ReviewCard";
+import type { Review } from "@/types/index";
 
-// Define the TypeScript interface for our review data.
-interface Review {
+// WordPress API response structure
+interface WordPressReview {
   id: number;
   title: {
     rendered: string;
@@ -36,8 +37,19 @@ const ReviewsList: React.FC = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await response.json();
-        setReviews(data);
+        const data: WordPressReview[] = await response.json();
+
+        // Transform WordPress data to Review format
+        const formattedReviews: Review[] = data.map((item) => ({
+          id: item.id,
+          author: item.acf.reviewer_name,
+          quote: item.acf.review_text,
+          rating: item.acf.rating,
+          photoUrl: item.acf.client_headshot || '',
+          reviewDate: item.acf.review_date,
+        }));
+
+        setReviews(formattedReviews);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "An unknown error occurred"

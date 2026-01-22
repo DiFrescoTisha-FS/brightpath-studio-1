@@ -21,7 +21,7 @@ const ReviewCard = ({ review }: { review: Review }) => { // FIX 1: Use curly bra
   return ( // Explicit return of the JSX
     <motion.div 
       // FIX 2: Use theme-aware, primary-based classes for the background, border, and text color
-      className={`p-8 rounded-lg border border-primary shadow-glow-primary flex flex-col items-center text-center ${cardClasses}`}
+      className={`p-8 rounded-lg border border-primary/30 shadow-glow-primary flex flex-col items-center text-center ${cardClasses}`}
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -47,7 +47,7 @@ const ReviewCard = ({ review }: { review: Review }) => { // FIX 1: Use curly bra
       <p className="text-lg font-lato italic leading-relaxed mb-4 flex-grow text-foreground">"{review.quote}"</p>
       
       <div className="mt-auto">
-        <h4 className="font-poppins font-bold text-lg text-foreground">{review.author}</h4>
+        <BrightPathGradientTitle as="h4" className="font-poppins font-bold text-lg text-foreground">{review.author}</BrightPathGradientTitle>
         <p className="text-sm text-muted-foreground">Client Review</p>
       </div>
     </motion.div>

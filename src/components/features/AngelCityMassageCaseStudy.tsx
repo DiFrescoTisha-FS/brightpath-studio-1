@@ -69,7 +69,7 @@ const AngelCityCaseStudy = () => {
           {/* Text color uses the inverse text color (white/light) */}
           <BrightPathGradientTitle
             as="h1"
-            className="text-5xl md:text-7xl font-bold mb-6 tracking-tight"
+            className="font-bold mb-6 tracking-tight"
             textColor='text-gray-900 dark:text-gray-200'
             gradientWords={["Case", "Study"]}
           >
@@ -100,7 +100,7 @@ const AngelCityCaseStudy = () => {
       <section className="relative z-10 bg-bp-light-bg-light dark:bg-bp-light-bg-dark pt-24 pb-16 px-4 transition-colors duration-300">
         <div className="max-w-4xl mx-auto">
           {/* Text color uses the default text color (dark) */}
-          <BrightPathGradientTitle as="h2" className="text-4xl md:text-5xl font-bold text-bp-text dark:text-bp-text-dark mb-6"
+          <BrightPathGradientTitle as="h2" className="font-bold text-bp-text dark:text-bp-text-dark mb-6"
             textColor='text-gray-900 dark:text-gray-200'
             gradientWords={["Experience"]}
           >

@@ -3,10 +3,8 @@
 import axios from 'axios';
 
 // API Base URL Configuration:
-// - In production (Netlify): Uses relative paths which get redirected via netlify.toml
-// - In development: Falls back to localhost:3002 for the local Express server
-const API_BASE_URL = import.meta.env.VITE_API_URL ||
-  (import.meta.env.PROD ? '' : 'http://localhost:3002');
+// Uses relative paths which get redirected via netlify.toml (works with both netlify dev and production)
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
 // This function fetches the flip card data from our backend server.
 export const getFlipCardPhases = async () => {

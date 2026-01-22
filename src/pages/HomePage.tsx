@@ -28,10 +28,10 @@ const HeroSection = ({ theme }: SectionProps) => (
     </video>
     <div className={`absolute top-0 left-0 w-full h-full ${theme === 'dark' ? 'bg-background/60' : 'bg-background/60'} z-10`}></div>
     <div className="relative z-20 text-center max-w-4xl mx-auto px-4">
-      <BrightPathGradientTitle as="h1" className="text-lg md:text-3xl lg:text-6xl sm:text-lg font-poppins font-bold mb-4 mt-24" gradientWords={["Shine", "Bright", "Online"]}>
+      <BrightPathGradientTitle as="h1" className="font-poppins font-bold mb-4 mt-24" gradientWords={["Shine", "Bright", "Online"]}>
         Guiding Your Business to Shine Bright Online
       </BrightPathGradientTitle>
-      <p className="text-sm md:text-lg text-muted-foreground font-lato mb-8 text-shadow-md">
+      <p className="text-slate-600 dark:text-slate-100 font-lato mb-8 text-shadow-md">
         We are the beacon in the digital fog, crafting brilliant web experiences
         that navigate your brand to success.
       </p>
@@ -72,7 +72,7 @@ const ServicesSection = ({ theme }: SectionProps) => {
     
     <section className="bg-services-bg py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <BrightPathGradientTitle as="h2" className="text-3xl md:text-4xl font-poppins font-bold text-services mb-12" gradientWords={["Services"]}>
+        <BrightPathGradientTitle as="h2" className="font-poppins font-bold text-services mb-12" gradientWords={["Services"]}>
           Our Services
         </BrightPathGradientTitle>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -83,13 +83,13 @@ const ServicesSection = ({ theme }: SectionProps) => {
             >
               <div className="flex justify-center">{service.icon}</div>
 
-              <BrightPathGradientTitle as="h3" className="font-poppins text-2xl font-semibold mb-4"
+              <BrightPathGradientTitle as="h5" className="font-poppins font-semibold mb-4"
               gradientWords={["Design", "Development", "Strategy", "Brand"]}
               >
                 {service.title}
               </BrightPathGradientTitle>
 
-              <p className={`font-lato ${theme === 'dark' ? 'text-white' : 'text-secondary'}`}>{service.description}</p>
+              <p className={`font-lato card-subheading ${theme === 'dark' ? 'text-white' : 'text-secondary'}`}>{service.description}</p>
             </div>
           ))}
         </div>
@@ -110,13 +110,13 @@ const BrandStorySection = ({ theme }: SectionProps) => (
             <img
               src="/images/lh-5.jpeg"
               alt="Lighthouse Graphic"
-              className="h-auto w-full mx-auto mb-4 rounded-lg shadow-glow-primary border border-primary"
+              className="h-auto w-full mx-auto mb-4 rounded-lg shadow-glow-primary border border-primary/30"
             />
           </div>
         </div>
       </div>
       <div>
-        <BrightPathGradientTitle as="h2" className="text-3xl md:text-4xl font-poppins font-bold text-foreground mb-4"
+        <BrightPathGradientTitle as="h3" className="font-poppins font-bold text-foreground mb-4"
         gradientWords={["Beacon"]}
         >
  A Beacon in the Digital Fog
@@ -155,7 +155,7 @@ const HomePage = () => {
         <PortfolioSection />
         <section id="reviews" className="py-20">
           <div className="container mx-auto px-4 text-center">
-            <BrightPathGradientTitle as="h2" className="text-3xl md:text-4xl font-bold font-poppins mb-12"
+            <BrightPathGradientTitle as="h2" className="font-bold font-poppins mb-12"
               gradientWords={["Testimonials"]}
             >
               Client Testimonials

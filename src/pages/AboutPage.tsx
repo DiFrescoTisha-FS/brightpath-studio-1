@@ -128,7 +128,7 @@ const AboutPage = () => {
         <div className="container mx-auto space-y-4 relative z-20">
           {/* H2 Title with Theme Awareness */}
 
-          <BrightPathGradientTitle as="h2" className="text-4xl md:text-5xl font-extrabold text-center mb-12 pt-0 font-poppins" gradientWords={["Journey"]}
+          <BrightPathGradientTitle as="h2" className="font-extrabold text-center mb-12 pt-0 font-poppins" gradientWords={["Journey"]}
           >My Digital Journey Timeline
 
           </BrightPathGradientTitle>

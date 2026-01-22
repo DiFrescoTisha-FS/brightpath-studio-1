@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useAppStore } from '@/store/appStore'; // Importing the global state for theme
+import { useAppStore } from '@/store/appStore';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
 
 // Portfolio data structure - each item represents a project showcase
@@ -38,7 +38,7 @@ const PortfolioSection = () => {
   return (
     <section className={`py-20 ${theme === 'dark' ? 'bg-[#273442]' : 'bg-gray-100'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <BrightPathGradientTitle as="h2" className="text-3xl md:text-4xl font-poppins font-bold mb-12 text-foreground"
+        <BrightPathGradientTitle as="h2" className="font-poppins font-bold mb-12 text-foreground"
           gradientWords={["Work"]}
         >
           My Work
@@ -79,11 +79,12 @@ const PortfolioSection = () => {
               {/* Card content with a gradient overlay for better readability */}
               <div className="p-6">
                 <BrightPathGradientTitle 
-                  as="h3"
-                  className={`text-2xl font-poppins font-semibold mb-2 ${theme === 'dark' ? 'text-primary' : 'text-secondary/80'}`}>
+                  as="h5"
+                  gradientWords={["Mobile", "Massage", "Dale", "Tiffany", "Song", "Artist"]}
+                  className="font-poppins font-semibold mb-2">
                   {item.title}
                 </BrightPathGradientTitle>
-                <p className={`font-lato text-base ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>
+                <p className={`card-subheading font-lato ${theme === 'dark' ? 'text-gray-300' : 'text-slate-700'}`}>
                   {item.description}
                 </p>
               </div>

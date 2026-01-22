@@ -249,7 +249,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
               {caseStudy.goals.map((goal, index) => (
                 <div
                   key={index}
-                  className="flex items-start gap-3 p-4 rounded-lg bg-card border border-primary/20"
+                  className="flex items-start gap-3 p-4 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary"
                 >
                   <Target className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                   <span className="text-muted-foreground font-lato">{goal}</span>
@@ -274,12 +274,12 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
             {caseStudy.deliverables.map((deliverable, index) => (
               <div
                 key={index}
-                className="p-6 rounded-lg bg-card border border-primary/50 hover:shadow-lg transition-shadow"
+                className="p-6 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary hover:shadow-lg transition-shadow"
               >
                 <BrightPathGradientTitle
                   as="h3"
                   className="text-lg font-semibold mb-2 font-poppins"
-                  gradientWords={["Calendar", "Photography", "Reels", "Story", "Community", "Performance"]}
+                  gradientWords={["Calendar", "Photography", "Reels", "Story", "Strategy", "Educational", "Video", "Promotion", "Community", "Performance"]}
                 >
                   {deliverable.title}
                 </BrightPathGradientTitle>
@@ -321,14 +321,14 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
 
                   {/* Content */}
                   <div
-                    className={`ml-12 md:ml-0 md:w-[calc(50%-2rem)] p-4 rounded-lg bg-card border border-border ${
+                    className={`ml-12 md:ml-0 md:w-[calc(50%-2rem)] p-4 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary ${
                       index % 2 === 0 ? 'md:mr-auto md:pr-8' : 'md:ml-auto md:pl-8'
                     }`}
                   >
                     <BrightPathGradientTitle
                       as="h3"
                       className="text-lg font-semibold mb-2 font-poppins"
-                      gradientWords={["Brand", "Strategy", "Creative", "Publishing", "Community", "Optimization"]}
+                      gradientWords={["Brand", "Strategy", "Creative", "Publishing", "Community", "Optimization", "Voice", "Content", "Pillars", "Impact"]}
                     >
                       {step.title}
                     </BrightPathGradientTitle>
@@ -360,10 +360,10 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
               return (
                 <div
                   key={metric.key}
-                  className="p-4 rounded-lg bg-card border border-primary/20 text-center"
+                  className="p-4 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary text-center"
                 >
                   <Icon className="w-6 h-6 text-primary mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-foreground">{metric.value}</div>
+                  <BrightPathGradientTitle as="span" className="text-2xl font-bold text-foreground">{metric.value}</BrightPathGradientTitle>
                   <div className="text-xs text-muted-foreground">{metric.label}</div>
                 </div>
               );
@@ -376,7 +376,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
               {caseStudy.results.map((result, index) => (
                 <div
                   key={index}
-                  className="flex items-start gap-3 p-4 rounded-lg bg-primary/5 border border-primary/20"
+                  className="flex items-start gap-3 p-4 rounded-lg bg-primary/5 border border-primary/50 dark:shadow-glow-primary"
                 >
                   <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                   <span className="text-muted-foreground font-lato">{result}</span>
@@ -401,7 +401,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
 
             {/* Main Carousel */}
             <div className="max-w-4xl mx-auto">
-              <div className="relative aspect-[4/5] max-w-md mx-auto rounded-lg overflow-hidden border border-border shadow-xl mb-4">
+              <div className="relative aspect-[4/5] max-w-md mx-auto rounded-lg overflow-hidden border border-primary/50 dark:shadow-glow-primary mb-4">
                 <img
                   src={images[activeImageIndex].src}
                   alt={images[activeImageIndex].alt}
@@ -490,7 +490,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                 <button
                   key={video.id}
                   onClick={() => openLightbox(video)}
-                  className="relative w-32 h-32 md:w-40 md:h-40 rounded-lg overflow-hidden border border-border group flex-shrink-0"
+                  className="relative w-32 h-32 md:w-40 md:h-40 rounded-lg overflow-hidden border border-primary/50 dark:shadow-glow-primary group flex-shrink-0"
                 >
                   <img
                     src={video.thumbnail || video.src}
@@ -526,7 +526,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                 "{caseStudy.testimonial.quote}"
               </blockquote>
               <div>
-                <div className="font-semibold text-foreground">{caseStudy.testimonial.author}</div>
+                <BrightPathGradientTitle as="span" className="font-semibold text-foreground">{caseStudy.testimonial.author}</BrightPathGradientTitle>
                 <div className="text-sm text-muted-foreground">{caseStudy.testimonial.role}</div>
               </div>
             </div>
@@ -539,7 +539,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         <div className="container mx-auto px-4 text-center">
           <BrightPathGradientTitle
             as="h2"
-            className="text-2xl font-bold text-foreground mb-4 font-poppins"
+            className="font-bold text-foreground mb-4 font-poppins"
             gradientWords={['Social', 'Media', 'Presence']}
           >
             Ready to Elevate Your Social Media Presence?

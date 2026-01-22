@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import BrightPathGradientTitle from '../BrightPathGradientTitle';
 
 // Define the shape of our data to ensure type-safety in TypeScript
 interface ListItem {
@@ -85,10 +86,12 @@ const PhaseCards: React.FC = () => {
             }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-                <div className="relative z-10 p-10 rounded-none bg-midnight border border-yellow-500 text-white backdrop-blur-sm">
-                <span className="inline-block px-4 py-2 rounded-full text-sm font-bold mb-4 bg-yellow-400 text-black">
+                <div className="relative z-10 p-10 rounded-none bg-midnight border shadow-glow-primary text-white backdrop-blur-sm">
+              <BrightPathGradientTitle
+                as="span"
+                className="inline-block px-4 py-2 rounded-full font-bold mb-4 bg-yellow-400 text-black">
   {`${card.acf.phase_number}`}
-</span>
+</BrightPathGradientTitle>
               <img src={card.acf.card_icon} alt="Phase Icon" className="w-24 h-24 mb-4 items-center" />
 
 

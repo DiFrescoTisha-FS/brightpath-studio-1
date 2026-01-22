@@ -90,8 +90,14 @@ export default function PortfolioDemoPage() {
             Web Projects
           </BrightPathGradientTitle>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <DaleTiffanyCard onViewCaseStudy={() => setView('dale-tiffany')} />
-            <AngelCityMassageCard onViewCaseStudy={() => setView('angel-city')} />
+            <DaleTiffanyCard onViewCaseStudy={() => {
+              setView('dale-tiffany');
+              window.scrollTo(0, 0);
+            }} />
+            <AngelCityMassageCard onViewCaseStudy={() => {
+              setView('angel-city');
+              window.scrollTo(0, 0);
+            }} />
           </div>
         </div>
 
@@ -107,12 +113,18 @@ export default function PortfolioDemoPage() {
           <div className="flex flex-wrap justify-center gap-8 max-w-4xl mx-auto">
             <SocialMediaCard
               caseStudy={daleTiffanySocialCaseStudy}
-              onViewCaseStudy={() => setView('dale-tiffany-social')}
+              onViewCaseStudy={() => {
+                setView('dale-tiffany-social');
+                window.scrollTo(0, 0);
+              }}
               className="w-full sm:w-80 md:w-96"
             />
             <SocialMediaCard
               caseStudy={livingBetterLifeSocialCaseStudy}
-              onViewCaseStudy={() => setView('living-better-life-social')}
+              onViewCaseStudy={() => {
+                setView('living-better-life-social');
+                window.scrollTo(0, 0);
+              }}
               className="w-full sm:w-80 md:w-96"
             />
           </div>

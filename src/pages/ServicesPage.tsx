@@ -72,13 +72,13 @@ const ServicesPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8 lg:gap-12 items-center">
           {/* Left Column: Text Content with constrained width */}
           <div className="text-white">
-            <BrightPathGradientTitle as="h2" className="text-4xl font-bold mb-4" 
+            <BrightPathGradientTitle as="h2" className="font-bold mb-4" 
             gradientWords={["Process"]}
             textColor="text-foreground"
             >
               Our Process
             </BrightPathGradientTitle>
-            <p className="text-sm md:text-lg mb-6 text-shadow-md">
+            <p className="mb-6 text-shadow-md">
               At BrightPath Web Studio, every website we create follows a clear,
               purposeful path—from the first spark of an idea to a seamless,
               fully launched experience.
