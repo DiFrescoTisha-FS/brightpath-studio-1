@@ -30,10 +30,9 @@ const ReviewCard = ({ review }: { review: Review }) => {
         ))}
       </div>
       
-      <p className="text-lg font-lato italic leading-relaxed mb-4 flex-grow">"{review.quote}"</p>
+      <p className="text-lg font-lato italic text-muted-foreground leading-relaxed mb-4 flex-grow">"{review.quote}"</p>
       
       <div className="mt-auto">
-      {/* {`w-5 h-5 ${i < review.rating ? 'text-primary' : 'text-primary'}`}  */}
         <BrightPathGradientTitle as="h4" className="font-poppins font-bold text-lg">{review.author}</BrightPathGradientTitle>
         <p className="text-sm text-muted-foreground">Client Review</p>
       </div>

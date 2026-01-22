@@ -183,7 +183,7 @@ const AboutPage = () => {
                     <BrightPathGradientTitle as="h3" className="font-poppins text-xl md:text-2xl font-bold mb-3 gradient-text-dark drop-shadow-lg">
                       {event.title}
                     </BrightPathGradientTitle>
-                    <p className="font-lato text- md:text-md text-white leading-[1.6em] text-stone-200">
+                    <p className="font-lato text- md:text-md text-white leading-[1.6em]">
                       {event.description}
                     </p>
                   </div>

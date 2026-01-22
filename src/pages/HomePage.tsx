@@ -31,7 +31,7 @@ const HeroSection = ({ theme }: SectionProps) => (
       <BrightPathGradientTitle as="h1" className="font-poppins font-bold mb-4 mt-24" gradientWords={["Shine", "Bright", "Online"]}>
         Guiding Your Business to Shine Bright Online
       </BrightPathGradientTitle>
-      <p className="text-slate-600 dark:text-slate-100 font-lato mb-8 text-shadow-md">
+      <p className="text-muted-foreground font-lato mb-8 text-shadow-md">
         We are the beacon in the digital fog, crafting brilliant web experiences
         that navigate your brand to success.
       </p>
@@ -69,7 +69,7 @@ const ServicesSection = ({ theme }: SectionProps) => {
   ];
 
   return (
-    
+
     <section className="bg-services-bg py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <BrightPathGradientTitle as="h2" className="font-poppins font-bold text-services mb-12" gradientWords={["Services"]}>
@@ -84,12 +84,15 @@ const ServicesSection = ({ theme }: SectionProps) => {
               <div className="flex justify-center">{service.icon}</div>
 
               <BrightPathGradientTitle as="h5" className="font-poppins font-semibold mb-4"
-              gradientWords={["Design", "Development", "Strategy", "Brand"]}
+                gradientWords={["Design", "Development", "Strategy", "Brand"]}
               >
                 {service.title}
               </BrightPathGradientTitle>
 
-              <p className={`font-lato card-subheading ${theme === 'dark' ? 'text-white' : 'text-secondary'}`}>{service.description}</p>
+              <p className="font-lato card-subheading text-muted-foreground">
+                {service.description}
+              </p>
+
             </div>
           ))}
         </div>
@@ -117,9 +120,9 @@ const BrandStorySection = ({ theme }: SectionProps) => (
       </div>
       <div>
         <BrightPathGradientTitle as="h3" className="font-poppins font-bold text-foreground mb-4"
-        gradientWords={["Beacon"]}
+          gradientWords={["Beacon"]}
         >
- A Beacon in the Digital Fog
+          A Beacon in the Digital Fog
         </BrightPathGradientTitle>
         <p className="font-lato text-muted-foreground leading-relaxed text-sm md:text-lg mb-6">
           In a crowded online world, clarity is everything. Like a lighthouse on
@@ -145,13 +148,13 @@ const BrandStorySection = ({ theme }: SectionProps) => (
 
 const HomePage = () => {
   const theme = useAppStore(state => state.theme);
-  
+
   return (
     <div className="min-h-screen">
       <main>
         <HeroSection theme={theme} />
         <ServicesSection theme={theme} />
-        
+
         <PortfolioSection />
         <section id="reviews" className="py-20">
           <div className="container mx-auto px-4 text-center">
@@ -161,7 +164,7 @@ const HomePage = () => {
               Client Testimonials
             </BrightPathGradientTitle>
             <ReviewWidget />
-           
+
           </div>
         </section>
         <BrandStorySection theme={theme} />

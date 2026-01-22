@@ -21,7 +21,7 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
         {/* === START OF THE NEW CONSOLIDATED SECTION === */}
         <BrightPathGradientTitle
           as="h3"
-          className="text-xl font-poppins font-bold mb-2"
+          className="text-xl font-poppins font-bold mb-2 text-muted-foreground"
           textColor='text-neutral-700 dark:text-gray-200'
           gradientWords={["BrightPath"]}
         >
@@ -41,7 +41,7 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
         <BrightPathGradientTitle
           as="p"
           className="font-lato mt-2"
-          textColor='text-neutral-700 dark:text-gray-200'
+          textColor='text-neutral-500 dark:text-gray-200'
           gradientWords={["Edward", "Almeida"]}
         >
           Inspired by Edward Almeida

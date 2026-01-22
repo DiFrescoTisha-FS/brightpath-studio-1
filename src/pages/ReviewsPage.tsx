@@ -44,7 +44,7 @@ const ReviewCard = ({ review }: { review: Review }) => { // FIX 1: Use curly bra
         ))}
       </div>
       
-      <p className="text-lg font-lato italic leading-relaxed mb-4 flex-grow text-foreground">"{review.quote}"</p>
+      <p className="text-lg font-lato italic leading-relaxed mb-4 flex-grow text-muted-foreground">"{review.quote}"</p>
       
       <div className="mt-auto">
         <BrightPathGradientTitle as="h4" className="font-poppins font-bold text-lg text-foreground">{review.author}</BrightPathGradientTitle>

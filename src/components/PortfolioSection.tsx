@@ -84,7 +84,7 @@ const PortfolioSection = () => {
                   className="font-poppins font-semibold mb-2">
                   {item.title}
                 </BrightPathGradientTitle>
-                <p className={`card-subheading font-lato ${theme === 'dark' ? 'text-gray-300' : 'text-slate-700'}`}>
+                <p className="card-subheading font-lato text-muted-foreground">
                   {item.description}
                 </p>
               </div>
