@@ -40,7 +40,7 @@ const Navbar = ({ theme }: NavbarProps) => {
               <Link to="/" className={`px-3 py-2 rounded-md text-sm font-lato transition-colors ${menuItemColorClass}`}>Home</Link>
               <Link to="/services" className={`px-3 py-2 rounded-md text-sm font-lato transition-colors ${menuItemColorClass}`}>Services</Link>
               <Link to="/about" className={`px-3 py-2 rounded-md text-sm font-lato transition-colors ${menuItemColorClass}`}>About</Link>
-              <Link to="/review" className={`px-3 py-2 rounded-md text-sm font-lato transition-colors ${menuItemColorClass}`}>Reviews</Link>
+              <Link to="/reviews" className={`px-3 py-2 rounded-md text-sm font-lato transition-colors ${menuItemColorClass}`}>Reviews</Link>
               <Link to="/portfolio" className={`px-3 py-2 rounded-md text-sm font-lato transition-colors ${menuItemColorClass}`}>Portfolio</Link>
               <Link to="/contact" className="bg-primary text-primary-foreground font-bold font-lato px-4 py-2 rounded-md text-sm hover:bg-yellow-400 transition-colors">Contact Us</Link>
               <ModeToggle />

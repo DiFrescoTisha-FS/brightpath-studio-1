@@ -42,12 +42,14 @@ export type WpContent = {
 * @property {number} id - The unique ID of the review post.
 * @property {WpContent} title - The title of the review post.
 * @property {WpContent} content - The main content of the review.
+* @property {WpContent} excerpt - The excerpt/summary of the review.
 * @property {AcfFields} acf - The custom fields from ACF.
 */
 export type WpReviewPost = {
   id: number;
   title: WpContent;
   content: WpContent;
+  excerpt: WpContent;
   acf: AcfFields;
 };
 
@@ -58,21 +60,20 @@ export type WpReviewPost = {
 /**
 * @typedef {object} Review - The simplified data structure for our front-end components.
 * This is what our UI will consume after processing the raw API response.
-* @property {number} id - The unique review ID.
 * @property {number} rating - The numerical star rating.
 * @property {string} author - The name of the reviewer.
 * @property {string} quote - The main review text.
-* @property {string} excerpt - A short excerpt or summary of the review (optional).
-* @property {string} photoUrl - The URL of the reviewer's photo (optional).
-* @property {string} reviewDate - The date of the review (optional).
+* @property {string} excerpt - Short excerpt for card display.
+* @property {string} photoUrl - The URL of the reviewer's photo.
+* @property {string} reviewDate - The date of the review.
 */
 export interface Review {
 id: number;
 rating: number;
 author: string;
 quote: string;
-excerpt?: string;
-photoUrl?: string;
+excerpt?: string; // The '?' makes this field optional
+photoUrl?: string; // The '?' makes this field optional
 reviewDate?: string;
 }
 

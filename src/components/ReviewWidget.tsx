@@ -5,8 +5,6 @@ import axios from 'axios';
 import ReviewCard from './ReviewCard';
 import { Review, MyReviewsResponse } from '@/types/index';
 
-// API Base URL Configuration:
-// Uses relative paths which get redirected via netlify.toml (works with both netlify dev and production)
 const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 const REVIEWS_URL = `${API_BASE_URL}/api/reviews`;
 
@@ -22,11 +20,20 @@ const ReviewWidget: React.FC = () => {
           REVIEWS_URL
         );
 
+        // Helper function to create excerpt from full text
+        const createExcerpt = (text: string, maxLength: number = 100): string => {
+          if (text.length <= maxLength) return text;
+          const trimmed = text.substring(0, maxLength);
+          const lastSpace = trimmed.lastIndexOf(' ');
+          return (lastSpace > 0 ? trimmed.substring(0, lastSpace) : trimmed) + '...';
+        };
+
         // This is the crucial data mapping step!
         const formattedReviews: Review[] = response.data.map((item) => ({
           id: item.id,
           author: item.acf.reviewer_name,
           quote: item.acf.review_text,
+          excerpt: createExcerpt(item.acf.review_text, 100),
           rating: item.acf.rating,
           photoUrl: item.acf.client_headshot?.url || '',
           reviewDate: item.acf.review_date || item.date,

@@ -6,14 +6,10 @@ import PortfolioSection from '../components/PortfolioSection';
 import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
 import BrightPathGradientButton from "@/components/BrightPathGradientButton";
 
-// Define a single props type for all sections that will receive the 'theme' prop
 type SectionProps = {
   theme: 'light' | 'dark';
 };
 
-// ===================================
-// HERO SECTION COMPONENT
-// ===================================
 const HeroSection = ({ theme }: SectionProps) => (
   <section className="relative text-foreground min-h-screen flex items-center justify-center overflow-hidden">
     <video
@@ -42,10 +38,6 @@ const HeroSection = ({ theme }: SectionProps) => (
   </section>
 );
 
-// ===================================
-// SERVICES SECTION COMPONENT
-// ===================================
-
 const ServicesSection = ({ theme }: SectionProps) => {
   const services = [
     {
@@ -69,7 +61,6 @@ const ServicesSection = ({ theme }: SectionProps) => {
   ];
 
   return (
-
     <section className="bg-services-bg py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <BrightPathGradientTitle as="h2" className="font-poppins font-bold text-services mb-12" gradientWords={["Services"]}>
@@ -101,9 +92,6 @@ const ServicesSection = ({ theme }: SectionProps) => {
   );
 };
 
-// ===================================
-// BRAND STORY SECTION COMPONENT
-// ===================================
 const BrandStorySection = ({ theme }: SectionProps) => (
   <section className={`py-20 ${theme === 'dark' ? 'bg-[#273442]' : 'bg-gray-200'}`}>
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -113,7 +101,7 @@ const BrandStorySection = ({ theme }: SectionProps) => (
             <img
               src="/images/lh-5.jpeg"
               alt="Lighthouse Graphic"
-              className="h-auto w-full mx-auto mb-4 rounded-lg shadow-glow-primary border border-primary/30"
+              className="h-auto w-full mx-auto mb-4 rounded-lg border border-primary/50 dark:shadow-glow-primary"
             />
           </div>
         </div>
@@ -136,7 +124,7 @@ const BrandStorySection = ({ theme }: SectionProps) => (
             Illuminating Success
           </span>
         </div>
-        <Link to="/review">
+        <Link to="/reviews">
           <button className="mt-8 bg-primary text-primary-foreground font-bold font-lato py-2 px-6 rounded-md text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl text-shadow-md">
             Read Our Reviews
           </button>

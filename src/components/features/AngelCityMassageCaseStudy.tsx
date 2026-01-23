@@ -102,6 +102,39 @@ const AngelCityCaseStudy = () => {
       <StyleGuideSection />
       <MultiPageFlowSection theme={theme} />
 
+      {/* Client Testimonial Section */}
+<section className="bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 py-20 px-4 transition-colors duration-300 relative z-10">
+  <div className="max-w-4xl mx-auto text-center">
+    <BrightPathGradientTitle
+      as="h2"
+      className="font-bold mb-8"
+      textColor="text-gray-900 dark:text-gray-200"
+      gradientWords={["Client"]}
+    >
+      What Our Client Says
+    </BrightPathGradientTitle>
+
+    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 md:p-12 relative">
+      <div className="absolute top-4 left-4 text-6xl text-primary/20 font-serif">"</div>
+      <div className="absolute bottom-4 right-4 text-6xl text-primary/20 font-serif">"</div>
+
+      <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 italic leading-relaxed mb-8 relative z-10">
+        Tish did an outstanding job building my new website. She has a great sense of style and really understands how to create a site that looks polished, modern, and inviting. More importantly, she truly cared about my needs and goals, listened carefully, and offered innovative ideas that made the final result even better than I envisioned. She was easy to work with, responsive, timely, and consistently professional throughout the entire process. I felt supported and confident every step of the way. I highly recommend Tish to anyone looking for a talented, creative, and reliable web designer. With sincere thanks.
+      </p>
+
+      <div className="flex flex-col items-center">
+        <div className="font-bold text-xl text-primary mb-1">Marlene Fenton</div>
+        <div className="text-gray-600 dark:text-gray-400">Owner, Angel City Massage</div>
+        <div className="flex gap-1 mt-3">
+          {[...Array(5)].map((_, i) => (
+            <span key={i} className="text-yellow-400 text-xl">★</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
       <section className="bg-gray-50 dark:bg-gray-800 py-16 px-4 transition-colors duration-300 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

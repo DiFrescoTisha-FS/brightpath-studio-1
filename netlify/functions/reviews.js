@@ -1,6 +1,4 @@
 // netlify/functions/reviews.js
-// Serverless function to fetch reviews from WordPress
-
 const axios = require('axios');
 
 export const handler = async (event, context) => {
@@ -24,7 +22,8 @@ export const handler = async (event, context) => {
   }
 
   try {
-    const fullUrl = `${process.env.WORDPRESS_API_URL}/wp-json/wp/v2/reviews?acf_format=standard`;
+    // Explicitly request excerpt field along with ACF data
+    const fullUrl = `${process.env.WORDPRESS_API_URL}/wp-json/wp/v2/reviews?acf_format=standard&_fields=id,title,content,excerpt,acf`;
 
     const response = await axios.get(fullUrl);
 
