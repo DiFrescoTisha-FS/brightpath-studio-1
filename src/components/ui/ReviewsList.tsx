@@ -11,10 +11,14 @@ interface WordPressReview {
   };
   acf: {
     reviewer_name: string;
+    review_excerpt: string;
     review_text: string;
     rating: number;
     client_headshot?: string;
     review_date: string;
+    reviewer_role?: string;
+    reviewer_company?: string;
+    project_context?: string;
   };
 }
 
@@ -43,6 +47,7 @@ const ReviewsList: React.FC = () => {
         const formattedReviews: Review[] = data.map((item) => ({
           id: item.id,
           author: item.acf.reviewer_name,
+          excerpt: item.acf.review_excerpt,
           quote: item.acf.review_text,
           rating: item.acf.rating,
           photoUrl: item.acf.client_headshot || '',

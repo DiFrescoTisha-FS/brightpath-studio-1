@@ -11,7 +11,6 @@ import {
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  // Play,
   X,
   Instagram,
   Facebook,
@@ -75,11 +74,9 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxContent, setLightboxContent] = useState<ContentSample | null>(null);
 
-  // Filter content by type
   const images = caseStudy.contentSamples.filter((c) => c.type === 'image');
   const videos = caseStudy.contentSamples.filter((c) => c.type === 'video');
 
-  // Get metrics as array for display (excluding reportingPeriod from main display)
   const metricsArray = Object.entries(caseStudy.metrics)
     .filter(([key, value]) => value && key !== 'reportingPeriod')
     .map(([key, value]) => ({
@@ -89,7 +86,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
       label: metricLabels[key] || key.charAt(0).toUpperCase() + key.slice(1),
     }));
 
-  // Get primary metrics (first 3) for hero display
   const primaryMetrics = metricsArray.slice(0, 3);
   const reportingPeriod = caseStudy.metrics.reportingPeriod;
 
@@ -113,7 +109,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
 
   return (
     <div className={`min-h-screen ${pageBg}`}>
-      {/* Back Button */}
       {onBack && (
         <div className="sticky top-20 z-40 bg-background/80 backdrop-blur-sm border-b border-border">
           <div className="container mx-auto px-4 py-3">
@@ -128,96 +123,85 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         </div>
       )}
 
-{/* Hero Section */}
-<section
-  className="relative overflow-hidden min-h-[70vh] lg:min-h-[80vh] flex items-center pt-24 pb-16 lg:pt-32 lg:pb-24"
-  style={
-    caseStudy.heroBackground
-      ? {
-          backgroundImage: `url(${caseStudy.heroBackground})`,
-          backgroundSize: 'cover',
-          backgroundPosition: caseStudy.heroBackgroundPosition || 'center',
-          backgroundRepeat: 'no-repeat',
+      <section
+        className="relative overflow-hidden min-h-[70vh] lg:min-h-[80vh] flex items-center pt-24 pb-16 lg:pt-32 lg:pb-24"
+        style={
+          caseStudy.heroBackground
+            ? {
+                backgroundImage: `url(${caseStudy.heroBackground})`,
+                backgroundSize: 'cover',
+                backgroundPosition: caseStudy.heroBackgroundPosition || 'center',
+                backgroundRepeat: 'no-repeat',
+              }
+            : undefined
         }
-      : undefined
-  }
->
-  {/* Overlays */}
-  <div className="absolute inset-0 bg-black/55" aria-hidden="true" />
-  <div
-    className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/35 to-background/95"
-    aria-hidden="true"
-  />
-
-  {/* Content must be ABOVE overlays */}
-  <div className="relative z-10 w-full">
-    <div className="container mx-auto px-4">
-      <div className="max-w-4xl mx-auto text-center mb-12">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 text-white rounded-full text-sm font-medium mb-6 border border-white/10">
-          <TrendingUp className="w-4 h-4" />
-          Social Media Content
-        </div>
-
-        {/* Title */}
-        <BrightPathGradientTitle
-          as="h1"
-          className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-poppins"
-        >
-          {caseStudy.title}
-        </BrightPathGradientTitle>
-
-        {/* Subtitle */}
-        <p className="text-xl text-white/90 font-lato max-w-2xl mx-auto">
-          {caseStudy.description}
-        </p>
-
-        {/* Platforms */}
-        <div className="flex justify-center gap-3 mt-6 flex-wrap">
-  {caseStudy.platforms.map((platform) => {
-    const Icon = platformIcons[platform];
-
-    return (
-      <div
-        key={platform}
-        className="flex items-center gap-2 px-3 py-1.5 bg-white/10 border border-white/15 rounded-full text-white"
       >
-        {Icon ? <Icon className="w-4 h-4 text-primary" /> : null}
-        <span className="text-sm capitalize">{platform}</span>
-      </div>
-    );
-  })}
-</div>
+        <div className="absolute inset-0 bg-black/55" aria-hidden="true" />
+        <div
+          className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/35 to-background/95"
+          aria-hidden="true"
+        />
 
-
-        {/* Quick Stats */}
-        <div className="flex flex-wrap justify-center gap-8 mt-8">
-          {primaryMetrics.map((metric) => {
-            const Icon = metric.icon;
-            return (
-              <div key={metric.key} className="text-center">
-                <div className="flex items-center justify-center gap-2">
-                  <Icon className="w-5 h-5 text-primary" />
-                  <div className="text-3xl font-bold text-primary">{metric.value}</div>
-                </div>
-                <div className="text-sm text-white/75">{metric.label}</div>
+        <div className="relative z-10 w-full">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center mb-12">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 text-white rounded-full text-sm font-medium mb-6 border border-white/10">
+                <TrendingUp className="w-4 h-4" />
+                Social Media Content
               </div>
-            );
-          })}
+
+              <BrightPathGradientTitle
+                as="h1"
+                className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-poppins"
+              >
+                {caseStudy.title}
+              </BrightPathGradientTitle>
+
+              <p className="text-xl text-white/90 font-lato max-w-2xl mx-auto">
+                {caseStudy.description}
+              </p>
+
+              <div className="flex justify-center gap-3 mt-6 flex-wrap">
+                {caseStudy.platforms.map((platform) => {
+                  const Icon = platformIcons[platform];
+
+                  return (
+                    <div
+                      key={platform}
+                      className="flex items-center gap-2 px-3 py-1.5 bg-white/10 border border-white/15 rounded-full text-white"
+                    >
+                      {Icon ? <Icon className="w-4 h-4 text-primary" /> : null}
+                      <span className="text-sm capitalize">{platform}</span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="flex flex-wrap justify-center gap-8 mt-8">
+                {primaryMetrics.map((metric) => {
+                  const Icon = metric.icon;
+                  return (
+                    <div key={metric.key} className="text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        <Icon className="w-5 h-5 text-primary" />
+                        <div className="text-3xl font-bold text-primary">{metric.value}</div>
+                      </div>
+                      <div className="text-sm text-white/75">{metric.label}</div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {reportingPeriod && (
+                <p className="text-sm text-white/70 mt-4">
+                  Reporting period: {reportingPeriod}
+                </p>
+              )}
+            </div>
+          </div>
         </div>
+      </section>
 
-        {/* Reporting Period Caption */}
-        {reportingPeriod && (
-          <p className="text-sm text-white/70 mt-4">
-            Reporting period: {reportingPeriod}
-          </p>
-        )}
-      </div>
-    </div>
-  </div>
-</section>
-
-      {/* Overview Section */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
@@ -235,7 +219,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         </div>
       </section>
 
-      {/* Goals Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
@@ -261,7 +244,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         </div>
       </section>
 
-      {/* Deliverables Section */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <BrightPathGradientTitle
@@ -293,7 +275,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         </div>
       </section>
 
-      {/* Process Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">
           <BrightPathGradientTitle
@@ -305,7 +286,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
           </BrightPathGradientTitle>
           <div className="max-w-4xl mx-auto">
             <div className="relative">
-              {/* Timeline line */}
               <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-primary/20 -translate-x-1/2" />
 
               {caseStudy.process.map((step, index) => (
@@ -315,12 +295,10 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                     index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
                   }`}
                 >
-                  {/* Step number */}
                   <div className="absolute left-4 md:left-1/2 w-8 h-8 rounded-full bg-primary/50 text-primary-foreground flex items-center justify-center text-sm font-bold -translate-x-1/2 z-10">
                     {step.step}
                   </div>
 
-                  {/* Content */}
                   <div
                     className={`ml-12 md:ml-0 md:w-[calc(50%-2rem)] p-4 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary ${
                       index % 2 === 0 ? 'md:mr-auto md:pr-8' : 'md:ml-auto md:pl-8'
@@ -333,8 +311,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                     >
                       {step.title}
                     </BrightPathGradientTitle>
-                    {/* <p className="text-sm text-muted-foreground font-lato">{step.description}
-                    </p> */}
                   </div>
                 </div>
               ))}
@@ -343,7 +319,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         </div>
       </section>
 
-      {/* Results Section */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <BrightPathGradientTitle
@@ -354,7 +329,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
             Results & Metrics
           </BrightPathGradientTitle>
 
-          {/* Metrics Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
             {metricsArray.map((metric) => {
               const Icon = metric.icon;
@@ -371,7 +345,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
             })}
           </div>
 
-          {/* Results List */}
           <div className="max-w-3xl mx-auto">
             <div className="space-y-3">
               {caseStudy.results.map((result, index) => (
@@ -388,7 +361,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         </div>
       </section>
 
-      {/* Content Samples - Image Carousel */}
       {images.length > 0 && (
         <section className="py-16">
           <div className="container mx-auto px-4">
@@ -400,7 +372,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
               Content Samples
             </BrightPathGradientTitle>
 
-            {/* Main Carousel */}
             <div className="max-w-4xl mx-auto">
               <div className="relative aspect-[4/5] max-w-md mx-auto rounded-lg overflow-hidden border border-primary/50 dark:shadow-glow-primary mb-4">
                 <img
@@ -410,7 +381,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                   onClick={() => openLightbox(images[activeImageIndex])}
                 />
 
-                {/* Platform badge */}
                 {images[activeImageIndex].platform && (
                   <div className="absolute top-4 left-4 px-3 py-1 bg-background/80 backdrop-blur-sm rounded-full flex items-center gap-1.5">
                     {(() => {
@@ -421,7 +391,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                   </div>
                 )}
 
-                {/* Navigation arrows */}
                 {images.length > 1 && (
                   <>
                     <button
@@ -439,7 +408,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                   </>
                 )}
 
-                {/* Caption */}
                 {images[activeImageIndex].caption && (
                   <div className="absolute bottom-4 left-4 right-4 px-4 py-2 bg-background/80 backdrop-blur-sm rounded-lg">
                     <p className="text-sm text-center">{images[activeImageIndex].caption}</p>
@@ -447,7 +415,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                 )}
               </div>
 
-              {/* Thumbnail strip */}
               {images.length > 1 && (
                 <div className="flex gap-2 overflow-x-auto pb-2">
                   {images.map((image, index) => (
@@ -474,7 +441,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         </section>
       )}
 
-      {/* Video Reels Section */}
       {videos.length > 0 && (
         <section className="py-16 bg-muted/30">
           <div className="container mx-auto px-4 mb-8">
@@ -499,7 +465,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         </section>
       )}
 
-      {/* Testimonial */}
       {caseStudy.testimonial && (
         <section className="py-16">
           <div className="container mx-auto px-4">
@@ -516,7 +481,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         </section>
       )}
 
-      {/* CTA Section */}
       <section className="py-16 bg-primary/5">
         <div className="container mx-auto px-4 text-center">
           <BrightPathGradientTitle
@@ -535,7 +499,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         </div>
       </section>
 
-      {/* Lightbox */}
       {lightboxOpen && lightboxContent && (
         <div
           className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"

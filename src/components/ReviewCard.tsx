@@ -1,5 +1,3 @@
-// src/components/ReviewCard.tsx
-
 'use client'; 
 
 import { motion } from 'framer-motion';
@@ -8,7 +6,6 @@ import type { Review } from '@/types/index';
 import { useAppStore } from '@/store/appStore';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
 
-// Helper component for a single review card
 const ReviewCard = ({ review }: { review: Review }) => {
   const { theme } = useAppStore();
   return (
@@ -18,17 +15,29 @@ const ReviewCard = ({ review }: { review: Review }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      {/* We'll handle the photoUrl in the ReviewWidget and pass the URL directly if needed */}
+      {review.photoUrl && (
+        <img 
+          src={review.photoUrl} 
+          alt={review.author} 
+          className="w-20 h-20 object-cover mb-4 rounded-lg shadow-md"
+        />
+      )}
       
       <div className="flex items-center space-x-2 mb-4">
         {Array.from({ length: 5 }, (_, i) => (
           <Star 
             key={i} 
-            className={`w-5 h-5 ${i < review.rating ? 'text-primary' : 'text-primary'}`} 
+            className={`w-5 h-5 ${i < review.rating ? 'text-primary' : 'text-muted-foreground'}`} 
             fill="currentColor"
           />
         ))}
       </div>
+      
+      {review.excerpt && (
+        <p className="text-base font-lato mb-3 text-muted-foreground font-semibold">
+          {review.excerpt}
+        </p>
+      )}
       
       <p className="text-lg font-lato italic text-muted-foreground leading-relaxed mb-4 flex-grow">"{review.quote}"</p>
       

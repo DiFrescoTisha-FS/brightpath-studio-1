@@ -9,18 +9,15 @@ import { Star } from 'lucide-react';
 import type { Review } from '@/types';
 import BrightPathGradientTitle from '@/components/BrightPathGradientTitle';
 
-// Helper component for a single review card
-const ReviewCard = ({ review }: { review: Review }) => { // FIX 1: Use curly braces { } for an explicit return
-  const { theme } = useAppStore(); // Now the hook call is valid
+const ReviewCard = ({ review }: { review: Review }) => {
+  const { theme } = useAppStore();
   
-  // Custom classes based on the theme
   const cardClasses = theme === 'dark' 
-    ? 'bg-background text-foreground' // Dark: use the dark background/foreground variables
-    : 'bg-services-card-bg text-secondary-foreground'; // Light: use the specific light theme card colors
+    ? 'bg-background text-foreground'
+    : 'bg-services-card-bg text-secondary-foreground';
 
-  return ( // Explicit return of the JSX
+  return (
     <motion.div 
-      // FIX 2: Use theme-aware, primary-based classes for the background, border, and text color
       className={`p-8 rounded-lg border border-primary/30 shadow-glow-primary flex flex-col items-center text-center ${cardClasses}`}
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
@@ -51,10 +48,9 @@ const ReviewCard = ({ review }: { review: Review }) => { // FIX 1: Use curly bra
         <p className="text-sm text-muted-foreground">Client Review</p>
       </div>
     </motion.div>
-  ); // End of explicit return
+  );
 };
 
-// Main ReviewsPage Component
 const ReviewsPage = () => {
   const { theme } = useAppStore();
   const { reviews, loading, error } = useReviews();
