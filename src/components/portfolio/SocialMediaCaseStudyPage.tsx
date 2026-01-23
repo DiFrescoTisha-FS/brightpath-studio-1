@@ -11,7 +11,7 @@ import {
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Play,
+  // Play,
   X,
   Instagram,
   Facebook,
@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
 import BrightPathGradientButton from './BrightPathGradientButton';
+import { VideoCarousel } from '@/components/portfolio/VideoCarousel';
 import type { SocialMediaCaseStudy, ContentSample } from '@/types/caseStudy';
 
 interface SocialMediaCaseStudyPageProps {
@@ -476,42 +477,23 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
       {/* Video Reels Section */}
       {videos.length > 0 && (
         <section className="py-16 bg-muted/30">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-4 mb-8">
             <BrightPathGradientTitle
               as="h2"
-              className="font-bold text-center mb-8 font-poppins"
+              className="font-bold text-center font-poppins"
               gradientWords={['Reels']}
             >
               Video Reels
             </BrightPathGradientTitle>
+          </div>
 
-            <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
-              {videos.map((video) => (
-                <button
-                  key={video.id}
-                  onClick={() => openLightbox(video)}
-                  className="relative w-32 h-32 md:w-40 md:h-40 rounded-lg overflow-hidden border border-primary/50 dark:shadow-glow-primary group flex-shrink-0"
-                >
-                  <img
-                    src={video.thumbnail || video.src}
-                    alt={video.alt}
-                    className="w-full h-full object-cover object-center"
-                  />
-                  <div className="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/40 transition-colors">
-                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center shadow-lg">
-                      <Play className="w-4 h-4 text-white ml-0.5 drop-shadow-sm" />
-                    </div>
-                  </div>
-                  {video.platform && (
-                    <div className="absolute top-2 left-2 w-5 h-5 rounded-full bg-background/80 flex items-center justify-center">
-                      {(() => {
-                        const Icon = platformIcons[video.platform];
-                        return Icon ? <Icon className="w-2.5 h-2.5 text-primary" /> : null;
-                      })()}
-                    </div>
-                  )}
-                </button>
-              ))}
+          <div className="w-full overflow-hidden">
+            <div className="container mx-auto px-4">
+              <VideoCarousel
+                videos={videos}
+                onVideoClick={openLightbox}
+                platformIcons={platformIcons}
+              />
             </div>
           </div>
         </section>
