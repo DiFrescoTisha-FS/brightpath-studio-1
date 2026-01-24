@@ -14,7 +14,7 @@ export const livingBetterLifeSocialCaseStudy: SocialMediaCaseStudy = {
   featuredImage: '/social-media/living-better-life/featured.png',
   hoverImage: '/social-media/living-better-life/hover.png',
   tags: ['Education', 'Entrepreneurship', 'Community', 'Economic Empowerment', 'Access & Opportunity', 'Small Business Support', 'Social Impact'],
-  platforms: ['instagram', 'facebook', 'tiktok', 'linkedin', 'youtube'],
+  platforms: ['instagram', 'facebook', 'tiktok', 'linkedin'],
   campaignPeriod: 'Ongoing',
   postFrequency: '4-6 posts per week',
 

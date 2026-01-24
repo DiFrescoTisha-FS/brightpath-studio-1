@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { ArrowRight, TrendingUp, Eye, Users } from 'lucide-react';
+import { ArrowRight, TrendingUp, Eye, Users, Linkedin } from 'lucide-react';
 import { Instagram, Facebook } from 'lucide-react';
 import BrightPathGradientButton from './BrightPathGradientButton';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
 import type { SocialMediaCaseStudy } from '@/types/caseStudy';
+import TikTokIcon from '../icons/TikTokIcon';
 
 interface SocialMediaCardProps {
   caseStudy: SocialMediaCaseStudy;
@@ -14,6 +15,8 @@ interface SocialMediaCardProps {
 const platformIcons: Record<string, React.ElementType> = {
   instagram: Instagram,
   facebook: Facebook,
+  tiktok: TikTokIcon,
+  linkedin: Linkedin,
 };
 
 export function SocialMediaCard({ caseStudy, onViewCaseStudy, className = '' }: SocialMediaCardProps) {
@@ -38,18 +41,16 @@ export function SocialMediaCard({ caseStudy, onViewCaseStudy, className = '' }: 
         <img
           src={caseStudy.featuredImage}
           alt={`${caseStudy.title} - Featured`}
-          className={`absolute inset-0 w-full h-full object-contain mt-6 pb-6 transition-opacity duration-500 ${
-            isHovered ? 'opacity-0' : 'opacity-100'
-          }`}
+          className={`absolute inset-0 w-full h-full object-contain mt-6 pb-6 transition-opacity duration-500 ${isHovered ? 'opacity-0' : 'opacity-100'
+            }`}
         />
 
         {/* Hover Image */}
         <img
           src={caseStudy.hoverImage || caseStudy.featuredImage}
           alt={`${caseStudy.title} - Preview`}
-          className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-500 ${
-            isHovered ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-500 ${isHovered ? 'opacity-100' : 'opacity-0'
+            }`}
         />
 
         {/* Badge */}
@@ -60,17 +61,21 @@ export function SocialMediaCard({ caseStudy, onViewCaseStudy, className = '' }: 
 
         {/* Platform Icons */}
         <div className="absolute top-3 right-3 flex gap-1">
-          {caseStudy.platforms.map((platform) => {
+          {caseStudy.platforms.map((platformRaw) => {
+            const platform = platformRaw.trim().toLowerCase();
             const Icon = platformIcons[platform];
+
             return Icon ? (
               <div
-                key={platform}
+                key={platformRaw}
                 className="w-7 h-7 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center"
+                title={platform}
               >
                 <Icon className="w-4 h-4 text-primary" />
               </div>
             ) : null;
           })}
+
         </div>
 
         {/* Hover instruction */}
@@ -83,7 +88,7 @@ export function SocialMediaCard({ caseStudy, onViewCaseStudy, className = '' }: 
       <div className="p-5">
         {/* Client & Industry */}
         <div className="flex items-center gap-2 mb-2">
-          <BrightPathGradientTitle 
+          <BrightPathGradientTitle
             as="span"
             className="text-xs font-medium text-primary"
             gradientWords={["Social", "Media"]}>Social Media</BrightPathGradientTitle>
