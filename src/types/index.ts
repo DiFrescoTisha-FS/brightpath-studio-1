@@ -21,11 +21,22 @@ export type WpImage = {
 * @property {string} review_date - The date of the review (ACF Field: 'review_date').
 */
 export type AcfFields = {
-  reviewer_name: string;
-  review_text: string;
-  client_headshot: WpImage;
-  rating: number;
-  review_date: string;
+  reviewer_name?: string;
+  review_text?: string;
+  review_excerpt?: string;
+  rating?: number | string;
+
+  review_date?: string;
+
+  // Sometimes ACF image returns URL string depending on settings; yours shows a URL string in Network,
+  // but you also sometimes map .url. This covers both shapes safely.
+  client_headshot?: WpImage | string;
+
+  // ✅ Fields shown in your Network screenshot
+  featured?: boolean | number | string;
+  project_context?: string;
+  reviewer_role?: string;
+  reviewer_company?: string;
 };
 
 /**
@@ -47,9 +58,9 @@ export type WpContent = {
 */
 export type WpReviewPost = {
   id: number;
-  title: WpContent;
-  content: WpContent;
-  excerpt: WpContent;
+  title?: WpContent;
+  content?: WpContent;
+  excerpt?: WpContent;
   acf: AcfFields;
 };
 
@@ -68,13 +79,19 @@ export type WpReviewPost = {
 * @property {string} reviewDate - The date of the review.
 */
 export interface Review {
-id: number;
-rating: number;
-author: string;
-quote: string;
-excerpt?: string; // The '?' makes this field optional
-photoUrl?: string; // The '?' makes this field optional
-reviewDate?: string;
+  id: number;
+  rating: number;
+  author: string;
+  quote: string;
+  excerpt?: string;
+  photoUrl?: string;
+  reviewDate?: string;
+
+  // optional extras
+  role?: string;
+  company?: string;
+  featured?: boolean;
+  projectContext?: string;
 }
 
 /**

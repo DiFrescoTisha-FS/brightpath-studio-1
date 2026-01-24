@@ -6,6 +6,8 @@ import type { Review } from '@/types';
 import { useAppStore } from '@/store/appStore';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
 
+const stripHtml = (html: string) => html.replace(/<[^>]*>/g, '').trim();
+
 const ReviewCard = ({ review }: { review: Review }) => {
   const { theme } = useAppStore();
 
@@ -14,7 +16,11 @@ const ReviewCard = ({ review }: { review: Review }) => {
       ? 'bg-[#1A2238] text-white border border-primary/30 shadow-glow-primary'
       : 'bg-gray-50 text-secondary-foreground border border-primary/30 shadow-md';
 
-  const displayText = (review.excerpt && review.excerpt.trim()) || review.quote || '';
+  // ✅ Always show something: excerpt -> quote
+  const displayText =
+    (review.excerpt && stripHtml(review.excerpt)) ||
+    (review.quote && stripHtml(review.quote)) ||
+    '';
 
   return (
     <motion.div
@@ -35,21 +41,32 @@ const ReviewCard = ({ review }: { review: Review }) => {
         {Array.from({ length: 5 }, (_, i) => (
           <Star
             key={i}
-            className={`w-5 h-5 ${i < (review.rating || 0) ? 'text-primary' : 'text-muted-foreground'}`}
+            className={`w-5 h-5 ${i < (Number(review.rating) || 0) ? 'text-primary' : 'text-muted-foreground'}`}
             fill="currentColor"
           />
         ))}
       </div>
 
-      <p className="text-lg font-lato italic text-muted-foreground leading-relaxed mb-4 flex-grow">
-        {displayText ? `"${displayText}"` : ''}
-      </p>
+      {/* ✅ Render excerpt OR quote (never blank unless both truly missing) */}
+      {displayText ? (
+        <p className="text-lg font-lato italic leading-relaxed mb-4 flex-grow text-muted-foreground">
+          “{displayText}”
+        </p>
+      ) : null}
 
       <div className="mt-auto">
         <BrightPathGradientTitle as="h4" className="font-poppins font-bold text-lg">
           {review.author}
         </BrightPathGradientTitle>
-        <p className="text-sm text-muted-foreground">Client Review</p>
+
+        {/* Optional line if you add role/company later */}
+        {(review.role || review.company) ? (
+          <p className="text-sm text-muted-foreground">
+            {[review.role, review.company].filter(Boolean).join(' • ')}
+          </p>
+        ) : (
+          <p className="text-sm text-muted-foreground">Client Review</p>
+        )}
       </div>
     </motion.div>
   );
