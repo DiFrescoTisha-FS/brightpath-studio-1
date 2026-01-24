@@ -96,7 +96,7 @@ module.exports = {
 			  'lg': '0 4px 6px rgba(0, 0, 0, 0.25)',
 		  },
 		  boxShadow: {
-			'glow-primary': '0 0 15px 4px rgba(242, 201, 76, 0.6)',
+			'glow-primary': '0 0 8px 0px rgba(242, 201, 76, 0.45)',
 		  },
 	  }
 	},

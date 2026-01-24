@@ -5,7 +5,6 @@ import {
   Eye,
   Users,
   Heart,
-  Share2,
   MessageCircle,
   Target,
   CheckCircle2,
@@ -17,6 +16,7 @@ import {
   Youtube,
   Linkedin
 } from 'lucide-react';
+import TikTokIcon from '../icons/TikTokIcon';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
 import BrightPathGradientButton from './BrightPathGradientButton';
 import { VideoCarousel } from '@/components/portfolio/VideoCarousel';
@@ -33,7 +33,7 @@ const platformIcons: Record<string, React.ElementType> = {
   facebook: Facebook,
   linkedin: Linkedin,
   youtube: Youtube,
-  tiktok: Share2,
+  tiktok: TikTokIcon,
 };
 
 const metricIcons: Record<string, React.ElementType> = {
@@ -46,10 +46,10 @@ const metricIcons: Record<string, React.ElementType> = {
   growth: TrendingUp,
   views: Eye,
   likes: Heart,
-  shares: Share2,
+  shares: TikTokIcon,
   comments: MessageCircle,
   profileVisits: Users,
-  linkTaps: Share2,
+  linkTaps: TikTokIcon,
 };
 
 const metricLabels: Record<string, string> = {
@@ -306,8 +306,9 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                   >
                     <BrightPathGradientTitle
                       as="h3"
+                      textColor="text-secondary dark:text-slate-300"
                       className="text-lg font-semibold mb-2 font-poppins"
-                      gradientWords={["Brand", "Strategy", "Creative", "Publishing", "Community", "Optimization", "Voice", "Content", "Pillars", "Impact"]}
+                      gradientWords={["Brand", "Strategy", "Creative", "Publishing", "Community", "Optimization", "Voice", "Pillars", "Impact"]}
                     >
                       {step.title}
                     </BrightPathGradientTitle>
