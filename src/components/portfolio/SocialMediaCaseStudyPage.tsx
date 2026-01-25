@@ -157,7 +157,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                 {caseStudy.title}
               </BrightPathGradientTitle>
 
-              <p className="text-xl text-white/90 font-lato max-w-2xl mx-auto">
+              <p className="text-white/90 font-lato max-w-2xl mx-auto">
                 {caseStudy.description}
               </p>
 
@@ -212,7 +212,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
             >
               Project Overview
             </BrightPathGradientTitle>
-            <p className="text-lg text-muted-foreground text-center font-lato leading-relaxed">
+            <p className="text-muted-foreground text-center font-lato leading-relaxed">
               {caseStudy.overview}
             </p>
           </div>
@@ -236,7 +236,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                   className="flex items-start gap-3 p-4 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary"
                 >
                   <Target className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                  <span className="text-muted-foreground font-lato">{goal}</span>
+                  <span className="text-sm text-muted-foreground font-lato">{goal}</span>
                 </div>
               ))}
             </div>
@@ -354,7 +354,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                   className="flex items-start gap-3 p-4 rounded-lg bg-primary/5 border border-primary/50 dark:shadow-glow-primary"
                 >
                   <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                  <span className="text-muted-foreground font-lato">{result}</span>
+                  <span className="text-sm text-muted-foreground font-lato">{result}</span>
                 </div>
               ))}
             </div>
