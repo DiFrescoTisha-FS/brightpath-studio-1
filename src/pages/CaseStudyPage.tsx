@@ -2,8 +2,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/store/appStore';
 import { getCaseStudyBySlug } from '@/data/caseStudies';
 import { SocialMediaCaseStudyPage } from '@/components/portfolio';
-import { BrightPathGradientTitle, BrightPathGradientButton } from '@/components/portfolio';
+import { BrightPathGradientTitle } from '@/components/portfolio';
 import type { SocialMediaCaseStudy } from '@/types/caseStudy';
+import BrightPathGradientButton from '@/components/BrightPathGradientButton';
 
 export default function CaseStudyPage() {
   const { slug } = useParams<{ slug: string }>();
