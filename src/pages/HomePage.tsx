@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ReviewWidget from '../components/ReviewWidget';
 import PortfolioSection from '../components/PortfolioSection';
 import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
-import BrightPathGradientButton from "@/components/BrightPathGradientButton";
+import BrightPathGradientButton from "@/components/BrightPathGradientButton.legacy";
 
 type SectionProps = {
   theme: 'light' | 'dark';

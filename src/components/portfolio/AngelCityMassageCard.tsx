@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ArrowRight, Smartphone, Palette, Gift } from 'lucide-react';
-import BrightPathGradientButton from './BrightPathGradientButton';
+import BrightPathGradientButton from '@/components/BrightPathGradientButton';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
 
 interface AngelCityMassageCardProps {
@@ -41,7 +41,7 @@ export function AngelCityMassageCard({ onViewCaseStudy, className = '' }: AngelC
           <img
             src="/images/CaseStudy.png"
             alt="Angel City Massage Case Study"
-            className="w-full h-full object-cover object-top"
+            className="w-full h-full object-cover object-top pointer-events-none"
           />
         </div>
 

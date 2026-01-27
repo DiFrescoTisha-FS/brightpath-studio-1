@@ -6,7 +6,7 @@ import { getFlipCardPhases } from "../services/api.service";
 import { motion } from "framer-motion";
 import { PhaseCard } from "../types/phaseCard";
 import { useAppStore } from '@/store/appStore';
-import BrightPathGradientButton from "@/components/BrightPathGradientButton";
+import BrightPathGradientButton from "@/components/BrightPathGradientButton.legacy";
 import { BrightPathGradientTitle } from "@/components/portfolio";
 
 const ServicesPage: React.FC = () => {
@@ -72,9 +72,9 @@ const ServicesPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8 lg:gap-12 items-center">
           {/* Left Column: Text Content with constrained width */}
           <div className="text-white">
-            <BrightPathGradientTitle as="h2" className="font-bold mb-4" 
-            gradientWords={["Process"]}
-            textColor="text-foreground"
+            <BrightPathGradientTitle as="h2" className="font-bold mb-4"
+              gradientWords={["Process"]}
+              textColor="text-white"
             >
               Our Process
             </BrightPathGradientTitle>
@@ -87,7 +87,7 @@ const ServicesPage: React.FC = () => {
               Our six-phase approach ensures each project is thoughtfully
               planned, beautifully designed, and built to perform.
             </p>
-            <BrightPathGradientButton className="mt-8 text-white text-shadow-md font-bold py-3 px-6 rounded-md hover:bg-yellow-400 transition-colors">
+            <BrightPathGradientButton className="mt-8 text-secondary text-shadow-md font-bold py-3 px-6 rounded-md hover:bg-yellow-400 transition-colors">
               Start Your Project
             </BrightPathGradientButton>
           </div>

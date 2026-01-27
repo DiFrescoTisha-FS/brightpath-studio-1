@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import { BrightPathTabButton } from '@/components/portfolio';
 import {
   ArrowLeft,
@@ -19,7 +21,7 @@ import {
   Sun,
 } from 'lucide-react';
 import BrightPathGradientTitle from '../BrightPathGradientTitle';
-import BrightPathGradientButton from '../BrightPathGradientButton';
+import BrightPathGradientButton from '../BrightPathGradientButton.legacy';
 
 interface DaleTiffanyCaseStudyProps {
   onBack?: () => void;
@@ -136,22 +138,22 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
             className="font-semibold text-center mb-8 font-poppins"
             gradientWords={["After"]}
           >
-            
+
             Before & After
           </BrightPathGradientTitle>
 
           {/* Screenshot Navigation */}
-          <div className="flex justify-center gap-2 mb-6 flex-wrap">                    
-    {screenshots.map((shot, index) => (                                         
-      <BrightPathTabButton                                                      
-        key={shot.label}                                                        
-        active={activeScreenshot === index}                                     
-        onClick={() => setActiveScreenshot(index)}                              
-      >                                                                         
-        {shot.label}                                                            
-      </BrightPathTabButton>                                                    
-    ))}                                                                         
-  </div>  
+          <div className="flex justify-center gap-2 mb-6 flex-wrap">
+            {screenshots.map((shot, index) => (
+              <BrightPathTabButton
+                key={shot.label}
+                active={activeScreenshot === index}
+                onClick={() => setActiveScreenshot(index)}
+              >
+                {shot.label}
+              </BrightPathTabButton>
+            ))}
+          </div>
 
           {/* Comparison Slider */}
           <div className="max-w-5xl mx-auto">
@@ -261,9 +263,9 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
 
             {/* After - Solutions */}
             <div className="p-6 rounded-lg bg-primary/5 border border-primary/50 dark:shadow-glow-primary">
-              <BrightPathGradientTitle 
-              as="h4"
-              className="font-semibold text-foreground mb-4 flex items-center gap-2 font-poppins">                
+              <BrightPathGradientTitle
+                as="h4"
+                className="font-semibold text-foreground mb-4 flex items-center gap-2 font-poppins">
                 The Solution
               </BrightPathGradientTitle>
               <ul className="space-y-3">
@@ -472,8 +474,8 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
             <div className="p-4 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary text-center">
               <Database className="w-6 h-6 text-primary mx-auto mb-2" />
               <BrightPathGradientTitle
-               as="h4"
-               className="font-medium text-foreground">Supabase</BrightPathGradientTitle>
+                as="h4"
+                className="font-medium text-foreground">Supabase</BrightPathGradientTitle>
               <p className="text-muted-foreground">Real-time database</p>
             </div>
             <div className="p-4 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary text-center">
@@ -531,9 +533,11 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
           <p className="text-muted-foreground mb-8 max-w-xl mx-auto font-lato">
             Let's discuss how we can modernize your website and build custom solutions for your business.
           </p>
-          <BrightPathGradientButton className="px-8 py-3 text-primary-foreground font-medium rounded-md hover:bg-primary/90 transition-colors">
-            Get in Touch
-          </BrightPathGradientButton>
+          <Link to="/contact">
+            <BrightPathGradientButton className="px-8 py-3 text-primary-foreground font-medium rounded-md hover:bg-primary/90 transition-colors">
+              Get in Touch
+            </BrightPathGradientButton>
+          </Link>
         </div>
       </section>
     </div>

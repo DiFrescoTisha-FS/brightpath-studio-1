@@ -55,11 +55,13 @@ const FlipCard: React.FC<FlipCardProps> = ({
           <div className="flex flex-col items-center justify-start">
             <BrightPathGradientTitle
               as="span"
+              textColor="text-white"
               className="card-heading text-center block">
               {mainHeading}
             </BrightPathGradientTitle>
             <BrightPathGradientTitle
               as="span"
+              textColor="text-white black:text-slate-200"
               gradientWords={["Planning", "Prototyping", "Implementation", "Refining", "Deployment", "Support", "Updates"]}
               className="card-subheading tracking-wide text-center block">
               {subheading}
@@ -85,8 +87,8 @@ const FlipCard: React.FC<FlipCardProps> = ({
               {backCardTitle}
             </h3>
 
-            <ul className="space-y-0.5 list-disc list-inside text-[#1A2238] card-text">
-              {bulletPoints.slice(0, 2).map((point, index) => {
+            <ul className="space-y-3 list-disc list-inside text-[#1A2238] card-text">
+              {bulletPoints.slice(0, 3).map((point, index) => {
                 const p = point;
                 return (
                   <li key={index} className="card-text text-[#1A2238]">
@@ -101,7 +103,7 @@ const FlipCard: React.FC<FlipCardProps> = ({
             </p>
           </div>
 
-          <button className="w-full bg-[#1A2238] text-primary font-bold py-1.5 rounded-md transition-all duration-300 ease-in-out hover:bg-[#222c48] shadow-md card-text relative z-10">
+          <button className="w-full mx-0 bg-[#1A2238] text-primary font-bold py-1.5 rounded-md transition-all duration-300 ease-in-out hover:bg-[#222c48] shadow-md card-text relative z-10">
             {backCardButtonText}
           </button>
         </div>

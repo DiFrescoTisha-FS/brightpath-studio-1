@@ -4,6 +4,7 @@ import ResponsiveMockupSection from '../features/ResponsiveMockupSection';
 import StyleGuideSection from '../features/StyleGuideSection';
 import MultiPageFlowSection from './MultiPageFlowSection';
 import BrightPathGradientTitle from '../BrightPathGradientTitle';
+import BrightPathGradientButton from "@/components/BrightPathGradientButton"
 
 const AngelCityCaseStudy = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -27,11 +28,11 @@ const AngelCityCaseStudy = () => {
 
   return (
     <div className="min-h-screen relative bg-bp-light-bg-light dark:bg-bp-light-bg-dark transition-colors duration-300">
-      
-      <div 
+
+      <div
         id="extended-background"
         className="absolute top-0 left-0 w-full h-[70rem] 
-                   bg-bp-dark-bg-light dark:bg-bp-dark-bg-dark transition-colors duration-300 z-0" 
+                   bg-bp-dark-bg-light dark:bg-bp-dark-bg-dark transition-colors duration-300 z-0"
       />
 
       <header className="fixed top-0 right-0 p-6 z-50">
@@ -48,7 +49,7 @@ const AngelCityCaseStudy = () => {
         </button>
       </header>
 
-      <section className="relative pt-32 pb-16 z-10">
+      <section className="relative pt-32 pb-16 z-[9999]">
         <div className="max-w-4xl mx-auto px-4 text-left">
           <BrightPathGradientTitle
             as="h1"
@@ -58,9 +59,15 @@ const AngelCityCaseStudy = () => {
           >
             Website Design & Development Case Study
           </BrightPathGradientTitle>
-          <button className="px-8 py-4 bg-primary dark:bg-primary hover:opacity-80 text-[#1a2238] font-semibold rounded-lg shadow-xl transition-all duration-200 transform hover:scale-105">
+          <BrightPathGradientButton
+            href="https://angelcitymassage.com"
+            className="relative z-[9999] px-8 py-4 text-[#1a2238] shadow-xl"
+          >
             angelcitymassage.com
-          </button>
+          </BrightPathGradientButton>
+
+
+
         </div>
       </section>
 
@@ -82,12 +89,12 @@ const AngelCityCaseStudy = () => {
             textColor='text-gray-900 dark:text-gray-200'
             gradientWords={["Experience"]}
           >
-          The Angel City Massage Experience
+            The Angel City Massage Experience
           </BrightPathGradientTitle>
           <div className="space-y-6 text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
             <p>
-            Angel City Massage website was designed with a focus on <strong>elegance, functionality, and user experience.</strong>
-                Our goal was to create a visually calming yet highly intuitive platform that reflects the brand's commitment to wellness and relaxation.
+              Angel City Massage website was designed with a focus on <strong>elegance, functionality, and user experience.</strong>
+              Our goal was to create a visually calming yet highly intuitive platform that reflects the brand's commitment to wellness and relaxation.
             </p>
             <p>
               The website features a seamless navigation structure, custom imagery, and strategically placed call-to-action elements to enhance client engagement.
@@ -103,37 +110,37 @@ const AngelCityCaseStudy = () => {
       <MultiPageFlowSection theme={theme} />
 
       {/* Client Testimonial Section */}
-<section className="bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 py-20 px-4 transition-colors duration-300 relative z-10">
-  <div className="max-w-4xl mx-auto text-center">
-    <BrightPathGradientTitle
-      as="h2"
-      className="font-bold mb-8"
-      textColor="text-gray-900 dark:text-gray-200"
-      gradientWords={["Client"]}
-    >
-      What Our Client Says
-    </BrightPathGradientTitle>
+      <section className="bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 py-20 px-4 transition-colors duration-300 relative z-10">
+        <div className="max-w-4xl mx-auto text-center">
+          <BrightPathGradientTitle
+            as="h2"
+            className="font-bold mb-8"
+            textColor="text-gray-900 dark:text-gray-200"
+            gradientWords={["Client"]}
+          >
+            What Our Client Says
+          </BrightPathGradientTitle>
 
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 md:p-12 relative">
-      <div className="absolute top-4 left-4 text-6xl text-primary/20 font-serif">"</div>
-      <div className="absolute bottom-4 right-4 text-6xl text-primary/20 font-serif">"</div>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 md:p-12 relative">
+            <div className="absolute top-4 left-4 text-6xl text-primary/20 font-serif">"</div>
+            <div className="absolute bottom-4 right-4 text-6xl text-primary/20 font-serif">"</div>
 
-      <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 italic leading-relaxed mb-8 relative z-10">
-        Tish did an outstanding job building my new website. She has a great sense of style and really understands how to create a site that looks polished, modern, and inviting. More importantly, she truly cared about my needs and goals, listened carefully, and offered innovative ideas that made the final result even better than I envisioned. She was easy to work with, responsive, timely, and consistently professional throughout the entire process. I felt supported and confident every step of the way. I highly recommend Tish to anyone looking for a talented, creative, and reliable web designer. With sincere thanks.
-      </p>
+            <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 italic leading-relaxed mb-8 relative z-10">
+              Tish did an outstanding job building my new website. She has a great sense of style and really understands how to create a site that looks polished, modern, and inviting. More importantly, she truly cared about my needs and goals, listened carefully, and offered innovative ideas that made the final result even better than I envisioned. She was easy to work with, responsive, timely, and consistently professional throughout the entire process. I felt supported and confident every step of the way. I highly recommend Tish to anyone looking for a talented, creative, and reliable web designer. With sincere thanks.
+            </p>
 
-      <div className="flex flex-col items-center">
-        <div className="font-bold text-xl text-primary mb-1">Marlene Fenton</div>
-        <div className="text-gray-600 dark:text-gray-400">Owner, Angel City Massage</div>
-        <div className="flex gap-1 mt-3">
-          {[...Array(5)].map((_, i) => (
-            <span key={i} className="text-yellow-400 text-xl">★</span>
-          ))}
+            <div className="flex flex-col items-center">
+              <div className="font-bold text-xl text-primary mb-1">Marlene Fenton</div>
+              <div className="text-gray-600 dark:text-gray-400">Owner, Angel City Massage</div>
+              <div className="flex gap-1 mt-3">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-yellow-400 text-xl">★</span>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
       <section className="bg-gray-50 dark:bg-gray-800 py-16 px-4 transition-colors duration-300 relative z-10">
         <div className="max-w-6xl mx-auto">

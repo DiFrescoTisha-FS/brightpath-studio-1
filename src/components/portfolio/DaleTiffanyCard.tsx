@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ArrowRight, Smartphone, Users, BarChart3 } from 'lucide-react';
-import BrightPathGradientButton from './BrightPathGradientButton';
+import BrightPathGradientButton from '@/components/BrightPathGradientButton';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
 
 interface DaleTiffanyCardProps {

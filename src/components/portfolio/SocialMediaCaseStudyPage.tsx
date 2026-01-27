@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   ArrowLeft,
   TrendingUp,
@@ -18,7 +19,7 @@ import {
 } from 'lucide-react';
 import TikTokIcon from '../icons/TikTokIcon';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
-import BrightPathGradientButton from './BrightPathGradientButton';
+import BrightPathGradientButton from '@/components/BrightPathGradientButton';
 import { VideoCarousel } from '@/components/portfolio/VideoCarousel';
 import type { SocialMediaCaseStudy, ContentSample } from '@/types/caseStudy';
 
@@ -308,7 +309,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                       as="h3"
                       textColor="text-secondary dark:text-slate-300"
                       className="text-lg font-semibold mb-2 font-poppins"
-                      gradientWords={["Brand", "Strategy", "Creative", "Publishing", "Community", "Optimization", "Voice", "Pillars", "Impact"]}
+                      gradientWords={["Brand", "Strategy", "Creative", "Publishing", "Community", "Optimization", "Voice", "Pillars", "Impact", "Production"]}
                     >
                       {step.title}
                     </BrightPathGradientTitle>
@@ -494,9 +495,11 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
           <p className="text-muted-foreground mb-8 max-w-xl mx-auto font-lato">
             Let's discuss how we can create engaging content that grows your audience and builds your brand.
           </p>
+          <Link to="/contact">
           <BrightPathGradientButton className="px-8 py-3 text-primary-foreground font-medium rounded-md hover:bg-primary/90 transition-colors">
             Get in Touch
-          </BrightPathGradientButton>
+            </BrightPathGradientButton>
+          </Link>
         </div>
       </section>
 

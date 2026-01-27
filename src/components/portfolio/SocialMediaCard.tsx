@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ArrowRight, TrendingUp, Eye, Users, Linkedin } from 'lucide-react';
 import { Instagram, Facebook } from 'lucide-react';
-import BrightPathGradientButton from './BrightPathGradientButton';
+import BrightPathGradientButton from '@/components/BrightPathGradientButton';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
 import type { SocialMediaCaseStudy } from '@/types/caseStudy';
 import TikTokIcon from '../icons/TikTokIcon';
