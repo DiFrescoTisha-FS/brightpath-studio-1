@@ -23,7 +23,7 @@ const HeroSection = ({ theme }: SectionProps) => (
       Your browser does not support the video tag.
     </video>
     <div className={`absolute top-0 left-0 w-full h-full ${theme === 'dark' ? 'bg-background/60' : 'bg-background/60'} z-10`}></div>
-    <div className="relative z-20 text-center max-w-4xl mx-auto px-4">
+    <div className="relative z-20 text-center max-w-5xl mx-auto px-4">
       <BrightPathGradientTitle as="h1" className="font-poppins font-bold mb-4 mt-24" gradientWords={["Shine", "Bright", "Online"]}>
         Guiding Your Business to Shine Bright Online
       </BrightPathGradientTitle>

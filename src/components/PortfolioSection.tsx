@@ -22,7 +22,7 @@ const portfolioItems: PortfolioItem[] = [
     id: 2,
     title: 'Dale Tiffany Lighting',
     description: 'An elegant e-commerce site for a luxury lighting brand.',
-    imageUrl: '/images/scroll-img-1.jpg'
+    imageUrl: '/images/DT-LONG.jpg'
   },
   {
     id: 3,

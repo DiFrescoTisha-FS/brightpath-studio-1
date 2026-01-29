@@ -2,15 +2,11 @@ import axios from "axios";
 import type { Review, WpReviewPost, WpImage } from "@/types";
 
 /**
- * API Base URL Configuration:
- * - In production (Netlify): Uses relative paths which get redirected via netlify.toml
- * - In development: Falls back to localhost:3002 for the local Express server
+ * Netlify Functions URL
+ * - Works in production automatically
+ * - Works locally ONLY when you run: netlify dev
  */
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "" : "http://localhost:3002");
-
-const API_REVIEWS_PATH = "/api/reviews";
-const FULL_API_URL = `${API_BASE_URL}${API_REVIEWS_PATH}`;
+const FULL_API_URL = "/.netlify/functions/reviews";
 
 const stripHtml = (html: string): string =>
   (html || "").replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
@@ -36,13 +32,8 @@ export const fetchReviews = async (): Promise<Review[]> => {
     return response.data.map((post) => {
       const acf = post.acf ?? ({} as WpReviewPost["acf"]);
 
-      // 1) Prefer ACF short excerpt
       const acfExcerpt = stripHtml(acf.review_excerpt ?? "");
-
-      // 2) WP excerpt as backup (often empty)
       const wpExcerpt = stripHtml(post.excerpt?.rendered ?? "");
-
-      // 3) Full review text (ACF)
       const fullText = stripHtml(acf.review_text ?? "");
 
       const excerpt = acfExcerpt || wpExcerpt || makeExcerpt(fullText, 180);
@@ -53,21 +44,27 @@ export const fetchReviews = async (): Promise<Review[]> => {
         author: acf.reviewer_name ?? "",
         quote: fullText,
         excerpt,
-
-        // ✅ fixed
         photoUrl: getHeadshotUrl(acf.client_headshot),
-
         reviewDate: acf.review_date || "",
-
-        // optional extras (safe)
         role: acf.reviewer_role || "",
         company: acf.reviewer_company || "",
         featured: Boolean(acf.featured),
         projectContext: acf.project_context || "",
       };
     });
-  } catch (error) {
-    console.error("Error fetching reviews:", error);
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error("Error fetching reviews:", {
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+        url: FULL_API_URL,
+      });
+    } else {
+      console.error("Unknown error fetching reviews:", error);
+    }
+  
     throw new Error("Failed to fetch reviews.");
   }
+  
 };
