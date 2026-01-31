@@ -129,11 +129,11 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         style={
           caseStudy.heroBackground
             ? {
-                backgroundImage: `url(${caseStudy.heroBackground})`,
-                backgroundSize: 'cover',
-                backgroundPosition: caseStudy.heroBackgroundPosition || 'center',
-                backgroundRepeat: 'no-repeat',
-              }
+              backgroundImage: `url(${caseStudy.heroBackground})`,
+              backgroundSize: 'cover',
+              backgroundPosition: caseStudy.heroBackgroundPosition || 'center',
+              backgroundRepeat: 'no-repeat',
+            }
             : undefined
         }
       >
@@ -213,7 +213,7 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
             >
               Project Overview
             </BrightPathGradientTitle>
-            <p className="text-muted-foreground text-center font-lato leading-relaxed">
+            <p className="text-muted-foreground text-center font-lato leading-relaxed whitespace-pre-line">
               {caseStudy.overview}
             </p>
           </div>
@@ -285,6 +285,8 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
           >
             Our Process
           </BrightPathGradientTitle>
+
+          <p className="text-white/90 font-lato max-w-2xl mx-auto text-center mt-[-30px] mb-14">Process reflects both active publishing phases and post-publishing analysis, including long-tail content performance and cross-platform discovery.</p>
           <div className="max-w-4xl mx-auto">
             <div className="relative">
               <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-primary/20 -translate-x-1/2" />
@@ -292,24 +294,22 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
               {caseStudy.process.map((step, index) => (
                 <div
                   key={step.step}
-                  className={`relative flex items-start gap-6 mb-8 ${
-                    index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-                  }`}
+                  className={`relative flex items-start gap-6 mb-8 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                    }`}
                 >
                   <div className="absolute left-4 md:left-1/2 w-8 h-8 rounded-full bg-primary/50 text-primary-foreground flex items-center justify-center text-sm font-bold -translate-x-1/2 z-10">
                     {step.step}
                   </div>
 
                   <div
-                    className={`ml-12 md:ml-0 md:w-[calc(50%-2rem)] p-4 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary ${
-                      index % 2 === 0 ? 'md:mr-auto md:pr-8' : 'md:ml-auto md:pl-8'
-                    }`}
+                    className={`ml-12 md:ml-0 md:w-[calc(50%-2rem)] p-4 rounded-lg bg-card border border-primary/50 dark:shadow-glow-primary ${index % 2 === 0 ? 'md:mr-auto md:pr-8' : 'md:ml-auto md:pl-8'
+                      }`}
                   >
                     <BrightPathGradientTitle
                       as="h3"
                       textColor="text-secondary dark:text-slate-300"
                       className="text-lg font-semibold mb-2 font-poppins"
-                      gradientWords={["Brand", "Strategy", "Creative", "Publishing", "Community", "Optimization", "Voice", "Pillars", "Impact", "Production"]}
+                      gradientWords={["Brand", "Strategy", "Publishing", "Community", "Optimization", "Voice", "Pillars", "Impact", "Production"]}
                     >
                       {step.title}
                     </BrightPathGradientTitle>
@@ -330,6 +330,9 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
           >
             Results & Metrics
           </BrightPathGradientTitle>
+          <p className="text-sm text-muted-foreground font-lato text-center max-w-3xl mx-auto -mt-4 mb-10">
+            Metrics shown represent a snapshot of organic performance across platforms and are intended to highlight discovery patterns rather than total campaign volume.
+          </p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
             {metricsArray.map((metric) => {
@@ -423,11 +426,10 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                     <button
                       key={image.id}
                       onClick={() => setActiveImageIndex(index)}
-                      className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                        index === activeImageIndex
+                      className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${index === activeImageIndex
                           ? 'border-primary scale-105'
                           : 'border-transparent opacity-60 hover:opacity-100'
-                      }`}
+                        }`}
                     >
                       <img
                         src={image.src}
@@ -496,8 +498,8 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
             Let's discuss how we can create engaging content that grows your audience and builds your brand.
           </p>
           <Link to="/contact">
-          <BrightPathGradientButton className="px-8 py-3 text-primary-foreground font-medium rounded-md hover:bg-primary/90 transition-colors">
-            Get in Touch
+            <BrightPathGradientButton className="px-8 py-3 text-primary-foreground font-medium rounded-md hover:bg-primary/90 transition-colors">
+              Get in Touch
             </BrightPathGradientButton>
           </Link>
         </div>

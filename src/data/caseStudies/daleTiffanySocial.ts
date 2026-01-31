@@ -11,7 +11,7 @@ export const daleTiffanySocialCaseStudy: SocialMediaCaseStudy = {
   industry: 'Luxury Lighting',
   category: 'Social Media Management',
   description:
-    'Strategic social media content creation and management for a luxury lighting brand, showcasing elegant products and driving engagement across platforms.',
+    'Strategic cross-platform social media content for a luxury lighting brand, focused on evergreen discovery, search visibility, and long-term brand storytelling across Instagram, Facebook Reels, and TikTok.',
   featuredImage: '/social-media/dale-tiffany/featured.png',
   hoverImage: '/social-media/dale-tiffany/hover.png',
   tags: ['Content Creation', 'Instagram', 'Facebook', 'TikTok', 'Product Photography', 'Luxury Brand'],
@@ -19,14 +19,16 @@ export const daleTiffanySocialCaseStudy: SocialMediaCaseStudy = {
   campaignPeriod: 'Ongoing',
   postFrequency: '3-5 posts per week',
 
-  overview: `Dale Tiffany is a premier luxury lighting manufacturer known for their exquisite Tiffany-style lamps and home decor. Our social media strategy focuses on showcasing the craftsmanship, elegance, and timeless beauty of their products while building a community of design enthusiasts and driving traffic to their retail partners.
+  overview: `Dale Tiffany is a premier luxury lighting manufacturer known for its exquisite Tiffany-style lamps and home décor. The social media strategy focused on showcasing craftsmanship, elegance, and timeless design through visually rich, evergreen content distributed across Instagram, Facebook Reels, and TikTok.
 
-During the reporting period (Oct 17 – Jan 14), the content strategy generated measurable visibility and discovery for a growing account. Additional activity included 23 profile visits and 2 external link taps, showing early-stage interest and intent beyond passive views.`,
+While active posting was later paused due to a strategic shift toward TikTok Shop priorities, previously published content continued to perform organically. During the reporting period (Oct 17 – Jan 14), the content generated measurable discovery, with a high percentage of reach coming from non-followers and continued engagement occurring months after initial posting.
+
+Additional performance indicators included profile visits and external link taps, reflecting early-stage intent and audience interest beyond passive views.`,
 
   goals: [
     'Increase brand awareness and reach among interior design enthusiasts',
     'Showcase product craftsmanship through high-quality visual content',
-    'Drive engagement and build a community of loyal followers',
+    'Drive meaningful engagement and expand brand discovery among new, design-focused audiences',
     'Generate traffic to retail partner websites',
     'Establish Dale Tiffany as a thought leader in luxury home lighting',
     'Create seasonal campaigns aligned with home decor trends',
@@ -34,8 +36,8 @@ During the reporting period (Oct 17 – Jan 14), the content strategy generated 
 
   deliverables: [
     {
-      title: 'Content Calendar',
-      description: 'Monthly content planning with themed posts, seasonal campaigns, and engagement strategies.',
+      title: 'Content Calendar (Monthly)',
+      description: 'Content planning and thematic direction for evergreen and seasonal posts',
     },
     {
       title: 'Product Photography',
@@ -47,15 +49,15 @@ During the reporting period (Oct 17 – Jan 14), the content strategy generated 
     },
     {
       title: 'Story Content',
-      description: 'Daily story content including polls, Q&As, product spotlights, and user-generated content.',
+      description: 'Select story and short-form content supporting product storytelling and brand presence',
     },
     {
       title: 'Community Management',
-      description: 'Active engagement with followers, responding to comments, and building relationships.',
+      description: 'Audience monitoring and engagement during active posting periods',
     },
     {
       title: 'Performance Reports',
-      description: 'Monthly analytics reports tracking growth, engagement, and content performance.',
+      description: 'Performance review and insights focused on reach patterns, discovery behavior, and long-term content visibility across platforms.',
     },
   ],
 
@@ -102,7 +104,7 @@ During the reporting period (Oct 17 – Jan 14), the content strategy generated 
   },
 
   results: [
-    'Generated 163 total impressions during the reporting period',
+    'Generated consistent organic impressions during the reporting period, with continued visibility beyond the initial posting window',
     'Reached 42 unique accounts',
     '86.4% of reach came from non-followers (new audience discovery)',
     'Drove 23 profile visits and 2 external link taps',
