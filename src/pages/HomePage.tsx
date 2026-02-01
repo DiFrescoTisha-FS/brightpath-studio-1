@@ -9,7 +9,6 @@ import BrightPathGradientButton from "@/components/BrightPathGradientButton.lega
 type SectionProps = {
   theme: 'light' | 'dark';
 };
-
 const HeroSection = ({ theme }: SectionProps) => (
   <section className="relative text-foreground min-h-screen flex items-center justify-center overflow-hidden">
     <video
@@ -31,9 +30,17 @@ const HeroSection = ({ theme }: SectionProps) => (
         We are the beacon in the digital fog, crafting brilliant web experiences
         that navigate your brand to success.
       </p>
-      <BrightPathGradientButton className="mt-8 bg-primary text-primary-foreground font-bold font-lato py-2 px-6 rounded-md text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl text-shadow-md">
-        Begin Your Journey
-      </BrightPathGradientButton>
+      <BrightPathGradientButton
+  onClick={() => {
+    document.getElementById('journey')?.scrollIntoView({
+      behavior: 'smooth',
+    });
+  }}
+  className="mt-8 bg-primary text-primary-foreground font-bold font-lato py-2 px-6 rounded-md text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl text-shadow-md"
+>
+  Begin Your Journey
+</BrightPathGradientButton>
+
     </div>
   </section>
 );
@@ -61,7 +68,7 @@ const ServicesSection = ({ theme }: SectionProps) => {
   ];
 
   return (
-    <section className="bg-services-bg py-20">
+    <section id="journey" className="bg-services-bg py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <BrightPathGradientTitle as="h2" className="font-poppins font-bold text-services mb-12" gradientWords={["Services"]}>
           Our Services

@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import useTheme from "../hooks/useTheme";
 import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
+import BrightPathGradientButton from "@/components/BrightPathGradientButton.legacy";
 
 const AboutPage = () => {
   // Fetch theme internally via the custom hook
@@ -67,12 +69,18 @@ const AboutPage = () => {
               creativity.
             </p>
             <motion.button
+              onClick={() => {
+                document.getElementById('story')?.scrollIntoView({
+                  behavior: 'smooth',
+                });
+              }}
               className="bg-primary text-white font-bold font-lato py-3 px-8 rounded-md text-lg hover:bg-yellow-400 transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               Read My Story
             </motion.button>
+
           </div>
 
           {/* Right Column: Arched Image */}
@@ -95,12 +103,13 @@ const AboutPage = () => {
 
       {/* --- TIMELINE SECTION --- */}
       <motion.section
+        id="story"
         className="relative py-20 px-8 min-h-screen flex flex-col justify-center bg-cover bg-center bg-fixed"
         style={{
           // This remains correct based on your initial intention for the timeline background
           backgroundImage: theme === 'light'
-    ? 'var(--timeline-bg-light)'
-    : 'var(--timeline-bg-dark)',
+            ? 'var(--timeline-bg-light)'
+            : 'var(--timeline-bg-dark)',
         }}
       >
         {/* Top fade gradient to blend from hero section */}
@@ -140,9 +149,8 @@ const AboutPage = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              className={`flex items-center w-full ${
-                index % 2 === 0 ? "justify-start" : "justify-end"
-              }`}
+              className={`flex items-center w-full ${index % 2 === 0 ? "justify-start" : "justify-end"
+                }`}
             >
               {/* Timeline dot (Position fixed for line start) */}
               <div
@@ -151,11 +159,10 @@ const AboutPage = () => {
               ></div>
 
               <div
-                className={`w-full md:w-5/12 ${
-                  index % 2 === 0
+                className={`w-full md:w-5/12 ${index % 2 === 0
                     ? "pr-0 md:pr-16 text-center md:text-right"
                     : "pl-0 md:pl-16 text-center md:text-left"
-                }`}
+                  }`}
               >
                 <motion.div
                   className="shadow-2xl overflow-hidden
@@ -191,6 +198,33 @@ const AboutPage = () => {
               </div>
             </motion.div>
           ))}
+        </div>
+      </motion.section>
+
+      {/* --- CTA SECTION --- */}
+      <motion.section
+        className={`py-20 px-8 ${theme === 'light' ? 'bg-gray-200' : 'bg-[#273442]'}`}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="container mx-auto text-center max-w-3xl">
+          <BrightPathGradientTitle
+            as="h2"
+            className="font-poppins font-bold mb-6 leading-tight"
+            gradientWords={["Action"]}
+          >
+            Ready to See My Work in Action?
+          </BrightPathGradientTitle>
+          <p className="font-lato text-muted-foreground text-lg mb-8 leading-relaxed">
+            From concept to completion, every project tells a story. Explore my portfolio to see how I've helped businesses shine online.
+          </p>
+          <Link to="/portfolio">
+            <BrightPathGradientButton className="bg-primary text-primary-foreground font-bold font-lato py-3 px-8 rounded-md text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
+              Explore My Portfolio
+            </BrightPathGradientButton>
+          </Link>
         </div>
       </motion.section>
     </div>

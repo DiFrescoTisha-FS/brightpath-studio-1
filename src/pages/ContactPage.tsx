@@ -272,7 +272,7 @@ const ContactPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full bg-primary hover:bg-yellow-400 text-shadow-md text-secondary font-lato font-bold py-3 px-6 rounded-lg transition-all duration-300 transform shadow-lg hover:shadow-xl
+                className={`w-full bg-primary hover:bg-yellow-400 text-shadow-md text-slate-800 font-lato font-bold py-3 px-6 rounded-lg transition-all duration-300 transform shadow-lg hover:shadow-xl
                 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-yellow-400 hover:scale-105'}`}
               >
                 {loading ? 'Sending...' : 'Send Message'}

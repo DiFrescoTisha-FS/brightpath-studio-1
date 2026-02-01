@@ -1,5 +1,6 @@
 // src/pages/ServicesPage.tsx
 
+import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from "react";
 import { FlipCardContainer } from "../components/ui/FlipCard";
 import { getFlipCardPhases } from "../services/api.service";
@@ -87,9 +88,11 @@ const ServicesPage: React.FC = () => {
               Our six-phase approach ensures each project is thoughtfully
               planned, beautifully designed, and built to perform.
             </p>
-            <BrightPathGradientButton className="mt-8 text-secondary text-shadow-md font-bold py-3 px-6 rounded-md hover:bg-yellow-400 transition-colors">
+            <Link to="/contact">
+            <BrightPathGradientButton className="mt-8 text-muted-foreground text-shadow-md font-bold py-3 px-6 rounded-md hover:bg-yellow-400 transition-colors">
               Start Your Project
-            </BrightPathGradientButton>
+              </BrightPathGradientButton>
+            </Link>
           </div>
 
           {/* Right Column: Cards with responsive grid layout */}

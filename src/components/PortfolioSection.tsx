@@ -38,11 +38,14 @@ const PortfolioSection = () => {
   return (
     <section className={`py-20 ${theme === 'dark' ? 'bg-[#273442]' : 'bg-gray-100'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <BrightPathGradientTitle as="h2" className="font-poppins font-bold mb-12 text-foreground"
+        <BrightPathGradientTitle as="h2" className="font-poppins font-bold mb-4 text-foreground"
           gradientWords={["Work"]}
         >
           My Work
         </BrightPathGradientTitle>
+        <p className="hidden md:block text-muted-foreground font-lato text-sm mb-8">
+          Hover over the cards to explore each project
+        </p>
         {/*
           This is the grid container for the portfolio cards.
           It uses CSS Grid to create a responsive layout that goes from a single column

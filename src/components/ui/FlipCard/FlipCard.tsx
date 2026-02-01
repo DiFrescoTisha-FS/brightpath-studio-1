@@ -1,5 +1,5 @@
 // src/components/ui/FlipCard/FlipCard.tsx
-
+import { Link } from 'react-router-dom';
 import React from 'react';
 import './FlipCard.css';
 import BrightPathGradientTitle from '@/components/BrightPathGradientTitle';
@@ -102,10 +102,11 @@ const FlipCard: React.FC<FlipCardProps> = ({
               Tap to flip back →
             </p>
           </div>
-
+        <Link to="/contact">
           <button className="w-full mx-0 bg-[#1A2238] text-primary font-bold py-1.5 rounded-md transition-all duration-300 ease-in-out hover:bg-[#222c48] shadow-md card-text relative z-10">
             {backCardButtonText}
-          </button>
+            </button>
+          </Link>
         </div>
 
       </div>
