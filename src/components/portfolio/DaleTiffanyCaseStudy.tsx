@@ -81,13 +81,13 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
       {onBack && (
         <div className="sticky top-20 z-40 bg-background/80 backdrop-blur-sm border-b border-border">
           <div className="container mx-auto px-4 py-3">
-            <button
-              onClick={onBack}
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+        <BrightPathGradientButton
+          onClick={onBack}
+          className="px-6 py-3 text-primary-foreground z-[10000] font-medium rounded-md"
             >
-              <ArrowLeft className="w-4 h-4" />
-              <span className="text-sm font-medium">Back to Portfolio</span>
-            </button>
+              <ArrowLeft />
+          Back to Portfolio
+        </BrightPathGradientButton>
           </div>
         </div>
       )}

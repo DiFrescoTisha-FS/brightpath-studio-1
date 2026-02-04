@@ -31,11 +31,11 @@ export default function CaseStudyPage() {
             The case study you're looking for doesn't exist or has been moved.
           </p>
           <BrightPathGradientButton
-            onClick={handleBack}
-            className="px-6 py-3 text-primary-foreground font-medium rounded-md"
-          >
-            Back to Portfolio
-          </BrightPathGradientButton>
+          onClick={handleBack}
+          className="px-6 py-3 text-primary-foreground font-medium rounded-md"
+        >
+          Back to Portfolio
+        </BrightPathGradientButton>
         </div>
       </div>
     );
