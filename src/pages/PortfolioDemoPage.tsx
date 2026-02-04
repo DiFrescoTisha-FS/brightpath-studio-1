@@ -24,7 +24,7 @@ export default function PortfolioDemoPage() {
       <div className="relative">
         <button
           onClick={() => setView('grid')}
-          className="fixed top-24 left-4 z-50 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors font-medium shadow-lg"
+          className="fixed top-24 left-4 z-[10000] px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors font-medium shadow-lg"
         >
           ← Back to Portfolio
         </button>
