@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./components/ui/Navbar";
 import Footer from "./components/ui/Footer";
-import GuidingLight from "./components/ui/GuidingLight";
+// import GuidingLight from "./components/ui/GuidingLight";
 import { useAppStore } from './store/appStore';
 
 // Scroll to top on route change
@@ -32,7 +32,7 @@ const App: React.FC = () => {
   return (
     <>
       <ScrollToTop />
-      <GuidingLight size={30} glowScale={2} />
+      {/* <GuidingLight size={30} glowScale={2} /> */}
       <Navbar theme={theme} />
       <main>
         <Outlet />

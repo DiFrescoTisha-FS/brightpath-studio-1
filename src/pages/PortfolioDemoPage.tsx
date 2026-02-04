@@ -1,25 +1,15 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   BrightPathGradientTitle,
   DaleTiffanyCard,
   DaleTiffanyCaseStudy,
   AngelCityMassageCard,
-  SocialMediaCard,
-  SocialMediaCaseStudyPage,
 } from '../components/portfolio';
 import AngelCityCaseStudy from '../components/features/AngelCityMassageCaseStudy';
 import { useAppStore } from '@/store/appStore';
-import {
-  daleTiffanySocialCaseStudy,
-  livingBetterLifeSocialCaseStudy,
-} from '@/data/caseStudies';
 
-type ViewState =
-  | 'grid'
-  | 'dale-tiffany'
-  | 'angel-city'
-  | 'dale-tiffany-social'
-  | 'living-better-life-social';
+type ViewState = 'grid' | 'dale-tiffany' | 'angel-city';
 
 export default function PortfolioDemoPage() {
   const { theme } = useAppStore();
@@ -43,26 +33,6 @@ export default function PortfolioDemoPage() {
     );
   }
 
-  if (view === 'dale-tiffany-social') {
-    return (
-      <SocialMediaCaseStudyPage
-        caseStudy={daleTiffanySocialCaseStudy}
-        onBack={() => setView('grid')}
-        theme={theme}
-      />
-    );
-  }
-
-  if (view === 'living-better-life-social') {
-    return (
-      <SocialMediaCaseStudyPage
-        caseStudy={livingBetterLifeSocialCaseStudy}
-        onBack={() => setView('grid')}
-        theme={theme}
-      />
-    );
-  }
-
   return (
     <div className="min-h-screen bg-background pt-32 pb-16">
       <div className="container mx-auto px-4">
@@ -70,64 +40,34 @@ export default function PortfolioDemoPage() {
           <BrightPathGradientTitle
             as="h1"
             className="mb-4 font-poppins"
-            gradientWords={['Demo']}
-          >
-            Project Demo
-          </BrightPathGradientTitle>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            Explore our case studies showcasing BrightPath Web Studio's work. Click "View Case
-            Study" to see the full project details.
-          </p>
-        </div>
-
-        {/* Web Projects Section */}
-        <div className="mb-16">
-          <BrightPathGradientTitle
-            as="h2"
-            className="text-center mb-8 font-poppins"
             gradientWords={['Projects']}
           >
             Web Projects
           </BrightPathGradientTitle>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <DaleTiffanyCard onViewCaseStudy={() => {
-              setView('dale-tiffany');
-              window.scrollTo(0, 0);
-            }} />
-            <AngelCityMassageCard onViewCaseStudy={() => {
-              setView('angel-city');
-              window.scrollTo(0, 0);
-            }} />
-          </div>
+          <p className="text-muted-foreground max-w-xl mx-auto">
+            Explore our web design case studies showcasing BrightPath Web Studio's work. Click "View Case
+            Study" to see the full project details.
+          </p>
         </div>
 
-        {/* Social Media Content Section */}
-        <div>
-          <BrightPathGradientTitle
-            as="h2"
-            className="text-center mb-8 font-poppins"
-            gradientWords={['Content']}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <DaleTiffanyCard onViewCaseStudy={() => {
+            setView('dale-tiffany');
+            window.scrollTo(0, 0);
+          }} />
+          <AngelCityMassageCard onViewCaseStudy={() => {
+            setView('angel-city');
+            window.scrollTo(0, 0);
+          }} />
+        </div>
+
+        <div className="text-center mt-16">
+          <Link
+            to="/social-media"
+            className="text-muted-foreground hover:text-primary transition-colors"
           >
-            Social Media Content
-          </BrightPathGradientTitle>
-          <div className="flex flex-wrap justify-center gap-8 max-w-4xl mx-auto">
-            <SocialMediaCard
-              caseStudy={daleTiffanySocialCaseStudy}
-              onViewCaseStudy={() => {
-                setView('dale-tiffany-social');
-                window.scrollTo(0, 0);
-              }}
-              className="w-full sm:w-80 md:w-96"
-            />
-            <SocialMediaCard
-              caseStudy={livingBetterLifeSocialCaseStudy}
-              onViewCaseStudy={() => {
-                setView('living-better-life-social');
-                window.scrollTo(0, 0);
-              }}
-              className="w-full sm:w-80 md:w-96"
-            />
-          </div>
+            Also see my Social Media & Content Strategy work →
+          </Link>
         </div>
       </div>
     </div>

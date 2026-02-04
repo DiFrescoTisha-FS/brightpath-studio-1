@@ -61,11 +61,8 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
             Contact Us
           </Link>
         </div>
-        <p className="mt-4 text-sm text-gray-500">
-          129 Maybin Rd, Zirconia, NC 28790
-        </p>
         <p className="mt-1 text-sm text-gray-500">
-          contact@brightpathwebstudio.com | (704) 453-3973
+          contact@brightpathwebstudio.org | (828) 388-5743
         </p>
         <p className="mt-6 text-sm text-gray-500">
           &copy; {new Date().getFullYear()} Bright Path Web Studio LLC. All Rights Reserved.
