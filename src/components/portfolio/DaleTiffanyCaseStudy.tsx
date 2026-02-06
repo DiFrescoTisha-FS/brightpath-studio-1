@@ -34,15 +34,15 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
   const [activeScreenshot, setActiveScreenshot] = useState(0);
 
   const screenshots = [
-    { before: '/dale-tiffany/before-home.png', after: '/dale-tiffany/after-home.png', label: 'Homepage' },
-    { before: '/dale-tiffany/before-about.png', after: '/dale-tiffany/after-about.png', label: 'About Page' },
-    { before: '/dale-tiffany/before-contact.png', after: '/dale-tiffany/after-contact.png', label: 'Contact Page' },
-    { before: '/dale-tiffany/before-retailer.png', after: '/dale-tiffany/after-retailer-logos.png', label: 'Retailer Logos' },
-    { before: '/dale-tiffany/before-catalog.png', after: '/dale-tiffany/after-retailer-portal.png', label: 'Retailer Portal' },
-    { before: null, after: '/dale-tiffany/after-admin-crm.png', label: 'CRM (New)' },
-    { before: null, after: '/dale-tiffany/after-ai-chatbot-public.png', label: 'AI Assistant' },
-    { before: null, after: '/dale-tiffany/after-ai-chatbot-retailer.png', label: 'Retailer AI' },
-    { before: '/dale-tiffany/after-home.png', after: '/dale-tiffany/after-home-light.png', label: 'Dark/Light Theme' },
+    { before: '/dale-tiffany/before-home.png', after: '/dale-tiffany/after-home.png', label: 'Homepage', useGrayscale: true },
+    { before: '/dale-tiffany/before-about.png', after: '/dale-tiffany/after-about.png', label: 'About Page', useGrayscale: true },
+    { before: '/dale-tiffany/before-contact.png', after: '/dale-tiffany/after-contact.png', label: 'Contact Page', useGrayscale: true },
+    { before: '/dale-tiffany/before-retailer.png', after: '/dale-tiffany/after-retailer-logos.png', label: 'Retailer Logos', useGrayscale: true },
+    { before: '/dale-tiffany/before-catalog.png', after: '/dale-tiffany/after-retailer-portal.png', label: 'Retailer Portal', useGrayscale: true },
+    { before: null, after: '/dale-tiffany/after-admin-crm.png', label: 'CRM (New)', useGrayscale: false },
+    { before: null, after: '/dale-tiffany/after-ai-chatbot-public.png', label: 'AI Assistant', useGrayscale: false },
+    { before: null, after: '/dale-tiffany/after-ai-chatbot-retailer.png', label: 'Retailer AI', useGrayscale: false },
+    { before: '/dale-tiffany/after-home.png', after: '/dale-tiffany/after-home-light.png', label: 'Dark/Light Theme', useGrayscale: false },
   ];
 
   const techStack = [
@@ -188,8 +188,11 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
                     <img
                       src={screenshots[activeScreenshot].before}
                       alt="Before - Legacy Site"
-                      className="absolute inset-0 w-full h-full object-cover object-top grayscale"
-                      style={{ width: `${100 / (beforeAfterPosition / 100)}%` }}
+                      className="absolute inset-0 w-full h-full object-cover object-top"
+                      style={{
+                        width: `${100 / (beforeAfterPosition / 100)}%`,
+                        filter: screenshots[activeScreenshot].useGrayscale ? 'grayscale(100%)' : 'none'
+                      }}
                     />
                   </div>
 
