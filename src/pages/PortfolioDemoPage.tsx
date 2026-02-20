@@ -40,13 +40,12 @@ export default function PortfolioDemoPage() {
           <BrightPathGradientTitle
             as="h1"
             className="mb-4 font-poppins"
-            gradientWords={['Projects']}
+            gradientWords={['Portfolio']}
           >
-            Web Projects
+            Portfolio
           </BrightPathGradientTitle>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            Explore our web design case studies showcasing BrightPath Web Studio's work. Click "View Case
-            Study" to see the full project details.
+            Real projects built for real clients — focused on performance, usability, and measurable results.
           </p>
         </div>
 

@@ -4,46 +4,12 @@ import { Link } from 'react-router-dom';
 import ReviewWidget from '../components/ReviewWidget';
 import PortfolioSection from '../components/PortfolioSection';
 import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
-import BrightPathGradientButton from "@/components/BrightPathGradientButton.legacy";
+import ClarityHero from "@/components/ClarityHero";
+
 
 type SectionProps = {
   theme: 'light' | 'dark';
 };
-const HeroSection = ({ theme }: SectionProps) => (
-  <section className="relative text-foreground min-h-screen flex items-center justify-center overflow-hidden">
-    <video
-      autoPlay
-      loop
-      muted
-      playsInline
-      className="absolute top-0 left-0 w-full h-full object-cover z-0"
-    >
-      <source src="/videos/video-1.mp4" type="video/mp4" />
-      Your browser does not support the video tag.
-    </video>
-    <div className={`absolute top-0 left-0 w-full h-full ${theme === 'dark' ? 'bg-background/60' : 'bg-background/60'} z-10`}></div>
-    <div className="relative z-20 text-center max-w-5xl mx-auto px-4">
-      <BrightPathGradientTitle as="h1" className="font-poppins font-bold mb-4 mt-24" gradientWords={["Shine", "Bright", "Online"]}>
-        Guiding Your Business to Shine Bright Online
-      </BrightPathGradientTitle>
-      <p className="text-muted-foreground font-lato mb-8 text-shadow-md">
-        We are the beacon in the digital fog, crafting brilliant web experiences
-        that navigate your brand to success.
-      </p>
-      <BrightPathGradientButton
-  onClick={() => {
-    document.getElementById('journey')?.scrollIntoView({
-      behavior: 'smooth',
-    });
-  }}
-  className="mt-8 bg-primary text-primary-foreground font-bold font-lato py-2 px-6 rounded-md text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl text-shadow-md"
->
-  Begin Your Journey
-</BrightPathGradientButton>
-
-    </div>
-  </section>
-);
 
 const ServicesSection = ({ theme }: SectionProps) => {
   const services = [
@@ -147,7 +113,7 @@ const HomePage = () => {
   return (
     <div className="min-h-screen">
       <main>
-        <HeroSection theme={theme} />
+        <ClarityHero />
         <ServicesSection theme={theme} />
 
         <PortfolioSection />

@@ -150,3 +150,265 @@
         @apply text-xs sm:text-xs leading-snug;
     }
 }
+
+/* ====================================
+   GUIDING LIGHT HERO (RESTORED)
+   Light searches, then settles. Clarity is the destination.
+   ==================================== */
+
+/* ✅ Let --lx/--ly interpolate smoothly (prevents jumping) */
+@property --lx {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 50%;
+}
+@property --ly {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 50%;
+}
+
+.hero-clarity {
+  background: radial-gradient(
+    ellipse 120% 100% at 50% 40%,
+    #0f1724 0%,
+    #0a0f18 55%,
+    #060a10 100%
+  );
+  position: relative;
+  overflow: hidden;
+
+  /* Animated light position */
+  --lx: 10%;
+  --ly: 44%;
+  --spot: 220px;
+  --spot-soft: 140px;
+
+  animation: lightPos 8.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Subtle grain */
+.hero-clarity::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* The visible light halo */
+.guiding-light {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 999px;
+  left: var(--lx);
+  top: var(--ly);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 2;
+
+  background: radial-gradient(
+    circle,
+    rgba(255, 248, 230, 0.34) 0%,
+    rgba(235, 200, 120, 0.18) 28%,
+    rgba(235, 177, 9, 0.09) 52%,
+    rgba(235, 177, 9, 0.03) 74%,
+    transparent 100%
+  );
+
+  filter: blur(52px);
+  opacity: 0;
+  animation: lightOn 8.2s ease forwards;
+}
+
+/* Horizon glow (destination) */
+.horizon-glow {
+  position: absolute;
+  left: 50%;
+  top: 62%;
+  transform: translate(-50%, -50%);
+  width: min(760px, 76vw);
+  height: 140px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+
+  background: radial-gradient(
+    ellipse 100% 100% at 50% 60%,
+    rgba(235, 200, 120, 0.18) 0%,
+    rgba(235, 177, 9, 0.09) 38%,
+    transparent 100%
+  );
+  filter: blur(34px);
+  animation: horizonIn 1.5s ease-out 6.0s forwards;
+}
+
+/* Headline container */
+.clarity-headline {
+  position: relative;
+  z-index: 10;
+  overflow: visible;
+}
+
+/* Prevent descender clipping */
+.clarity-headline h1 {
+  line-height: 1.15;
+  padding-bottom: 0.18em;
+}
+
+/* Base dim state */
+.clarity-text,
+.clarity-subtitle {
+  color: rgba(245, 240, 232, 0.18);
+}
+
+/* Spotlight reveal driven by light */
+.clarity-text-line1,
+.clarity-subtitle {
+  opacity: 0.22;
+
+  -webkit-mask-image: radial-gradient(
+    circle at var(--lx) var(--ly),
+    rgba(0,0,0,1) 0,
+    rgba(0,0,0,1) var(--spot),
+    rgba(0,0,0,0) calc(var(--spot) + var(--spot-soft))
+  );
+  mask-image: radial-gradient(
+    circle at var(--lx) var(--ly),
+    rgba(0,0,0,1) 0,
+    rgba(0,0,0,1) var(--spot),
+    rgba(0,0,0,0) calc(var(--spot) + var(--spot-soft))
+  );
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* Second line reveals then locks */
+.clarity-text-line2 {
+  opacity: 0.22;
+
+  -webkit-mask-image: radial-gradient(
+    circle at var(--lx) var(--ly),
+    rgba(0,0,0,1) 0,
+    rgba(0,0,0,1) var(--spot),
+    rgba(0,0,0,0) calc(var(--spot) + var(--spot-soft))
+  );
+  mask-image: radial-gradient(
+    circle at var(--lx) var(--ly),
+    rgba(0,0,0,1) 0,
+    rgba(0,0,0,1) var(--spot),
+    rgba(0,0,0,0) calc(var(--spot) + var(--spot-soft))
+  );
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  animation: lockIn 8.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Make the key phrase read as elevated */
+.clarity-text-line2 {
+  text-shadow:
+    0 6px 14px rgba(0, 0, 0, 0.45),
+    0 2px 4px rgba(0, 0, 0, 0.55);
+}
+
+/* CTA appears after destination */
+.clarity-cta {
+  opacity: 0;
+  transform: none;
+  animation: ctaIn 1.1s ease-out 6.6s forwards;
+}
+
+@keyframes ctaIn {
+  to { opacity: 1; }
+}
+
+@keyframes horizonIn {
+  to { opacity: 1; }
+}
+
+/* Light fade-in/out (no pulsing) */
+@keyframes lightOn {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Lighthouse-like sweep: drift across, return, settle */
+@keyframes lightPos {
+  0%   { --lx: 10%; --ly: 44%; }
+  28%  { --lx: 85%; --ly: 41%; }
+  58%  { --lx: 30%; --ly: 47%; }
+  78%  { --lx: 60%; --ly: 50%; }
+  100% { --lx: 50%; --ly: 62%; }
+}
+
+/* Lock-in final clarity (emboss only; glow can be added later) */
+@keyframes lockIn {
+  0%, 70% {
+    color: rgba(245, 240, 232, 0.22);
+    opacity: 0.22;
+    text-shadow: none;
+  }
+  78% {
+    color: rgba(255, 252, 245, 0.92);
+    opacity: 0.95;
+    text-shadow:
+      0 6px 14px rgba(0, 0, 0, 0.45),
+      0 2px 4px rgba(0, 0, 0, 0.55);
+  }
+  100% {
+    color: #f5f0e8;
+    opacity: 1;
+    text-shadow:
+      0 -1px 0 rgba(255, 255, 255, 0.25),
+      0 1px 1px rgba(0, 0, 0, 0.4),
+      0 6px 14px rgba(0, 0, 0, 0.45),
+      0 2px 4px rgba(0, 0, 0, 0.55);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .guiding-light { width: 360px; height: 360px; filter: blur(44px); }
+  .hero-clarity { --spot: 180px; --spot-soft: 120px; }
+  .horizon-glow { height: 110px; }
+}
+
+@media (max-width: 480px) {
+  .guiding-light { width: 280px; height: 280px; filter: blur(40px); }
+  .hero-clarity { --spot: 150px; --spot-soft: 110px; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .hero-clarity { animation: none; --lx: 50%; --ly: 62%; }
+  .guiding-light { display: none; animation: none; }
+  .horizon-glow { opacity: 1; animation: none; }
+
+  .clarity-text-line1,
+  .clarity-subtitle {
+    opacity: 0.7;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .clarity-text-line2 {
+    opacity: 1;
+    -webkit-mask-image: none;
+    mask-image: none;
+    text-shadow:
+      0 -1px 0 rgba(255, 255, 255, 0.25),
+      0 1px 1px rgba(0, 0, 0, 0.4),
+      0 6px 14px rgba(0, 0, 0, 0.45),
+      0 2px 4px rgba(0, 0, 0, 0.55);
+  }
+
+  .clarity-cta { opacity: 1; animation: none; }
+}

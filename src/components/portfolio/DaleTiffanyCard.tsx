@@ -112,7 +112,7 @@ export function DaleTiffanyCard({ onViewCaseStudy, className = '' }: DaleTiffany
           onClick={onViewCaseStudy}
           className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-primary-foreground font-medium rounded-md hover:bg-primary/90 transition-colors"
         >
-          View Case Study
+          View Project
           <ArrowRight className="w-4 h-4" />
         </BrightPathGradientButton>
       </div>
