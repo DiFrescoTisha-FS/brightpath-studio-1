@@ -110,7 +110,10 @@ const AngelCityCaseStudy = () => {
       <MultiPageFlowSection theme={theme} />
 
       {/* Client Testimonial Section */}
-      <section className="bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 py-20 px-4 transition-colors duration-300 relative z-10">
+      <section className="    py-20 px-4 transition-colors duration-300 relative z-10
+    bg-gradient-to-br
+    from-slate-50 via-white to-slate-100
+    dark:from-[#050B14] dark:via-[#081426] dark:to-[#0B1E33]">
         <div className="max-w-4xl mx-auto text-center">
           <BrightPathGradientTitle
             as="h2"
