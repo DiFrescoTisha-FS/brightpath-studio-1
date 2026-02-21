@@ -1,67 +1,39 @@
-import { useState, useEffect } from 'react';
-import { Sun, Moon } from 'lucide-react';
 import ResponsiveMockupSection from '../features/ResponsiveMockupSection';
 import StyleGuideSection from '../features/StyleGuideSection';
 import MultiPageFlowSection from './MultiPageFlowSection';
 import BrightPathGradientTitle from '../BrightPathGradientTitle';
 import BrightPathGradientButton from "@/components/BrightPathGradientButton"
+import { useAppStore } from '@/store/appStore';
 
 const AngelCityCaseStudy = () => {
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    const stored = localStorage.getItem('theme');
-    return (stored === 'dark' || stored === 'light') ? stored : 'light';
-  });
-
-  useEffect(() => {
-    const root = window.document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
-  };
+  const { theme } = useAppStore();
 
   return (
     <div className="min-h-screen relative bg-bp-light-bg-light dark:bg-bp-light-bg-dark transition-colors duration-300">
 
       <div
         id="extended-background"
-        className="absolute top-0 left-0 w-full h-[70rem] 
+        className="absolute top-0 left-0 w-full h-[70rem]
                    bg-bp-dark-bg-light dark:bg-bp-dark-bg-dark transition-colors duration-300 z-0"
       />
 
-      <header className="fixed top-0 right-0 p-6 z-50">
-        <button
-          onClick={toggleTheme}
-          className="p-3 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 shadow-lg"
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          {theme === 'light' ? (
-            <Moon className="w-5 h-5 text-gray-800" />
-          ) : (
-            <Sun className="w-5 h-5 text-bp-primary" />
-          )}
-        </button>
-      </header>
-
-      <section className="relative pt-32 pb-16 z-[9999]">
+      <section className="relative pt-32 pb-36 z-10">
         <div className="max-w-4xl mx-auto px-4 text-left">
           <BrightPathGradientTitle
             as="h1"
-            className="font-bold mb-6 tracking-tight"
+            className="font-bold pb-6 tracking-tight"
             textColor='text-gray-900 dark:text-gray-200'
-            gradientWords={["Case", "Study"]}
+          >
+            Angel City Massage
+          </BrightPathGradientTitle>
+            <h3
+            className="font-bold pb-6 tracking-tight shadoe-md text-[#1a2238] dark:text-gray-200"
           >
             Website Design & Development Case Study
-          </BrightPathGradientTitle>
+          </h3>
           <BrightPathGradientButton
             href="https://angelcitymassage.com"
-            className="relative z-[9999] px-8 py-4 text-[#1a2238] shadow-xl"
+            className="relative z-10 px-8 py-4 text-[#1a2238] shadow-xl"
           >
             angelcitymassage.com
           </BrightPathGradientButton>

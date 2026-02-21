@@ -14,7 +14,7 @@ interface MultiPageFlowSectionProps {
 // FIX: Apply the interface and destructure the theme prop
 const MultiPageFlowSection: React.FC<MultiPageFlowSectionProps> = ({ theme }) => {
     const bgVar = theme === 'dark' ? 'var(--timeline-bg-dark)' : 'var(--timeline-bg-light)';
-    const fallbackBg = theme === 'dark' ? 'rgb(243, 244, 246)' : 'rgb(17, 24, 39)'; // dark gray / light gray
+    const fallbackBg = theme === 'dark' ? 'rgb(17, 24, 39) ' : 'rgb(243, 244, 246)'; // dark gray / light gray
 
     return (
 

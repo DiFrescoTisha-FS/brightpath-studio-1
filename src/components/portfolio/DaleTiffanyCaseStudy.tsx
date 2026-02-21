@@ -81,13 +81,13 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
       {onBack && (
         <div className="sticky top-20 z-40 bg-background/80 backdrop-blur-sm border-b border-border">
           <div className="container mx-auto px-4 py-3">
-        <BrightPathGradientButton
-          onClick={onBack}
-          className="px-6 py-3 text-primary-foreground z-[10000] font-medium rounded-md"
+            <BrightPathGradientButton
+              onClick={onBack}
+              className="px-6 py-3 text-primary-foreground z-[10000] font-medium rounded-md"
             >
               <ArrowLeft />
-          Back to Portfolio
-        </BrightPathGradientButton>
+              Back to Portfolio
+            </BrightPathGradientButton>
           </div>
         </div>
       )}
@@ -110,6 +110,18 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
             <p className="text-muted-foreground font-lato max-w-2xl mx-auto">
               Transforming a 20-year-old legacy PHP site into a modern, responsive e-commerce platform with B2B portal and integrated CRM.
             </p>
+            <div className="mt-8 flex justify-center">
+              <a
+                href="https://695c0c5bcf78e900081d78d5--daletiffany.netlify.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block"
+              >
+                <BrightPathGradientButton className="relative z-[9999] px-8 py-4 text-[#1a2238] shadow-xl font-medium">
+                  View Dale Tiffany Staging Site
+                </BrightPathGradientButton>
+              </a>
+            </div>
 
             {/* Quick Stats */}
             <div className="flex flex-wrap justify-center gap-8 mt-8">
