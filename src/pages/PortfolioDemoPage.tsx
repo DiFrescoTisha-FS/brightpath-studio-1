@@ -45,7 +45,7 @@ export default function PortfolioDemoPage() {
             Portfolio
           </BrightPathGradientTitle>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            Real projects built for real clients — focused on performance, usability, and measurable results.
+            Real-world systems built with modern stacks — focused on performance, scalability, and measurable growth.
           </p>
         </div>
 

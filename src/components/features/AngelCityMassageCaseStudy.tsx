@@ -26,6 +26,9 @@ const AngelCityCaseStudy = () => {
           >
             Angel City Massage
           </BrightPathGradientTitle>
+                      <p className="text-xs text-muted-foreground mb-4">
+              WordPress | Divi | Custom CSS | Performance Optimization | SEO
+            </p>
             <h3
             className="font-bold pb-6 tracking-tight shadoe-md text-[#1a2238] dark:text-gray-200"
           >

@@ -76,7 +76,7 @@ export function DaleTiffanyCard({ onViewCaseStudy, className = '' }: DaleTiffany
 
         {/* Description */}
         <p className="text-sm text-muted-foreground mb-4 line-clamp-2 font-lato">
-          Complete digital transformation of a 20-year-old PHP site into a modern React platform with B2B portal and CRM.
+          Re-architected a legacy 20-year PHP platform into a modern React + Supabase B2B system with role-based authentication, CRM dashboard, and scalable API integrations.
         </p>
 
         {/* Key Features Icons */}

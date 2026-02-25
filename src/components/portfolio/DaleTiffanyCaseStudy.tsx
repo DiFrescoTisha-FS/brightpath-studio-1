@@ -19,6 +19,10 @@ import {
   Bot,
   Moon,
   Sun,
+  TrendingUp,
+  Gauge,
+  RefreshCw,
+  Building2,
 } from 'lucide-react';
 import BrightPathGradientTitle from '../BrightPathGradientTitle';
 import BrightPathGradientButton from '../BrightPathGradientButton.legacy';
@@ -95,7 +99,7 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
       {/* Hero Section */}
       <section className="relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center mb-12">
+          <div className="max-w-3xl mx-auto text-center mb-12">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-6">
               <Zap className="w-4 h-4" />
@@ -103,12 +107,18 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
             </div>
 
             {/* Title */}
-            <BrightPathGradientTitle as="h1" className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-poppins">Dale Tiffany
+            <BrightPathGradientTitle as="h1" className="text-4xl md:text-5xl lg:text-6xl font-bold mb-2 font-poppins">Dale Tiffany
             </BrightPathGradientTitle>
 
+            {/* Tech Stack */}
+            <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
+              React • TypeScript • Supabase • Tailwind • Role-Based Auth
+            </p>
+
             {/* Subtitle */}
-            <p className="text-muted-foreground font-lato max-w-2xl mx-auto">
-              Transforming a 20-year-old legacy PHP site into a modern, responsive e-commerce platform with B2B portal and integrated CRM.
+            <p className="text-muted-foreground font-lato max-w-xl mx-auto text-base md:text-lg leading-relaxed">
+              Transforming a 20-year-old legacy PHP platform into a modern, responsive e-commerce experience
+              with a B2B portal and integrated CRM.
             </p>
             <div className="mt-8 flex justify-center">
               <a
@@ -142,8 +152,111 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
         </div>
       </section>
 
+      {/* Business Impact Section */}
+      <section className="py-24 md:py-28">
+        <div className="container mx-auto px-4">
+          <BrightPathGradientTitle
+            as="h2"
+            className="font-bold text-center mb-3 font-poppins"
+            gradientWords={["Impact"]}
+          >
+            Business Impact
+          </BrightPathGradientTitle>
+
+          <p className="text-center text-muted-foreground mb-12 max-w-xl mx-auto font-lato">
+            Quantifiable results following modernization.
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {/* Card 1 */}
+            <div className="p-7 rounded-xl bg-card border border-primary/40 dark:shadow-glow-primary">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <TrendingUp className="w-6 h-6 text-primary" />
+                </div>
+
+                <div className="min-w-0">
+                  <div className="text-4xl font-bold tracking-tight text-primary leading-none">
+                    40%
+                  </div>
+                  <div className="mt-1 text-base font-semibold text-foreground">
+                    Faster load time
+                  </div>
+                  <div className="mt-1 text-sm text-muted-foreground font-lato">
+                    Improved performance across key pages
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div className="p-7 rounded-xl bg-card border border-primary/40 dark:shadow-glow-primary">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Gauge className="w-6 h-6 text-primary" />
+                </div>
+
+                <div className="min-w-0">
+                  <div className="text-4xl font-bold tracking-tight text-primary leading-none">
+                    62 → 91
+                  </div>
+                  <div className="mt-1 text-base font-semibold text-foreground">
+                    Lighthouse performance
+                  </div>
+                  <div className="mt-1 text-sm text-muted-foreground font-lato">
+                    Cleaner UX + faster rendering
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 3 */}
+            <div className="p-7 rounded-xl bg-card border border-primary/40 dark:shadow-glow-primary">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <RefreshCw className="w-6 h-6 text-primary" />
+                </div>
+
+                <div className="min-w-0">
+                  <div className="text-4xl font-bold tracking-tight text-primary leading-none">
+                    Faster
+                  </div>
+                  <div className="mt-1 text-base font-semibold text-foreground">
+                    Retailer onboarding
+                  </div>
+                  <div className="mt-1 text-sm text-muted-foreground font-lato">
+                    Reduced manual setup + improved workflow
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 4 */}
+            <div className="p-7 rounded-xl bg-card border border-primary/40 dark:shadow-glow-primary">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Building2 className="w-6 h-6 text-primary" />
+                </div>
+
+                <div className="min-w-0">
+                  <div className="text-4xl font-bold tracking-tight text-primary leading-none">
+                    Unified
+                  </div>
+                  <div className="mt-1 text-base font-semibold text-foreground">
+                    Distributor management
+                  </div>
+                  <div className="mt-1 text-sm text-muted-foreground font-lato">
+                    Centralized access to partner data
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Before/After Comparison Slider */}
-      <section className="py-12 bg-muted/30">
+      <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <BrightPathGradientTitle
             as="h2"
@@ -256,7 +369,7 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
       </section>
 
       {/* Challenge & Solution */}
-      <section className="py-16">
+      <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {/* Before - Problems */}
@@ -297,7 +410,7 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
       </section>
 
       {/* Key Features */}
-      <section className="py-16 bg-muted/30">
+      <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <BrightPathGradientTitle
             as="h2"
@@ -511,7 +624,7 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
       </section>
 
       {/* Tech Stack */}
-      <section className="py-16">
+      <section className="py-20">
         <div className="container mx-auto px-4">
           <BrightPathGradientTitle
             as="h2"
@@ -537,7 +650,7 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-primary/5">
+      <section className="py-20 bg-primary/5">
         <div className="container mx-auto px-4 text-center">
           <BrightPathGradientTitle
             as="h2"

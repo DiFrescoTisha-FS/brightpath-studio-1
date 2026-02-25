@@ -73,7 +73,7 @@ export function AngelCityMassageCard({ onViewCaseStudy, className = '' }: AngelC
 
         {/* Description */}
         <p className="text-sm text-muted-foreground mb-4 line-clamp-2 font-lato">
-          A beautifully designed wellness website focused on elegance, functionality, and seamless user experience for booking services.
+          Designed and optimized a high-performance WordPress platform with custom CSS architecture, responsive layout systems, and SEO-driven structure.
         </p>
 
         {/* Key Features Icons */}
