@@ -23,6 +23,9 @@ import {
   Gauge,
   RefreshCw,
   Building2,
+  Lock,
+  Shield,
+  Key
 } from 'lucide-react';
 import BrightPathGradientTitle from '../BrightPathGradientTitle';
 import BrightPathGradientButton from '../BrightPathGradientButton.legacy';
@@ -35,7 +38,7 @@ interface DaleTiffanyCaseStudyProps {
 export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCaseStudyProps) {
   const pageBg = theme === 'dark' ? 'bg-background text-foreground' : 'bg-white text-neutral-900';
   const [beforeAfterPosition, setBeforeAfterPosition] = useState(50);
-  const [activeScreenshot, setActiveScreenshot] = useState(0);
+  const [activeScreenshot, setActiveScreenshot] = useState(5);
 
   const screenshots = [
     { before: '/dale-tiffany/before-home.png', after: '/dale-tiffany/after-home.png', label: 'Homepage', useGrayscale: true },
@@ -117,8 +120,7 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
 
             {/* Subtitle */}
             <p className="text-muted-foreground font-lato max-w-xl mx-auto text-base md:text-lg leading-relaxed">
-              Transforming a 20-year-old legacy PHP platform into a modern, responsive e-commerce experience
-              with a B2B portal and integrated CRM.
+              Re-architected a 20-year legacy PHP platform into a modern React + Supabase system with role-based access, a secure B2B retailer portal, and an integrated admin CRM.
             </p>
             <div className="mt-8 flex justify-center">
               <a
@@ -146,6 +148,205 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary">100%</div>
                 <div className="text-sm text-muted-foreground">Responsive</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Product UI & Platform Modernization */}
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <BrightPathGradientTitle
+            as="h2"
+            className="font-semibold text-center mb-8 font-poppins"
+            gradientWords={["Platform"]}
+          >
+            Product UI & Platform Modernization
+          </BrightPathGradientTitle>
+
+          {/* Screenshot Navigation */}
+          <div className="flex justify-center gap-2 mb-6 flex-wrap">
+            {screenshots.map((shot, index) => (
+              <BrightPathTabButton
+                key={shot.label}
+                active={activeScreenshot === index}
+                onClick={() => setActiveScreenshot(index)}
+              >
+                {shot.label}
+              </BrightPathTabButton>
+            ))}
+          </div>
+
+          {/* Comparison Slider */}
+          <div className="max-w-5xl mx-auto">
+            {screenshots[activeScreenshot].before ? (
+              /* Before/After Comparison Mode */
+              <>
+                <div
+                  className="relative aspect-[16/10] rounded-lg overflow-hidden border border-primary/50 dark:shadow-glow-primary shadow-xl"
+                  onMouseMove={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    const x = ((e.clientX - rect.left) / rect.width) * 100;
+                    setBeforeAfterPosition(Math.max(5, Math.min(95, x)));
+                  }}
+                  onTouchMove={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    const x = ((e.touches[0].clientX - rect.left) / rect.width) * 100;
+                    setBeforeAfterPosition(Math.max(5, Math.min(95, x)));
+                  }}
+                >
+                  {/* After Image (Background) */}
+                  <img
+                    src={screenshots[activeScreenshot].after}
+                    alt="After - Modern Site"
+                    className="absolute inset-0 w-full h-full object-cover object-top"
+                  />
+
+                  {/* Before Image (Clipped) */}
+                  <div
+                    className="absolute inset-0 overflow-hidden"
+                    style={{ width: `${beforeAfterPosition}%` }}
+                  >
+                    <img
+                      src={screenshots[activeScreenshot].before}
+                      alt="Before - Legacy Site"
+                      className="absolute inset-0 w-full h-full object-cover object-top"
+                      style={{
+                        width: `${100 / (beforeAfterPosition / 100)}%`,
+                        filter: screenshots[activeScreenshot].useGrayscale ? 'grayscale(100%)' : 'none'
+                      }}
+                    />
+                  </div>
+
+                  {/* Slider Line */}
+                  <div
+                    className="absolute top-0 bottom-0 w-1 bg-primary cursor-ew-resize"
+                    style={{ left: `${beforeAfterPosition}%`, transform: 'translateX(-50%)' }}
+                  >
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-lg">
+                      <ChevronLeft className="w-4 h-4 text-primary-foreground -mr-1" />
+                      <ChevronRight className="w-4 h-4 text-primary-foreground -ml-1" />
+                    </div>
+                  </div>
+
+                  {/* Labels */}
+                  <div className="absolute top-4 left-4 px-3 py-1 bg-destructive text-destructive-foreground text-sm font-medium rounded">
+                    BEFORE
+                  </div>
+                  <div className="absolute top-4 right-4 px-3 py-1 bg-primary text-primary-foreground text-sm font-medium rounded">
+                    AFTER
+                  </div>
+                </div>
+                <p className="text-center text-sm text-muted-foreground mt-4">
+                  Drag or hover to compare before and after
+                </p>
+              </>
+            ) : (
+              /* New Feature Mode (no before image) */
+              <>
+                <div className="relative aspect-[16/10] rounded-lg overflow-hidden border border-primary/50 dark:shadow-glow-primary shadow-xl">
+                  <img
+                    src={screenshots[activeScreenshot].after}
+                    alt="New Feature"
+                    className="w-full h-full object-cover object-top"
+                  />
+                  {/* New Feature Badge */}
+                  <div className="absolute top-4 left-4 px-3 py-1 bg-primary text-primary-foreground text-sm font-medium rounded flex items-center gap-1.5">
+                    <Zap className="w-4 h-4" />
+                    NEW FEATURE
+                  </div>
+                </div>
+                <p className="text-center text-sm text-muted-foreground mt-4">
+                  Brand new functionality - no legacy equivalent existed
+                </p>
+              </>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Authentication & System Architecture */}
+      <section className="py-16 md:py-20">
+        <div className="container mx-auto px-4">
+          <BrightPathGradientTitle
+            as="h2"
+            className="font-bold text-center mb-3 font-poppins"
+            gradientWords={["Architecture"]}
+          >
+            Authentication & System Architecture
+          </BrightPathGradientTitle>
+
+          <p className="text-center text-muted-foreground mb-10 max-w-xl mx-auto font-lato">
+            Built for secure access, role separation, and scalable B2B workflows.
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {/* Card 1 */}
+            <div className="p-6 rounded-xl bg-card border border-primary/50 dark:shadow-glow-primary">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Lock className="w-5 h-5 text-primary" />
+                </div>
+                <div className="min-w-0">
+                  <h4 className="text-base font-semibold text-foreground font-poppins">
+                    Secure retailer login
+                  </h4>
+                  <p className="mt-1 text-sm text-muted-foreground font-lato">
+                    Supabase Auth with protected routes and session persistence.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div className="p-6 rounded-xl bg-card border border-primary/50 dark:shadow-glow-primary">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Users className="w-5 h-5 text-primary" />
+                </div>
+                <div className="min-w-0">
+                  <h4 className="text-base font-semibold text-foreground font-poppins">
+                    Role-based UI states
+                  </h4>
+                  <p className="mt-1 text-sm text-muted-foreground font-lato">
+                    Retailers and admins see different tools and workflows.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 3 */}
+            <div className="p-6 rounded-xl bg-card border border-primary/50 dark:shadow-glow-primary">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Shield className="w-5 h-5 text-primary" />
+                </div>
+                <div className="min-w-0">
+                  <h4 className="text-base font-semibold text-foreground font-poppins">
+                    Protected API routes
+                  </h4>
+                  <p className="mt-1 text-sm text-muted-foreground font-lato">
+                    Serverless functions validate sessions and permissions.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 4 */}
+            <div className="p-6 rounded-xl bg-card border border-primary/50 dark:shadow-glow-primary">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Key className="w-5 h-5 text-primary" />
+                </div>
+                <div className="min-w-0">
+                  <h4 className="text-base font-semibold text-foreground font-poppins">
+                    Session handling via Supabase
+                  </h4>
+                  <p className="mt-1 text-sm text-muted-foreground font-lato">
+                    Persistent auth state with controlled expiration and refresh handling.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -251,119 +452,6 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Before/After Comparison Slider */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <BrightPathGradientTitle
-            as="h2"
-            className="font-semibold text-center mb-8 font-poppins"
-            gradientWords={["After"]}
-          >
-
-            Before & After
-          </BrightPathGradientTitle>
-
-          {/* Screenshot Navigation */}
-          <div className="flex justify-center gap-2 mb-6 flex-wrap">
-            {screenshots.map((shot, index) => (
-              <BrightPathTabButton
-                key={shot.label}
-                active={activeScreenshot === index}
-                onClick={() => setActiveScreenshot(index)}
-              >
-                {shot.label}
-              </BrightPathTabButton>
-            ))}
-          </div>
-
-          {/* Comparison Slider */}
-          <div className="max-w-5xl mx-auto">
-            {screenshots[activeScreenshot].before ? (
-              /* Before/After Comparison Mode */
-              <>
-                <div
-                  className="relative aspect-[16/10] rounded-lg overflow-hidden border border-primary/50 dark:shadow-glow-primary shadow-xl"
-                  onMouseMove={(e) => {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    const x = ((e.clientX - rect.left) / rect.width) * 100;
-                    setBeforeAfterPosition(Math.max(5, Math.min(95, x)));
-                  }}
-                  onTouchMove={(e) => {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    const x = ((e.touches[0].clientX - rect.left) / rect.width) * 100;
-                    setBeforeAfterPosition(Math.max(5, Math.min(95, x)));
-                  }}
-                >
-                  {/* After Image (Background) */}
-                  <img
-                    src={screenshots[activeScreenshot].after}
-                    alt="After - Modern Site"
-                    className="absolute inset-0 w-full h-full object-cover object-top"
-                  />
-
-                  {/* Before Image (Clipped) */}
-                  <div
-                    className="absolute inset-0 overflow-hidden"
-                    style={{ width: `${beforeAfterPosition}%` }}
-                  >
-                    <img
-                      src={screenshots[activeScreenshot].before}
-                      alt="Before - Legacy Site"
-                      className="absolute inset-0 w-full h-full object-cover object-top"
-                      style={{
-                        width: `${100 / (beforeAfterPosition / 100)}%`,
-                        filter: screenshots[activeScreenshot].useGrayscale ? 'grayscale(100%)' : 'none'
-                      }}
-                    />
-                  </div>
-
-                  {/* Slider Line */}
-                  <div
-                    className="absolute top-0 bottom-0 w-1 bg-primary cursor-ew-resize"
-                    style={{ left: `${beforeAfterPosition}%`, transform: 'translateX(-50%)' }}
-                  >
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-lg">
-                      <ChevronLeft className="w-4 h-4 text-primary-foreground -mr-1" />
-                      <ChevronRight className="w-4 h-4 text-primary-foreground -ml-1" />
-                    </div>
-                  </div>
-
-                  {/* Labels */}
-                  <div className="absolute top-4 left-4 px-3 py-1 bg-destructive text-destructive-foreground text-sm font-medium rounded">
-                    BEFORE
-                  </div>
-                  <div className="absolute top-4 right-4 px-3 py-1 bg-primary text-primary-foreground text-sm font-medium rounded">
-                    AFTER
-                  </div>
-                </div>
-                <p className="text-center text-sm text-muted-foreground mt-4">
-                  Drag or hover to compare before and after
-                </p>
-              </>
-            ) : (
-              /* New Feature Mode (no before image) */
-              <>
-                <div className="relative aspect-[16/10] rounded-lg overflow-hidden border border-primary/50 dark:shadow-glow-primary shadow-xl">
-                  <img
-                    src={screenshots[activeScreenshot].after}
-                    alt="New Feature"
-                    className="w-full h-full object-cover object-top"
-                  />
-                  {/* New Feature Badge */}
-                  <div className="absolute top-4 left-4 px-3 py-1 bg-primary text-primary-foreground text-sm font-medium rounded flex items-center gap-1.5">
-                    <Zap className="w-4 h-4" />
-                    NEW FEATURE
-                  </div>
-                </div>
-                <p className="text-center text-sm text-muted-foreground mt-4">
-                  Brand new functionality - no legacy equivalent existed
-                </p>
-              </>
-            )}
           </div>
         </div>
       </section>
