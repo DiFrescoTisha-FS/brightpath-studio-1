@@ -1,6 +1,8 @@
 import ResponsiveMockupSection from '../features/ResponsiveMockupSection';
 import StyleGuideSection from '../features/StyleGuideSection';
 import MultiPageFlowSection from './MultiPageFlowSection';
+import ProjectSnapshot from './ProjectSnapshot';
+import PerformanceResults from './PerformanceResults';
 import BrightPathGradientTitle from '../BrightPathGradientTitle';
 import BrightPathGradientButton from "@/components/BrightPathGradientButton"
 import { useAppStore } from '@/store/appStore';
@@ -40,13 +42,18 @@ const AngelCityCaseStudy = () => {
           >
             angelcitymassage.com
           </BrightPathGradientButton>
-
-
-
         </div>
       </section>
 
-      <section className="relative -mt-32 z-20">
+      <ProjectSnapshot theme={theme} />
+
+      <PerformanceResults
+        theme={theme}
+        screenshotSrc="/images/lighthouse-score.png"
+        screenshotAlt="Lighthouse performance score showing 99"
+      />
+
+      <section className="relative z-20">
         <div className="w-full px-4">
           <div className="relative h-[48rem] md:h-[48rem] overflow-hidden rounded-2xl shadow-2xl bg-bp-light-bg-light dark:bg-bp-light-bg-dark">
             <img

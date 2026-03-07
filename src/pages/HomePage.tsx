@@ -1,4 +1,4 @@
-import { Lightbulb, Compass, Star } from "lucide-react";
+import { RefreshCcw, Zap, Code } from "lucide-react";
 import { useAppStore } from '@/store/appStore';
 import { Link } from 'react-router-dom';
 import ReviewWidget from '../components/ReviewWidget';
@@ -14,31 +14,36 @@ type SectionProps = {
 const ServicesSection = ({ theme }: SectionProps) => {
   const services = [
     {
-      title: "Web Design & Development",
+      title: "Website Modernization",
       description:
-        "Creating stunning, high-performance websites tailored to your brand.",
-      icon: <Compass className={`h-8 w-8 mb-4 drop-shadow-md ${theme === 'dark' ? 'text-primary' : 'text-primary'}`} />,
+        "Updating outdated websites with modern responsive layouts, improved accessibility, and enhanced user experience.",
+      icon: <RefreshCcw className="h-8 w-8 mb-4 drop-shadow-md text-primary" aria-hidden="true" />,
     },
     {
-      title: "Digital Strategy",
+      title: "Performance Optimization",
       description:
-        "Crafting data-driven strategies to illuminate your path to growth.",
-      icon: <Lightbulb className={`h-8 w-8 mb-4 drop-shadow-md ${theme === 'dark' ? 'text-primary' : 'text-primary'}`} />,
+        "Improving site speed, Lighthouse scores, and Core Web Vitals through asset optimization and layout restructuring.",
+      icon: <Zap className="h-8 w-8 mb-4 drop-shadow-md text-primary" aria-hidden="true" />,
     },
     {
-      title: "Brand Identity",
+      title: "Custom Front-End Development",
       description:
-        "Building memorable brands that shine bright and stand out from the crowd.",
-      icon: <Star className={`h-8 w-8 mb-4 drop-shadow-md ${theme === 'dark' ? 'text-primary' : 'text-primary'}`} />,
+        "Building polished web experiences with responsive layouts, custom styling, and performance-focused implementation.",
+      icon: <Code className="h-8 w-8 mb-4 drop-shadow-md text-primary" aria-hidden="true" />,
     },
   ];
 
   return (
-    <section id="journey" className="bg-services-bg py-20">
+    <section id="services" className="bg-services-bg py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <BrightPathGradientTitle as="h2" className="font-poppins font-bold text-services mb-12" gradientWords={["Services"]}>
-          Our Services
+        <BrightPathGradientTitle as="h2" className="font-poppins font-bold text-services mb-4" gradientWords={["Help"]}>
+          How I Help Businesses
         </BrightPathGradientTitle>
+
+        <p className="font-lato text-muted-foreground mb-12 max-w-2xl mx-auto">
+          Transforming outdated websites into modern, high-performing digital experiences.
+        </p>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <div
@@ -47,8 +52,8 @@ const ServicesSection = ({ theme }: SectionProps) => {
             >
               <div className="flex justify-center">{service.icon}</div>
 
-              <BrightPathGradientTitle as="h5" className="font-poppins font-semibold mb-4"
-                gradientWords={["Design", "Development", "Strategy", "Brand"]}
+              <BrightPathGradientTitle as="h3" className="font-poppins font-semibold mb-4 text-xl"
+                gradientWords={["Modernization", "Optimization", "Development"]}
               >
                 {service.title}
               </BrightPathGradientTitle>
