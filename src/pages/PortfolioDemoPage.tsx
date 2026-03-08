@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import ReactGA from "react-ga4";
 import { Link } from 'react-router-dom';
 import {
   BrightPathGradientTitle,
@@ -14,6 +15,14 @@ type ViewState = 'grid' | 'dale-tiffany' | 'angel-city';
 export default function PortfolioDemoPage() {
   const { theme } = useAppStore();
   const [view, setView] = useState<ViewState>('grid');
+
+    useEffect(() => {
+    ReactGA.event({
+      category: "BrightPath Web Studio Portfolio",
+      action: "Opened Portfolio Page",
+      label: "BrightPath Portfolio"
+    });
+  }, []);
 
   if (view === 'dale-tiffany') {
     return <DaleTiffanyCaseStudy onBack={() => setView('grid')} theme={theme} />;
