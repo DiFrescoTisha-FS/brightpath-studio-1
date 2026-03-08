@@ -1,10 +1,12 @@
 import BrightPathGradientButton from "@/components/BrightPathGradientButton.legacy";
+import { useNavigate } from "react-router-dom";
 
 type ClarityHeroProps = {
   onCtaClick?: () => void;
 };
 
 export default function ClarityHero({ onCtaClick }: ClarityHeroProps) {
+  const navigate = useNavigate();
   return (
     <section className="hero-clarity relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Light that "searches" */}
@@ -27,19 +29,19 @@ export default function ClarityHero({ onCtaClick }: ClarityHeroProps) {
           </span>
         </h1>
 
-        <p className="clarity-subtitle font-lato mb-12 max-w-2xl mx-auto text-base sm:text-lg">
+        {/* <p className="clarity-subtitle font-lato mb-12 max-w-2xl mx-auto text-base sm:text-lg">
           Clear strategy. Brilliant design. A website that leads with confidence.
-        </p>
+        </p> */}
 
         <div className="clarity-cta">
           <BrightPathGradientButton
             onClick={() => {
               if (onCtaClick) return onCtaClick();
-              document.getElementById("journey")?.scrollIntoView({ behavior: "smooth" });
+              navigate("/portfolio");
             }}
             className="bg-primary text-primary-foreground font-bold font-poppins py-3 px-8 rounded-md text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
           >
-            Begin Your Journey
+            See My Work
           </BrightPathGradientButton>
         </div>
       </div>
