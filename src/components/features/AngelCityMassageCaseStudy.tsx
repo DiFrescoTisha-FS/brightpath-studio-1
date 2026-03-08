@@ -19,7 +19,7 @@ const AngelCityCaseStudy = () => {
                    bg-bp-dark-bg-light dark:bg-bp-dark-bg-dark transition-colors duration-300 z-0"
       />
 
-      <section className="relative pt-32 pb-36 z-10">
+      <section className="relative pt-36 md:pt-32 pb-12 md:pb-24 z-10">
         <div className="max-w-4xl mx-auto px-4 text-left">
           <BrightPathGradientTitle
             as="h1"
@@ -53,7 +53,22 @@ const AngelCityCaseStudy = () => {
         screenshotAlt="Lighthouse performance score showing 99"
       />
 
-      <section className="relative z-20">
+      <section className="relative z-20 md:hidden px-4">
+        <div className="w-full max-w-md mx-auto">
+          <div className="overflow-hidden rounded-2xl shadow-xl bg-bp-light-bg-light dark:bg-bp-light-bg-dark">
+            <img
+              src="/images/ACM_HOME.png"
+              alt="Angel City Massage homepage preview"
+              className="w-full h-64 object-cover object-top"
+            />
+          </div>
+          <p className="mt-3 text-sm text-center text-gray-600 dark:text-gray-400">
+            Homepage preview
+          </p>
+        </div>
+      </section>
+
+      <section className="relative z-20 hidden md:block">
         <div className="w-full px-4">
           <div className="relative h-[48rem] md:h-[48rem] overflow-hidden rounded-2xl shadow-2xl bg-bp-light-bg-light dark:bg-bp-light-bg-dark">
             <img
@@ -110,7 +125,7 @@ const AngelCityCaseStudy = () => {
             <div className="absolute top-4 left-4 text-6xl text-primary/20 font-serif">"</div>
             <div className="absolute bottom-4 right-4 text-6xl text-primary/20 font-serif">"</div>
 
-            <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 italic leading-relaxed mb-8 relative z-10">
+            <p className="text-base sm:text-lg md:text-xl text-gray-700 dark:text-gray-300 italic leading-relaxed mb-8 relative z-10">
               Tish did an outstanding job building my new website. She has a great sense of style and really understands how to create a site that looks polished, modern, and inviting. More importantly, she truly cared about my needs and goals, listened carefully, and offered innovative ideas that made the final result even better than I envisioned. She was easy to work with, responsive, timely, and consistently professional throughout the entire process. I felt supported and confident every step of the way. I highly recommend Tish to anyone looking for a talented, creative, and reliable web designer. With sincere thanks.
             </p>
 
@@ -129,12 +144,12 @@ const AngelCityCaseStudy = () => {
 
       <section className="bg-gray-50 dark:bg-gray-800 py-16 px-4 transition-colors duration-300 relative z-10">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8">
             <div className="space-y-4">
               <h3 className="text-[18px] text-shadow-md font-bold text-primary dark:text-primary uppercase tracking-wider">
                 Client
               </h3>
-              <ul className="space-y-2 text-gray-700 dark:text-gray-300 list-disc">
+              <ul className="space-y-2 text-gray-700 dark:text-gray-300 list-disc pl-5">
                 <li>Angel City Massage</li>
               </ul>
             </div>
@@ -143,7 +158,7 @@ const AngelCityCaseStudy = () => {
               <h3 className="text-[18px] text-shadow-md font-bold text-primary dark:text-bp-primary uppercase tracking-wider">
                 Services
               </h3>
-              <ul className="space-y-2 text-gray-700 dark:text-gray-300 list-disc">
+              <ul className="space-y-2 text-gray-700 dark:text-gray-300 list-disc pl-5">
                 <li>Web design</li>
                 <li>UI / UX</li>
                 <li>Website Build</li>
@@ -154,7 +169,7 @@ const AngelCityCaseStudy = () => {
               <h3 className="text-[18px] text-shadow-md font-bold text-primary dark:text-bp-primary uppercase tracking-wider">
                 Other
               </h3>
-              <ul className="space-y-2 text-gray-700 dark:text-gray-300 list-disc">
+              <ul className="space-y-2 text-gray-700 dark:text-gray-300 list-disc pl-5">
                 <li>SEO</li>
                 <li>Analytics</li>
               </ul>
@@ -164,13 +179,13 @@ const AngelCityCaseStudy = () => {
               <h3 className="text-[18px] text-shadow-md font-bold text-primary dark:text-bp-primary uppercase tracking-wider">
                 Website / Deliverables
               </h3>
-              <ul className="space-y-2 list-disc">
+              <ul className="space-y-2 list-disc pl-5 break-words">
                 <li>
                   <a
                     href="https://angelcitymassage.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-bp-primary dark:text-bp-primary hover:underline"
+                    className="text-bp-primary dark:text-bp-primary hover:underline break-all"
                   >
                     angelcitymassage.com
                   </a>
