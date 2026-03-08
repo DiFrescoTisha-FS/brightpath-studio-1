@@ -9,6 +9,7 @@ import {
 } from '../components/portfolio';
 import AngelCityCaseStudy from '../components/features/AngelCityMassageCaseStudy';
 import { useAppStore } from '@/store/appStore';
+import { useParams } from "react-router-dom";
 
 type ViewState = 'grid' | 'dale-tiffany' | 'angel-city';
 
@@ -16,13 +17,17 @@ export default function PortfolioDemoPage() {
   const { theme } = useAppStore();
   const [view, setView] = useState<ViewState>('grid');
 
-    useEffect(() => {
-    ReactGA.event({
-      category: "BrightPath Web Studio Portfolio",
-      action: "Opened Portfolio Page",
-      label: "BrightPath Portfolio"
-    });
-  }, []);
+  const { slug } = useParams();
+
+  useEffect(() => {
+    if (slug) {
+      ReactGA.event({
+        category: "Portfolio",
+        action: "Viewed Case Study",
+        label: slug
+      });
+    }
+  }, [slug]);
 
   if (view === 'dale-tiffany') {
     return <DaleTiffanyCaseStudy onBack={() => setView('grid')} theme={theme} />;

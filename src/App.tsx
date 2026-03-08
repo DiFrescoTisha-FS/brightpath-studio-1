@@ -4,6 +4,7 @@ import Navbar from "./components/ui/Navbar";
 import Footer from "./components/ui/Footer";
 // import GuidingLight from "./components/ui/GuidingLight";
 import { useAppStore } from './store/appStore';
+import AnalyticsTracker from "./components/AnalyticsTracker"
 
 // Scroll to top on route change
 function ScrollToTop() {
@@ -32,6 +33,7 @@ const App: React.FC = () => {
   return (
     <>
       <ScrollToTop />
+      <AnalyticsTracker />
       {/* <GuidingLight size={30} glowScale={2} /> */}
       <Navbar theme={theme} />
       <main>

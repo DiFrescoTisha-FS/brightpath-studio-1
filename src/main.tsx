@@ -20,7 +20,6 @@ import { initializeTheme } from "./store/appStore";
 import ReactGA from "react-ga4";
 
 ReactGA.initialize("G-P8N6CYZX9Q");
-ReactGA.send("pageview");
 
 initializeTheme();
 
