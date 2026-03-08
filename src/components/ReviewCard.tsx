@@ -2,13 +2,20 @@
 
 import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import type { Review } from '@/types';
 import { useAppStore } from '@/store/appStore';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
 
 const stripHtml = (html: string) => html.replace(/<[^>]*>/g, '').trim();
 
-const ReviewCard = ({ review }: { review: Review }) => {
+interface ReviewCardProps {
+  review: Review;
+  showFullQuote?: boolean;
+  showReadMoreLink?: boolean;
+}
+
+const ReviewCard = ({ review, showFullQuote = false, showReadMoreLink = false }: ReviewCardProps) => {
   const { theme } = useAppStore();
 
   const cardClasses =
@@ -16,11 +23,10 @@ const ReviewCard = ({ review }: { review: Review }) => {
       ? 'bg-[#1A2238] text-white border border-primary/30 shadow-glow-primary'
       : 'bg-gray-50 text-secondary-foreground border border-primary/30 shadow-md';
 
-  // ✅ Always show something: excerpt -> quote
-  const displayText =
-    (review.excerpt && stripHtml(review.excerpt)) ||
-    (review.quote && stripHtml(review.quote)) ||
-    '';
+  const cleanExcerpt = review.excerpt ? stripHtml(review.excerpt) : '';
+  const cleanQuote = review.quote ? stripHtml(review.quote) : '';
+  const displayText = showFullQuote ? (cleanQuote || cleanExcerpt) : (cleanExcerpt || cleanQuote);
+  const shouldShowReadMore = showReadMoreLink && !showFullQuote && Boolean(cleanQuote);
 
   return (
     <motion.div
@@ -49,9 +55,19 @@ const ReviewCard = ({ review }: { review: Review }) => {
 
       {/* ✅ Render excerpt OR quote (never blank unless both truly missing) */}
       {displayText ? (
-        <p className="text-lg font-lato italic leading-relaxed mb-4 flex-grow text-muted-foreground">
-          “{displayText}”
-        </p>
+        <div className="mb-4 flex-grow">
+          <p className="text-lg font-lato italic leading-relaxed text-muted-foreground">
+            “{displayText}”
+          </p>
+          {shouldShowReadMore ? (
+            <Link
+              to="/reviews"
+              className="inline-block mt-3 text-sm font-semibold text-primary hover:underline"
+            >
+              Read more
+            </Link>
+          ) : null}
+        </div>
       ) : null}
 
       <div className="mt-auto">

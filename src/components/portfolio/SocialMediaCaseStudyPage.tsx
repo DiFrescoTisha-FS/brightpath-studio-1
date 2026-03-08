@@ -470,15 +470,36 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
       )}
 
       {caseStudy.testimonial && (
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <blockquote className="text-xl md:text-2xl text-muted-foreground italic mb-6 font-lato">
-                "{caseStudy.testimonial.quote}"
-              </blockquote>
-              <div>
-                <BrightPathGradientTitle as="span" className="font-semibold text-foreground">{caseStudy.testimonial.author}</BrightPathGradientTitle>
-                <div className="text-sm text-muted-foreground">{caseStudy.testimonial.role}</div>
+        <section className="py-16 px-4 transition-colors duration-300 bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-[#050B14] dark:via-[#081426] dark:to-[#0B1E33]">
+          <div className="container mx-auto">
+            <div className="max-w-4xl mx-auto text-center">
+              <BrightPathGradientTitle
+                as="h2"
+                className="font-bold mb-8"
+                gradientWords={['Client']}
+              >
+                What Our Client Says
+              </BrightPathGradientTitle>
+
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-10 relative">
+                <div className="absolute top-4 left-4 text-5xl text-primary/20 font-serif">"</div>
+                <div className="absolute bottom-4 right-4 text-5xl text-primary/20 font-serif">"</div>
+
+                <blockquote className="text-base sm:text-lg md:text-xl text-muted-foreground italic leading-relaxed mb-8 relative z-10 font-lato">
+                  {caseStudy.testimonial.quote}
+                </blockquote>
+
+                <div className="flex flex-col items-center">
+                  <BrightPathGradientTitle as="h3" className="font-bold text-xl mb-1">
+                    {caseStudy.testimonial.author}
+                  </BrightPathGradientTitle>
+                  <div className="text-sm text-muted-foreground">{caseStudy.testimonial.role}</div>
+                  <div className="flex gap-1 mt-3" aria-hidden="true">
+                    {[...Array(5)].map((_, i) => (
+                      <span key={i} className="text-yellow-400 text-xl">★</span>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

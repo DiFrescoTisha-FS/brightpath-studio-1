@@ -2,11 +2,17 @@ import axios from "axios";
 import type { Review, WpReviewPost, WpImage } from "@/types";
 
 /**
- * Netlify Functions URL
- * - Works in production automatically
- * - Works locally ONLY when you run: netlify dev
+ * Review API endpoints in priority order.
+ * 1) Explicit base URL from Vite env
+ * 2) Same-origin /api route
+ * 3) Netlify functions fallback
  */
-const FULL_API_URL = "/.netlify/functions/reviews";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+const API_CANDIDATES = [
+  `${API_BASE_URL}/api/reviews`,
+  "/api/reviews",
+  "/.netlify/functions/reviews",
+];
 
 const stripHtml = (html: string): string =>
   (html || "").replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
@@ -26,45 +32,50 @@ const getHeadshotUrl = (headshot?: string | WpImage): string => {
 };
 
 export const fetchReviews = async (): Promise<Review[]> => {
-  try {
-    const response = await axios.get<WpReviewPost[]>(FULL_API_URL);
+  let lastError: unknown = null;
 
-    return response.data.map((post) => {
-      const acf = post.acf ?? ({} as WpReviewPost["acf"]);
+  for (const endpoint of API_CANDIDATES) {
+    try {
+      const response = await axios.get<WpReviewPost[]>(endpoint);
 
-      const acfExcerpt = stripHtml(acf.review_excerpt ?? "");
-      const wpExcerpt = stripHtml(post.excerpt?.rendered ?? "");
-      const fullText = stripHtml(acf.review_text ?? "");
+      return response.data.map((post) => {
+        const acf = post.acf ?? ({} as WpReviewPost["acf"]);
 
-      const excerpt = acfExcerpt || wpExcerpt || makeExcerpt(fullText, 180);
+        const acfExcerpt = stripHtml(acf.review_excerpt ?? "");
+        const wpExcerpt = stripHtml(post.excerpt?.rendered ?? "");
+        const fullText = stripHtml(acf.review_text ?? "");
 
-      return {
-        id: Number(post.id),
-        rating: Number(acf.rating ?? 0),
-        author: acf.reviewer_name ?? "",
-        quote: fullText,
-        excerpt,
-        photoUrl: getHeadshotUrl(acf.client_headshot),
-        reviewDate: acf.review_date || "",
-        role: acf.reviewer_role || "",
-        company: acf.reviewer_company || "",
-        featured: Boolean(acf.featured),
-        projectContext: acf.project_context || "",
-      };
-    });
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      console.error("Error fetching reviews:", {
-        message: error.message,
-        status: error.response?.status,
-        data: error.response?.data,
-        url: FULL_API_URL,
+        const excerpt = acfExcerpt || wpExcerpt || makeExcerpt(fullText, 180);
+
+        return {
+          id: Number(post.id),
+          rating: Number(acf.rating ?? 0),
+          author: acf.reviewer_name ?? "",
+          quote: fullText,
+          excerpt,
+          photoUrl: getHeadshotUrl(acf.client_headshot),
+          reviewDate: acf.review_date || "",
+          role: acf.reviewer_role || "",
+          company: acf.reviewer_company || "",
+          featured: Boolean(acf.featured),
+          projectContext: acf.project_context || "",
+        };
       });
-    } else {
-      console.error("Unknown error fetching reviews:", error);
+    } catch (error: unknown) {
+      lastError = error;
+      if (axios.isAxiosError(error)) {
+        console.error("Error fetching reviews:", {
+          message: error.message,
+          status: error.response?.status,
+          data: error.response?.data,
+          url: endpoint,
+        });
+      } else {
+        console.error("Unknown error fetching reviews:", error);
+      }
     }
-  
-    throw new Error("Failed to fetch reviews.");
   }
-  
+
+  console.error("All review API endpoints failed.", { endpoints: API_CANDIDATES, lastError });
+  throw new Error("Failed to fetch reviews.");
 };

@@ -37,6 +37,10 @@ const ReviewWidget: React.FC = () => {
           rating: item.acf.rating,
           photoUrl: item.acf.client_headshot?.url || '',
           reviewDate: item.acf.review_date || item.date,
+          role: item.acf.reviewer_role || '',
+          company: item.acf.reviewer_company || '',
+          featured: Boolean(item.acf.featured),
+          projectContext: item.acf.project_context || '',
         }));
 
         setReviews(formattedReviews);
@@ -63,7 +67,7 @@ const ReviewWidget: React.FC = () => {
       {reviews.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {reviews.map((review) => (
-            <ReviewCard key={review.id} review={review} />
+            <ReviewCard key={review.id} review={review} showReadMoreLink />
           ))}
         </div>
       ) : (

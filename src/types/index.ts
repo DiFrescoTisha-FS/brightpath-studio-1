@@ -111,6 +111,10 @@ acf: {
   review_text: string;
   rating: number;
   review_date?: string;
+  reviewer_role?: string;
+  reviewer_company?: string;
+  featured?: boolean | number | string;
+  project_context?: string;
   client_headshot?: {
     url: string;
     alt?: string;

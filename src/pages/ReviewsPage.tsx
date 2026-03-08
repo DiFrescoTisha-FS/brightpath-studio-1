@@ -7,7 +7,7 @@ import { useReviews } from '@/hooks/useReviews';
 import { Button } from '@/components/ui/button';
 import BrightPathGradientTitle from '@/components/BrightPathGradientTitle';
 import ReviewCard from '@/components/ReviewCard';
-import type { Review } from '@/types';
+import FeaturedTestimonials, { splitFeaturedReviews } from '@/components/FeaturedTestimonials';
 
 const ReviewsPage = () => {
   const { theme } = useAppStore();
@@ -17,6 +17,8 @@ const ReviewsPage = () => {
     theme === 'dark'
       ? 'bg-primary text-primary-foreground hover:bg-primary/90 text-shadow-md'
       : 'bg-primary border-2 border-primary text-secondary hover:bg-primary/90 text-shadow-md';
+
+  const { featuredReviews, remainingReviews } = splitFeaturedReviews(reviews);
 
   return (
     <div className="container py-16 pt-28">
@@ -51,11 +53,17 @@ const ReviewsPage = () => {
       )}
 
       {!loading && !error && reviews?.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {(reviews as Review[]).map((review) => (
-            <ReviewCard key={review.id} review={review} />
-          ))}
-        </div>
+        <>
+          <FeaturedTestimonials reviews={featuredReviews} />
+
+          {remainingReviews.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {remainingReviews.map((review) => (
+                <ReviewCard key={review.id} review={review} showFullQuote />
+              ))}
+            </div>
+          )}
+        </>
       )}
 
       {!loading && !error && (!reviews || reviews.length === 0) && (
