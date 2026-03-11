@@ -16,7 +16,7 @@ const ProjectSnapshot = ({ theme }: ProjectSnapshotProps) => {
   const achievements = [
     'Modernized a 20-year-old website originally built before responsive design',
     'Rebuilt layouts for desktop, tablet, and mobile responsiveness',
-    'Improved Lighthouse performance from 62 → 99',
+    'Improved Lighthouse performance from 62 → 99 on desktop and 62 → 97 on mobile',
     'Reduced cumulative layout shift (CLS) by restructuring the hero section',
     'Optimized asset loading and JavaScript execution',
   ];

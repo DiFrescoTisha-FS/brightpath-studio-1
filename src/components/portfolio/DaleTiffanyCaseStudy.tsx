@@ -20,7 +20,6 @@ import {
   Moon,
   Sun,
   TrendingUp,
-  Gauge,
   RefreshCw,
   Building2,
   Lock,
@@ -394,18 +393,18 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
             <div className="p-7 rounded-xl bg-card border border-primary/40 dark:shadow-glow-primary">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Gauge className="w-6 h-6 text-primary" />
+                  <Key className="w-6 h-6 text-primary" />
                 </div>
 
                 <div className="min-w-0">
                   <div className="text-4xl font-bold tracking-tight text-primary leading-none">
-                    62 → 91
+                    3
                   </div>
                   <div className="mt-1 text-base font-semibold text-foreground">
-                    Lighthouse performance
+                    Role-based access tiers
                   </div>
                   <div className="mt-1 text-sm text-muted-foreground font-lato">
-                    Cleaner UX + faster rendering
+                    Structured permissions across the platform
                   </div>
                 </div>
               </div>

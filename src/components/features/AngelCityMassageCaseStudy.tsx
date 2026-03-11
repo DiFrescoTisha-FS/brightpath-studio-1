@@ -47,11 +47,7 @@ const AngelCityCaseStudy = () => {
 
       <ProjectSnapshot theme={theme} />
 
-      <PerformanceResults
-        theme={theme}
-        screenshotSrc="/images/lighthouse-score.png"
-        screenshotAlt="Lighthouse performance score showing 99"
-      />
+      <PerformanceResults theme={theme} />
 
       <section className="relative z-20 md:hidden px-4">
         <div className="w-full max-w-md mx-auto">
