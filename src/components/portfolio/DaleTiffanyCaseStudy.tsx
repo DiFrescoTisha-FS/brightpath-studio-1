@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import BrightPathGradientTitle from '../BrightPathGradientTitle';
 import BrightPathGradientButton from '../BrightPathGradientButton.legacy';
+import { trackPortfolioClick } from '@/utils/analytics';
 
 interface DaleTiffanyCaseStudyProps {
   onBack?: () => void;
@@ -127,6 +128,14 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block"
+                onClick={() =>
+                  trackPortfolioClick(
+                    'dale_tiffany_staging_click',
+                    'View Dale Tiffany Staging Site',
+                    'https://695c0c5bcf78e900081d78d5--daletiffany.netlify.app/',
+                    'Dale Tiffany'
+                  )
+                }
               >
                 <BrightPathGradientButton className="relative z-[9999] px-8 py-4 text-[#1a2238] shadow-xl font-medium">
                   View Dale Tiffany Staging Site

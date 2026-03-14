@@ -11,6 +11,16 @@ interface FormData {
   message: string;
 }
 
+declare global {
+  interface Window {
+    gtag?: (
+      command: 'event',
+      eventName: string,
+      params?: Record<string, string>
+    ) => void;
+  }
+}
+
 // API URL Configuration:
 // - In production (Netlify): Uses relative paths which get redirected via netlify.toml
 // - In development: Falls back to localhost:3002 for the local Express server
@@ -47,6 +57,15 @@ const ContactPage: React.FC = () => {
       const response = await axios.post(CONTACT_FORM_URL, formData);
 
       if (response.status === 200) {
+        // This allows Google Analytics to track successful contact form conversions.
+        if (typeof window !== 'undefined' && window.gtag) {
+          window.gtag('event', 'contact_submit', {
+            form_name: 'contact_form',
+            page_location: window.location.href,
+            page_title: document.title
+          });
+        }
+
         setStatus('success');
         setFormData({ fullName: '', email: '', message: '' }); // Clear the form
       } else {

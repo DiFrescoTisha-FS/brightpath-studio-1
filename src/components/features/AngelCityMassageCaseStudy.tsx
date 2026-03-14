@@ -6,6 +6,7 @@ import PerformanceResults from './PerformanceResults';
 import BrightPathGradientTitle from '../BrightPathGradientTitle';
 import BrightPathGradientButton from "@/components/BrightPathGradientButton"
 import { useAppStore } from '@/store/appStore';
+import { trackPortfolioClick } from '@/utils/analytics';
 
 const AngelCityCaseStudy = () => {
   const { theme } = useAppStore();
@@ -36,12 +37,24 @@ const AngelCityCaseStudy = () => {
           >
             Website Design & Development Case Study
           </h3>
-          <BrightPathGradientButton
+          <a
             href="https://angelcitymassage.com"
-            className="relative z-10 px-8 py-4 text-[#1a2238] shadow-xl"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block"
+            onClick={() =>
+              trackPortfolioClick(
+                'angel_city_massage_click',
+                'angelcitymassage.com',
+                'https://angelcitymassage.com',
+                'Angel City Massage'
+              )
+            }
           >
-            angelcitymassage.com
-          </BrightPathGradientButton>
+            <BrightPathGradientButton className="relative z-10 px-8 py-4 text-[#1a2238] shadow-xl">
+              angelcitymassage.com
+            </BrightPathGradientButton>
+          </a>
         </div>
       </section>
 
