@@ -36,12 +36,12 @@ export function SocialMediaCard({ caseStudy, onViewCaseStudy, className = '' }: 
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Image Preview with Hover Effect */}
-      <div className="relative overflow-hidden aspect-square">
+      <div className="relative overflow-hidden aspect-[4/5]">
         {/* Default Image */}
         <img
           src={caseStudy.featuredImage}
           alt={`${caseStudy.title} - Featured`}
-          className={`absolute inset-0 w-full h-full object-contain mt-6 pb-6 transition-opacity duration-500 ${isHovered ? 'opacity-0' : 'opacity-100'
+          className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-500 ${isHovered ? 'opacity-0' : 'opacity-100'
             }`}
         />
 

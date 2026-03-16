@@ -13,7 +13,7 @@ export const daleTiffanySocialCaseStudy: SocialMediaCaseStudy = {
   description:
     'Strategic cross-platform social media content for a luxury lighting brand, focused on evergreen discovery, search visibility, and long-term brand storytelling across Instagram, Facebook Reels, and TikTok.',
   featuredImage: '/social-media/dale-tiffany/featured.png',
-  hoverImage: '/social-media/dale-tiffany/hover.png',
+  hoverImage: '/social-media/dale-tiffany/hover.jpg',
   tags: ['Content Creation', 'Instagram', 'Facebook', 'TikTok', 'Product Photography', 'Luxury Brand'],
   platforms: ['instagram', 'facebook', 'tiktok'],
   skills: [
