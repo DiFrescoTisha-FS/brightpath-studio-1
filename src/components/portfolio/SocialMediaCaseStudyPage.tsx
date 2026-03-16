@@ -37,6 +37,15 @@ const platformIcons: Record<string, React.ElementType> = {
   tiktok: TikTokIcon,
 };
 
+const platformLabels: Record<string, string> = {
+  instagram: 'Instagram',
+  facebook: 'Facebook',
+  linkedin: 'LinkedIn',
+  youtube: 'YouTube',
+  tiktok: 'TikTok',
+  twitter: 'Twitter',
+};
+
 const metricIcons: Record<string, React.ElementType> = {
   impressions: Eye,
   accountsReached: Users,
@@ -89,6 +98,9 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
 
   const primaryMetrics = metricsArray.slice(0, 3);
   const reportingPeriod = caseStudy.metrics.reportingPeriod;
+  const formattedPlatforms = caseStudy.platforms
+    .map((platform) => platformLabels[platform] || platform)
+    .join(' • ');
 
   const openLightbox = (content: ContentSample) => {
     setLightboxContent(content);
@@ -203,6 +215,76 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         </div>
       </section>
 
+      {(caseStudy.quickImpact?.length || caseStudy.role || caseStudy.campaignPeriod || caseStudy.strategySummary) && (
+        <section className="py-16 bg-gradient-to-b from-muted/40 to-transparent">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto rounded-[2rem] border border-primary/30 bg-card/90 backdrop-blur-sm shadow-2xl p-6 md:p-10">
+              <div className="text-center mb-10">
+                <p className="text-sm uppercase tracking-[0.2em] text-primary/80 mb-3">Quick Impact</p>
+                <BrightPathGradientTitle
+                  as="h2"
+                  className="font-bold text-3xl md:text-4xl mb-3 font-poppins"
+                  gradientWords={['Impact', 'Strategy']}
+                >
+                  Case Study Snapshot
+                </BrightPathGradientTitle>
+                <p className="text-muted-foreground font-lato text-sm md:text-base">
+                  A fast recruiter-ready view of the strategy, scope, and measurable results behind this campaign.
+                </p>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-3 mb-8">
+                <div className="rounded-2xl border border-primary/30 bg-primary/5 p-5">
+                  <p className="text-xs uppercase tracking-[0.18em] text-primary/70 mb-2">Role</p>
+                  <p className="text-lg font-semibold font-poppins">{caseStudy.role || 'Social Media Content Strategist'}</p>
+                </div>
+                <div className="rounded-2xl border border-primary/30 bg-primary/5 p-5">
+                  <p className="text-xs uppercase tracking-[0.18em] text-primary/70 mb-2">Platforms</p>
+                  <p className="text-sm md:text-base font-lato leading-relaxed">{formattedPlatforms}</p>
+                </div>
+                <div className="rounded-2xl border border-primary/30 bg-primary/5 p-5">
+                  <p className="text-xs uppercase tracking-[0.18em] text-primary/70 mb-2">Campaign Period</p>
+                  <p className="text-lg font-semibold font-poppins">{caseStudy.campaignPeriod || 'Ongoing'}</p>
+                </div>
+              </div>
+
+              {caseStudy.quickImpact && caseStudy.quickImpact.length > 0 && (
+                <div className="mb-8">
+                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-center text-primary/75 mb-5">
+                    Impact Snapshot
+                  </p>
+                  <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+                    {caseStudy.quickImpact.map((item) => (
+                      <div
+                        key={`${item.label}-${item.value}`}
+                        className="rounded-2xl border border-primary/30 bg-background/70 p-5 text-center dark:shadow-glow-primary"
+                      >
+                        <BrightPathGradientTitle
+                          as="div"
+                          className="text-3xl font-bold mb-2 font-poppins"
+                        >
+                          {item.value}
+                        </BrightPathGradientTitle>
+                        <p className="text-sm text-muted-foreground font-lato">{item.label}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {caseStudy.strategySummary && (
+                <div className="rounded-2xl border border-primary/30 bg-primary/10 px-6 py-5 text-center">
+                  <p className="text-xs uppercase tracking-[0.18em] text-primary/75 mb-2">Strategy</p>
+                  <p className="text-base md:text-lg leading-relaxed text-foreground font-lato">
+                    {caseStudy.strategySummary}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
@@ -275,6 +357,32 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
           </div>
         </div>
       </section>
+
+      {caseStudy.skills && caseStudy.skills.length > 0 && (
+        <section className="py-16 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <BrightPathGradientTitle
+                as="h2"
+                className="font-bold text-center mb-8 font-poppins"
+                gradientWords={['Skills', 'Tools']}
+              >
+                Core Skills & Tools
+              </BrightPathGradientTitle>
+              <div className="flex flex-wrap justify-center gap-3">
+                {caseStudy.skills.map((skill) => (
+                  <div
+                    key={skill}
+                    className="px-4 py-2 rounded-full bg-card border border-primary/50 dark:shadow-glow-primary text-sm font-lato text-muted-foreground"
+                  >
+                    {skill}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="py-16">
         <div className="container mx-auto px-4">

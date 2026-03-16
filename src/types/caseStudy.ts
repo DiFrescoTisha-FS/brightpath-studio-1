@@ -49,6 +49,11 @@ export interface Deliverable {
   icon?: string;
 }
 
+export interface QuickImpactItem {
+  label: string;
+  value: string;
+}
+
 // Process step
 export interface ProcessStep {
   step: number;
@@ -88,6 +93,10 @@ export interface SocialMediaCaseStudy extends BaseCaseStudy {
   platforms: ('instagram' | 'facebook' | 'tiktok' | 'youtube' | 'linkedin' | 'twitter')[];
   metrics: SocialMediaMetrics;
   contentSamples: ContentSample[];
+  skills?: string[];
+  role?: string;
+  strategySummary?: string;
+  quickImpact?: QuickImpactItem[];
   campaignPeriod?: string;
   postFrequency?: string;
   heroBackground?: string;
