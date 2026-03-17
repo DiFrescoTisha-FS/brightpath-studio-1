@@ -260,7 +260,6 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                         className="rounded-2xl border border-primary/30 bg-background/70 p-5 text-center dark:shadow-glow-primary"
                       >
                         <BrightPathGradientTitle
-                          as="div"
                           className="text-3xl font-bold mb-2 font-poppins"
                         >
                           {item.value}
