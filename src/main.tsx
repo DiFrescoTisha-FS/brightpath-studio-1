@@ -17,9 +17,6 @@ const SocialMediaPortfolioPage = React.lazy(() => import('./pages/SocialMediaPor
 const CaseStudyPage = React.lazy(() => import('./pages/CaseStudyPage'));
 import "./index.css";
 import { initializeTheme } from "./store/appStore";
-import ReactGA from "react-ga4";
-
-ReactGA.initialize("G-P8N6CYZX9Q");
 
 initializeTheme();
 

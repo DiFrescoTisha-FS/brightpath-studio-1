@@ -41,6 +41,8 @@ export function SocialMediaCard({ caseStudy, onViewCaseStudy, className = '' }: 
         <img
           src={caseStudy.featuredImage}
           alt={`${caseStudy.title} - Featured`}
+          loading="lazy"
+          decoding="async"
           className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-500 ${isHovered ? 'opacity-0' : 'opacity-100'
             }`}
         />
@@ -49,6 +51,8 @@ export function SocialMediaCard({ caseStudy, onViewCaseStudy, className = '' }: 
         <img
           src={caseStudy.hoverImage || caseStudy.featuredImage}
           alt={`${caseStudy.title} - Preview`}
+          loading="lazy"
+          decoding="async"
           className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-500 ${isHovered ? 'opacity-100' : 'opacity-0'
             }`}
         />

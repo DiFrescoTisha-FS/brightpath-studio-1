@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import ReactGA from "react-ga4";
 import { Link } from 'react-router-dom';
 import {
   BrightPathGradientTitle,
@@ -10,6 +9,7 @@ import {
 import AngelCityCaseStudy from '../components/features/AngelCityMassageCaseStudy';
 import { useAppStore } from '@/store/appStore';
 import { useParams } from "react-router-dom";
+import { trackEvent } from '@/utils/analytics';
 
 type ViewState = 'grid' | 'dale-tiffany' | 'angel-city';
 
@@ -21,10 +21,10 @@ export default function PortfolioDemoPage() {
 
   useEffect(() => {
     if (slug) {
-      ReactGA.event({
-        category: "Portfolio",
-        action: "Viewed Case Study",
-        label: slug
+      trackEvent('view_case_study', {
+        category: 'Portfolio',
+        action: 'Viewed Case Study',
+        label: slug,
       });
     }
   }, [slug]);

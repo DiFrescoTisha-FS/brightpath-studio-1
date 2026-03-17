@@ -5,6 +5,7 @@ import Footer from "./components/ui/Footer";
 // import GuidingLight from "./components/ui/GuidingLight";
 import { useAppStore } from './store/appStore';
 import AnalyticsTracker from "./components/AnalyticsTracker"
+import { loadAnalytics } from "./utils/analytics";
 
 // Scroll to top on route change
 function ScrollToTop() {
@@ -29,6 +30,31 @@ function ScrollToTop() {
 
 const App: React.FC = () => {
   const { theme } = useAppStore();
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const handleFirstInteraction = () => {
+      void loadAnalytics();
+    };
+
+    const passiveOptions: AddEventListenerOptions = { once: true, passive: true };
+    const onceOptions: AddEventListenerOptions = { once: true };
+
+    window.addEventListener('scroll', handleFirstInteraction, passiveOptions);
+    window.addEventListener('click', handleFirstInteraction, onceOptions);
+    window.addEventListener('keydown', handleFirstInteraction, onceOptions);
+    window.addEventListener('touchstart', handleFirstInteraction, passiveOptions);
+
+    return () => {
+      window.removeEventListener('scroll', handleFirstInteraction);
+      window.removeEventListener('click', handleFirstInteraction);
+      window.removeEventListener('keydown', handleFirstInteraction);
+      window.removeEventListener('touchstart', handleFirstInteraction);
+    };
+  }, []);
 
   return (
     <>
