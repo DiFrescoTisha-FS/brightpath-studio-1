@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ElementType } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -29,7 +29,7 @@ interface SocialMediaCaseStudyPageProps {
   theme?: 'light' | 'dark';
 }
 
-const platformIcons: Record<string, React.ElementType> = {
+const platformIcons: Record<string, ElementType> = {
   instagram: Instagram,
   facebook: Facebook,
   linkedin: Linkedin,
@@ -46,7 +46,7 @@ const platformLabels: Record<string, string> = {
   twitter: 'Twitter',
 };
 
-const metricIcons: Record<string, React.ElementType> = {
+const metricIcons: Record<string, ElementType> = {
   impressions: Eye,
   accountsReached: Users,
   nonFollowerReach: TrendingUp,
