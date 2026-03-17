@@ -7,6 +7,7 @@ import type { SocialMediaCaseStudy } from '@/types/caseStudy';
 import TikTokIcon from '../icons/TikTokIcon';
 
 interface SocialMediaCardProps {
+  index: number;
   caseStudy: SocialMediaCaseStudy;
   onViewCaseStudy: () => void;
   className?: string;
@@ -19,8 +20,9 @@ const platformIcons: Record<string, React.ElementType> = {
   linkedin: Linkedin,
 };
 
-export function SocialMediaCard({ caseStudy, onViewCaseStudy, className = '' }: SocialMediaCardProps) {
+export function SocialMediaCard({ index, caseStudy, onViewCaseStudy, className = '' }: SocialMediaCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const isPriority = index === 0;
 
   // Get primary metrics to display
   const displayMetrics = [
@@ -41,7 +43,8 @@ export function SocialMediaCard({ caseStudy, onViewCaseStudy, className = '' }: 
         <img
           src={caseStudy.featuredImage}
           alt={`${caseStudy.title} - Featured`}
-          loading="lazy"
+          loading={isPriority ? 'eager' : 'lazy'}
+          fetchPriority={isPriority ? 'high' : 'auto'}
           decoding="async"
           className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-500 ${isHovered ? 'opacity-0' : 'opacity-100'
             }`}
@@ -52,6 +55,7 @@ export function SocialMediaCard({ caseStudy, onViewCaseStudy, className = '' }: 
           src={caseStudy.hoverImage || caseStudy.featuredImage}
           alt={`${caseStudy.title} - Preview`}
           loading="lazy"
+          fetchPriority="auto"
           decoding="async"
           className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-500 ${isHovered ? 'opacity-100' : 'opacity-0'
             }`}

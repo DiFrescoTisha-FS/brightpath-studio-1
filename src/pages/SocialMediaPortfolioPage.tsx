@@ -15,6 +15,22 @@ type ViewState = 'grid' | 'dale-tiffany-social' | 'living-better-life-social';
 export default function SocialMediaPortfolioPage() {
   const { theme } = useAppStore();
   const [view, setView] = useState<ViewState>('grid');
+  const socialCards = [
+    {
+      caseStudy: daleTiffanySocialCaseStudy,
+      onViewCaseStudy: () => {
+        setView('dale-tiffany-social');
+        window.scrollTo(0, 0);
+      },
+    },
+    {
+      caseStudy: livingBetterLifeSocialCaseStudy,
+      onViewCaseStudy: () => {
+        setView('living-better-life-social');
+        window.scrollTo(0, 0);
+      },
+    },
+  ];
 
   if (view === 'dale-tiffany-social') {
     return (
@@ -53,22 +69,15 @@ export default function SocialMediaPortfolioPage() {
         </div>
 
         <div className="flex flex-wrap justify-center gap-8 max-w-4xl mx-auto">
-          <SocialMediaCard
-            caseStudy={daleTiffanySocialCaseStudy}
-            onViewCaseStudy={() => {
-              setView('dale-tiffany-social');
-              window.scrollTo(0, 0);
-            }}
-            className="w-full sm:w-80 md:w-96"
-          />
-          <SocialMediaCard
-            caseStudy={livingBetterLifeSocialCaseStudy}
-            onViewCaseStudy={() => {
-              setView('living-better-life-social');
-              window.scrollTo(0, 0);
-            }}
-            className="w-full sm:w-80 md:w-96"
-          />
+          {socialCards.map((card, index) => (
+            <SocialMediaCard
+              key={card.caseStudy.id}
+              index={index}
+              caseStudy={card.caseStudy}
+              onViewCaseStudy={card.onViewCaseStudy}
+              className="w-full sm:w-80 md:w-96"
+            />
+          ))}
         </div>
       </div>
     </div>
