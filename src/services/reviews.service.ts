@@ -1,18 +1,48 @@
 import axios from "axios";
+import type { AxiosResponseHeaders, RawAxiosResponseHeaders } from "axios";
 import type { Review, WpReviewPost, WpImage } from "@/types";
 
-/**
- * Review API endpoints in priority order.
- * 1) Explicit base URL from Vite env
- * 2) Same-origin /api route
- * 3) Netlify functions fallback
- */
 const API_BASE_URL = import.meta.env.VITE_API_URL || "";
-const API_CANDIDATES = [
-  `${API_BASE_URL}/api/reviews`,
-  "/api/reviews",
-  "/.netlify/functions/reviews",
-];
+
+const isHtmlResponse = (value: unknown): value is string => {
+  if (typeof value !== "string") return false;
+  const trimmed = value.trim().toLowerCase();
+  return trimmed.startsWith("<!doctype html") || trimmed.startsWith("<html") || trimmed.includes("<body");
+};
+
+const getContentType = (
+  headers?: RawAxiosResponseHeaders | AxiosResponseHeaders
+): string => {
+  const contentType = headers?.["content-type"];
+  return Array.isArray(contentType) ? contentType.join(", ") : contentType || "";
+};
+
+const isNetlifyDevOrigin = (): boolean => {
+  if (typeof window === "undefined") return false;
+  return (
+    window.location.hostname === "localhost" &&
+    window.location.port === "8888"
+  );
+};
+
+const isProductionOrigin = (): boolean => {
+  if (typeof window === "undefined") return import.meta.env.PROD;
+  return !["localhost", "127.0.0.1"].includes(window.location.hostname);
+};
+
+export const getReviewsEndpoints = (): string[] => {
+  const endpoints: string[] = [];
+
+  if (API_BASE_URL) {
+    endpoints.push(`${API_BASE_URL.replace(/\/$/, "")}/api/reviews`);
+  }
+
+  if (isNetlifyDevOrigin() || isProductionOrigin()) {
+    endpoints.push("/api/reviews", "/.netlify/functions/reviews");
+  }
+
+  return [...new Set(endpoints)];
+};
 
 const stripHtml = (html: string): string =>
   (html || "").replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
@@ -33,12 +63,58 @@ const getHeadshotUrl = (headshot?: string | WpImage): string => {
 
 export const fetchReviews = async (): Promise<Review[]> => {
   let lastError: unknown = null;
+  const endpoints = getReviewsEndpoints();
 
-  for (const endpoint of API_CANDIDATES) {
+  if (endpoints.length === 0) {
+    const environmentHint =
+      "Reviews are served by the Netlify function redirect in production and via `netlify dev` locally. " +
+      "Plain `vite`/`vite preview` does not provide `/api/reviews` unless `VITE_API_URL` points to a real backend.";
+    console.error("No valid review API endpoint is available for this environment.", {
+      apiBaseUrl: API_BASE_URL || null,
+      origin: typeof window !== "undefined" ? window.location.origin : null,
+      hint: environmentHint,
+    });
+    throw new Error("No valid review API endpoint is configured.");
+  }
+
+  for (const endpoint of endpoints) {
     try {
-      const response = await axios.get<WpReviewPost[]>(endpoint);
+      const response = await axios.get<WpReviewPost[] | { data?: WpReviewPost[]; reviews?: WpReviewPost[] } | string>(endpoint);
 
-      return response.data.map((post) => {
+      const contentType = getContentType(response.headers);
+
+      if (contentType.includes("text/html") || isHtmlResponse(response.data)) {
+        const preview =
+          typeof response.data === "string"
+            ? response.data.slice(0, 160)
+            : null;
+        console.error("Reviews endpoint returned HTML instead of JSON.", {
+          url: endpoint,
+          contentType,
+          preview,
+          hint: "Use `netlify dev` for local Netlify Functions, or set `VITE_API_URL` to a backend that serves `/api/reviews`.",
+        });
+        continue;
+      }
+
+      const rawPosts = Array.isArray(response.data)
+        ? response.data
+        : Array.isArray(response.data?.data)
+          ? response.data.data
+          : Array.isArray(response.data?.reviews)
+            ? response.data.reviews
+            : null;
+
+      if (!Array.isArray(rawPosts)) {
+        console.error("Unexpected reviews response shape.", {
+          url: endpoint,
+          contentType,
+          data: response.data,
+        });
+        continue;
+      }
+
+      return rawPosts.map((post) => {
         const acf = post.acf ?? ({} as WpReviewPost["acf"]);
 
         const acfExcerpt = stripHtml(acf.review_excerpt ?? "");
@@ -76,6 +152,6 @@ export const fetchReviews = async (): Promise<Review[]> => {
     }
   }
 
-  console.error("All review API endpoints failed.", { endpoints: API_CANDIDATES, lastError });
+  console.error("All review API endpoints failed.", { endpoints, lastError });
   throw new Error("Failed to fetch reviews.");
 };

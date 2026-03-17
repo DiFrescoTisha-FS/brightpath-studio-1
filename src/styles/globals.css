@@ -179,13 +179,13 @@
   overflow: hidden;
 
   /* Animated light position */
-  --lx: 10%;
+ --lx: 10%;
   --ly: 44%;
-  --spot: 220px;
-  --spot-soft: 140px;
+  --spot: 280px;
+  --spot-soft: 150px;
 
   animation: lightPos 8.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
+} 
 
 /* Subtle grain */
 .hero-clarity::before {
@@ -212,12 +212,13 @@
 
   background: radial-gradient(
     circle,
-    rgba(255, 248, 230, 0.34) 0%,
+    rgba(255, 248, 230, 0.42) 0%,
     rgba(235, 200, 120, 0.18) 28%,
     rgba(235, 177, 9, 0.09) 52%,
     rgba(235, 177, 9, 0.03) 74%,
     transparent 100%
   );
+
 
   filter: blur(52px);
   opacity: 0;
@@ -228,22 +229,25 @@
 .horizon-glow {
   position: absolute;
   left: 50%;
-  top: 62%;
+  top: 63%;
   transform: translate(-50%, -50%);
-  width: min(760px, 76vw);
-  height: 140px;
+  width: 860px;
+  height: 190px;
   pointer-events: none;
   z-index: 2;
   opacity: 0;
 
   background: radial-gradient(
-    ellipse 100% 100% at 50% 60%,
-    rgba(235, 200, 120, 0.18) 0%,
-    rgba(235, 177, 9, 0.09) 38%,
-    transparent 100%
+    circle at center,
+    rgba(235, 200, 120, 0.14) 0%,
+    rgba(235, 177, 9, 0.08) 30%,
+    rgba(235, 177, 9, 0.04) 50%,
+    rgba(235, 177, 9, 0.03) 65%,
+    rgba(235, 177, 9, 0) 80%
   );
-  filter: blur(34px);
-  animation: horizonIn 1.5s ease-out 6.0s forwards;
+
+  filter: blur(30px);
+  animation: horizonIn 1.5s ease-out 6s forwards;
 }
 
 /* Headline container */
@@ -260,15 +264,13 @@
 }
 
 /* Base dim state */
-.clarity-text,
-.clarity-subtitle {
-  color: rgba(245, 240, 232, 0.18);
+.clarity-text {
+  color: rgba(245, 240, 232, 0.28);
 }
 
 /* Spotlight reveal driven by light */
-.clarity-text-line1,
-.clarity-subtitle {
-  opacity: 0.22;
+.clarity-text-line1 {
+  opacity: 0.34;
 
   -webkit-mask-image: radial-gradient(
     circle at var(--lx) var(--ly),
@@ -285,6 +287,17 @@
 
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
+}
+
+.clarity-subtitle {
+  color: rgba(255, 252, 245, 0.85);
+  opacity: 0;
+
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.6),
+    0 4px 14px rgba(0, 0, 0, 0.45);
+
+  animation: subtitleFadeIn 1s ease-out 6s forwards;
 }
 
 /* Second line reveals then locks */
@@ -324,6 +337,31 @@
   animation: ctaIn 1.1s ease-out 6.6s forwards;
 }
 
+
+.lighthouse-silhouette {
+  position: absolute;
+  right: clamp(12px, 5vw, 80px);
+  bottom: clamp(-24px, -2vw, -10px);
+  width: clamp(220px, 40vw, 600px);
+  height: auto;
+  opacity: 0;
+  z-index: 3;
+  pointer-events: none;
+  filter: drop-shadow(0 0 10px rgba(235, 177, 9, 0.05));
+  animation: lighthouseIn 1.4s ease-out 6.2s forwards;
+}
+
+@keyframes lighthouseIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 0.11;
+    transform: translateY(0);
+  }
+}
+
 @keyframes ctaIn {
   to { opacity: 1; }
 }
@@ -336,8 +374,8 @@
 @keyframes lightOn {
   0% { opacity: 0; }
   10% { opacity: 1; }
-  92% { opacity: 1; }
-  100% { opacity: 0; }
+  92% { opacity: 0.9; }
+  100% { opacity: 0.18; }
 }
 
 /* Lighthouse-like sweep: drift across, return, settle */
@@ -364,26 +402,33 @@
       0 2px 4px rgba(0, 0, 0, 0.55);
   }
   100% {
-    color: #f5f0e8;
+    color: #f8f4ec;
     opacity: 1;
     text-shadow:
-      0 -1px 0 rgba(255, 255, 255, 0.25),
-      0 1px 1px rgba(0, 0, 0, 0.4),
-      0 6px 14px rgba(0, 0, 0, 0.45),
-      0 2px 4px rgba(0, 0, 0, 0.55);
+      0 -1px 0 rgba(255, 255, 255, 0.35),
+      0 1px 1px rgba(0, 0, 0, 0.5),
+      0 8px 18px rgba(0, 0, 0, 0.55),
+      0 2px 6px rgba(0, 0, 0, 0.6);
+  }
+}
+
+@keyframes subtitleFadeIn {
+  to {
+    opacity: 1;
   }
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .guiding-light { width: 360px; height: 360px; filter: blur(44px); }
-  .hero-clarity { --spot: 180px; --spot-soft: 120px; }
-  .horizon-glow { height: 110px; }
+  .hero-clarity { --spot: 220px; --spot-soft: 140px; }
+  .horizon-glow { width: min(420px, 74vw); height: 170px; }
 }
 
 @media (max-width: 480px) {
   .guiding-light { width: 280px; height: 280px; filter: blur(40px); }
-  .hero-clarity { --spot: 150px; --spot-soft: 110px; }
+  .hero-clarity { --spot: 180px; --spot-soft: 130px; }
+  .horizon-glow { width: min(320px, 82vw); height: 140px; }
 }
 
 /* Reduced motion */
@@ -410,5 +455,6 @@
       0 2px 4px rgba(0, 0, 0, 0.55);
   }
 
-  .clarity-cta { opacity: 1; animation: none; }
+  .clarity-cta { opacity: 1; animation: none; } 
+
 }

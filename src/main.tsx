@@ -1,10 +1,10 @@
 // main.tsx
 
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
-const HomePage = React.lazy(() => import('./pages/HomePage'));
+import HomePage from "./pages/HomePage";
 const ContactPage = React.lazy(() => import('./pages/ContactPage'));
 const AboutPage = React.lazy(() => import('./pages/AboutPage'));
 const TermsPage = React.lazy(() => import('./pages/TermsPage'));
@@ -75,6 +75,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Suspense fallback={<div className="min-h-screen p-8">Loading...</div>}>
+      <RouterProvider router={router} />
+    </Suspense>
   </React.StrictMode>
 );

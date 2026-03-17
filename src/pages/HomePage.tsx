@@ -1,10 +1,13 @@
+import React, { Suspense } from "react";
 import { RefreshCcw, Zap, Code } from "lucide-react";
 import { useAppStore } from '@/store/appStore';
 import { Link } from 'react-router-dom';
-import ReviewWidget from '../components/ReviewWidget';
-import PortfolioSection from '../components/PortfolioSection';
 import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
 import ClarityHero from "@/components/ClarityHero";
+
+// Lazy load heavy components to reduce critical path
+const ReviewWidget = React.lazy(() => import('../components/ReviewWidget'));
+const PortfolioSection = React.lazy(() => import('../components/PortfolioSection'));
 
 
 type SectionProps = {
@@ -121,7 +124,9 @@ const HomePage = () => {
         <ClarityHero />
         <ServicesSection theme={theme} />
 
-        <PortfolioSection />
+        <Suspense fallback={<div className="py-20 text-center text-muted-foreground">Loading portfolio...</div>}>
+          <PortfolioSection />
+        </Suspense>
         <section id="reviews" className="py-20">
           <div className="container mx-auto px-4 text-center">
             <BrightPathGradientTitle as="h2" className="font-bold font-poppins mb-12"
@@ -129,8 +134,9 @@ const HomePage = () => {
             >
               Client Testimonials
             </BrightPathGradientTitle>
-            <ReviewWidget />
-
+            <Suspense fallback={<div className="text-center p-8 text-muted-foreground">Loading reviews...</div>}>
+              <ReviewWidget />
+            </Suspense>
           </div>
         </section>
         <BrandStorySection theme={theme} />

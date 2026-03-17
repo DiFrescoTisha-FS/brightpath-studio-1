@@ -22,10 +22,9 @@ declare global {
 }
 
 // API URL Configuration:
-// - In production (Netlify): Uses relative paths which get redirected via netlify.toml
-// - In development: Falls back to localhost:3002 for the local Express server
-const API_BASE_URL = import.meta.env.VITE_API_URL ||
-  (import.meta.env.PROD ? '' : 'http://localhost:3002');
+// - In production and `netlify dev`: Uses same-origin paths redirected by netlify.toml
+// - For alternate backends, set VITE_API_URL explicitly
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 const CONTACT_FORM_URL = `${API_BASE_URL}/api/submit-contact-form`;
 
 
