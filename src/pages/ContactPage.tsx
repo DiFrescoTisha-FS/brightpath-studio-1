@@ -3,6 +3,7 @@ import { Mail, Phone, MapPin } from 'lucide-react';
 import axios from 'axios';
 import { useAppStore } from '@/store/appStore'; // Import the store
 import BrightPathGradientTitle from '@/components/BrightPathGradientTitle';
+import { PageMeta } from '@/components/PageMeta';
 
 // Define the shape of the form data
 interface FormData {
@@ -96,6 +97,11 @@ const ContactPage: React.FC = () => {
   return (
 
     <div className={`min-h-screen ${themeClasses.bg} ${themeClasses.text} p-4`}>
+      <PageMeta
+        title="Contact"
+        description="Start a conversation with BrightPath Web Studio. Tisha Di Fresco builds modern, performant websites — get in touch to discuss your project."
+        path="/contact"
+      />
       {/* Header Section */}
       <div className="text-center pt-28 pb-12 px-4">
         <BrightPathGradientTitle as="h1" className="text-4xl md:text-5xl font-poppins font-bold mb-4"

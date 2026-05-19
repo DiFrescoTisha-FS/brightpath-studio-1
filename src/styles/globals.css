@@ -1,5 +1,42 @@
 /* globals.css */
 
+/* ====================================
+   SELF-HOSTED FONTS
+   ====================================
+   Lato (400, 700) for body text and Poppins (600, 700) for headings.
+   Files live in public/fonts/ so they're served from the same origin —
+   no third-party DNS lookup, no privacy leak to Google, no render-block
+   on the external stylesheet. `font-display: swap` shows a fallback
+   while the woff2 loads, then swaps in once it's ready. */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/lato-v25-latin-regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/lato-v25-latin-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/poppins-v24-latin-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/poppins-v24-latin-700.woff2') format('woff2');
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

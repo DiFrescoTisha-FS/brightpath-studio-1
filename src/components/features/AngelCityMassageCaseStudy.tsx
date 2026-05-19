@@ -7,12 +7,18 @@ import BrightPathGradientTitle from '../BrightPathGradientTitle';
 import BrightPathGradientButton from "@/components/BrightPathGradientButton"
 import { useAppStore } from '@/store/appStore';
 import { trackPortfolioClick } from '@/utils/analytics';
+import { PageMeta } from '@/components/PageMeta';
 
 const AngelCityCaseStudy = () => {
   const { theme } = useAppStore();
 
   return (
     <div className="min-h-screen relative bg-bp-light-bg-light dark:bg-bp-light-bg-dark transition-colors duration-300">
+      <PageMeta
+        title="Angel City Massage — Case Study"
+        description="WordPress + Divi modernization for Angel City Massage. Lighthouse desktop 62 → 99, mobile 62 → 97 through asset optimization, layout restructuring, and CLS fixes."
+        path="/case-study"
+      />
 
       <div
         id="extended-background"

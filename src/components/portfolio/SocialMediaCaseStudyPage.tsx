@@ -21,6 +21,7 @@ import TikTokIcon from '../icons/TikTokIcon';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
 import BrightPathGradientButton from '@/components/BrightPathGradientButton';
 import { VideoCarousel } from '@/components/portfolio/VideoCarousel';
+import { PageMeta } from '@/components/PageMeta';
 import type { SocialMediaCaseStudy, ContentSample } from '@/types/caseStudy';
 
 interface SocialMediaCaseStudyPageProps {
@@ -122,6 +123,33 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
 
   return (
     <div className={`min-h-screen ${pageBg}`}>
+      <PageMeta
+        title={`${caseStudy.title} — Case Study`}
+        description={caseStudy.description}
+        path={`/portfolio/${caseStudy.slug}`}
+        image={caseStudy.featuredImage?.startsWith('http') ? caseStudy.featuredImage : undefined}
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://brightpathwebstudio.org/' },
+              { '@type': 'ListItem', position: 2, name: 'Social Media', item: 'https://brightpathwebstudio.org/social-media' },
+              { '@type': 'ListItem', position: 3, name: caseStudy.title },
+            ],
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'CreativeWork',
+            name: caseStudy.title,
+            description: caseStudy.description,
+            url: `https://brightpathwebstudio.org/portfolio/${caseStudy.slug}`,
+            creator: { '@type': 'Person', name: 'Tisha Di Fresco' },
+            about: caseStudy.category,
+            keywords: caseStudy.tags?.join(', '),
+          },
+        ]}
+      />
       {onBack && (
         <div className="sticky top-20 z-40 bg-background/80 backdrop-blur-sm border-b border-border">
           <div className="container mx-auto px-4 py-3">
@@ -507,15 +535,17 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                   <>
                     <button
                       onClick={prevImage}
+                      aria-label="Previous image"
                       className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-colors"
                     >
-                      <ChevronLeft className="w-5 h-5" />
+                      <ChevronLeft className="w-5 h-5" aria-hidden="true" />
                     </button>
                     <button
                       onClick={nextImage}
+                      aria-label="Next image"
                       className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-colors"
                     >
-                      <ChevronRight className="w-5 h-5" />
+                      <ChevronRight className="w-5 h-5" aria-hidden="true" />
                     </button>
                   </>
                 )}
@@ -533,6 +563,8 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
                     <button
                       key={image.id}
                       onClick={() => setActiveImageIndex(index)}
+                      aria-label={`View image ${index + 1} of ${images.length}`}
+                      aria-current={index === activeImageIndex ? 'true' : undefined}
                       className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${index === activeImageIndex
                           ? 'border-primary scale-105'
                           : 'border-transparent opacity-60 hover:opacity-100'
@@ -640,9 +672,10 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         >
           <button
             onClick={closeLightbox}
+            aria-label="Close image preview"
             className="absolute top-4 right-4 w-10 h-10 rounded-full bg-background/20 flex items-center justify-center hover:bg-background/40 transition-colors"
           >
-            <X className="w-5 h-5 text-white" />
+            <X className="w-5 h-5 text-white" aria-hidden="true" />
           </button>
           <div
             className="max-w-4xl max-h-[90vh] overflow-hidden rounded-lg"

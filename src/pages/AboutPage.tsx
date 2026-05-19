@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import useTheme from "../hooks/useTheme";
 import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
 import BrightPathGradientButton from "@/components/BrightPathGradientButton.legacy";
+import { PageMeta } from "@/components/PageMeta";
 
 const AboutPage = () => {
   // Fetch theme internally via the custom hook
@@ -34,6 +35,28 @@ const AboutPage = () => {
 
   return (
     <div className="min-h-screen">
+      <PageMeta
+        title="About"
+        description="Meet Tisha Di Fresco — Full Sail valedictorian, front-end developer, and founder of BrightPath Web Studio. Her journey from creativity to code, and the story behind the studio."
+        path="/about"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'Person',
+          name: 'Tisha Di Fresco',
+          jobTitle: 'Front-End Developer & Web Designer',
+          worksFor: {
+            '@type': 'ProfessionalService',
+            name: 'BrightPath Web Studio',
+            url: 'https://brightpathwebstudio.org',
+          },
+          alumniOf: {
+            '@type': 'CollegeOrUniversity',
+            name: 'Full Sail University',
+          },
+          knowsAbout: ['React', 'TypeScript', 'WordPress', 'Divi', 'Web Performance', 'Responsive Design'],
+          url: 'https://brightpathwebstudio.org/about',
+        }}
+      />
       {/* --- HERO SECTION --- */}
       <motion.section
         className="min-h-screen flex items-center justify-center p-8 pt-28 bg-cover bg-center relative"

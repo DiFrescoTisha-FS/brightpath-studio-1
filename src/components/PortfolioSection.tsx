@@ -1,35 +1,40 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { useAppStore } from '@/store/appStore';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
 
-// Portfolio data structure - each item represents a project showcase
 interface PortfolioItem {
   id: number;
   title: string;
   description: string;
   imageUrl: string;
+  href: string;
+  badge?: string;
 }
 
-// Hard-coded portfolio items for display
 const portfolioItems: PortfolioItem[] = [
   {
     id: 1,
-    title: 'Mobile Massage Website',
-    description: 'A modern, mobile-first website for a massage therapy service.',
-    imageUrl: '/images/scroll-img-2.png' 
+    title: 'AweStruck Intelligence',
+    description: 'Custom React + TypeScript build with a performance-first architecture — Lighthouse mobile 26 → 100.',
+    imageUrl: '/images/case-studies/awestruck/card-hero.png',
+    href: '/portfolio/awestruck-intelligence',
+    badge: 'Featured',
   },
   {
     id: 2,
     title: 'Dale Tiffany Lighting',
     description: 'An elegant e-commerce site for a luxury lighting brand.',
-    imageUrl: '/images/DT-LONG.jpg'
+    imageUrl: '/images/DT-LONG.jpg',
+    href: '/portfolio',
   },
   {
     id: 3,
-    title: 'Song Artist Website',
-    description: 'A dynamic portfolio site for a music artist, showcasing tracks and bio.',
-    imageUrl: '/images/scroll-img-3.png'
-  }
+    title: 'Angel City Massage',
+    description: 'WordPress modernization with a Lighthouse desktop lift from 62 to 99.',
+    imageUrl: '/images/ACM_HOME.png',
+    href: '/portfolio',
+  },
 ];
 
 const PortfolioSection = () => {
@@ -46,52 +51,46 @@ const PortfolioSection = () => {
         <p className="hidden md:block text-muted-foreground font-lato text-sm mb-8">
           Hover over the cards to explore each project
         </p>
-        {/*
-          This is the grid container for the portfolio cards.
-          It uses CSS Grid to create a responsive layout that goes from a single column
-          on mobile to three columns on desktop.
-        */}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {portfolioItems.map((item) => (
-            // A motion.div for the card wrapper to handle the hover animation
-            <motion.div
-              key={item.id}
-              className={`relative rounded-2xl overflow-hidden cursor-pointer
-              transition-all duration-300 hover:shadow-2xl hover:scale-[0.25px]
-              ${theme === 'dark' ? 'bg-[#273442] border-primary/20 border-[0.25px] shadow-glow-primary' : 'bg-white border-[0.25px] border-primary/50'}`}
-              // Framer Motion's whileHover prop is perfect for this effect
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {/*
-                This container holds the image. It has a fixed height and hides
-                anything that overflows, creating the "window" effect for the image.
-              */}
-              <div className="h-[400px] w-full overflow-hidden">
-                <motion.img
-                  src={item.imageUrl}
-                  alt={item.title}
-                  className="w-full h-auto"
-                  // Framer Motion's whileHover prop animates the vertical position of the image.
-                  // It moves the image up by the difference in height, creating a scroll effect.
-                  whileHover={{ y: -((650 * 100) / 400 - 100) + '%' }}
-                  transition={{ duration: 3, ease: 'easeInOut' }}
-                />
-              </div>
+            <Link to={item.href} key={item.id} className="block">
+              <motion.div
+                className={`relative rounded-2xl overflow-hidden cursor-pointer h-full
+                transition-all duration-300 hover:shadow-2xl
+                ${theme === 'dark' ? 'bg-[#273442] border-primary/20 border-[0.25px] shadow-glow-primary' : 'bg-white border-[0.25px] border-primary/50'}`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {item.badge && (
+                  <div className="absolute top-3 left-3 z-10 px-2 py-1 bg-primary text-primary-foreground text-xs font-medium rounded">
+                    {item.badge}
+                  </div>
+                )}
 
-              {/* Card content with a gradient overlay for better readability */}
-              <div className="p-6">
-                <BrightPathGradientTitle 
-                  as="h5"
-                  gradientWords={["Mobile", "Massage", "Dale", "Tiffany", "Song", "Artist"]}
-                  className="font-poppins font-semibold mb-2">
-                  {item.title}
-                </BrightPathGradientTitle>
-                <p className="card-subheading font-lato text-muted-foreground">
-                  {item.description}
-                </p>
-              </div>
-            </motion.div>
+                <div className="h-[400px] w-full overflow-hidden">
+                  <motion.img
+                    src={item.imageUrl}
+                    alt={item.title}
+                    className="w-full h-auto"
+                    whileHover={{ y: -((650 * 100) / 400 - 100) + '%' }}
+                    transition={{ duration: 3, ease: 'easeInOut' }}
+                  />
+                </div>
+
+                <div className="p-6">
+                  <BrightPathGradientTitle
+                    as="h5"
+                    gradientWords={["AweStruck", "Intelligence", "Dale", "Tiffany", "Angel", "City"]}
+                    className="font-poppins font-semibold mb-2">
+                    {item.title}
+                  </BrightPathGradientTitle>
+                  <p className="card-subheading font-lato text-muted-foreground">
+                    {item.description}
+                  </p>
+                </div>
+              </motion.div>
+            </Link>
           ))}
         </div>
       </div>

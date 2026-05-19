@@ -9,6 +9,7 @@ import {
   daleTiffanySocialCaseStudy,
   livingBetterLifeSocialCaseStudy,
 } from '@/data/caseStudies';
+import { PageMeta } from '@/components/PageMeta';
 
 type ViewState = 'grid' | 'dale-tiffany-social' | 'living-better-life-social';
 
@@ -54,6 +55,11 @@ export default function SocialMediaPortfolioPage() {
 
   return (
     <div className="min-h-screen bg-background pt-32 pb-16">
+      <PageMeta
+        title="Social Media Content"
+        description="Social media content and strategy work from BrightPath Web Studio — Dale Tiffany luxury lighting, Living Better Life wellness, and more."
+        path="/social-media"
+      />
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <BrightPathGradientTitle

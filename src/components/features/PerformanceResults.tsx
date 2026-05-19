@@ -1,38 +1,45 @@
 import { TrendingUp } from 'lucide-react';
 import BrightPathGradientTitle from '@/components/BrightPathGradientTitle';
-
-interface LighthouseMetric {
-  label: string;
-  before: number;
-  after: number;
-  screenshotSrc: string;
-  screenshotAlt: string;
-}
+import type { LighthouseMetric } from '@/types/caseStudy';
 
 interface PerformanceResultsProps {
   theme: 'light' | 'dark';
   metrics?: LighthouseMetric[];
+  summary?: string;
 }
+
+const defaultMetrics: LighthouseMetric[] = [
+  {
+    label: 'Desktop',
+    before: 62,
+    after: 99,
+    screenshotSrc: '/images/lighthouse-score.png',
+    screenshotAlt: 'Angel City Massage desktop Lighthouse performance score showing 99',
+  },
+  {
+    label: 'Mobile',
+    before: 62,
+    after: 97,
+    screenshotSrc: '/images/mobile-scores.png',
+    screenshotAlt: 'Angel City Massage mobile Lighthouse performance score showing 97',
+  },
+];
+
+const defaultSummary =
+  'Through asset optimization, layout restructuring, and JavaScript execution improvements across desktop and mobile.';
 
 const PerformanceResults = ({
   theme,
-  metrics = [
-    {
-      label: 'Desktop',
-      before: 62,
-      after: 99,
-      screenshotSrc: '/images/lighthouse-score.png',
-      screenshotAlt: 'Angel City Massage desktop Lighthouse performance score showing 99'
-    },
-    {
-      label: 'Mobile',
-      before: 62,
-      after: 97,
-      screenshotSrc: '/images/mobile-scores.png',
-      screenshotAlt: 'Angel City Massage mobile Lighthouse performance score showing 97'
-    }
-  ]
+  metrics = defaultMetrics,
+  summary = defaultSummary,
 }: PerformanceResultsProps) => {
+  // When there's only one metric (e.g. AweStruck Mobile-only), render the
+  // score card and screenshot as two grid cells side-by-side. The wrapper
+  // div uses `display: contents` so its children become direct grid items,
+  // bypassing the wrapper for layout. Multiple metrics keep their original
+  // vertical stack per metric (e.g. Angel City's Desktop + Mobile pair).
+  const isSingle = metrics.length === 1;
+
   return (
     <section className="relative z-10 py-16 px-4">
       <div className="max-w-5xl mx-auto">
@@ -47,7 +54,7 @@ const PerformanceResults = ({
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           {metrics.map((metric) => (
-            <div key={metric.label} className="space-y-6">
+            <div key={metric.label} className={isSingle ? 'contents' : 'space-y-6'}>
               <div className={`p-8 rounded-2xl text-center transition-colors duration-300 ${
                 theme === 'dark'
                   ? 'bg-gradient-to-br from-[#1A2238] to-[#0f1628] border border-primary/30 shadow-glow-primary'
@@ -103,7 +110,7 @@ const PerformanceResults = ({
         </div>
 
         <p className="mt-8 text-sm text-muted-foreground max-w-2xl mx-auto text-center">
-          Through asset optimization, layout restructuring, and JavaScript execution improvements across desktop and mobile.
+          {summary}
         </p>
       </div>
     </section>

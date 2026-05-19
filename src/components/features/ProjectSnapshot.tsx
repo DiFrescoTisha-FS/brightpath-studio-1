@@ -1,26 +1,37 @@
 import { CheckCircle } from 'lucide-react';
 import BrightPathGradientTitle from '@/components/BrightPathGradientTitle';
+import type { SnapshotMetadataItem } from '@/types/caseStudy';
 
 interface ProjectSnapshotProps {
   theme: 'light' | 'dark';
+  metadata?: SnapshotMetadataItem[];
+  achievements?: string[];
+  heading?: string;
+  gradientWords?: string[];
 }
 
-const ProjectSnapshot = ({ theme }: ProjectSnapshotProps) => {
-  const metadata = [
-    { label: 'Client', value: 'Angel City Massage' },
-    { label: 'Project Type', value: 'Website Modernization & Performance Optimization' },
-    { label: 'Platform', value: 'WordPress + Divi' },
-    { label: 'My Role', value: 'Front-End Developer & Performance Optimization' },
-  ];
+const defaultMetadata: SnapshotMetadataItem[] = [
+  { label: 'Client', value: 'Angel City Massage' },
+  { label: 'Project Type', value: 'Website Modernization & Performance Optimization' },
+  { label: 'Platform', value: 'WordPress + Divi' },
+  { label: 'My Role', value: 'Front-End Developer & Performance Optimization' },
+];
 
-  const achievements = [
-    'Modernized a 20-year-old website originally built before responsive design',
-    'Rebuilt layouts for desktop, tablet, and mobile responsiveness',
-    'Improved Lighthouse performance from 62 → 99 on desktop and 62 → 97 on mobile',
-    'Reduced cumulative layout shift (CLS) by restructuring the hero section',
-    'Optimized asset loading and JavaScript execution',
-  ];
+const defaultAchievements = [
+  'Modernized a 20-year-old website originally built before responsive design',
+  'Rebuilt layouts for desktop, tablet, and mobile responsiveness',
+  'Improved Lighthouse performance from 62 → 99 on desktop and 62 → 97 on mobile',
+  'Reduced cumulative layout shift (CLS) by restructuring the hero section',
+  'Optimized asset loading and JavaScript execution',
+];
 
+const ProjectSnapshot = ({
+  theme,
+  metadata = defaultMetadata,
+  achievements = defaultAchievements,
+  heading = 'Project Snapshot',
+  gradientWords = ['Snapshot'],
+}: ProjectSnapshotProps) => {
   return (
     <section className="relative z-10 py-12 px-4">
       <div className="max-w-4xl mx-auto">
@@ -28,12 +39,11 @@ const ProjectSnapshot = ({ theme }: ProjectSnapshotProps) => {
           as="h2"
           className="font-poppins font-bold mb-8 text-2xl md:text-3xl"
           textColor="text-gray-900 dark:text-gray-200"
-          gradientWords={["Snapshot"]}
+          gradientWords={gradientWords}
         >
-          Project Snapshot
+          {heading}
         </BrightPathGradientTitle>
 
-        {/* Metadata Grid */}
         <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 p-6 rounded-xl transition-colors duration-300 ${
           theme === 'dark'
             ? 'bg-[#1A2238]/50 border border-primary/20'
@@ -51,7 +61,6 @@ const ProjectSnapshot = ({ theme }: ProjectSnapshotProps) => {
           ))}
         </div>
 
-        {/* Key Achievements */}
         <div className={`p-6 rounded-xl transition-colors duration-300 ${
           theme === 'dark'
             ? 'bg-[#1A2238]/50 border border-primary/20'

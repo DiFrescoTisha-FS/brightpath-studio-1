@@ -1,0 +1,14 @@
+# Default: HTML and anything else without a more-specific match gets no-cache.
+# Forces browser to revalidate index.html on every visit so stale HTML
+# never references chunk hashes from a previous deploy (the bug that broke
+# section loading on the AweStruck site on May 16 before we added this).
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Vite emits content-hashed filenames in /assets/. The hash changes when
+# the file's contents change, so it's safe to cache these forever — a
+# new build with new contents produces a new filename and the browser
+# fetches it fresh anyway. `immutable` tells the browser it never needs
+# to revalidate within the max-age window.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

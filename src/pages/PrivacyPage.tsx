@@ -1,6 +1,13 @@
+import { PageMeta } from '@/components/PageMeta';
+
 const PrivacyPage = () => {
   return (
     <div className="bg-stone text-deep-dark py-20 px-4 sm:px-6 lg:px-8">
+      <PageMeta
+        title="Privacy Policy"
+        description="How BrightPath Web Studio collects, uses, and protects your information."
+        path="/privacy-policy"
+      />
       <div className="max-w-4xl mx-auto font-lato">
         <h1 className="text-4xl font-poppins font-bold text-center mb-4">Privacy Policy</h1>
         <p className="text-center text-sm text-gray-600 mb-12">

@@ -31,6 +31,30 @@ export interface WebProjectMetrics {
   seoScore?: string;
 }
 
+// Lighthouse before/after metric for PerformanceResults
+export interface LighthouseMetric {
+  label: string;
+  before: number;
+  after: number;
+  screenshotSrc: string;
+  screenshotAlt: string;
+}
+
+// Snapshot metadata row (used by ProjectSnapshot)
+export interface SnapshotMetadataItem {
+  label: string;
+  value: string;
+}
+
+// Engineering / feature highlight card
+export interface HighlightItem {
+  title: string;
+  description: string;
+  image?: string;
+  video?: string;
+  videoPoster?: string;
+}
+
 // Content sample (image or video)
 export interface ContentSample {
   id: string;
@@ -82,8 +106,10 @@ export interface BaseCaseStudy {
   techStack?: string[];
   testimonial?: {
     quote: string;
+    quoteTitle?: string;
     author: string;
     role: string;
+    image?: string;
   };
 }
 
@@ -113,6 +139,24 @@ export interface WebProjectCaseStudy extends BaseCaseStudy {
     label: string;
   }[];
   liveUrl?: string;
+  subtitle?: string;
+  heroImage?: string;
+  challenge?: string[];
+  approach?: string[];
+  engineeringHighlights?: HighlightItem[];
+  featureShowcase?: HighlightItem[];
+  performanceMetrics?: LighthouseMetric[];
+  performanceSummary?: string;
+  projectSnapshot?: {
+    metadata: SnapshotMetadataItem[];
+    achievements: string[];
+  };
+  techStackPills?: string[];
+  badge?: string;
+  mobileShowcase?: {
+    images: { src: string; label?: string }[];
+    caption?: string;
+  };
 }
 
 // Union type for all case studies

@@ -7,7 +7,9 @@ import { useReviews } from '@/hooks/useReviews';
 import { Button } from '@/components/ui/button';
 import BrightPathGradientTitle from '@/components/BrightPathGradientTitle';
 import ReviewCard from '@/components/ReviewCard';
-import FeaturedTestimonials, { splitFeaturedReviews } from '@/components/FeaturedTestimonials';
+import FeaturedTestimonials from '@/components/FeaturedTestimonials';
+import { splitFeaturedReviews } from '@/components/featuredTestimonials.utils';
+import { PageMeta } from '@/components/PageMeta';
 
 const ReviewsPage = () => {
   const { theme } = useAppStore();
@@ -22,6 +24,11 @@ const ReviewsPage = () => {
 
   return (
     <div className="container py-16 pt-28">
+      <PageMeta
+        title="Client Reviews"
+        description="Real feedback from real clients — what it's like to work with Tisha at BrightPath Web Studio. Featured endorsements and the full review collection."
+        path="/reviews"
+      />
       <motion.section
         className="text-center mb-12"
         initial={{ opacity: 0 }}

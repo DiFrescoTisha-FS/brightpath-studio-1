@@ -1,6 +1,13 @@
+import { PageMeta } from '@/components/PageMeta';
+
 const TermsPage = () => {
   return (
     <div className="bg-stone text-deep-dark py-20 px-4 sm:px-6 lg:px-8">
+      <PageMeta
+        title="Terms and Conditions"
+        description="Terms and conditions for using the BrightPath Web Studio website and services."
+        path="/terms-of-service"
+      />
       <div className="max-w-4xl mx-auto font-lato">
         <h1 className="text-4xl font-poppins font-bold text-center mb-4">Terms and Conditions</h1>
         <p className="text-center text-sm text-gray-600 mb-12">

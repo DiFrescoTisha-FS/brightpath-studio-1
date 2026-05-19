@@ -4,6 +4,7 @@ import { useAppStore } from '@/store/appStore';
 import { Link } from 'react-router-dom';
 import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
 import ClarityHero from "@/components/ClarityHero";
+import { PageMeta } from "@/components/PageMeta";
 
 // Lazy load heavy components to reduce critical path
 const ReviewWidget = React.lazy(() => import('../components/ReviewWidget'));
@@ -120,6 +121,11 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen">
+      <PageMeta
+        title="BrightPath Web Studio — Front-End Developer & Web Designer"
+        description="Portfolio of Tisha Di Fresco — front-end developer and designer building modern, responsive, high-performance websites in React and WordPress."
+        path="/"
+      />
       <main>
         <ClarityHero />
         <ServicesSection theme={theme} />

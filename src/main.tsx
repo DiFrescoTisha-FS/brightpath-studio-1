@@ -3,6 +3,7 @@
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import HomePage from "./pages/HomePage";
 const ContactPage = React.lazy(() => import('./pages/ContactPage'));
@@ -75,8 +76,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Suspense fallback={<div className="min-h-screen p-8">Loading...</div>}>
-      <RouterProvider router={router} />
-    </Suspense>
+    <HelmetProvider>
+      <Suspense fallback={<div className="min-h-screen p-8">Loading...</div>}>
+        <RouterProvider router={router} />
+      </Suspense>
+    </HelmetProvider>
   </React.StrictMode>
 );

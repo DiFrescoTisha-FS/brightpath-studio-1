@@ -5,13 +5,17 @@ import {
   DaleTiffanyCard,
   DaleTiffanyCaseStudy,
   AngelCityMassageCard,
+  AweStruckCard,
+  WebProjectCaseStudyPage,
 } from '../components/portfolio';
 import AngelCityCaseStudy from '../components/features/AngelCityMassageCaseStudy';
+import { awestruckIntelligenceCaseStudy } from '@/data/caseStudies';
 import { useAppStore } from '@/store/appStore';
 import { useParams } from "react-router-dom";
 import { trackEvent } from '@/utils/analytics';
+import { PageMeta } from '@/components/PageMeta';
 
-type ViewState = 'grid' | 'dale-tiffany' | 'angel-city';
+type ViewState = 'grid' | 'dale-tiffany' | 'angel-city' | 'awestruck';
 
 export default function PortfolioDemoPage() {
   const { theme } = useAppStore();
@@ -47,8 +51,26 @@ export default function PortfolioDemoPage() {
     );
   }
 
+  if (view === 'awestruck') {
+    return (
+      <WebProjectCaseStudyPage
+        caseStudy={awestruckIntelligenceCaseStudy}
+        onBack={() => {
+          setView('grid');
+          window.scrollTo(0, 0);
+        }}
+        theme={theme}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background pt-32 pb-16">
+      <PageMeta
+        title="Portfolio"
+        description="Selected work from BrightPath Web Studio — custom React builds, WordPress modernizations, performance optimizations, and social media content systems."
+        path="/portfolio"
+      />
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <BrightPathGradientTitle
@@ -63,7 +85,11 @@ export default function PortfolioDemoPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <AweStruckCard onViewCaseStudy={() => {
+            setView('awestruck');
+            window.scrollTo(0, 0);
+          }} />
           <DaleTiffanyCard onViewCaseStudy={() => {
             setView('dale-tiffany');
             window.scrollTo(0, 0);

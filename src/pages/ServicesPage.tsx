@@ -9,6 +9,13 @@ import { PhaseCard } from "../types/phaseCard";
 import { useAppStore } from '@/store/appStore';
 import BrightPathGradientButton from "@/components/BrightPathGradientButton.legacy";
 import { BrightPathGradientTitle } from "@/components/portfolio";
+import { PageMeta } from "@/components/PageMeta";
+
+const SERVICES_META = {
+  title: "Services",
+  description: "Front-end development, performance optimization, and custom React + WordPress builds. BrightPath Web Studio's full service offering and step-by-step project process.",
+  path: "/services",
+};
 
 const ServicesPage: React.FC = () => {
   const { theme } = useAppStore();
@@ -37,6 +44,7 @@ const ServicesPage: React.FC = () => {
   if (loading) {
     return (
       <div className={`text-center py-10 min-h-screen ${theme === 'dark' ? 'bg-slate-900 text-white' : 'bg-white text-slate-900'}`}>
+        <PageMeta {...SERVICES_META} />
         Loading our process...
       </div>
     );
@@ -45,16 +53,19 @@ const ServicesPage: React.FC = () => {
   if (error) {
     return (
       <div className={`text-center py-10 text-red-500 min-h-screen ${theme === 'dark' ? 'bg-slate-900' : 'bg-white'}`}>
+        <PageMeta {...SERVICES_META} />
         Error: {error}
       </div>
     );
   }
 
   return (
-    <div
-      className={`py-12 sm:py-20 mt-20 px-4 sm:px-8 min-h-screen relative overflow-hidden`}
-      style={{
-        backgroundImage: "url('/images/BG-Lighthouse-Desktop.jpeg')",
+    <>
+      <PageMeta {...SERVICES_META} />
+      <div
+        className={`py-12 sm:py-20 mt-20 px-4 sm:px-8 min-h-screen relative overflow-hidden`}
+        style={{
+          backgroundImage: "url('/images/BG-Lighthouse-Desktop.jpeg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
@@ -101,7 +112,8 @@ const ServicesPage: React.FC = () => {
           </div>
         </div>
       </motion.div>
-    </div>
+      </div>
+    </>
   );
 };
 
