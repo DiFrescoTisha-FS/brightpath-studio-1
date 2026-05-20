@@ -11,12 +11,18 @@ import { buildCloudinaryUrl } from '@/utils/cloudinary';
  *   2. Open it, copy the Public ID (e.g. `my-image_xxxxxx`)
  *   3. Add to the ID map and export a pre-built URL below
  */
+// Public IDs include the folder path because the djqw1de3s cloud uses
+// Cloudinary's Dynamic Folders mode — folder structure is part of the
+// public ID, not just visual organization. The display name in the
+// Media Library list is NOT the public ID. Get the real public ID by
+// right-clicking an asset → "Copy URL" and reading what comes after
+// `/image/upload/v{timestamp}/`.
 const ID = {
-  lighthouseGraphic: 'lh-5_laoadg',
-  angelCityHomepage: 'ACM_HOME_ggqogf',
-  daleTiffanyLong: 'DT-LONG_qixl3l',
-  lighthouseGift: 'lighthouse-gift_t93s4t',
-  awestruckCardHero: 'card-hero_mocn2q',
+  lighthouseGraphic: 'brightpath/home-page/lh-5_laoadg',
+  angelCityHomepage: 'brightpath/portfolio/case-studies/acm/ACM_HOME_1_a2t424',
+  daleTiffanyLong: 'brightpath/home-page/DT-LONG_qixl3l',
+  lighthouseGift: 'brightpath/home-page/lighthouse-gift_t93s4t',
+  awestruckCardHero: 'brightpath/portfolio/case-studies/awestruck/card-hero_mocn2q',
 } as const;
 
 /**
