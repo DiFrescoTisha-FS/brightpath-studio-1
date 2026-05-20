@@ -3,7 +3,6 @@ import { RefreshCcw, Zap, Code } from "lucide-react";
 import { useAppStore } from '@/store/appStore';
 import { Link } from 'react-router-dom';
 import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
-import ClarityHero from "@/components/ClarityHero";
 import { PageMeta } from "@/components/PageMeta";
 import { cloudinaryAssets } from "@/data/cloudinaryAssets";
 
@@ -127,8 +126,10 @@ const HomePage = () => {
         description="Portfolio of Tisha Di Fresco — front-end developer and designer building modern, responsive, high-performance websites in React and WordPress."
         path="/"
       />
+      {/* ClarityHero is rendered statically into index.html by the
+          brightpath-inject-static-hero Vite plugin so the LCP text paints
+          before React boots. <main> starts at ServicesSection. */}
       <main>
-        <ClarityHero />
         <ServicesSection theme={theme} />
 
         <Suspense fallback={<div className="py-20 text-center text-muted-foreground">Loading portfolio...</div>}>
