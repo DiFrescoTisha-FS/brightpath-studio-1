@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowRight, Zap, Layers, Code } from 'lucide-react';
 import BrightPathGradientButton from '@/components/BrightPathGradientButton';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
+import { cloudinaryAssets } from '@/data/cloudinaryAssets';
 
 interface AweStruckCardProps {
   onViewCaseStudy?: () => void;
@@ -26,7 +27,7 @@ export function AweStruckCard({ onViewCaseStudy, className = '' }: AweStruckCard
           }`}
         >
           <img
-            src="/images/case-studies/awestruck/card-hero.png"
+            src={cloudinaryAssets.awestruckCardHeroThumb}
             alt="AweStruck Intelligence homepage"
             className="w-full h-full object-cover object-top"
           />

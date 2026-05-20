@@ -2,6 +2,7 @@
 
 import React from "react";
 import type { Theme } from '@/store/appStore';
+import { cloudinaryAssets } from '@/data/cloudinaryAssets';
 
 // Define the component's props to accept the 'theme' variable
 interface InspiredSectionProps {
@@ -23,7 +24,7 @@ const InspiredSection: React.FC<InspiredSectionProps> = ({ theme }) => {
         {/* Lighthouse Image */}
         <div className="my-4 inline-block">
           <img
-            src="/images/lighthouse-gift.png"
+            src={cloudinaryAssets.lighthouseGift}
             alt="Lighthouse logo"
             className="h-24 w-auto mx-auto"
           />

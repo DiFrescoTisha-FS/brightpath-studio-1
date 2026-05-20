@@ -4,6 +4,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import type { Theme } from '@/store/appStore';
 import BrightPathGradientTitle from '../BrightPathGradientTitle';
+import { cloudinaryAssets } from '@/data/cloudinaryAssets';
 
 // The Footer component now includes the "Inspired" section content
 interface FooterProps {
@@ -31,7 +32,7 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
         {/* Lighthouse Image */}
         <div className="my-4 inline-block">
           <img
-            src="/images/lighthouse-gift.png" // Update this path to your lighthouse image
+            src={cloudinaryAssets.lighthouseGift}
             alt="Lighthouse logo"
             className="h-24 w-auto mx-auto rounded-full pb-4 pt-1 border border-primary shadow-glow-primary"
           />

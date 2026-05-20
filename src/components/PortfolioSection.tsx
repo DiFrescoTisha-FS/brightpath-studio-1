@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useAppStore } from '@/store/appStore';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
+import { cloudinaryAssets } from '@/data/cloudinaryAssets';
 
 interface PortfolioItem {
   id: number;
@@ -17,7 +18,7 @@ const portfolioItems: PortfolioItem[] = [
     id: 1,
     title: 'AweStruck Intelligence',
     description: 'Custom React + TypeScript build with a performance-first architecture — Lighthouse mobile 26 → 100.',
-    imageUrl: '/images/case-studies/awestruck/card-hero.png',
+    imageUrl: cloudinaryAssets.awestruckCardHeroFull,
     href: '/portfolio/awestruck-intelligence',
     badge: 'Featured',
   },
@@ -25,14 +26,14 @@ const portfolioItems: PortfolioItem[] = [
     id: 2,
     title: 'Dale Tiffany Lighting',
     description: 'An elegant e-commerce site for a luxury lighting brand.',
-    imageUrl: '/images/DT-LONG.jpg',
+    imageUrl: cloudinaryAssets.daleTiffanyLongFull,
     href: '/portfolio',
   },
   {
     id: 3,
     title: 'Angel City Massage',
     description: 'WordPress modernization with a Lighthouse desktop lift from 62 to 99.',
-    imageUrl: '/images/ACM_HOME.png',
+    imageUrl: cloudinaryAssets.angelCityHomepage,
     href: '/portfolio',
   },
 ];

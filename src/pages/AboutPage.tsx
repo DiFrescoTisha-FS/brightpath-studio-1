@@ -4,6 +4,7 @@ import useTheme from "../hooks/useTheme";
 import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
 import BrightPathGradientButton from "@/components/BrightPathGradientButton.legacy";
 import { PageMeta } from "@/components/PageMeta";
+import { cloudinaryAssets } from "@/data/cloudinaryAssets";
 
 const AboutPage = () => {
   // Fetch theme internally via the custom hook
@@ -21,7 +22,7 @@ const AboutPage = () => {
       title: "The Lighthouse That Started It All",
       description:
         "At my graduation, one of my instructors gifted me a lighthouse, symbolizing guidance, resilience, and perseverance. It was a reminder that even in the darkest times, we can find our way forward. This symbol became the foundation for BrightPath Web Studio LLC, inspiring me to help businesses navigate the digital world with confidence and clarity.",
-      imageUrl: "/images/lighthouse-gift.png",
+      imageUrl: cloudinaryAssets.lighthouseGift,
       highlightColor: "#F2C94C",
     },
     {

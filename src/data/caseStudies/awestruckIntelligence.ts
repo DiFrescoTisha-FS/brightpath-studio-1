@@ -1,4 +1,5 @@
 import type { WebProjectCaseStudy } from '@/types/caseStudy';
+import { cloudinaryAssets } from '@/data/cloudinaryAssets';
 
 export const awestruckIntelligenceCaseStudy: WebProjectCaseStudy = {
   id: 'awestruck-intelligence',
@@ -13,7 +14,7 @@ export const awestruckIntelligenceCaseStudy: WebProjectCaseStudy = {
   liveUrl: 'https://iamawestruck.com',
   description:
     'A custom React + TypeScript site for AweStruck Intelligence — a Biblical Social and Emotional Learning (SEL) framework. Designed and engineered from scratch with a performance-first architecture that took Lighthouse mobile from 26 to 100.',
-  featuredImage: '/images/case-studies/awestruck/card-hero.png',
+  featuredImage: cloudinaryAssets.awestruckCardHeroFull,
   hoverImage: '/images/case-studies/awestruck/jjarm.png',
   heroImage: '/images/case-studies/awestruck/case-study-hero.png',
   tags: ['React', 'TypeScript', 'Vite', 'Performance', 'Custom Build'],

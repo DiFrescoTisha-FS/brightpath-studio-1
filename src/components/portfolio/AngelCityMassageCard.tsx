@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowRight, Smartphone, Palette, Gift } from 'lucide-react';
 import BrightPathGradientButton from '@/components/BrightPathGradientButton';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
+import { cloudinaryAssets } from '@/data/cloudinaryAssets';
 
 interface AngelCityMassageCardProps {
   onViewCaseStudy?: () => void;
@@ -26,7 +27,7 @@ export function AngelCityMassageCard({ onViewCaseStudy, className = '' }: AngelC
           }`}
         >
           <img
-            src="/images/ACM_HOME.png"
+            src={cloudinaryAssets.angelCityHomepage}
             alt="Angel City Massage Website"
             className="w-full h-full object-cover object-top"
           />

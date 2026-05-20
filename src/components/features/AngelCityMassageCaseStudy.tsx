@@ -8,6 +8,7 @@ import BrightPathGradientButton from "@/components/BrightPathGradientButton"
 import { useAppStore } from '@/store/appStore';
 import { trackPortfolioClick } from '@/utils/analytics';
 import { PageMeta } from '@/components/PageMeta';
+import { cloudinaryAssets } from '@/data/cloudinaryAssets';
 
 const AngelCityCaseStudy = () => {
   const { theme } = useAppStore();
@@ -72,7 +73,7 @@ const AngelCityCaseStudy = () => {
         <div className="w-full max-w-md mx-auto">
           <div className="overflow-hidden rounded-2xl shadow-xl bg-bp-light-bg-light dark:bg-bp-light-bg-dark">
             <img
-              src="/images/ACM_HOME.png"
+              src={cloudinaryAssets.angelCityHomepage}
               alt="Angel City Massage homepage preview"
               className="w-full h-64 object-cover object-top"
             />

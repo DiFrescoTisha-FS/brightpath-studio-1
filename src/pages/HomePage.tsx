@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
 import ClarityHero from "@/components/ClarityHero";
 import { PageMeta } from "@/components/PageMeta";
+import { cloudinaryAssets } from "@/data/cloudinaryAssets";
 
 // Lazy load heavy components to reduce critical path
 const ReviewWidget = React.lazy(() => import('../components/ReviewWidget'));
@@ -81,7 +82,7 @@ const BrandStorySection = ({ theme }: SectionProps) => (
         <div className="w-full h-80 bg-accent/10 rounded-lg flex items-center justify-center border border-accent/20">
           <div className="text-center">
             <img
-              src="/images/lh-5.jpeg"
+              src={cloudinaryAssets.lighthouseGraphic}
               alt="Lighthouse Graphic"
               className="h-auto w-full mx-auto mb-4 rounded-lg border border-primary/50 dark:shadow-glow-primary"
             />
