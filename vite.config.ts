@@ -23,7 +23,7 @@ function injectStaticHero(): Plugin {
       order: 'pre',
       handler(html: string) {
         const heroHtml = `
-<section class="hero-clarity relative min-h-screen flex items-center justify-center overflow-hidden">
+<section id="hero-clarity-static" class="hero-clarity relative min-h-screen flex items-center justify-center overflow-hidden">
   <div class="guiding-light"></div>
   <div class="horizon-glow"></div>
   <img src="/images/lighthouse-sillouette.svg" alt="" aria-hidden="true" class="lighthouse-silhouette" />

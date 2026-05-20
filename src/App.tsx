@@ -28,6 +28,24 @@ function ScrollToTop() {
   return null;
 }
 
+/**
+ * Hides the static homepage hero (#hero-clarity-static, injected into
+ * index.html by the brightpath-inject-static-hero plugin) on any route
+ * other than `/`. Without this, the static hero stays visible at the
+ * top of every page — /portfolio, /about, /contact all look like the
+ * homepage with mystery content scrolled below the fold.
+ */
+function StaticHeroRouteGate() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    const hero = document.getElementById('hero-clarity-static');
+    if (hero) {
+      hero.style.display = pathname === '/' ? '' : 'none';
+    }
+  }, [pathname]);
+  return null;
+}
+
 const App: React.FC = () => {
   const { theme } = useAppStore();
 
@@ -59,6 +77,7 @@ const App: React.FC = () => {
   return (
     <>
       <ScrollToTop />
+      <StaticHeroRouteGate />
       <AnalyticsTracker />
       {/* <GuidingLight size={30} glowScale={2} /> */}
       <Navbar theme={theme} />

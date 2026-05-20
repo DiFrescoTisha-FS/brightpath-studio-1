@@ -14,7 +14,7 @@
  */
 export default function ClarityHeroClassManifest() {
   return (
-    <section className="hero-clarity relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero-clarity-static" className="hero-clarity relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="guiding-light" />
       <div className="horizon-glow" />
       <img alt="" aria-hidden="true" className="lighthouse-silhouette" />
