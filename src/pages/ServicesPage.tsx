@@ -318,7 +318,7 @@ const ServicesPage: React.FC = () => {
             <div className="flex flex-col sm:flex-row items-baseline justify-between gap-2 mb-6">
               <h3 className="font-poppins font-bold text-2xl">Monthly Maintenance</h3>
               <div>
-                <span className="font-poppins font-bold text-3xl text-primary">$25</span>
+                <span className="font-poppins font-bold text-3xl text-primary">$100</span>
                 <span className="text-muted-foreground">/month</span>
               </div>
             </div>
