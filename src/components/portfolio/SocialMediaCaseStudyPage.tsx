@@ -178,8 +178,11 @@ export function SocialMediaCaseStudyPage({ caseStudy, onBack, theme = 'dark' }: 
         }
       >
         <div className="absolute inset-0 bg-black/55" aria-hidden="true" />
+        {/* Hero-to-page transition. Fades down to dark in BOTH themes; was
+            previously `to-background/95` which becomes near-pure white in
+            light theme and washes out the hero image. */}
         <div
-          className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/35 to-background/95"
+          className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/35 to-black/70 dark:to-background/95"
           aria-hidden="true"
         />
 
