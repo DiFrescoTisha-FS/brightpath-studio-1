@@ -377,7 +377,15 @@ const WebProjectCaseStudyPage = ({ caseStudy, onBack, theme }: WebProjectCaseStu
                 'Every section is fully responsive — breakpoint-tuned image delivery, mobile-tested layouts, and a static Hero injection that paints the LCP image before React even boots.'}
             </p>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 justify-items-center">
+            {/* Tighten column count to image count so 5 phones fit in
+                one row instead of wrapping a lone tile to row 2. Full
+                class names are listed below so Tailwind's content scan
+                catches them. */}
+            <div
+              className={`grid grid-cols-2 ${
+                mobileShowcase.images.length === 5 ? 'md:grid-cols-5' : 'md:grid-cols-4'
+              } gap-6 md:gap-8 justify-items-center`}
+            >
               {mobileShowcase.images.map((img, i) => (
                 <div key={i} className="flex flex-col items-center w-full max-w-[200px]">
                   <div
@@ -427,19 +435,32 @@ const WebProjectCaseStudyPage = ({ caseStudy, onBack, theme }: WebProjectCaseStu
             </BrightPathGradientTitle>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {screenshots.map((shot, i) => (
-                <figure key={i} className="rounded-xl overflow-hidden shadow-xl border border-gray-200 dark:border-primary/20">
-                  <img
-                    src={shot.after}
-                    alt={shot.label}
-                    className="w-full h-auto"
-                    loading="lazy"
-                  />
-                  <figcaption className="px-4 py-3 text-sm text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-[#1A2238]/50">
-                    {shot.label}
-                  </figcaption>
-                </figure>
-              ))}
+              {screenshots.map((shot, i) => {
+                // When the screenshot count is odd, the last item sits alone
+                // in a half-width column on sm+. Span both columns and cap
+                // its width to ~half (minus half the 1.5rem gap) so it
+                // centers cleanly under the row above.
+                const isOrphan =
+                  i === screenshots.length - 1 && screenshots.length % 2 === 1;
+                return (
+                  <figure
+                    key={i}
+                    className={`rounded-xl overflow-hidden shadow-xl border border-gray-200 dark:border-primary/20 ${
+                      isOrphan ? 'sm:col-span-2 sm:max-w-[calc(50%-0.75rem)] sm:mx-auto' : ''
+                    }`}
+                  >
+                    <img
+                      src={shot.after}
+                      alt={shot.label}
+                      className="w-full h-auto"
+                      loading="lazy"
+                    />
+                    <figcaption className="px-4 py-3 text-sm text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-[#1A2238]/50">
+                      {shot.label}
+                    </figcaption>
+                  </figure>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -600,7 +621,9 @@ const WebProjectCaseStudyPage = ({ caseStudy, onBack, theme }: WebProjectCaseStu
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="/contact">
-              <BrightPathGradientButton className="px-6 py-3 inline-flex items-center gap-2 text-primary-foreground font-medium rounded-md">
+              {/* h-12 overrides Shadcn Button's default h-10 so this matches
+                  the ghost button's natural height beside it. */}
+              <BrightPathGradientButton className="h-12 px-6 inline-flex items-center gap-2 text-primary-foreground font-medium rounded-md">
                 Start a project
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </BrightPathGradientButton>
@@ -608,10 +631,10 @@ const WebProjectCaseStudyPage = ({ caseStudy, onBack, theme }: WebProjectCaseStu
             {onBack && (
               <button
                 onClick={onBack}
-                className="px-6 py-3 inline-flex items-center gap-2 border border-primary/40 text-primary rounded-md hover:bg-primary/5 transition-colors"
+                className="h-12 px-6 inline-flex items-center justify-center gap-2 border border-primary/40 text-primary rounded-md hover:bg-primary/5 transition-colors"
               >
-                <ArrowLeft className="w-4 h-4" aria-hidden="true" />
                 See more work
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </button>
             )}
           </div>

@@ -2,6 +2,7 @@ export { DaleTiffanyCard } from './DaleTiffanyCard';
 export { DaleTiffanyCaseStudy } from './DaleTiffanyCaseStudy';
 export { AngelCityMassageCard } from './AngelCityMassageCard';
 export { AweStruckCard } from './AweStruckCard';
+export { BamvsthewrldCard } from './BamvsthewrldCard';
 
 // Social Media Components
 export { SocialMediaCard } from './SocialMediaCard';

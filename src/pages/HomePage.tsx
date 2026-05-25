@@ -37,9 +37,30 @@ const ServicesSection = ({ theme }: SectionProps) => {
     },
   ];
 
+  // Per-viewport background art direction. Phones get a portrait-oriented
+  // bg so the wide desktop composition doesn't crop badly.
+  const desktopBg = theme === 'dark'
+    ? cloudinaryAssets.homepageServicesBgDark
+    : cloudinaryAssets.homepageServicesBgLight;
+  const mobileBg = theme === 'dark'
+    ? cloudinaryAssets.homepageServicesBgDarkMobile
+    : cloudinaryAssets.homepageServicesBgLightMobile;
+
   return (
-    <section id="services" className="bg-services-bg py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section id="services" className="relative py-32 md:py-40 overflow-hidden">
+      {/* Mobile bg layer — visible below md breakpoint */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${mobileBg})` }}
+      />
+      {/* Desktop bg layer — visible at md and up */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat hidden md:block"
+        style={{ backgroundImage: `url(${desktopBg})` }}
+      />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <BrightPathGradientTitle as="h2" className="font-poppins font-bold text-services mb-4" gradientWords={["Help"]}>
           How I Help Businesses
         </BrightPathGradientTitle>
@@ -135,8 +156,27 @@ const HomePage = () => {
         <Suspense fallback={<div className="py-20 text-center text-muted-foreground">Loading portfolio...</div>}>
           <PortfolioSection />
         </Suspense>
-        <section id="reviews" className="py-20">
-          <div className="container mx-auto px-4 text-center">
+        <section
+          id="reviews"
+          className="relative py-32 md:py-40 overflow-hidden"
+        >
+          {/* Mobile bg layer — visible below md breakpoint */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat md:hidden"
+            style={{
+              backgroundImage: `url(${theme === 'dark' ? cloudinaryAssets.homepageTestimonialsBgDarkMobile : cloudinaryAssets.homepageTestimonialsBgLightMobile})`,
+            }}
+          />
+          {/* Desktop bg layer — visible at md and up */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat hidden md:block"
+            style={{
+              backgroundImage: `url(${theme === 'dark' ? cloudinaryAssets.homepageTestimonialsBgDark : cloudinaryAssets.homepageTestimonialsBgLight})`,
+            }}
+          />
+          <div className="relative container mx-auto px-4 text-center">
             <BrightPathGradientTitle as="h2" className="font-bold font-poppins mb-12"
               gradientWords={["Testimonials"]}
             >

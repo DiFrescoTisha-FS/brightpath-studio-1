@@ -6,16 +6,17 @@ import {
   DaleTiffanyCaseStudy,
   AngelCityMassageCard,
   AweStruckCard,
+  BamvsthewrldCard,
   WebProjectCaseStudyPage,
 } from '../components/portfolio';
 import AngelCityCaseStudy from '../components/features/AngelCityMassageCaseStudy';
-import { awestruckIntelligenceCaseStudy } from '@/data/caseStudies';
+import { awestruckIntelligenceCaseStudy, bamvsthewrldCaseStudy } from '@/data/caseStudies';
 import { useAppStore } from '@/store/appStore';
 import { useParams } from "react-router-dom";
 import { trackEvent } from '@/utils/analytics';
 import { PageMeta } from '@/components/PageMeta';
 
-type ViewState = 'grid' | 'dale-tiffany' | 'angel-city' | 'awestruck';
+type ViewState = 'grid' | 'dale-tiffany' | 'angel-city' | 'awestruck' | 'bamvsthewrld';
 
 export default function PortfolioDemoPage() {
   const { theme } = useAppStore();
@@ -64,6 +65,19 @@ export default function PortfolioDemoPage() {
     );
   }
 
+  if (view === 'bamvsthewrld') {
+    return (
+      <WebProjectCaseStudyPage
+        caseStudy={bamvsthewrldCaseStudy}
+        onBack={() => {
+          setView('grid');
+          window.scrollTo(0, 0);
+        }}
+        theme={theme}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background pt-32 pb-16">
       <PageMeta
@@ -98,6 +112,16 @@ export default function PortfolioDemoPage() {
             setView('angel-city');
             window.scrollTo(0, 0);
           }} />
+          {/* 4th card wraps to row 2 on lg; col-start-2 centers it under
+              the Dale Tiffany column. On md (2-col) it lands naturally
+              in row 2 col 2 next to Angel City. */}
+          <BamvsthewrldCard
+            className="lg:col-start-2"
+            onViewCaseStudy={() => {
+              setView('bamvsthewrld');
+              window.scrollTo(0, 0);
+            }}
+          />
         </div>
 
         <div className="text-center mt-16">

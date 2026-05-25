@@ -36,6 +36,13 @@ const portfolioItems: PortfolioItem[] = [
     imageUrl: cloudinaryAssets.angelCityHomepage,
     href: '/portfolio',
   },
+  {
+    id: 4,
+    title: 'Bamvsthewrld',
+    description: 'Full-stack MERN platform for music artist — immersive 3D, Firebase auth, embedded media.',
+    imageUrl: cloudinaryAssets.bamvsthewrldScrollFull,
+    href: '/portfolio/bamvsthewrld',
+  },
 ];
 
 const PortfolioSection = () => {
@@ -53,7 +60,7 @@ const PortfolioSection = () => {
           Hover over the cards to explore each project
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {portfolioItems.map((item) => (
             <Link to={item.href} key={item.id} className="block">
               <motion.div
@@ -69,24 +76,27 @@ const PortfolioSection = () => {
                   </div>
                 )}
 
-                <div className="h-[400px] w-full overflow-hidden">
+                <div className="h-[240px] w-full overflow-hidden">
                   <motion.img
                     src={item.imageUrl}
                     alt={item.title}
                     className="w-full h-auto"
-                    whileHover={{ y: -((650 * 100) / 400 - 100) + '%' }}
+                    // Scroll-reveal on hover. -70% of image height shifts the
+                    // bottom portion of long scroll captures into view; short/
+                    // landscape images over-scroll but that's a minor quirk.
+                    whileHover={{ y: '-70%' }}
                     transition={{ duration: 3, ease: 'easeInOut' }}
                   />
                 </div>
 
-                <div className="p-6">
+                <div className="p-4">
                   <BrightPathGradientTitle
                     as="h5"
-                    gradientWords={["AweStruck", "Intelligence", "Dale", "Tiffany", "Angel", "City"]}
-                    className="font-poppins font-semibold mb-2">
+                    gradientWords={["AweStruck", "Intelligence", "Dale", "Tiffany", "Angel", "City", "Bamvsthewrld"]}
+                    className="font-poppins font-semibold mb-1 text-base">
                     {item.title}
                   </BrightPathGradientTitle>
-                  <p className="card-subheading font-lato text-muted-foreground">
+                  <p className="font-lato text-xs text-muted-foreground leading-snug">
                     {item.description}
                   </p>
                 </div>
