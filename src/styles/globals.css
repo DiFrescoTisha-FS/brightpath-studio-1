@@ -148,15 +148,18 @@
     @apply animate-pulse bg-muted rounded;
   }
   :root {
-    /* Light mode image URL */
-    --timeline-bg-light: url('/images/gray-grad-2.png'); 
-    /* Dark mode image URL */
-    --timeline-bg-dark: url('/images/blue-grad-2.png'); 
+    /* Timeline section bg — used by AboutPage and MultiPageFlowSection.
+       Cloudinary URLs live here (not in cloudinaryAssets.ts) because CSS
+       can't import from TS. Transforms mirror buildCloudinaryUrl defaults:
+       f_auto/q_auto:good/w_1920/c_limit/dpr_auto. */
+    --timeline-bg-light: url('https://res.cloudinary.com/djqw1de3s/image/upload/f_auto/q_auto:good/w_1920/c_limit/dpr_auto/brightpath/background-images/2FA7BEB5-2F9F-4CA6-A6AC-312BD3DEF319_rydpdh.png');
+    --timeline-bg-dark: url('https://res.cloudinary.com/djqw1de3s/image/upload/f_auto/q_auto:good/w_1920/c_limit/dpr_auto/brightpath/background-images/30C31BFE-DFC0-4B78-8092-B0977853A8B0_cspwa9.png');
   }
-  
+
   .dark {
-    /* Tailwind applies .dark class in dark mode, swapping the variable */
-    --timeline-bg-light: url('/images/blue-grad-2.png'); 
+    /* Defensive: if .dark is applied but a component still reads the
+       "light" variable, fall through to the dark-theme image. */
+    --timeline-bg-light: url('https://res.cloudinary.com/djqw1de3s/image/upload/f_auto/q_auto:good/w_1920/c_limit/dpr_auto/brightpath/background-images/30C31BFE-DFC0-4B78-8092-B0977853A8B0_cspwa9.png');
   }
 }
 
