@@ -110,13 +110,13 @@ const ServicesPage: React.FC = () => {
     fetchCards();
   }, []);
 
-  const tintedSectionBg = theme === 'dark' ? 'bg-[#273442]' : 'bg-gray-100';
+  const tintedSectionBg = theme === 'dark' ? 'bg-[#273442]/90' : 'bg-gray-100/90';
   const cardBg = theme === 'dark'
     ? 'bg-[#1A2238] border border-primary/20 shadow-glow-primary'
     : 'bg-white border border-primary/50 shadow-xl';
 
   return (
-    <>
+    <div style={LIGHTHOUSE_BG_STYLE}>
       <PageMeta {...SERVICES_META} />
 
       {/* === HERO === */}
@@ -253,15 +253,15 @@ const ServicesPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {INCLUDED.map((item) => {
               const Icon = item.icon;
               return (
-                <div key={item.title} className={`p-6 rounded-lg ${cardBg}`}>
+                <div key={item.title} className={`p-6 pr-8 rounded-lg ${cardBg}`}>
                   <div className="flex items-start gap-4">
-                    <Icon className="h-6 w-6 text-primary flex-shrink-0 mt-1" aria-hidden="true" />
+                    <Icon className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" aria-hidden="true" />
                     <div>
-                      <h3 className="font-poppins font-semibold mb-2 text-foreground">{item.title}</h3>
+                      <h3 className="font-poppins font-semibold text-sm mb-2 text-primary">{item.title}</h3>
                       <p className="font-lato text-sm text-muted-foreground leading-relaxed">{item.description}</p>
                     </div>
                   </div>
@@ -273,7 +273,7 @@ const ServicesPage: React.FC = () => {
       </section>
 
       {/* === TECH STACK === */}
-      <section className="py-20 px-4 bg-background">
+      <section className={`py-20 px-4 ${theme === 'dark' ? 'bg-[#1A2238]/90' : 'bg-white/90'}`}>
         <div className="container mx-auto max-w-4xl text-center">
           <BrightPathGradientTitle
             as="h2"
@@ -371,7 +371,7 @@ const ServicesPage: React.FC = () => {
           </Link>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

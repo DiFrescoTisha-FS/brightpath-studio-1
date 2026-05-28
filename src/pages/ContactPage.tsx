@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin } from 'lucide-react';
-import axios from 'axios';
 import { useAppStore } from '@/store/appStore'; // Import the store
 import BrightPathGradientTitle from '@/components/BrightPathGradientTitle';
 import { PageMeta } from '@/components/PageMeta';
@@ -22,12 +21,22 @@ declare global {
   }
 }
 
-// API URL Configuration:
-// - In production and `netlify dev`: Uses same-origin paths redirected by netlify.toml
-// - For alternate backends, set VITE_API_URL explicitly
-const API_BASE_URL = import.meta.env.VITE_API_URL || '';
-const CONTACT_FORM_URL = `${API_BASE_URL}/api/submit-contact-form`;
+// Google Apps Script endpoint for contact form submissions
+// Saves to Google Sheet + sends email notification to Google Workspace
+const CONTACT_FORM_URL = 'https://script.google.com/macros/s/AKfycbyW1GDPbHkKNiwAM5iFnydDKq8y76bz3Gk3t9BoNGL7A3KqDmHZ_J-6AS3XFKuY2dgm/exec';
 
+
+// Background images by theme and device
+const BG_IMAGES = {
+  light: {
+    desktop: 'https://res.cloudinary.com/djqw1de3s/image/upload/v1779684787/brightpath/background-images/09733844-51EB-4FED-9D45-96D27F6B5721_h0pgqv.png',
+    mobile: 'https://res.cloudinary.com/djqw1de3s/image/upload/v1779713339/brightpath/background-images/DD66B962-520A-4DB7-B601-AF7B05C10EA4_x49gkb.png',
+  },
+  dark: {
+    desktop: 'https://res.cloudinary.com/djqw1de3s/image/upload/v1779684835/brightpath/background-images/39D0F6A1-1E44-47D3-AF62-76DA60A068D2_vrt9t4.png',
+    mobile: 'https://res.cloudinary.com/djqw1de3s/image/upload/v1779711137/brightpath/background-images/775767A6-F757-46B8-BEDB-07E2CAFAE02A_tzca8a.png',
+  },
+};
 
 const ContactPage: React.FC = () => {
   const { theme } = useAppStore(); // Get the current theme
@@ -36,6 +45,7 @@ const ContactPage: React.FC = () => {
     email: '',
     message: ''
   });
+  const [honeypot, setHoneypot] = useState(''); // Spam protection - bots fill this, humans don't see it
   const [loading, setLoading] = useState<boolean>(false);
   const [status, setStatus] = useState<'success' | 'error' | null>(null);
 
@@ -52,25 +62,43 @@ const ContactPage: React.FC = () => {
     setLoading(true);
     setStatus(null); // Reset status on new submission
 
-    try {
-      // The crucial step: send the form data to our new backend API endpoint
-      const response = await axios.post(CONTACT_FORM_URL, formData);
-
-      if (response.status === 200) {
-        // This allows Google Analytics to track successful contact form conversions.
-        if (typeof window !== 'undefined' && window.gtag) {
-          window.gtag('event', 'contact_submit', {
-            form_name: 'contact_form',
-            page_location: window.location.href,
-            page_title: document.title
-          });
-        }
-
+    // Honeypot spam check - if filled, a bot submitted the form
+    // Silently "succeed" without actually sending to avoid tipping off the bot
+    if (honeypot) {
+      setTimeout(() => {
         setStatus('success');
-        setFormData({ fullName: '', email: '', message: '' }); // Clear the form
-      } else {
-        setStatus('error');
+        setFormData({ fullName: '', email: '', message: '' });
+        setLoading(false);
+      }, 1000); // Fake delay to seem real
+      return;
+    }
+
+    try {
+      // Send to Google Apps Script using fetch with no-cors mode
+      // This avoids CORS preflight issues with Google Apps Script
+      await fetch(CONTACT_FORM_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Required for Google Apps Script
+        headers: {
+          'Content-Type': 'text/plain', // Avoids preflight
+        },
+        body: JSON.stringify(formData),
+      });
+
+      // With no-cors mode, we can't read the response, so we assume success
+      // if no network error was thrown. The Apps Script logs to Sheet + sends email.
+
+      // Track in Google Analytics
+      if (typeof window !== 'undefined' && window.gtag) {
+        window.gtag('event', 'contact_submit', {
+          form_name: 'contact_form',
+          page_location: window.location.href,
+          page_title: document.title
+        });
       }
+
+      setStatus('success');
+      setFormData({ fullName: '', email: '', message: '' }); // Clear the form
     } catch (error) {
       console.error('Form submission error:', error);
       setStatus('error');
@@ -88,15 +116,31 @@ const ContactPage: React.FC = () => {
     cardBorder: theme === 'dark' ? 'border-primary' : 'border-gray-200',
     inputBg: theme === 'dark' ? 'bg-midnight' : 'bg-gray-100',
     inputBorder: theme === 'dark' ? 'border-stone/30' : 'border-gray-300',
-    inputPlaceholder: theme === 'dark' ? 'placeholder:text-secondary' : 'placeholder:text-gray-600',
+    inputText: 'text-gray-900', // Dark text for readability in both themes
+    inputPlaceholder: theme === 'dark' ? 'placeholder:text-gray-500' : 'placeholder:text-gray-500',
     iconColor: theme === 'dark' ? 'text-primary' : 'text-primary',
     goldText: theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-dark',
     textBoxBG: theme === 'dark' ? 'bg-gray-700' : 'bg-[#f9fafb]'
   };
 
-  return (
+  const bgImages = theme === 'dark' ? BG_IMAGES.dark : BG_IMAGES.light;
 
-    <div className={`min-h-screen ${themeClasses.bg} ${themeClasses.text} p-4`}>
+  return (
+    <>
+      {/* Mobile background */}
+      <style>{`
+        @media (max-width: 767px) {
+          .contact-page-bg {
+            background-image: url('${bgImages.mobile}');
+          }
+        }
+        @media (min-width: 768px) {
+          .contact-page-bg {
+            background-image: url('${bgImages.desktop}');
+          }
+        }
+      `}</style>
+      <div className="contact-page-bg min-h-screen p-4 bg-cover bg-center bg-no-repeat bg-fixed">
       <PageMeta
         title="Contact"
         description="Start a conversation with BrightPath Web Studio. Tisha Di Fresco builds modern, performant websites — get in touch to discuss your project."
@@ -115,11 +159,11 @@ const ContactPage: React.FC = () => {
 
       {/* Main Content Grid */}
       <div className="max-w-6xl mx-auto px-4 pb-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
 
           {/* Left Column - Contact Info */}
-          <div className="space-y-8">
-            <div className={`${themeClasses.cardBg} p-8 rounded-lg border ${themeClasses.cardBorder}`}>
+          <div className="flex flex-col gap-8">
+            <div className={`${themeClasses.cardBg} p-8 rounded-lg border ${themeClasses.cardBorder} flex-1`}>
               <BrightPathGradientTitle as="h2" className="gradient-text-dark text-2xl font-poppins font-semibold mb-6"
                 textColor="text-neutral-800 dark:gray-200"
                 gradientWords={["Touch"]}
@@ -215,6 +259,20 @@ const ContactPage: React.FC = () => {
             </BrightPathGradientTitle>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Honeypot field - hidden from humans, bots will fill it */}
+              <div className="absolute -left-[9999px]" aria-hidden="true">
+                <label htmlFor="website">Website</label>
+                <input
+                  type="text"
+                  id="website"
+                  name="website"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
+
               {/* Full Name */}
               <div>
                 <label htmlFor="fullName" className="mb-1">
@@ -232,7 +290,7 @@ const ContactPage: React.FC = () => {
                   value={formData.fullName}
                   onChange={handleInputChange}
                   required
-                  className={`w-full px-4 py-3 ${themeClasses.inputBg} border ${themeClasses.inputBorder} rounded-lg ${themeClasses.textMuted} font-lato ${themeClasses.inputPlaceholder} focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors`}
+                  className={`w-full px-4 py-3 ${themeClasses.inputBg} border ${themeClasses.inputBorder} rounded-lg ${themeClasses.inputText} font-lato ${themeClasses.inputPlaceholder} focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors`}
                   placeholder="Enter your full name"
                 />
               </div>
@@ -276,7 +334,7 @@ const ContactPage: React.FC = () => {
                   onChange={handleInputChange}
                   required
                   rows={6}
-                  className={`w-full px-4 py-3 ${themeClasses.inputBg} border ${themeClasses.inputBorder} rounded-lg ${themeClasses.textMuted} font-lato ${themeClasses.inputPlaceholder} focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors resize-vertical`}
+                  className={`w-full px-4 py-3 ${themeClasses.inputBg} border ${themeClasses.inputBorder} rounded-lg ${themeClasses.inputText} font-lato ${themeClasses.inputPlaceholder} focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors resize-vertical`}
                   placeholder="Tell us about your project and how we can help illuminate your path to success..."
                 />
               </div>
@@ -312,7 +370,8 @@ const ContactPage: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 
