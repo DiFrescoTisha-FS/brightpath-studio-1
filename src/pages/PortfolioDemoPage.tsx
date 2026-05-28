@@ -16,6 +16,18 @@ import { useParams } from "react-router-dom";
 import { trackEvent } from '@/utils/analytics';
 import { PageMeta } from '@/components/PageMeta';
 
+// Background images by theme and device
+const BG_IMAGES = {
+  light: {
+    desktop: 'https://res.cloudinary.com/djqw1de3s/image/upload/brightpath/background-images/773F3E3F-CEF6-4DA0-BB15-AC025AEAA336_qhyuw3',
+    mobile: 'https://res.cloudinary.com/djqw1de3s/image/upload/brightpath/background-images/E163A136-43C0-4F7A-A3BC-D9F60A029A6E_nonghd',
+  },
+  dark: {
+    desktop: 'https://res.cloudinary.com/djqw1de3s/image/upload/brightpath/background-images/A8DC3DBB-E83E-4F6D-8BE0-EB82145DF29A_cyrlwi',
+    mobile: 'https://res.cloudinary.com/djqw1de3s/image/upload/brightpath/background-images/786F78DB-EC9D-478E-9F21-52905E7BEB81_rsel8f',
+  },
+};
+
 type ViewState = 'grid' | 'dale-tiffany' | 'angel-city' | 'awestruck' | 'bamvsthewrld';
 
 export default function PortfolioDemoPage() {
@@ -78,8 +90,24 @@ export default function PortfolioDemoPage() {
     );
   }
 
+  const bgImages = theme === 'dark' ? BG_IMAGES.dark : BG_IMAGES.light;
+
   return (
-    <div className="min-h-screen bg-background pt-32 pb-16">
+    <>
+      {/* Responsive background images */}
+      <style>{`
+        @media (max-width: 767px) {
+          .portfolio-page-bg {
+            background-image: url('${bgImages.mobile}');
+          }
+        }
+        @media (min-width: 768px) {
+          .portfolio-page-bg {
+            background-image: url('${bgImages.desktop}');
+          }
+        }
+      `}</style>
+      <div className="portfolio-page-bg min-h-screen pt-32 pb-16 bg-cover bg-center bg-no-repeat md:bg-fixed">
       <PageMeta
         title="Portfolio"
         description="Selected work from BrightPath Web Studio — custom React builds, WordPress modernizations, performance optimizations, and social media content systems."
@@ -133,6 +161,7 @@ export default function PortfolioDemoPage() {
           </Link>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

@@ -140,7 +140,7 @@ const ContactPage: React.FC = () => {
           }
         }
       `}</style>
-      <div className="contact-page-bg min-h-screen p-4 bg-cover bg-center bg-no-repeat bg-fixed">
+      <div className="contact-page-bg min-h-screen p-4 bg-cover bg-center bg-no-repeat md:bg-fixed">
       <PageMeta
         title="Contact"
         description="Start a conversation with BrightPath Web Studio. Tisha Di Fresco builds modern, performant websites — get in touch to discuss your project."

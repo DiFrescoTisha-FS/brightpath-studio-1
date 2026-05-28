@@ -128,7 +128,7 @@ const AboutPage = () => {
       {/* --- TIMELINE SECTION --- */}
       <motion.section
         id="story"
-        className="relative py-20 px-8 min-h-screen flex flex-col justify-center bg-cover bg-center bg-fixed"
+        className="relative py-20 px-8 min-h-screen flex flex-col justify-center bg-cover bg-center md:bg-fixed"
         style={{
           // This remains correct based on your initial intention for the timeline background
           backgroundImage: theme === 'light'

@@ -19,7 +19,7 @@ const MultiPageFlowSection: React.FC<MultiPageFlowSectionProps> = ({ theme }) =>
     return (
 
         <section
-            className="relative min-h-screen py-32 px-6 flex flex-col justify-center bg-cover bg-center bg-fixed transition-colors duration-300"
+            className="relative min-h-screen py-32 px-6 flex flex-col justify-center bg-cover bg-center md:bg-fixed transition-colors duration-300"
             style={{
                 backgroundImage: bgVar,
                 backgroundColor: fallbackBg,

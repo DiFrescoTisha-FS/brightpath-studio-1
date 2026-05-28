@@ -32,11 +32,11 @@ const SERVICES_META = {
 };
 
 // Lighthouse parallax background applied to hero, process, and CTA sections.
+// Note: backgroundAttachment: fixed doesn't work on iOS, so we use md:bg-fixed class instead
 const LIGHTHOUSE_BG_STYLE: React.CSSProperties = {
   backgroundImage: "url('/images/BG-Lighthouse-Desktop.jpeg')",
   backgroundSize: "cover",
   backgroundPosition: "center",
-  backgroundAttachment: "fixed",
 };
 
 const SERVICES = [
@@ -116,12 +116,12 @@ const ServicesPage: React.FC = () => {
     : 'bg-white border border-primary/50 shadow-xl';
 
   return (
-    <div style={LIGHTHOUSE_BG_STYLE}>
+    <div style={LIGHTHOUSE_BG_STYLE} className="md:bg-fixed">
       <PageMeta {...SERVICES_META} />
 
       {/* === HERO === */}
       <section
-        className="relative min-h-[55vh] flex items-center justify-center px-4 pt-36 pb-20 overflow-hidden"
+        className="relative min-h-[55vh] flex items-center justify-center px-4 pt-36 pb-20 overflow-hidden md:bg-fixed"
         style={LIGHTHOUSE_BG_STYLE}
       >
         <div className="absolute inset-0 bg-black/55" aria-hidden="true" />
@@ -187,7 +187,7 @@ const ServicesPage: React.FC = () => {
 
       {/* === OUR PROCESS (existing — async-loaded FlipCards) === */}
       <section
-        className="relative py-20 px-4 overflow-hidden"
+        className="relative py-20 px-4 overflow-hidden md:bg-fixed"
         style={LIGHTHOUSE_BG_STYLE}
       >
         <div className="absolute inset-0 bg-black/55" aria-hidden="true" />
@@ -347,7 +347,7 @@ const ServicesPage: React.FC = () => {
 
       {/* === CTA === */}
       <section
-        className="relative py-24 px-4 overflow-hidden"
+        className="relative py-24 px-4 overflow-hidden md:bg-fixed"
         style={LIGHTHOUSE_BG_STYLE}
       >
         <div className="absolute inset-0 bg-black/65" aria-hidden="true" />
