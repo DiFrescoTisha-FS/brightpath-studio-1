@@ -20,12 +20,12 @@ export const awestruckIntelligenceCaseStudy: WebProjectCaseStudy = {
   tags: ['React', 'TypeScript', 'Vite', 'Performance', 'Custom Build'],
 
   overview:
-    'AweStruck Intelligence needed a public-facing home for a brand-new Biblical SEL curriculum. The site had to feel space-themed and cinematic, host interactive content (an audio-driven AMP wheel, video walkthroughs, decision-tree cards), and load fast on the low-end mobile devices that make up most of the audience.',
+    'AweStruck Intelligence needed a public-facing home for a brand-new Biblical SEL curriculum. The site had to feel space-themed and cinematic, host interactive content (an audio-driven AMP wheel, video walkthroughs, decision-tree cards), and perform well despite heavy use of scroll animations throughout the homepage.',
 
   goals: [
     'Tell the story of a Biblical SEL framework with a custom, on-brand visual system',
     'Support interactive content: audio playback per pillar, video walkthroughs, decision cards',
-    'Hit production-grade performance on mobile (the primary audience device)',
+    'Hit production-grade performance despite heavy scroll animations throughout the homepage',
     'Stay maintainable for a solo developer post-handoff',
   ],
 
@@ -85,8 +85,8 @@ export const awestruckIntelligenceCaseStudy: WebProjectCaseStudy = {
   },
 
   challenge: [
-    'Robin had a fully-developed Biblical SEL curriculum and no website to host it. She needed a public-facing site that felt distinctive — not a template — and could carry interactive content like an audio-driven AMP wheel, video walkthroughs, and decision-tree cards.',
-    'The audience is mostly on mobile devices, often low-end. So performance was a hard requirement, not a polish item. The first build came in at a Lighthouse mobile score of 26 — unacceptable for the launch target.',
+    'Robin had the first domain of her Biblical SEL curriculum — Josiah\'s Journey — ready to share, but no website to host it. She needed a public-facing site that felt distinctive — not a template — and could carry interactive content like an audio-driven AMP wheel, video walkthroughs, and decision-tree cards.',
+    'The primary audience is homeschool moms browsing on laptops and desktops, but the animation-heavy homepage pushed performance to its limits. The first build came in at a Lighthouse mobile score of 26 — unacceptable for the launch target.',
   ],
 
   approach: [
