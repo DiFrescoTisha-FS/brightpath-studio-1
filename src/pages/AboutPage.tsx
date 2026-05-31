@@ -6,6 +6,41 @@ import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
 import BrightPathGradientButton from "@/components/BrightPathGradientButton.legacy";
 import { PageMeta } from "@/components/PageMeta";
 import { cloudinaryAssets } from "@/data/cloudinaryAssets";
+import { Heart, MessageCircle, Users, Sparkles } from "lucide-react";
+
+const SKILLS = [
+  // Frontend
+  "React", "TypeScript", "JavaScript", "Vite", "Tailwind CSS", "Framer Motion", "HTML5", "CSS3",
+  // CMS & WordPress
+  "WordPress", "Divi", "ACF",
+  // Tools & Services
+  "Cloudinary", "Netlify", "Git", "GitHub", "Figma",
+  // Specializations
+  "Performance Optimization", "Lighthouse", "Core Web Vitals", "Responsive Design", "Accessibility", "SEO", "GA4",
+];
+
+const VALUES = [
+  {
+    title: "Vision-Driven",
+    description: "I take time to deeply understand your business goals and brand identity. Your website should be an authentic extension of your vision, not a generic template.",
+    icon: Heart,
+  },
+  {
+    title: "Clear Communication",
+    description: "No jargon, no disappearing acts. I keep you informed at every step with regular updates, quick responses, and explanations that actually make sense.",
+    icon: MessageCircle,
+  },
+  {
+    title: "True Collaboration",
+    description: "Your input matters throughout the process. I see every project as a partnership where your feedback shapes the final result.",
+    icon: Users,
+  },
+  {
+    title: "Craft & Quality",
+    description: "Every detail counts — from pixel-perfect designs to optimized performance. I build sites that look great and work flawlessly.",
+    icon: Sparkles,
+  },
+];
 
 const AboutPage = () => {
   // Fetch theme internally via the custom hook
@@ -249,6 +284,98 @@ const AboutPage = () => {
               </div>
             </motion.div>
           ))}
+        </div>
+      </motion.section>
+
+      {/* --- SKILLS SECTION --- */}
+      <motion.section
+        className={`py-12 md:py-20 px-4 md:px-8 ${theme === 'light' ? 'bg-gray-100' : 'bg-[#1A2238]'}`}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="container mx-auto max-w-4xl text-center">
+          <BrightPathGradientTitle
+            as="h2"
+            className="font-poppins font-bold mb-4 md:mb-6 text-2xl md:text-3xl lg:text-4xl"
+            gradientWords={["Expertise"]}
+          >
+            Skills & Expertise
+          </BrightPathGradientTitle>
+          <p className="font-lato text-muted-foreground text-sm md:text-lg mb-8 md:mb-10 max-w-2xl mx-auto leading-normal md:leading-relaxed">
+            The tools and technologies I use to bring your vision to life.
+          </p>
+          <div className="flex flex-wrap justify-center gap-2 md:gap-3">
+            {SKILLS.map((skill) => (
+              <motion.span
+                key={skill}
+                className={`px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium border border-primary/40 ${
+                  theme === 'dark' ? 'bg-[#273442] text-foreground' : 'bg-white text-foreground'
+                }`}
+                whileHover={{ scale: 1.05, borderColor: 'rgba(242, 201, 76, 0.8)' }}
+                transition={{ duration: 0.2 }}
+              >
+                {skill}
+              </motion.span>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* --- VALUES SECTION --- */}
+      <motion.section
+        className={`py-12 md:py-20 px-4 md:px-8 ${theme === 'light' ? 'bg-gray-200' : 'bg-[#273442]'}`}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="container mx-auto max-w-5xl">
+          <div className="text-center mb-8 md:mb-12">
+            <BrightPathGradientTitle
+              as="h2"
+              className="font-poppins font-bold mb-4 md:mb-6 text-2xl md:text-3xl lg:text-4xl"
+              gradientWords={["Me"]}
+            >
+              Why Work With Me
+            </BrightPathGradientTitle>
+            <p className="font-lato text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto leading-normal md:leading-relaxed">
+              More than just code — it's about building something meaningful together.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            {VALUES.map((value, index) => {
+              const Icon = value.icon;
+              return (
+                <motion.div
+                  key={value.title}
+                  className={`p-5 md:p-6 rounded-lg ${
+                    theme === 'dark'
+                      ? 'bg-[#1A2238] border border-primary/20 shadow-glow-primary'
+                      : 'bg-white border border-primary/50 shadow-xl'
+                  }`}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+                >
+                  <div className="flex items-start gap-4">
+                    <Icon className="h-6 w-6 md:h-8 md:w-8 text-primary flex-shrink-0 mt-1" aria-hidden="true" />
+                    <div>
+                      <h3 className="font-poppins font-semibold text-base md:text-lg mb-2 text-foreground">
+                        {value.title}
+                      </h3>
+                      <p className="font-lato text-sm md:text-base text-muted-foreground leading-relaxed">
+                        {value.description}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </motion.section>
 
