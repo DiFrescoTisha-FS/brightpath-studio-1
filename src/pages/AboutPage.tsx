@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import useTheme from "../hooks/useTheme";
 import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
@@ -9,6 +10,26 @@ import { cloudinaryAssets } from "@/data/cloudinaryAssets";
 const AboutPage = () => {
   // Fetch theme internally via the custom hook
   const { theme } = useTheme();
+
+  // Detect mobile for conditional grayscale effect
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Scroll-based grayscale transition for hero (desktop only)
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  // Map scroll progress (0-0.5) to grayscale (100%-0%)
+  const grayscale = useTransform(scrollYProgress, [0, 0.5], [100, 0]);
+  // Create reactive filter string for Framer Motion
+  const grayscaleFilter = useMotionTemplate`grayscale(${grayscale}%)`;
 
   const timelineEvents = [
     {
@@ -35,7 +56,7 @@ const AboutPage = () => {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <PageMeta
         title="About"
         description="Meet Tisha Di Fresco — Full Sail valedictorian, front-end developer, and founder of BrightPath Web Studio. Her journey from creativity to code, and the story behind the studio."
@@ -60,13 +81,14 @@ const AboutPage = () => {
       />
       {/* --- HERO SECTION --- */}
       <motion.section
-        className="min-h-screen flex items-center justify-center p-8 pt-28 bg-cover bg-center relative"
+        ref={heroRef}
+        className="min-h-screen flex items-center justify-center p-4 sm:p-8 pt-28 bg-cover bg-center relative"
         style={{
           backgroundImage: "url('/images/Mountains.jpeg')",
+          // Grayscale scroll effect only on desktop; mobile shows full color
+          ...(isMobile ? {} : { filter: grayscaleFilter }),
         }}
-        initial={{ filter: "grayscale(100%)" }}
-        animate={{ filter: "grayscale(100%)" }}
-        whileHover={{ filter: "grayscale(0%)" }}
+        whileHover={isMobile ? undefined : { filter: "grayscale(0%)" }}
         transition={{
           duration: 0.8,
           ease: "easeInOut",
@@ -83,11 +105,11 @@ const AboutPage = () => {
         <div className="container mx-auto grid md:grid-cols-2 gap-8 items-center relative z-0">
           {/* Left Column: Text Content */}
           <div className="text-white text-center md:text-left">
-            <p className="font-lato text-lg mb-2 tracking-wider">ABOUT ME</p>
-            <h1 className="font-poppins text-5xl md:text-6xl font-bold mb-6">
-              TISHA DI FRESCO
+            <p className="font-lato text-sm md:text-lg mb-2 tracking-wider">ABOUT ME</p>
+            <h1 className="font-poppins text-3xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 text-primary drop-shadow-lg">
+              TISHA <span className="whitespace-nowrap">DI FRESCO</span>
             </h1>
-            <p className="font-lato text-xl mb-8 leading-relaxed">
+            <p className="font-lato text-sm md:text-xl mb-6 md:mb-8 leading-normal md:leading-relaxed">
               Like the mountains that shape my home, my journey in web
               development and design is built on strong foundations and endless
               creativity.
@@ -98,7 +120,7 @@ const AboutPage = () => {
                   behavior: 'smooth',
                 });
               }}
-              className="bg-primary text-white font-bold font-lato py-3 px-8 rounded-md text-lg hover:bg-yellow-400 transition-colors"
+              className="bg-primary text-white font-bold font-lato py-2 px-6 md:py-3 md:px-8 rounded-md text-sm md:text-lg hover:bg-yellow-400 transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -128,7 +150,7 @@ const AboutPage = () => {
       {/* --- TIMELINE SECTION --- */}
       <motion.section
         id="story"
-        className="relative py-20 px-8 min-h-screen flex flex-col justify-center bg-cover bg-center md:bg-fixed"
+        className="relative py-12 md:py-20 px-4 md:px-8 min-h-screen flex flex-col justify-center bg-cover bg-center md:bg-fixed"
         style={{
           // This remains correct based on your initial intention for the timeline background
           backgroundImage: theme === 'light'
@@ -147,9 +169,9 @@ const AboutPage = () => {
         {/* Dark Overlay for better text readability */}
         <div className="absolute inset-0 bg-midnight/60 z-10"></div>
 
-        {/* Vertical Timeline Line (Positioned to start below the title block) */}
+        {/* Vertical Timeline Line (Desktop only - hidden on mobile) */}
         <div
-          className="absolute left-1/2 w-2
+          className="hidden md:block absolute left-1/2 w-2
             top-72 h-[calc(100%-18rem)]
             bg-gradient-to-b
             from-primary
@@ -161,9 +183,8 @@ const AboutPage = () => {
         <div className="container mx-auto space-y-4 relative z-20">
           {/* H2 Title with Theme Awareness */}
 
-          <BrightPathGradientTitle as="h2" className="font-extrabold text-center mb-12 pt-0 font-poppins" gradientWords={["Journey"]}
+          <BrightPathGradientTitle as="h2" className="font-extrabold text-center mb-8 md:mb-12 pt-0 font-poppins text-2xl md:text-3xl lg:text-4xl" gradientWords={["Journey"]}
           >My Digital Journey Timeline
-
           </BrightPathGradientTitle>
 
           {timelineEvents.map((event, index) => (
@@ -176,9 +197,9 @@ const AboutPage = () => {
               className={`flex items-center w-full ${index % 2 === 0 ? "justify-start" : "justify-end"
                 }`}
             >
-              {/* Timeline dot (Position fixed for line start) */}
+              {/* Timeline dot (Desktop only - hidden on mobile) */}
               <div
-                className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-brightpath-blue rounded-full border-4 border-white shadow-lg z-30"
+                className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-brightpath-blue rounded-full border-4 border-white shadow-lg z-30"
                 style={{ top: "280px" }}
               ></div>
 
@@ -210,11 +231,11 @@ const AboutPage = () => {
                     className="h-32 pt-4 rounded-t-xl object-cover"
                   />
 
-                  <div className="p-8 text-[#F2C94C] text-center">
-                    <BrightPathGradientTitle as="h3" className="font-poppins text-xl md:text-2xl font-bold mb-3 gradient-text-dark drop-shadow-lg">
+                  <div className="p-4 md:p-8 text-[#F2C94C] text-center">
+                    <BrightPathGradientTitle as="h3" className="font-poppins text-lg md:text-xl lg:text-2xl font-bold mb-3 gradient-text-dark drop-shadow-lg">
                       {event.title}
                     </BrightPathGradientTitle>
-                    <p className="font-lato text- md:text-md text-white leading-[1.6em]">
+                    <p className="font-lato text-sm md:text-base text-white leading-normal md:leading-[1.6em]">
                       {event.description}
                     </p>
                   </div>
@@ -227,7 +248,7 @@ const AboutPage = () => {
 
       {/* --- CTA SECTION --- */}
       <motion.section
-        className={`py-20 px-8 ${theme === 'light' ? 'bg-gray-200' : 'bg-[#273442]'}`}
+        className={`py-12 md:py-20 px-4 md:px-8 ${theme === 'light' ? 'bg-gray-200' : 'bg-[#273442]'}`}
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
@@ -236,16 +257,16 @@ const AboutPage = () => {
         <div className="container mx-auto text-center max-w-3xl">
           <BrightPathGradientTitle
             as="h2"
-            className="font-poppins font-bold mb-6 leading-tight"
+            className="font-poppins font-bold mb-4 md:mb-6 leading-tight text-2xl md:text-3xl lg:text-4xl"
             gradientWords={["Action"]}
           >
             Ready to See My Work in Action?
           </BrightPathGradientTitle>
-          <p className="font-lato text-muted-foreground text-lg mb-8 leading-relaxed">
+          <p className="font-lato text-muted-foreground text-sm md:text-lg mb-6 md:mb-8 leading-normal md:leading-relaxed">
             From concept to completion, every project tells a story. Explore my portfolio to see how I've helped businesses shine online.
           </p>
           <Link to="/portfolio">
-            <BrightPathGradientButton className="bg-primary text-primary-foreground font-bold font-lato py-3 px-8 rounded-md text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
+            <BrightPathGradientButton className="bg-primary text-primary-foreground font-bold font-lato py-2 px-6 md:py-3 md:px-8 rounded-md text-sm md:text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
               Explore My Portfolio
             </BrightPathGradientButton>
           </Link>
