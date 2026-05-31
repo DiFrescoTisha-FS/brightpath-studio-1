@@ -111,11 +111,11 @@ const AboutPage = () => {
         <div className="container mx-auto grid md:grid-cols-2 gap-8 items-center relative z-0">
           {/* Left Column: Text Content */}
           <div className="text-white text-center md:text-left">
-            <p className="font-lato text-sm md:text-lg mb-2 tracking-wider">ABOUT ME</p>
-            <h1 className="font-poppins text-3xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 text-primary drop-shadow-lg">
+            <p className="font-lato text-sm md:text-lg mb-2 tracking-wider text-shadow-md">ABOUT ME</p>
+            <h1 className="font-poppins text-3xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 text-primary drop-shadow-lg text-shadow-md">
               TISHA <span className="whitespace-nowrap">DI FRESCO</span>
             </h1>
-            <p className="font-lato text-sm md:text-xl mb-6 md:mb-8 leading-normal md:leading-relaxed">
+            <p className="font-lato text-sm md:text-xl mb-6 md:mb-8 leading-normal md:leading-relaxed text-shadow-md">
               Like the mountains that shape my home, my journey in web
               development and design is built on strong foundations and endless
               creativity.
@@ -126,7 +126,7 @@ const AboutPage = () => {
                   behavior: 'smooth',
                 });
               }}
-              className="bg-primary text-white font-bold font-lato py-2 px-6 md:py-3 md:px-8 rounded-md text-sm md:text-lg hover:bg-yellow-400 transition-colors"
+              className="bg-primary text-white font-bold font-lato py-2 px-6 md:py-3 md:px-8 rounded-md text-sm md:text-lg hover:bg-yellow-400 transition-colors shadow-lg text-shadow-md"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
