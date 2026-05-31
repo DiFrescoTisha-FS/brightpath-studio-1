@@ -28,8 +28,8 @@ export default function ClarityHeroClassManifest() {
         </h1>
         <p className="clarity-subtitle font-lato mb-10 max-w-2xl mx-auto text-base sm:text-lg" />
         <div className="clarity-cta flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <a className="inline-flex w-full min-w-[220px] items-center justify-center rounded-md bg-primary px-8 py-3 text-lg font-bold font-poppins text-primary-foreground shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0f18] sm:w-auto" />
-          <a className="inline-flex w-full min-w-[220px] items-center justify-center rounded-md border border-primary/70 bg-white/10 px-8 py-3 text-lg font-bold font-poppins text-[#f5f0e8] shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-primary hover:bg-white/15 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0f18] sm:w-auto" />
+          <a className="inline-flex min-w-[220px] items-center justify-center rounded-md bg-primary px-8 py-3 text-lg font-bold font-poppins text-primary-foreground shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0f18]" />
+          <a className="inline-flex min-w-[220px] items-center justify-center rounded-md border border-primary/70 bg-white/10 px-8 py-3 text-lg font-bold font-poppins text-[#f5f0e8] shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-primary hover:bg-white/15 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0f18]" />
         </div>
       </div>
     </section>

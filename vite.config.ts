@@ -39,10 +39,10 @@ function injectStaticHero(): Plugin {
       I build fast, responsive websites using WordPress, ACF, JavaScript, and performance-focused front-end development.
     </p>
     <div class="clarity-cta flex flex-col items-center justify-center gap-4 sm:flex-row">
-      <a href="/portfolio" class="inline-flex w-full min-w-[220px] items-center justify-center rounded-md bg-primary px-8 py-3 text-lg font-bold font-poppins text-primary-foreground shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0f18] sm:w-auto">
+      <a href="/portfolio" class="inline-flex min-w-[220px] items-center justify-center rounded-md bg-primary px-8 py-3 text-lg font-bold font-poppins text-primary-foreground shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0f18]">
         View My Work
       </a>
-      <a href="/assets/Tisha-DiFresco-Resume.pdf" download class="inline-flex w-full min-w-[220px] items-center justify-center rounded-md border border-primary/70 bg-white/10 px-8 py-3 text-lg font-bold font-poppins text-[#f5f0e8] shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-primary hover:bg-white/15 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0f18] sm:w-auto">
+      <a href="/assets/Tisha-DiFresco-Resume.pdf" download class="inline-flex min-w-[220px] items-center justify-center rounded-md border border-primary/70 bg-white/10 px-8 py-3 text-lg font-bold font-poppins text-[#f5f0e8] shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-primary hover:bg-white/15 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0f18]">
         Download Resume
       </a>
     </div>
