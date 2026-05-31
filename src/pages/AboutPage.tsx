@@ -12,7 +12,13 @@ const AboutPage = () => {
   const { theme } = useTheme();
 
   // Detect mobile for conditional grayscale effect
-  const [isMobile, setIsMobile] = useState(false);
+  // Default to true (mobile) so phone users see color immediately on first paint
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 768;
+    }
+    return true; // Default to mobile (no grayscale) for SSR
+  });
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
