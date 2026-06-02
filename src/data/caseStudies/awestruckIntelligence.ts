@@ -6,24 +6,24 @@ export const awestruckIntelligenceCaseStudy: WebProjectCaseStudy = {
   slug: 'awestruck-intelligence',
   type: 'web',
   title: 'AweStruck Intelligence',
-  subtitle: 'A custom React build for a Biblical SEL curriculum — Lighthouse mobile 26 → 100.',
+  subtitle: 'A custom React build for a Biblically-centered SEL curriculum — Lighthouse mobile 26 → 100.',
   client: 'Robin Walsh — AweStruck Intelligence',
   industry: 'Education / Faith-based Curriculum',
   category: 'Custom Web Application',
   badge: 'CUSTOM REACT BUILD',
   liveUrl: 'https://iamawestruck.com',
   description:
-    'A custom React + TypeScript site for AweStruck Intelligence — a Biblical Social and Emotional Learning (SEL) framework. Designed and engineered from scratch with a performance-first architecture that took Lighthouse mobile from 26 to 100.',
+    'A custom React + TypeScript site for AweStruck Intelligence — a Biblically-centered Social and Emotional Learning (SEL) framework. Designed and engineered from scratch with a performance-first architecture that took Lighthouse mobile from 26 to 100.',
   featuredImage: cloudinaryAssets.awestruckCardHeroFull,
   hoverImage: '/images/case-studies/awestruck/jjarm.png',
   heroImage: '/images/case-studies/awestruck/case-study-hero.png',
   tags: ['React', 'TypeScript', 'Vite', 'Performance', 'Custom Build'],
 
   overview:
-    'AweStruck Intelligence needed a public-facing home for a brand-new Biblical SEL curriculum. The site had to feel space-themed and cinematic, host interactive content (an audio-driven AMP wheel, video walkthroughs, decision-tree cards), and perform well despite heavy use of scroll animations throughout the homepage.',
+    'AweStruck Intelligence needed a public-facing home for a brand-new Biblically-centered SEL curriculum. The site had to feel space-themed and cinematic, host interactive content (an audio-driven Biblically-centered SEL wheel — the AMP wheel — video walkthroughs, decision-tree cards), and perform well despite heavy use of scroll animations throughout the homepage.',
 
   goals: [
-    'Tell the story of a Biblical SEL framework with a custom, on-brand visual system',
+    'Tell the story of a Biblically-centered SEL framework with a custom, on-brand visual system',
     'Support interactive content: audio playback per pillar, video walkthroughs, decision cards',
     'Hit production-grade performance despite heavy scroll animations throughout the homepage',
     'Stay maintainable for a solo developer post-handoff',
@@ -79,13 +79,13 @@ export const awestruckIntelligenceCaseStudy: WebProjectCaseStudy = {
       'Lifted Lighthouse mobile from 26 → 100 through a five-part performance architecture',
       'Wrote a custom Vite plugin to inject the Hero as static HTML at build time for LCP wins',
       'Implemented viewport-based section lazy-loading via IntersectionObserver',
-      'Built an interactive AMP wheel with responsive hotspots and per-pillar audio playback',
+      'Built an interactive Biblically-centered SEL wheel (AMP wheel) with responsive hotspots and per-pillar audio playback',
       'Set up domain consolidation, structured data, GA4, and Netlify Forms contact integration',
     ],
   },
 
   challenge: [
-    'Robin had the first domain of her Biblical SEL curriculum — Josiah\'s Journey — ready to share, but no website to host it. She needed a public-facing site that felt distinctive — not a template — and could carry interactive content like an audio-driven AMP wheel, video walkthroughs, and decision-tree cards.',
+    'Robin had the first domain of her Biblically-centered SEL curriculum — Josiah\'s Journey — ready to share, but no website to host it. She needed a public-facing site that felt distinctive — not a template — and could carry interactive content like the audio-driven AMP wheel, video walkthroughs, and decision-tree cards.',
     'The primary audience is homeschool moms browsing on laptops and desktops, but the animation-heavy homepage pushed performance to its limits. The first build came in at a Lighthouse mobile score of 26 — unacceptable for the launch target.',
   ],
 
