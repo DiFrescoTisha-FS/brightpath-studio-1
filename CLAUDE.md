@@ -31,7 +31,20 @@ Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with Re
 - `background-attachment: fixed` doesn't work on iOS - use `md:bg-fixed` instead
 - Timeline line/dot hidden on mobile (`hidden md:block`)
 
-## Recent Session Work (May 30, 2026)
+## Recent Session Work (June 8, 2026)
+
+### AweStruck Case Study Update
+- Updated wording per Robin's feedback:
+  - "Biblical SEL" → "Biblically-centered SEL" throughout
+  - Introduced AMP wheel as "Biblically-centered SEL wheel (AMP wheel)"
+  - Distinguishes AweStruck from other BSEL curriculums
+
+### Commits
+- `43d2cf4` — Update AweStruck case study wording per client feedback
+
+---
+
+## Previous Session Work (May 30, 2026)
 
 ### About Page Enhancements
 - Fixed horizontal overflow on mobile (`overflow-x-hidden`)
