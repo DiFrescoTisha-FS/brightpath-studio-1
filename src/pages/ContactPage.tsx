@@ -145,6 +145,13 @@ const ContactPage: React.FC = () => {
         title="Contact"
         description="Start a conversation with BrightPath Web Studio. Tisha Di Fresco builds modern, performant websites — get in touch to discuss your project."
         path="/contact"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'ContactPage',
+          name: 'BrightPath Web Studio Contact Page',
+          description: 'Contact page for BrightPath Web Studio with phone, email, and a project inquiry form.',
+          url: 'https://brightpathwebstudio.org/contact',
+        }}
       />
       {/* Header Section */}
       <div className="text-center pt-28 pb-12 px-4">

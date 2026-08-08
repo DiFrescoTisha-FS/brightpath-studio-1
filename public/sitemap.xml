@@ -26,14 +26,24 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://brightpathwebstudio.org/portfolio/dale-tiffany-social</loc>
+    <loc>https://brightpathwebstudio.org/portfolio/dale-tiffany-social-media</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://brightpathwebstudio.org/portfolio/living-better-life-social</loc>
+    <loc>https://brightpathwebstudio.org/portfolio/living-better-life-social-media</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://brightpathwebstudio.org/portfolio/bamvsthewrld</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://brightpathwebstudio.org/case-study</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://brightpathwebstudio.org/social-media</loc>

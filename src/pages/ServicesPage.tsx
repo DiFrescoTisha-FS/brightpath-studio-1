@@ -29,6 +29,32 @@ const SERVICES_META = {
   title: "Services",
   description: "Front-end development, performance optimization, and custom React + WordPress builds. BrightPath Web Studio's full service offering and step-by-step project process.",
   path: "/services",
+  jsonLd: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: 'Website Modernization',
+      description: 'Bringing legacy sites into 2026 with modern responsive layouts, improved accessibility, and refreshed visual systems.',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: 'Performance Optimization',
+      description: 'Lighthouse score lifts, Core Web Vitals improvements, image and asset optimization, and bundle tuning.',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: 'Custom Front-End Development',
+      description: 'Hand-built React + TypeScript applications and Divi-based WordPress sites with pixel-precise design and scalable architecture.',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: 'Social Media Strategy & Content',
+      description: 'End-to-end social media content programs including calendars, original photography and video, and multi-platform publishing.',
+    },
+  ],
 };
 
 // Lighthouse parallax background applied to hero, process, and CTA sections.

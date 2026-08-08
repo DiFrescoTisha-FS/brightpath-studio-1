@@ -5,6 +5,7 @@ import { SocialMediaCaseStudyPage, WebProjectCaseStudyPage } from '@/components/
 import { BrightPathGradientTitle } from '@/components/portfolio';
 import type { SocialMediaCaseStudy, WebProjectCaseStudy } from '@/types/caseStudy';
 import BrightPathGradientButton from '@/components/BrightPathGradientButton';
+import { PageMeta } from '@/components/PageMeta';
 
 export default function CaseStudyPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -20,6 +21,11 @@ export default function CaseStudyPage() {
   if (!caseStudy) {
     return (
       <div className="min-h-screen bg-background pt-32 pb-16">
+        <PageMeta
+          title="Case Study Not Found"
+          description="The BrightPath case study you're looking for doesn't exist or has been moved. Explore the portfolio to view current website and content work."
+          path="/portfolio"
+        />
         <div className="container mx-auto px-4 text-center">
           <BrightPathGradientTitle
             as="h1"
