@@ -5,6 +5,29 @@
     <link rel="icon" type="image/png" href="/images/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Theme bootstrap. Runs during head parse, before anything paints, and
+         applies the same resolution `initializeTheme()` in src/store/appStore.ts
+         uses: stored preference first, then the OS setting.
+
+         Two reasons this has to be inline rather than left to the bundle.
+         First, prerendered pages ship with whatever class the build-time
+         browser resolved baked onto <html>, so without this a visitor whose
+         preference differs paints the wrong theme until the bundle boots.
+         Second, appStore's `setTheme` is a no-op when the resolved theme
+         already equals the store's default ('light'), so it would never strip
+         a baked-in `class="dark"` for a light-mode visitor at all. -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.className = stored || (prefersDark ? 'dark' : 'light');
+        } catch (e) {
+          document.documentElement.className = 'light';
+        }
+      })();
+    </script>
+
     <!-- Critical inline CSS to prevent FOUC on the static hero. Without this,
          html/body briefly paint white and the lighthouse silhouette renders
          at its natural SVG size in the page flow (huge, centered) before
@@ -24,11 +47,11 @@
          react-helmet-async, but Google needs values for any route that
          hasn't mounted its <Helmet> yet (and for the social crawlers
          that fetch the static HTML). -->
-    <title>BrightPath Web Studio — Front-End Developer & Web Designer</title>
-    <meta name="description" content="BrightPath Web Studio is the portfolio of Tisha Di Fresco — front-end developer and designer specializing in modern responsive websites, performance optimization, and custom React + WordPress builds." />
+    <title data-rh="true">BrightPath Web Studio — Front-End Developer & Web Designer</title>
+    <meta data-rh="true" name="description" content="BrightPath Web Studio is the portfolio of Tisha Di Fresco — front-end developer and designer specializing in modern responsive websites, performance optimization, and custom React + WordPress builds." />
     <meta name="author" content="Tisha Di Fresco" />
     <meta name="keywords" content="front-end developer, web designer, React developer, WordPress developer, Divi, performance optimization, responsive design, portfolio" />
-    <link rel="canonical" href="https://brightpathwebstudio.org/" />
+    <link data-rh="true" rel="canonical" href="https://brightpathwebstudio.org/" />
 
     <!-- Self-hosted fonts (declared via @font-face in globals.css).
          Preload Lato Regular — used by every block of body text — so it
@@ -43,19 +66,29 @@
       crossorigin
     />
 
-    <!-- Open Graph (Facebook, LinkedIn) -->
-    <meta property="og:title" content="BrightPath Web Studio — Front-End Developer & Web Designer" />
-    <meta property="og:description" content="Portfolio of Tisha Di Fresco — front-end developer specializing in modern responsive websites, performance optimization, and custom React + WordPress builds." />
-    <meta property="og:image" content="https://brightpathwebstudio.org/social-preview.png" />
-    <meta property="og:url" content="https://brightpathwebstudio.org" />
+    <!-- Open Graph (Facebook, LinkedIn)
+
+         `data-rh="true"` on a tag hands ownership of it to react-helmet-async:
+         on mount, Helmet removes every `meta[data-rh]` it doesn't itself emit
+         and appends its own. Without the attribute the tag is invisible to
+         Helmet, so a prerendered page ends up with the generic default *and*
+         the route-specific value — two og:description tags, two canonicals.
+
+         Tag exactly the ones PageMeta always emits. og:type, og:site_name and
+         twitter:card stay untagged because PageMeta never sets them — marking
+         them would let Helmet delete them on every route. -->
+    <meta data-rh="true" property="og:title" content="BrightPath Web Studio — Front-End Developer & Web Designer" />
+    <meta data-rh="true" property="og:description" content="Portfolio of Tisha Di Fresco — front-end developer specializing in modern responsive websites, performance optimization, and custom React + WordPress builds." />
+    <meta data-rh="true" property="og:image" content="https://brightpathwebstudio.org/social-preview.png" />
+    <meta data-rh="true" property="og:url" content="https://brightpathwebstudio.org" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="BrightPath Web Studio" />
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="BrightPath Web Studio — Front-End Developer & Web Designer" />
-    <meta name="twitter:description" content="Portfolio of Tisha Di Fresco — front-end developer specializing in modern responsive websites, performance optimization, and custom React + WordPress builds." />
-    <meta name="twitter:image" content="https://brightpathwebstudio.org/social-preview.jpg" />
+    <meta data-rh="true" name="twitter:title" content="BrightPath Web Studio — Front-End Developer & Web Designer" />
+    <meta data-rh="true" name="twitter:description" content="Portfolio of Tisha Di Fresco — front-end developer specializing in modern responsive websites, performance optimization, and custom React + WordPress builds." />
+    <meta data-rh="true" name="twitter:image" content="https://brightpathwebstudio.org/social-preview.png" />
 
     <!-- Structured Data (JSON-LD) — tells Google about the business itself -->
     <script type="application/ld+json">

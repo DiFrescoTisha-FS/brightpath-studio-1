@@ -12,3 +12,10 @@
 # to revalidate within the max-age window.
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
+
+# app.html is the SPA fallback shell (see netlify.toml). It's reachable
+# directly, and its contents duplicate the homepage shell, so keep it out of
+# the index. Header rules match the *requested* path, so routes served
+# through the fallback — /services, /reviews — are unaffected.
+/app.html
+  X-Robots-Tag: noindex

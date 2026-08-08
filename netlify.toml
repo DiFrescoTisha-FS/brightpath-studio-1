@@ -26,9 +26,16 @@
   to = "/.netlify/functions/get-case-studies"
   status = 200
 
+# SPA fallback for every route without its own prerendered HTML — /services
+# and /reviews (both load live data from the functions above), plus any
+# unknown URL. app.html is a copy of the built shell with an empty #root,
+# taken before the prerenderer overwrites index.html with the rendered
+# homepage; falling back to index.html would serve homepage content on those
+# routes and break hydration. Static files still win over this rule, so the
+# prerendered /about/index.html and friends are served directly.
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/app.html"
   status = 200
 
 [dev]

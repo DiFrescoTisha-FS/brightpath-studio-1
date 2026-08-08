@@ -74,7 +74,8 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+const rootElement = document.getElementById("root")!;
+const app = (
   <React.StrictMode>
     <HelmetProvider>
       <Suspense fallback={<div className="min-h-screen p-8">Loading...</div>}>
@@ -83,3 +84,20 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     </HelmetProvider>
   </React.StrictMode>
 );
+
+/**
+ * Always a client render — never hydrateRoot, even on prerendered routes.
+ *
+ * The prerendered HTML in #root (see PRERENDER_ROUTES in vite.config.ts) is a
+ * DOM snapshot taken from a headless browser, not `renderToString` output. It
+ * therefore lacks the markers React 18 requires to hydrate: the `<!-- -->`
+ * separators between adjacent text nodes and the `<!--$-->`/`<!--/$-->` pairs
+ * around Suspense boundaries. hydrateRoot against it always fails (minified
+ * errors #418/#423/#425) and React discards the tree and client-renders
+ * anyway — so we skip the failed attempt and its console noise.
+ *
+ * The snapshot still does its job: search engines and AI crawlers get complete
+ * route-specific HTML, and the page paints before the bundle executes.
+ * createRoot clears the container on first render, so there is no duplication.
+ */
+ReactDOM.createRoot(rootElement).render(app);
