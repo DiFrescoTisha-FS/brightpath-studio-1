@@ -355,6 +355,12 @@ export default defineConfig(async ({ command }): Promise<UserConfig> => {
               // renderer treats these as if/else-if, so setting both would
               // silently discard the timeout anyway.
               renderAfterDocumentEvent: 'prerender-ready',
+              // Defines window.__PRERENDER_INJECTED before any page script
+              // runs, which is how components tell this build-time render
+              // apart from a real visit. Scroll-triggered reveals use it to
+              // emit their settled (visible) state instead of opacity: 0 —
+              // see src/utils/isPrerender.ts.
+              inject: {},
             }),
           }),
           verifyPrerender(PRERENDER_ROUTES),

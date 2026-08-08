@@ -43,6 +43,17 @@ interface BrightPathGradientButtonProps {
    * Default: "glow"
    */
   hoverEffect?: 'glow' | 'bright' | 'scale';
+  /**
+   * Tab order. Pass -1 when this button is purely presentational — e.g. when
+   * it sits inside a <Link>, where the surrounding anchor is the real control
+   * and a focusable button would add a second, redundant tab stop.
+   */
+  tabIndex?: number;
+  /**
+   * Hide from assistive technology. Use together with `tabIndex={-1}` when the
+   * button is decorative and its accessible name is provided by an ancestor.
+   */
+  'aria-hidden'?: boolean;
 }
 
 const sizeClasses = {
@@ -85,6 +96,8 @@ export default function BrightPathGradientButton({
   iconPosition = 'left',
   size = 'md',
   hoverEffect = 'glow',
+  tabIndex,
+  'aria-hidden': ariaHidden,
 }: BrightPathGradientButtonProps) {
   const getHoverClasses = () => {
     switch (hoverEffect) {
@@ -104,6 +117,8 @@ export default function BrightPathGradientButton({
       type={type}
       onClick={onClick}
       disabled={disabled}
+      tabIndex={tabIndex}
+      aria-hidden={ariaHidden}
       className={`
         relative
         bg-gradient-to-r from-primary via-yellow-500 to-yellow-400

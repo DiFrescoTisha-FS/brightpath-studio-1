@@ -1,4 +1,5 @@
-import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionTemplate, type TargetAndTransition } from "framer-motion";
+import { IS_PRERENDER } from "@/utils/isPrerender";
 import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import useTheme from "../hooks/useTheme";
@@ -7,6 +8,19 @@ import BrightPathGradientButton from "@/components/BrightPathGradientButton.lega
 import { PageMeta } from "@/components/PageMeta";
 import { cloudinaryAssets } from "@/data/cloudinaryAssets";
 import { Heart, MessageCircle, Users, Sparkles } from "lucide-react";
+
+/**
+ * Starting state for a scroll-triggered entrance animation.
+ *
+ * Every section below reveals itself with `whileInView`, which only fires once
+ * the element is scrolled into view. That is fine for visitors but invisible to
+ * anything that doesn't scroll, so the prerendered HTML was emitting most of
+ * this page's text at `opacity: 0`. During the snapshot we return `false`,
+ * which tells Framer Motion to skip the hidden starting state and render the
+ * element settled and visible. Real visitors get the original value, so the
+ * animations and their timing are completely unchanged.
+ */
+const revealFrom = (hidden: TargetAndTransition) => (IS_PRERENDER ? false : hidden);
 
 const SKILLS = [
   // Frontend
@@ -170,20 +184,20 @@ const AboutPage = () => {
 
           </div>
 
-          {/* Right Column: Arched Image */}
+          {/* Right Column: Arched Image
+              Deliberately not animated. This is the LCP element, and any
+              entrance animation delays it twice over: the prerendered
+              snapshot bakes in the animation's `initial` state (opacity 0),
+              and React then replays the fade after it boots — so the portrait
+              could not appear until well after its bytes had arrived. */}
           <div className="flex justify-center">
-            <motion.div
-              className="relative"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-            >
+            <div className="relative">
               <img
-                src="/images/my-profile.png"
+                src="/images/my-profile.webp"
                 alt="Portrait of Tisha Di Fresco"
                 className="max-w-sm md:max-w-md w-full rounded-t-full shadow-2xl"
               />
-            </motion.div>
+            </div>
           </div>
         </div>
       </motion.section>
@@ -231,7 +245,7 @@ const AboutPage = () => {
           {timelineEvents.map((event, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
+              initial={revealFrom({ opacity: 0, x: index % 2 === 0 ? -100 : 100 })}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
@@ -290,7 +304,7 @@ const AboutPage = () => {
       {/* --- SKILLS SECTION --- */}
       <motion.section
         className={`py-12 md:py-20 px-4 md:px-8 ${theme === 'light' ? 'bg-gray-100' : 'bg-[#1A2238]'}`}
-        initial={{ opacity: 0, y: 50 }}
+        initial={revealFrom({ opacity: 0, y: 50 })}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.6 }}
@@ -326,7 +340,7 @@ const AboutPage = () => {
       {/* --- VALUES SECTION --- */}
       <motion.section
         className={`py-12 md:py-20 px-4 md:px-8 ${theme === 'light' ? 'bg-gray-200' : 'bg-[#273442]'}`}
-        initial={{ opacity: 0, y: 50 }}
+        initial={revealFrom({ opacity: 0, y: 50 })}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.6 }}
@@ -355,7 +369,7 @@ const AboutPage = () => {
                       ? 'bg-[#1A2238] border border-primary/20 shadow-glow-primary'
                       : 'bg-white border border-primary/50 shadow-xl'
                   }`}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={revealFrom({ opacity: 0, y: 30 })}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -382,7 +396,7 @@ const AboutPage = () => {
       {/* --- CTA SECTION --- */}
       <motion.section
         className={`py-12 md:py-20 px-4 md:px-8 ${theme === 'light' ? 'bg-gray-200' : 'bg-[#273442]'}`}
-        initial={{ opacity: 0, y: 50 }}
+        initial={revealFrom({ opacity: 0, y: 50 })}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.6 }}
@@ -398,8 +412,17 @@ const AboutPage = () => {
           <p className="font-lato text-muted-foreground text-sm md:text-lg mb-6 md:mb-8 leading-normal md:leading-relaxed">
             From concept to completion, every project tells a story. Explore my portfolio to see how I've helped businesses shine online.
           </p>
-          <Link to="/portfolio">
-            <BrightPathGradientButton className="bg-primary text-primary-foreground font-bold font-lato py-2 px-6 md:py-3 md:px-8 rounded-md text-sm md:text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
+          {/* The <button> here is presentational — the <Link> is the real
+              control. Left focusable it produced two tab stops and two
+              announcements ("link Explore My Portfolio", then "button Explore
+              My Portfolio") for one action, so it's removed from the tab order
+              and the accessibility tree. The Link carries the accessible name. */}
+          <Link to="/portfolio" aria-label="Explore My Portfolio">
+            <BrightPathGradientButton
+              tabIndex={-1}
+              aria-hidden
+              className="bg-primary text-primary-foreground font-bold font-lato py-2 px-6 md:py-3 md:px-8 rounded-md text-sm md:text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
+            >
               Explore My Portfolio
             </BrightPathGradientButton>
           </Link>
