@@ -1,7 +1,8 @@
-import { defineConfig, type Plugin } from 'vite';
+import { defineConfig, type Plugin, type UserConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import fs from 'fs';
+import { execFileSync } from 'child_process';
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
@@ -37,6 +38,15 @@ const PRERENDER_ROUTES = [
   '/privacy-policy',
 ];
 
+/** Chrome flags for the prerenderer. Shared so the preflight launch in
+ *  `ensureChromeExecutable` exercises exactly what the real render will use. */
+const PRERENDER_CHROME_ARGS = [
+  '--no-sandbox',
+  '--disable-setuid-sandbox',
+  '--disable-gpu',
+  '--disable-dev-shm-usage',
+];
+
 /** Escape hatch: `SKIP_PRERENDER=1 npm run build` drops both the prerender
  *  pass and its verification, producing the plain SPA build. Both go together
  *  on purpose — skipping only the check would be the silent-failure mode this
@@ -44,38 +54,98 @@ const PRERENDER_ROUTES = [
 const SKIP_PRERENDER = !!process.env.SKIP_PRERENDER;
 
 /**
- * Finds a Chrome/Chromium binary for the prerenderer.
+ * Guarantees a Chrome binary exists for the prerenderer and returns its path.
  *
- * Nothing here is specific to one machine. In priority order:
- *   1. PUPPETEER_EXECUTABLE_PATH / CHROME_PATH — set these in the Netlify UI
- *      (or locally) to pin an exact binary.
- *   2. A conventional install path that actually exists on this platform.
- *   3. `undefined`, which lets Puppeteer use the Chromium it downloaded on
- *      install. That is the expected path on Netlify's Linux x64 builders.
+ * No machine-specific paths: this resolves to Puppeteer's own Chrome for
+ * Testing, which has builds for both Netlify's Linux x64 builders and Apple
+ * Silicon. `PUPPETEER_EXECUTABLE_PATH` / `CHROME_PATH` still win if set, so a
+ * CI image with its own Chrome can skip the download.
  *
- * Step 2 matters on Apple Silicon: puppeteer 1.20 only ever shipped an x64
- * Chromium, so its bundled binary fails with EBADARCH on arm64 unless Rosetta
- * is installed. Falling back to the system Chrome keeps local builds working
- * without hardcoding anything that would break on Linux.
+ * The download is performed here, explicitly, rather than being left to
+ * Puppeteer's postinstall hook. Install scripts are routinely suppressed —
+ * `npm ci --ignore-scripts`, npm's allow-scripts gating, hardened CI images —
+ * and when that happens the hook no-ops silently, `launch()` fails with no
+ * browser, and vite-plugin-prerender swallows the error. That is exactly how
+ * the first Netlify build produced a green `vite build` and zero prerendered
+ * routes. Doing it at build time makes it deterministic and loud.
+ *
+ * `puppeteer browsers install chrome` is idempotent — a no-op once the browser
+ * is in the cache directory (PUPPETEER_CACHE_DIR, set for Netlify in
+ * netlify.toml so the download survives between deploys).
  */
-function resolveChromeExecutable(): string | undefined {
+async function ensureChromeExecutable(): Promise<string> {
   const explicit = process.env.PUPPETEER_EXECUTABLE_PATH || process.env.CHROME_PATH;
-  if (explicit) return explicit;
+  if (explicit) {
+    if (!fs.existsSync(explicit)) {
+      throw new Error(
+        `[prerender] PUPPETEER_EXECUTABLE_PATH/CHROME_PATH points at "${explicit}", which does not exist.`,
+      );
+    }
+    return explicit;
+  }
 
-  const candidates =
-    process.platform === 'darwin'
-      ? [
-          '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-          '/Applications/Chromium.app/Contents/MacOS/Chromium',
-        ]
-      : [
-          '/usr/bin/google-chrome-stable',
-          '/usr/bin/google-chrome',
-          '/usr/bin/chromium-browser',
-          '/usr/bin/chromium',
-        ];
+  const puppeteer = require('puppeteer');
+  const installed = async () => {
+    try {
+      const executable = await puppeteer.executablePath();
+      return executable && fs.existsSync(executable) ? executable : null;
+    } catch {
+      return null;
+    }
+  };
 
-  return candidates.find((candidate) => fs.existsSync(candidate));
+  const alreadyThere = await installed();
+  if (alreadyThere) return alreadyThere;
+
+  console.log('[prerender] Chrome for Testing not found — downloading it now...');
+  try {
+    execFileSync(path.resolve(__dirname, 'node_modules/.bin/puppeteer'),
+      ['browsers', 'install', 'chrome'], { stdio: 'inherit' });
+  } catch (error) {
+    throw new Error(
+      `[prerender] Could not download Chrome for Testing.\n${(error as Error).message}\n\n` +
+        `Set PUPPETEER_EXECUTABLE_PATH to an existing Chrome binary, or build with\n` +
+        `SKIP_PRERENDER=1 to ship the plain SPA build.`,
+    );
+  }
+
+  const afterInstall = await installed();
+  if (!afterInstall) {
+    throw new Error(
+      `[prerender] Chrome for Testing still missing after install. Set\n` +
+        `PUPPETEER_EXECUTABLE_PATH, or build with SKIP_PRERENDER=1.`,
+    );
+  }
+  return afterInstall;
+}
+
+/**
+ * Launches and closes the browser once before the real render starts.
+ *
+ * A binary can exist and still fail to run — missing shared libraries on a
+ * slim CI image is the usual cause. vite-plugin-prerender catches launch
+ * failures and logs a generic line, so without this check the symptom is a
+ * silent 180-second wait followed by "no routes were generated" and no
+ * explanation. Failing here surfaces Chrome's actual error instead.
+ */
+async function preflightChrome(executablePath: string): Promise<void> {
+  const puppeteer = require('puppeteer');
+  try {
+    const browser = await puppeteer.launch({
+      headless: true,
+      executablePath,
+      args: PRERENDER_CHROME_ARGS,
+    });
+    await browser.close();
+  } catch (error) {
+    throw new Error(
+      `[prerender] Chrome exists at "${executablePath}" but could not be launched.\n` +
+        `${(error as Error).message}\n\n` +
+        `On a slim Linux image this is usually a missing system library.\n` +
+        `Set PUPPETEER_EXECUTABLE_PATH to a working Chrome, or build with\n` +
+        `SKIP_PRERENDER=1 to ship the plain SPA build.`,
+    );
+  }
 }
 
 /**
@@ -255,35 +325,47 @@ function injectStaticHero(): Plugin {
 }
 
 // https://vitejs.dev/config/
-export default defineConfig({
+// Async because the prerenderer's browser is resolved (and downloaded if
+// missing) before the plugin is constructed. Gated on `command === 'build'`
+// so `vite dev` never touches it.
+export default defineConfig(async ({ command }): Promise<UserConfig> => {
+  const prerendering = command === 'build' && !SKIP_PRERENDER;
+  const chromePath = prerendering ? await ensureChromeExecutable() : undefined;
+  if (prerendering && chromePath) {
+    await preflightChrome(chromePath);
+    console.log(`[prerender] Using Chrome at ${chromePath}`);
+  }
+
+  return {
   plugins: [
     react(),
     injectStaticHero(),
-    ...(SKIP_PRERENDER
-      ? []
-      : [
+    ...(prerendering
+      ? [
           snapshotSpaFallback(),
           vitePrerender({
             staticDir: path.resolve(__dirname, 'dist'),
             routes: PRERENDER_ROUTES,
             renderer: new PuppeteerRenderer({
               headless: true,
-              executablePath: resolveChromeExecutable(),
-              args: [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-gpu',
-                '--disable-dev-shm-usage',
-              ],
+              executablePath: chromePath,
+              args: PRERENDER_CHROME_ARGS,
               // PageMeta fires this once Helmet has committed the route's
               // <head>. Note there is no renderAfterTime fallback: the
               // renderer treats these as if/else-if, so setting both would
               // silently discard the timeout anyway.
               renderAfterDocumentEvent: 'prerender-ready',
+              // Defines window.__PRERENDER_INJECTED before any page script
+              // runs, which is how components tell this build-time render
+              // apart from a real visit. Scroll-triggered reveals use it to
+              // emit their settled (visible) state instead of opacity: 0 —
+              // see src/utils/isPrerender.ts.
+              inject: {},
             }),
           }),
           verifyPrerender(PRERENDER_ROUTES),
-        ]),
+        ]
+      : []),
   ],
   resolve: {
     alias: {
@@ -329,4 +411,5 @@ export default defineConfig({
     },
     chunkSizeWarningLimit: 500,
   },
+  };
 });

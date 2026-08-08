@@ -3,6 +3,13 @@
   publish = "dist"
   functions = "netlify/functions"
 
+[build.environment]
+  # Where Puppeteer keeps Chrome for Testing, used by the prerender step in
+  # vite.config.ts. /opt/build/cache is Netlify's build cache, restored between
+  # deploys, so the ~150 MB browser is downloaded once rather than every build.
+  # If the cache is cold the build just re-downloads it — nothing breaks.
+  PUPPETEER_CACHE_DIR = "/opt/build/cache/puppeteer"
+
 [functions]
   node_bundler = "esbuild"
 
