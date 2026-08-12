@@ -16,13 +16,21 @@ Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with Re
 - **Theme**: Light/dark mode via `useAppStore` (Zustand)
 - **Responsive**: Mobile-first, breakpoints at `md` (768px) and `lg` (1024px)
 - **Typography**: Poppins for headings, Lato for body, Open Sans occasionally
-- **Colors**: Primary gold (#F2C94C), midnight blue (#1A2238), BrightPath blue
+- **Colors**: Primary gold (#F2C94C), midnight blue (#1A2238), BrightPath blue.
+  The approved homepage adds near-black `#0A0F18` and warm cream `#FAF6EF` as its
+  two grounds, plus a light-mode gold pair — see "Homepage Visual System" below.
 - **Text on mobile**: 14px (`text-sm`) for paragraphs, `leading-normal` for tighter line spacing
 
 ## Important Files
 - `src/pages/AboutPage.tsx` - Hero with scroll-based grayscale (desktop only), Timeline, Skills, Values, CTA
-- `src/pages/HomePage.tsx` - Hero injected via Vite plugin for LCP optimization
-- `src/components/ClarityHero.tsx` - Class manifest for static hero (must sync with vite.config.ts)
+- `src/pages/HomePage.tsx` - Hero injected via Vite plugin for LCP optimization; also wires
+  the section background classes (`home-services`, `home-reviews`, `home-story`)
+- `src/components/ClarityHero.tsx` - Structural mirror of the static hero. NOT a Tailwind
+  class manifest any more — the hero uses dedicated CSS classes, so nothing here is
+  load-bearing for purging. Keep it in step with the markup in vite.config.ts
+- `src/styles/globals.css` - Carries the approved homepage visual system: `.studio-hero*`,
+  `.studio-cta*`, `.nav-link*` / `.nav-cta`, `.home-*` section backgrounds, `.site-footer`,
+  `.text-brand-gold`
 - `vite.config.ts` - Static hero HTML injection, prerender config, Chrome resolution, build-time verification
 - `src/pages/ServicesPage.tsx` - Services, process flip cards, pricing
 - `src/pages/PortfolioDemoPage.tsx` - Portfolio grid with case study views
@@ -75,6 +83,70 @@ AI crawlers, which don't run JS) get real content. `/services` and `/reviews` ar
   state is emitted; visitors still get the animation. Apply the same pattern to any new
   `whileInView` section carrying meaningful copy.
 
+## Homepage Visual System (approved — treat as the baseline)
+
+Completed and approved across Aug 11–12, 2026; committed as `7927270`. The homepage is
+the visual reference for the rest of the site. Don't redesign any of it without agreeing
+the change first.
+
+**Hero.** Left-aligned studio layout: copy left, workspace photograph right. The photo is
+`public/images/brightpath-hero-image.webp` (96 KB, 1672×941) — the production asset. The
+current approved treatment uses it as-is; visual blending is handled in CSS via a
+two-gradient `mask-image` plus a scrim, so the left edge dissolves into the ground and the
+top/bottom soften. Below 1024px the composition *recomposes* — the photo becomes a band
+beneath the copy rather than shrinking, because a portrait-tablet side panel makes
+`object-fit: cover` magnify the laptop past a natural crop.
+
+**Theme grounds.** Dark: near-black `#0A0F18`. Light: warm cream `#FAF6EF`. Light is not an
+inversion of dark — the image grade, scrim direction and gold values all differ.
+
+**Gold.** Dark `#F2C94C`. Light needs the same hue darkened because `#F2C94C` measures
+1.47:1 on cream: `#9E6E04` for large display text, `#8C6103` for normal-size text. One gold
+family, adjusted only for contrast. Brand gold survives as a *surface* (the header CTA fill,
+the Featured badge), just not as light-mode text.
+
+**Header / nav / CTAs.** Header background matches the hero at `#0A0F18`. Active route is a
+1px gold hairline the width of the label plus a gold text shift, via `NavLink` (which also
+sets `aria-current="page"`). Browser-default blue focus rings are replaced by palette rings.
+Both the hero primary and header CTA are outlined-gold that fill on hover; the hero secondary
+stays a text link with a pseudo-element rule. A mid-blue header was trialled against four
+candidates and **rejected** — it broke the midnight/gold/cream palette. Don't re-propose it.
+
+**Section backgrounds.** The alternating horizontal-band effect is gone. Artwork sections
+(`home-services`, `home-reviews`) keep their original artwork, graded in CSS via `filter` and
+feathered into the ground at both edges. Flat-slab sections (`home-work`, `home-story`) became
+shallow gradients that lift a few values mid-section, each opening with a faded gold hairline.
+The rhythm is artwork-section → gradient-section, so sections stay distinguishable through
+artwork and depth rather than colour steps.
+
+**Footer.** `site-footer` is part of the same system: a gradient that deepens toward the
+bottom (so the page reads as closing out, not banding), with the same hairline instead of the
+old grey `border-t`. It's global, so this treatment appears on every route.
+
+**Typography emphasis.** The legacy yellow→orange clipped gradient is retired *on the
+homepage*. `BrightPathGradientTitle` gained an optional `emphasis` prop:
+`'gradient'` (default — every other call site is unaffected), `'solid'` (one theme-aware gold
+via `.text-brand-gold`), `'none'` (no emphasis at all). `'none'` exists because omitting
+`gradientWords` makes the component gradient the *entire* title. Section headings use
+`'solid'`; service-card and project titles use `'none'`, leaving the gold icon and the
+Featured badge as each card's accent.
+
+## Recent Session Work (August 11–12, 2026)
+
+### Homepage redesign — complete and approved (`7927270`)
+Hero, header/nav/CTA, full light/dark background system, footer integration and typography
+emphasis. Detail in "Homepage Visual System" above. Verified per pass with a headless-Chrome
+harness at 1440px and 390px in both themes, pixel-diffing approved regions to confirm nothing
+locked had moved.
+
+- Removed `public/images/hero-image.png` (1.8 MB, unreferenced) in favour of the WebP.
+- Contrast was verified against *rendered pixels*, not the stylesheet — which is how the
+  primary CTA was found rendering white-on-gold at 1.59:1. Cause: `.studio-hero__cta a
+  { color: inherit }` in the critical inline CSS outranks a single class, so colour rules
+  for hero CTAs must be scoped one level deeper.
+
+---
+
 ## Recent Session Work (August 8, 2026)
 
 Branch: `test-netlify-prerender`. Verified with a headless-Chrome harness serving `dist/`
@@ -122,6 +194,17 @@ pixel-identical throughout (maxDelta 0).
 - **Social-media case studies**: `VideoCarousel.tsx` uses mount animations, so whether the
   snapshot catches them mid-fade is a timing race. Only ~10 words of decorative text; left
   alone.
+- **Legacy gradient text still site-wide**: ~60 occurrences remain outside the homepage
+  (ServicesPage, ContactPage, AboutPage, ReviewsPage, PortfolioDemoPage,
+  SocialMediaPortfolioPage and the case-study components). Not migrated. There is also a
+  near-duplicate `src/components/portfolio/BrightPathGradientTitle.tsx` used by the
+  portfolio/case-study components — it does *not* have the `emphasis` prop. Any site-wide
+  rollout has to reconcile both files.
+- **Pre-existing TypeScript error**: `src/pages/ContactPage.tsx:16` — TS2717, conflicting
+  `gtag` declarations. Predates this work; deliberately not fixed in `7927270`.
+- **Pre-existing lint**: `netlify/functions/get-case-studies.ts:178` unused `_context`
+  (error) and `src/components/ui/GuidingLight.tsx:230` missing hook dependency (warning).
+  Both predate this work and were left alone.
 
 ---
 
@@ -165,6 +248,9 @@ pixel-identical throughout (maxDelta 0).
 - AweStruck case study content corrections
 
 ## Commit History (Recent)
+- `7927270` - Redesign homepage visual system: hero, backgrounds, and typography
+- `c04bb8d` - Merge PR #21 (test-netlify-prerender)
+- `3a1e994` - Optimize About page and improve prerender visibility
 - `409f6c0` - Fix prerendering for Netlify builds
 - `3c4b4cd` - Add static prerendering for key routes
 - `5757b6b` - Improve structured data and AI discoverability
