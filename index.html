@@ -29,18 +29,28 @@
     </script>
 
     <!-- Critical inline CSS to prevent FOUC on the static hero. Without this,
-         html/body briefly paint white and the lighthouse silhouette renders
-         at its natural SVG size in the page flow (huge, centered) before
-         globals.css loads and snaps it to absolute corner positioning with
-         opacity 0. These three rules apply immediately during HTML parse. -->
+         html/body briefly paint white and the workspace photo renders at its
+         natural 1672px size in the page flow before globals.css loads and
+         confines it to the right-hand panel. These rules apply immediately
+         during HTML parse; full styling lives in the `.studio-hero` block of
+         src/styles/globals.css. -->
     <style>
       html, body { background: #060a10; }
-      .hero-clarity { background: #060a10; }
-      .lighthouse-silhouette { position: absolute; opacity: 0; }
+      .studio-hero { background: #0a0f18; position: relative; overflow: hidden; }
+      /* Theme bootstrap above has already written .light/.dark onto <html>,
+         so the correct ground paints on the very first frame instead of
+         flashing navy at light-theme visitors. #fff matches the light
+         theme's --background, so nothing shifts when globals.css lands. */
+      html.light, html.light body { background: #ffffff; }
+      html.light .studio-hero { background: #faf6ef; }
+      .studio-hero__media { position: absolute; inset: 0 0 0 auto; width: 62%; }
+      .studio-hero__img { display: block; width: 100%; height: 100%; object-fit: cover; }
       /* Kill default <a> styling on the hero CTAs so they don't briefly
-         render as blue underlined links on the left edge during the FOUC
-         window before Tailwind classes apply. */
-      .clarity-cta a { color: inherit; text-decoration: none; }
+         render as blue underlined links during the FOUC window. */
+      .studio-hero__cta a { color: inherit; text-decoration: none; }
+      @media (max-width: 767px) {
+        .studio-hero__media { position: relative; inset: auto; width: 100%; height: 18rem; }
+      }
     </style>
 
     <!-- Default title + description. Individual pages override these via

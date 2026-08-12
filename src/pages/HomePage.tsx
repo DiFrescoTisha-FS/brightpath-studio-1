@@ -47,21 +47,25 @@ const ServicesSection = ({ theme }: SectionProps) => {
     : cloudinaryAssets.homepageServicesBgLightMobile;
 
   return (
-    <section id="services" className="relative py-32 md:py-40 overflow-hidden">
+    <section id="services" className="home-services relative py-32 md:py-40 overflow-hidden">
       {/* Mobile bg layer — visible below md breakpoint */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat md:hidden"
+        className="home-services__art absolute inset-0 bg-cover bg-center bg-no-repeat md:hidden"
         style={{ backgroundImage: `url(${mobileBg})` }}
       />
       {/* Desktop bg layer — visible at md and up */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat hidden md:block"
+        className="home-services__art absolute inset-0 bg-cover bg-center bg-no-repeat hidden md:block"
         style={{ backgroundImage: `url(${desktopBg})` }}
       />
+      {/* Grading layer — dark theme only. Blends the section's edges into the
+          hero and My Work, and re-lights the gold the grade pulls down.
+          Transparent in light mode, which is left exactly as it was. */}
+      <div aria-hidden="true" className="home-services__veil absolute inset-0" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <BrightPathGradientTitle as="h2" className="font-poppins font-bold text-services mb-4" gradientWords={["Help"]}>
+        <BrightPathGradientTitle as="h2" className="font-poppins font-bold text-services mb-4" gradientWords={["Help"]} emphasis="solid">
           How I Help Businesses
         </BrightPathGradientTitle>
 
@@ -77,9 +81,9 @@ const ServicesSection = ({ theme }: SectionProps) => {
             >
               <div className="flex justify-center">{service.icon}</div>
 
-              <BrightPathGradientTitle as="h3" className="font-poppins font-semibold mb-4 text-xl"
-                gradientWords={["Modernization", "Optimization", "Development"]}
-              >
+              {/* No emphasised word: the gold icon above is the card's accent,
+                  so the title reads in the normal foreground colour. */}
+              <BrightPathGradientTitle as="h3" className="font-poppins font-semibold mb-4 text-xl" emphasis="none">
                 {service.title}
               </BrightPathGradientTitle>
 
@@ -95,8 +99,10 @@ const ServicesSection = ({ theme }: SectionProps) => {
   );
 };
 
-const BrandStorySection = ({ theme }: SectionProps) => (
-  <section className={`py-20 ${theme === 'dark' ? 'bg-[#273442]' : 'bg-gray-200'}`}>
+// Background handled by the `home-story` rules in globals.css, so this
+// section no longer needs the theme prop.
+const BrandStorySection = () => (
+  <section className="home-story py-20">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
       <div>
         <div className="w-full h-80 bg-accent/10 rounded-lg flex items-center justify-center border border-accent/20">
@@ -112,6 +118,7 @@ const BrandStorySection = ({ theme }: SectionProps) => (
       <div>
         <BrightPathGradientTitle as="h3" className="font-poppins font-bold text-foreground mb-4"
           gradientWords={["Beacon"]}
+          emphasis="solid"
         >
           A Beacon in the Digital Fog
         </BrightPathGradientTitle>
@@ -158,12 +165,12 @@ const HomePage = () => {
         </Suspense>
         <section
           id="reviews"
-          className="relative py-32 md:py-40 overflow-hidden"
+          className="home-reviews relative py-32 md:py-40 overflow-hidden"
         >
           {/* Mobile bg layer — visible below md breakpoint */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat md:hidden"
+            className="home-reviews__art absolute inset-0 bg-cover bg-center bg-no-repeat md:hidden"
             style={{
               backgroundImage: `url(${theme === 'dark' ? cloudinaryAssets.homepageTestimonialsBgDarkMobile : cloudinaryAssets.homepageTestimonialsBgLightMobile})`,
             }}
@@ -171,14 +178,18 @@ const HomePage = () => {
           {/* Desktop bg layer — visible at md and up */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat hidden md:block"
+            className="home-reviews__art absolute inset-0 bg-cover bg-center bg-no-repeat hidden md:block"
             style={{
               backgroundImage: `url(${theme === 'dark' ? cloudinaryAssets.homepageTestimonialsBgDark : cloudinaryAssets.homepageTestimonialsBgLight})`,
             }}
           />
+          {/* Grading layer — grades the artwork into midnight in dark mode,
+              and in light mode only feathers the edges into cream. */}
+          <div aria-hidden="true" className="home-reviews__veil absolute inset-0" />
           <div className="relative container mx-auto px-4 text-center">
             <BrightPathGradientTitle as="h2" className="font-bold font-poppins mb-12"
               gradientWords={["Testimonials"]}
+              emphasis="solid"
             >
               Client Testimonials
             </BrightPathGradientTitle>
@@ -187,7 +198,7 @@ const HomePage = () => {
             </Suspense>
           </div>
         </section>
-        <BrandStorySection theme={theme} />
+        <BrandStorySection />
       </main>
     </div>
   );

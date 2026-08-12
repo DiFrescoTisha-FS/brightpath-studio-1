@@ -48,11 +48,14 @@ const portfolioItems: PortfolioItem[] = [
 const PortfolioSection = () => {
   const { theme } = useAppStore();
 
+  // Background handled by the `home-work` rules in globals.css so the section
+  // can carry a gradient rather than a flat slab.
   return (
-    <section className={`py-20 ${theme === 'dark' ? 'bg-[#273442]' : 'bg-gray-100'}`}>
+    <section className="home-work py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <BrightPathGradientTitle as="h2" className="font-poppins font-bold mb-4 text-foreground"
           gradientWords={["Work"]}
+          emphasis="solid"
         >
           My Work
         </BrightPathGradientTitle>
@@ -90,9 +93,11 @@ const PortfolioSection = () => {
                 </div>
 
                 <div className="p-4">
+                  {/* Project names read in the foreground colour; the gold
+                      "Featured" badge stays the card's accent. */}
                   <BrightPathGradientTitle
                     as="h5"
-                    gradientWords={["AweStruck", "Intelligence", "Dale", "Tiffany", "Angel", "City", "Bamvsthewrld"]}
+                    emphasis="none"
                     className="font-poppins font-semibold mb-1 text-base">
                     {item.title}
                   </BrightPathGradientTitle>

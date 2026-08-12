@@ -12,12 +12,15 @@ interface FooterProps {
 }
 
 const Footer: React.FC<FooterProps> = ({ theme }) => {
-  const footerClasses = theme === 'dark' ? 'bg-[#1A2238] text-white' : 'bg-gray-100 text-gray-800';
+  // Background and top rule come from the `site-footer` rules in globals.css
+  // so the footer sits in the same surface system as the homepage sections.
+  // Text colours are unchanged.
+  const footerClasses = theme === 'dark' ? 'text-white' : 'text-gray-800';
   // const textClasses = theme === 'dark' ? 'text-white' : 'text-gray-800';
   const linkClasses = theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black';
 
   return (
-    <footer className={`py-12 border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'} ${footerClasses}`}>
+    <footer className={`site-footer py-12 ${footerClasses}`}>
       <div className="container mx-auto px-4 text-center">
         {/* === START OF THE NEW CONSOLIDATED SECTION === */}
         <BrightPathGradientTitle
@@ -25,6 +28,7 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
           className="text-xl font-poppins font-bold mb-2 text-muted-foreground"
           textColor='text-neutral-700 dark:text-gray-200'
           gradientWords={["BrightPath"]}
+          emphasis="solid"
         >
           BrightPath Web Studio LLC
         </BrightPathGradientTitle>
@@ -44,6 +48,7 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
           className="font-lato mt-2"
           textColor='text-neutral-500 dark:text-gray-200'
           gradientWords={["Edward", "Almeida"]}
+          emphasis="solid"
         >
           Inspired by Edward Almeida
         </BrightPathGradientTitle>

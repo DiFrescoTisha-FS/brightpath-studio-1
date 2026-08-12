@@ -274,14 +274,15 @@ function verifyPrerender(routes: string[]): Plugin {
 
 /**
  * Renders the homepage hero as static HTML directly into index.html so the
- * LCP element ("Custom WordPress Websites / That Perform") paints before
- * React boots. Pulls the section out of the JS critical path entirely —
- * same pattern as `awestruck-inject-static-hero` on the AweStruck site.
+ * LCP element ("Websites That Work Beautifully.") paints before React boots.
+ * Pulls the section out of the JS critical path entirely — same pattern as
+ * `awestruck-inject-static-hero` on the AweStruck site.
  *
- * The React `ClarityHero.tsx` component is no longer rendered by HomePage;
- * it exists only so Tailwind sees the classes used in this static markup
- * and emits them in the production CSS. If you edit classes here, also
- * edit them in `ClarityHero.tsx` and vice versa.
+ * Styling lives in the `.studio-hero` block of src/styles/globals.css.
+ * `ClarityHero.tsx` mirrors this markup for reference; it is not rendered
+ * anywhere. The hero uses dedicated CSS classes rather than Tailwind
+ * utilities, because Tailwind's content scanner never reads this string —
+ * utilities here would survive only as long as the mirror file stayed exact.
  *
  * Navbar is already `fixed top-0 z-50`, so it overlays the static hero
  * cleanly from the very first paint.
@@ -293,29 +294,21 @@ function injectStaticHero(): Plugin {
       order: 'pre',
       handler(html: string) {
         const heroHtml = `
-<section id="hero-clarity-static" class="hero-clarity relative min-h-screen flex items-center justify-center overflow-hidden">
-  <div class="guiding-light"></div>
-  <div class="horizon-glow"></div>
-  <img src="/images/lighthouse-sillouette.svg" alt="" aria-hidden="true" class="lighthouse-silhouette" />
-  <div class="clarity-headline text-center max-w-5xl mx-auto px-4">
-    <p class="clarity-eyebrow font-poppins mb-4 mt-24 text-sm sm:text-base md:text-lg uppercase tracking-[0.18em] text-white/70">
-      WordPress Developer &amp; Front-End Specialist
-    </p>
-    <h1 class="font-poppins font-bold mb-6 mt-24">
-      <span class="clarity-text clarity-text-line1 block text-3xl sm:text-4xl md:text-5xl lg:text-6xl">Custom WordPress Websites</span>
-      <span class="clarity-text clarity-text-line2 block text-4xl sm:text-5xl md:text-6xl lg:text-7xl mt-2">That <span class="bright-word">Perform</span></span>
-    </h1>
-    <p class="clarity-subtitle font-lato mb-10 max-w-2xl mx-auto text-base sm:text-lg">
-      I build fast, responsive websites using WordPress, ACF, JavaScript, and performance-focused front-end development.
-    </p>
-    <div class="clarity-cta flex flex-col items-center justify-center gap-4 sm:flex-row">
-      <a href="/portfolio" class="inline-flex min-w-[220px] items-center justify-center rounded-md bg-primary px-8 py-3 text-lg font-bold font-poppins text-primary-foreground shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0f18]">
-        View My Work
-      </a>
-      <a href="/assets/Tisha-DiFresco-Resume.pdf" download class="inline-flex min-w-[220px] items-center justify-center rounded-md border border-primary/70 bg-white/10 px-8 py-3 text-lg font-bold font-poppins text-[#f5f0e8] shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-primary hover:bg-white/15 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0f18]">
-        Download Resume
-      </a>
+<section id="hero-clarity-static" class="studio-hero">
+  <div class="studio-hero__inner">
+    <div class="studio-hero__copy">
+      <p class="studio-hero__eyebrow">WEBSITES BUILT FOR BUSINESS</p>
+      <h1 class="studio-hero__title">Websites That Work <span class="studio-hero__accent">Beautifully.</span></h1>
+      <p class="studio-hero__lede">Custom websites built for speed, clarity, and growth&#8212;so your online presence works as hard as you do.</p>
+      <div class="studio-hero__cta">
+        <a href="/contact" class="studio-cta studio-cta--primary">Start Your Project <span class="studio-cta__arrow" aria-hidden="true">&#8594;</span></a>
+        <a href="/portfolio" class="studio-cta studio-cta--ghost">View Our Work <span class="studio-cta__arrow" aria-hidden="true">&#8594;</span></a>
+      </div>
     </div>
+  </div>
+  <div class="studio-hero__media">
+    <img src="/images/brightpath-hero-image.webp" width="1672" height="941" fetchpriority="high" decoding="async" class="studio-hero__img" alt="A laptop on a studio desk showing a BrightPath-built client website, beside a BrightPath mug and design books." />
+    <span class="studio-hero__scrim" aria-hidden="true"></span>
   </div>
 </section>`;
         return html.replace('<!-- HERO_PLACEHOLDER -->', heroHtml);

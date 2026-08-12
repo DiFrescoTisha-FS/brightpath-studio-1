@@ -25,6 +25,15 @@ interface BrightPathGradientTitleProps {
    */
   gradientStyle?: 'gold' | 'primary';
   /**
+   * How the emphasised words are rendered.
+   * - "gradient": the original yellow→orange clipped gradient
+   * - "solid": one flat warm gold, theme-aware, matching the approved hero
+   * - "none": no emphasis at all — the whole title uses `textColor`. Needed
+   *   because omitting `gradientWords` makes the *entire* title gradient.
+   * Default: "gradient", so existing call sites are unaffected.
+   */
+  emphasis?: 'gradient' | 'solid' | 'none';
+  /**
    * HTML tag to render
    * Default: "h2"
    */
@@ -64,6 +73,7 @@ export default function BrightPathGradientTitle({
   className = 'text-4xl md:text-3xl sm:text-2xl font-bold font-poppins',
   textColor = 'text-foreground',
   gradientStyle = 'gold',
+  emphasis = 'gradient',
   as: Tag = 'h2',
   id,
 }: BrightPathGradientTitleProps) {
@@ -73,7 +83,18 @@ export default function BrightPathGradientTitle({
             primary: 'bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent dark:from-yellow-500 dark:to-yellow-600',
   };
 
-  const gradientClass = gradientClasses[gradientStyle];
+  // `text-brand-gold` is defined in globals.css and resolves per theme.
+  const gradientClass =
+    emphasis === 'solid' ? 'text-brand-gold' : gradientClasses[gradientStyle];
+
+  // Plain title, no emphasised words.
+  if (emphasis === 'none') {
+    return (
+      <Tag id={id} className={`${className} ${textColor}`}>
+        {children}
+      </Tag>
+    );
+  }
 
   // If no gradient words specified, apply gradient to entire text
   if (gradientWords.length === 0) {

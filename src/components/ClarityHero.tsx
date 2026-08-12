@@ -1,36 +1,60 @@
 /**
- * ClarityHero is now rendered as static HTML directly into index.html by
- * the `brightpath-inject-static-hero` Vite plugin (see vite.config.ts).
- * This file exists only so Tailwind sees the classes used in that static
- * markup and emits them in the production CSS — it is NOT imported or
- * rendered anywhere in the React tree.
+ * Structural mirror of the homepage hero.
  *
- * If you change classes in the heroHtml string in vite.config.ts, also
- * change them here, and vice versa. The two must stay in sync.
+ * The hero is rendered as static HTML directly into index.html by the
+ * `brightpath-inject-static-hero` Vite plugin (see vite.config.ts) so its
+ * text paints before React boots. This file is NOT imported or rendered
+ * anywhere — it exists so the markup is reviewable as JSX alongside the rest
+ * of the components, and so changes to the injected string have an obvious
+ * second place to keep in step.
  *
- * Why the static-injection trick: it pulls the LCP text out of the JS
- * critical path so it paints before React boots. Same pattern used on
- * the AweStruck Intelligence site for the LCP win.
+ * The hero styles itself with dedicated `.studio-hero` / `.studio-cta`
+ * classes from src/styles/globals.css rather than Tailwind utilities:
+ * Tailwind's content scanner never reads the plugin string, so utilities
+ * used there would be purged unless this mirror stayed perfectly in sync.
+ * Plain CSS removes that failure mode — but if you edit the markup in
+ * vite.config.ts, update this file too.
  */
-export default function ClarityHeroClassManifest() {
+export default function ClarityHeroStructureMirror() {
   return (
-    <section id="hero-clarity-static" className="hero-clarity relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div className="guiding-light" />
-      <div className="horizon-glow" />
-      <img alt="" aria-hidden="true" className="lighthouse-silhouette" />
-      <div className="clarity-headline text-center max-w-5xl mx-auto px-4">
-        <p className="clarity-eyebrow font-poppins mb-4 mt-24 text-sm sm:text-base md:text-lg uppercase tracking-[0.18em] text-white/70" />
-        <h1 className="font-poppins font-bold mb-6 mt-24">
-          <span className="clarity-text clarity-text-line1 block text-3xl sm:text-4xl md:text-5xl lg:text-6xl" />
-          <span className="clarity-text clarity-text-line2 block text-4xl sm:text-5xl md:text-6xl lg:text-7xl mt-2">
-            <span className="bright-word" />
-          </span>
-        </h1>
-        <p className="clarity-subtitle font-lato mb-10 max-w-2xl mx-auto text-base sm:text-lg" />
-        <div className="clarity-cta flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <a className="inline-flex min-w-[220px] items-center justify-center rounded-md bg-primary px-8 py-3 text-lg font-bold font-poppins text-primary-foreground shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0f18]" />
-          <a className="inline-flex min-w-[220px] items-center justify-center rounded-md border border-primary/70 bg-white/10 px-8 py-3 text-lg font-bold font-poppins text-[#f5f0e8] shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-primary hover:bg-white/15 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0f18]" />
+    <section id="hero-clarity-static" className="studio-hero">
+      <div className="studio-hero__inner">
+        <div className="studio-hero__copy">
+          <p className="studio-hero__eyebrow">WEBSITES BUILT FOR BUSINESS</p>
+          <h1 className="studio-hero__title">
+            Websites That Work <span className="studio-hero__accent">Beautifully.</span>
+          </h1>
+          <p className="studio-hero__lede">
+            Custom websites built for speed, clarity, and growth—so your online presence
+            works as hard as you do.
+          </p>
+          <div className="studio-hero__cta">
+            <a href="/contact" className="studio-cta studio-cta--primary">
+              Start Your Project{' '}
+              <span className="studio-cta__arrow" aria-hidden="true">
+                →
+              </span>
+            </a>
+            <a href="/portfolio" className="studio-cta studio-cta--ghost">
+              View Our Work{' '}
+              <span className="studio-cta__arrow" aria-hidden="true">
+                →
+              </span>
+            </a>
+          </div>
         </div>
+      </div>
+      <div className="studio-hero__media">
+        <img
+          src="/images/brightpath-hero-image.webp"
+          width={1672}
+          height={941}
+          fetchPriority="high"
+          decoding="async"
+          className="studio-hero__img"
+          alt="A laptop on a studio desk showing a BrightPath-built client website, beside a BrightPath mug and design books."
+        />
+        <span className="studio-hero__scrim" aria-hidden="true" />
       </div>
     </section>
   );

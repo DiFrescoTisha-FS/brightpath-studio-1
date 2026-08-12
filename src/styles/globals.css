@@ -192,309 +192,974 @@
 }
 
 /* ====================================
-   GUIDING LIGHT HERO (RESTORED)
-   Light searches, then settles. Clarity is the destination.
+   HOMEPAGE HERO — studio layout
+   ------------------------------------
+   Rendered as static HTML injected into index.html by the
+   `brightpath-inject-static-hero` plugin (vite.config.ts), so it paints
+   before React boots. Structural mirror: src/components/ClarityHero.tsx.
+
+   Deliberately uses dedicated classes rather than Tailwind utilities: the
+   markup lives in a plugin string that Tailwind's content scanner doesn't
+   read, so utilities there would depend on the mirror file staying perfectly
+   in sync to survive purging. Plain CSS removes that failure mode.
    ==================================== */
 
-/* ✅ Let --lx/--ly interpolate smoothly (prevents jumping) */
-@property --lx {
-  syntax: "<percentage>";
-  inherits: true;
-  initial-value: 50%;
-}
-@property --ly {
-  syntax: "<percentage>";
-  inherits: true;
-  initial-value: 50%;
-}
-
-.hero-clarity {
-  background: radial-gradient(
-    ellipse 120% 100% at 50% 40%,
-    #0f1724 0%,
-    #0a0f18 55%,
-    #060a10 100%
-  );
+.studio-hero {
   position: relative;
+  isolation: isolate;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  background: #0a0f18;
+  min-height: 100vh;
+  min-height: 100svh;
+}
 
-  /* Animated light position */
- --lx: 10%;
-  --ly: 44%;
-  --spot: 280px;
-  --spot-soft: 150px;
+/* Photographic layer.
+   The image is never edited — the blend is done entirely here, with a mask
+   that dissolves its left edge and softens top/bottom, plus a navy scrim
+   that tints whatever survives. Two independent techniques on purpose: if a
+   browser doesn't support mask-composite, the scrim alone still fades the
+   photo into the background rather than leaving a hard rectangle. */
+.studio-hero__media {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 62%;
+  z-index: 0;
+  pointer-events: none;
+}
 
-  animation: lightPos 8.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-} 
+.studio-hero__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Bias right so the laptop and mug stay in frame as the panel narrows */
+  object-position: 64% 50%;
 
-/* Subtle grain */
-.hero-clarity::before {
-  content: "";
+  -webkit-mask-image:
+    linear-gradient(to right,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.05) 9%,
+      rgba(0, 0, 0, 0.4) 22%,
+      rgba(0, 0, 0, 0.88) 38%,
+      rgba(0, 0, 0, 1) 52%),
+    linear-gradient(to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 1) 15%,
+      rgba(0, 0, 0, 1) 78%,
+      rgba(0, 0, 0, 0) 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.05) 9%,
+      rgba(0, 0, 0, 0.4) 22%,
+      rgba(0, 0, 0, 0.88) 38%,
+      rgba(0, 0, 0, 1) 52%),
+    linear-gradient(to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 1) 15%,
+      rgba(0, 0, 0, 1) 78%,
+      rgba(0, 0, 0, 0) 100%);
+  mask-composite: intersect;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.studio-hero__scrim {
   position: absolute;
   inset: 0;
-  opacity: 0.03;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   pointer-events: none;
-  z-index: 1;
+  background:
+    /* left-to-right dissolve into the navy field */
+    linear-gradient(100deg,
+      #0a0f18 0%,
+      #0a0f18 19%,
+      rgba(10, 15, 24, 0.68) 34%,
+      rgba(10, 15, 24, 0.2) 53%,
+      rgba(10, 15, 24, 0) 70%),
+    /* barely-there warmth picked up from the window light in the photo */
+    radial-gradient(120% 95% at 76% 42%,
+      rgba(242, 201, 76, 0.07) 0%,
+      rgba(242, 201, 76, 0) 62%),
+    /* settle the bottom edge into the section below */
+    linear-gradient(to top,
+      rgba(6, 10, 16, 0.6) 0%,
+      rgba(6, 10, 16, 0) 27%);
 }
 
-/* The visible light halo */
-.guiding-light {
-  position: absolute;
-  width: 520px;
-  height: 520px;
-  border-radius: 999px;
-  left: var(--lx);
-  top: var(--ly);
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  z-index: 2;
-
-  background: radial-gradient(
-    circle,
-    rgba(255, 248, 230, 0.42) 0%,
-    rgba(235, 200, 120, 0.18) 28%,
-    rgba(235, 177, 9, 0.09) 52%,
-    rgba(235, 177, 9, 0.03) 74%,
-    transparent 100%
-  );
-
-
-  filter: blur(52px);
-  opacity: 0;
-  animation: lightOn 8.2s ease forwards;
-}
-
-/* Horizon glow (destination) */
-.horizon-glow {
-  position: absolute;
-  left: 50%;
-  top: 63%;
-  transform: translate(-50%, -50%);
-  width: 860px;
-  height: 190px;
-  pointer-events: none;
-  z-index: 2;
-  opacity: 0;
-
-  background: radial-gradient(
-    circle at center,
-    rgba(235, 200, 120, 0.14) 0%,
-    rgba(235, 177, 9, 0.08) 30%,
-    rgba(235, 177, 9, 0.04) 50%,
-    rgba(235, 177, 9, 0.03) 65%,
-    rgba(235, 177, 9, 0) 80%
-  );
-
-  filter: blur(30px);
-  animation: horizonIn 1.5s ease-out 6s forwards;
-}
-
-/* Headline container */
-.clarity-headline {
+/* Copy column */
+.studio-hero__inner {
   position: relative;
-  z-index: 10;
-  overflow: visible;
+  z-index: 2;
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 9rem 1.5rem 4rem;
 }
 
-/* Prevent descender clipping */
-.clarity-headline h1 {
-  line-height: 1.15;
-  padding-bottom: 0.18em;
+.studio-hero__copy {
+  max-width: 36rem;
 }
 
-/* Base dim state */
-.clarity-text {
-  color: rgba(245, 240, 232, 0.28);
+.studio-hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 0 0 clamp(1.1rem, 2vw, 1.6rem);
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.66rem, 0.6rem + 0.2vw, 0.76rem);
+  letter-spacing: 0.24em;
+  color: rgba(242, 201, 76, 0.88);
 }
 
-/* Spotlight reveal driven by light */
-.clarity-text-line1 {
-  opacity: 0.34;
-
-  -webkit-mask-image: radial-gradient(
-    circle at var(--lx) var(--ly),
-    rgba(0,0,0,1) 0,
-    rgba(0,0,0,1) var(--spot),
-    rgba(0,0,0,0) calc(var(--spot) + var(--spot-soft))
-  );
-  mask-image: radial-gradient(
-    circle at var(--lx) var(--ly),
-    rgba(0,0,0,1) 0,
-    rgba(0,0,0,1) var(--spot),
-    rgba(0,0,0,0) calc(var(--spot) + var(--spot-soft))
-  );
-
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
+.studio-hero__eyebrow::before {
+  content: "";
+  flex: none;
+  width: clamp(26px, 4vw, 46px);
+  height: 1px;
+  background: linear-gradient(to right, rgba(242, 201, 76, 0.9), rgba(242, 201, 76, 0.12));
 }
 
-.clarity-subtitle {
-  color: rgba(255, 252, 245, 0.85);
-  opacity: 0;
-
-  text-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.6),
-    0 4px 14px rgba(0, 0, 0, 0.45);
-
-  animation: subtitleFadeIn 1s ease-out 6s forwards;
+.studio-hero__title {
+  margin: 0 0 clamp(1.15rem, 2.2vw, 1.7rem);
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+  font-size: clamp(2.3rem, 1.15rem + 4.5vw, 4.6rem);
+  line-height: 1.07;
+  letter-spacing: -0.022em;
+  color: #f5f0e8;
+  text-wrap: balance;
 }
 
-/* Second line reveals then locks */
-.clarity-text-line2 {
-  opacity: 0.22;
-
-  -webkit-mask-image: radial-gradient(
-    circle at var(--lx) var(--ly),
-    rgba(0,0,0,1) 0,
-    rgba(0,0,0,1) var(--spot),
-    rgba(0,0,0,0) calc(var(--spot) + var(--spot-soft))
-  );
-  mask-image: radial-gradient(
-    circle at var(--lx) var(--ly),
-    rgba(0,0,0,1) 0,
-    rgba(0,0,0,1) var(--spot),
-    rgba(0,0,0,0) calc(var(--spot) + var(--spot-soft))
-  );
-
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-
-  animation: lockIn 8.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+/* Serif italic accent in BrightPath gold. Uses a system serif stack on
+   purpose — no webfont is added to the hero's critical path. */
+.studio-hero__accent {
+  font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.05em;
+  letter-spacing: -0.012em;
+  color: #f2c94c;
 }
 
-/* Make the key phrase read as elevated */
-.clarity-text-line2 {
-  text-shadow:
-    0 6px 14px rgba(0, 0, 0, 0.45),
-    0 2px 4px rgba(0, 0, 0, 0.55);
+.studio-hero__lede {
+  margin: 0 0 clamp(2rem, 3.4vw, 2.9rem);
+  max-width: 33rem;
+  font-family: Lato, sans-serif;
+  font-size: clamp(1rem, 0.93rem + 0.34vw, 1.19rem);
+  line-height: 1.66;
+  color: rgba(245, 240, 232, 0.74);
 }
 
-/* CTA appears after destination */
-.clarity-cta {
-  opacity: 0;
-  transform: none;
-  animation: ctaIn 1.1s ease-out 6.6s forwards;
+/* Calls to action */
+.studio-hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(1rem, 2.2vw, 2rem);
 }
 
+.studio-cta {
+  display: inline-flex;
+  align-items: center;
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.86rem, 0.83rem + 0.14vw, 0.93rem);
+  /* Tracking is what separates a considered button from a default one at
+     this size — it lets the label breathe without shouting in caps. */
+  letter-spacing: 0.045em;
+  text-decoration: none;
+  transition: background-color 0.28s ease, color 0.28s ease, border-color 0.28s ease;
+}
 
-.lighthouse-silhouette {
+/* The arrow sits in a fixed-width slot so travelling on hover never reflows
+   the label or changes the button's width. */
+.studio-cta__arrow {
+  display: inline-block;
+  width: 1.05em;
+  margin-left: 0.7em;
+  transition: transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.studio-cta:hover .studio-cta__arrow,
+.studio-cta:focus-visible .studio-cta__arrow {
+  transform: translateX(5px);
+}
+
+/* Cream ring rather than gold: a gold ring is invisible against the gold
+   primary fill. Offset keeps it clear of the button edge. */
+.studio-cta:focus-visible {
+  outline: 2px solid #f5f0e8;
+  outline-offset: 3px;
+}
+
+/* Outlined at rest so the composition stays restrained — the gold reads as a
+   drawn line rather than a block of colour — then commits to a solid fill on
+   hover. Padding subtracts the 1px border on each edge so the outer box keeps
+   the same 236.45 x 55.91 footprint the filled version had, and the secondary
+   CTA beside it doesn't shift. */
+.studio-cta--primary {
+  padding: calc(1.05rem - 1px) calc(2.1rem - 1px);
+  border: 1px solid #f2c94c;
+  border-radius: 2px;
+  background: transparent;
+}
+
+.studio-cta--primary:hover {
+  background: #f2c94c;
+  border-color: #f2c94c;
+}
+
+/* Colour is scoped one level deeper on purpose. The critical inline CSS in
+   index.html carries `.studio-hero__cta a { color: inherit }` at specificity
+   (0,1,1), which outranks a lone class — so a plain `.studio-cta--primary
+   { color }` silently loses and the label inherits the body colour instead.
+   (0,2,0) puts it back in charge. The light-theme rules below already sit at
+   (0,2,1) via `html.light`, so they were never affected. */
+.studio-hero__cta .studio-cta--primary {
+  color: #f2c94c;
+}
+
+.studio-hero__cta .studio-cta--primary:hover {
+  color: #10192b;
+}
+
+/* Secondary stays a text link. The rule is a pseudo-element rather than a
+   border so it hugs the label instead of sitting a padding-height below it,
+   and so its colour can shift independently of the text. */
+.studio-cta--ghost {
+  position: relative;
+  padding: 1.05rem 0.1rem;
+  color: rgba(245, 240, 232, 0.82);
+}
+
+.studio-cta--ghost::after {
+  content: "";
   position: absolute;
-  right: clamp(12px, 5vw, 80px);
-  bottom: clamp(-24px, -2vw, -10px);
-  width: clamp(220px, 40vw, 600px);
-  height: auto;
-  opacity: 0;
-  z-index: 3;
-  pointer-events: none;
-  filter: drop-shadow(0 0 10px rgba(235, 177, 9, 0.05));
-  animation: lighthouseIn 1.4s ease-out 6.2s forwards;
+  left: 0;
+  right: 0;
+  bottom: 0.85rem;
+  height: 1px;
+  background: rgba(245, 240, 232, 0.3);
+  transition: background-color 0.28s ease;
 }
 
-@keyframes lighthouseIn {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
+.studio-cta--ghost:hover {
+  color: #f5f0e8;
+}
+
+.studio-cta--ghost:hover::after {
+  background: #f2c94c;
+}
+
+/* ---- Below the desktop breakpoint: recompose rather than shrink.
+   The photo leaves the background and becomes a soft-edged band beneath the
+   copy, so it can never sit behind the text.
+
+   This starts at 1023px rather than a phone width on purpose. A portrait
+   tablet gives the side panel a very tall, narrow box, and `object-fit: cover`
+   then scales the 16:9 photo to that height — magnifying the laptop far past
+   a natural crop while squeezing the copy column. Stacking keeps the photo at
+   a sane scale and gives the headline the full measure. ---- */
+@media (max-width: 1023px) {
+  .studio-hero {
+    display: block;
+    min-height: 0;
   }
-  100% {
-    opacity: 0.11;
-    transform: translateY(0);
+
+  .studio-hero__inner {
+    padding: 7.5rem 1.4rem 2.5rem;
   }
-}
 
-@keyframes ctaIn {
-  to { opacity: 1; }
-}
+  .studio-hero__copy { max-width: 34rem; }
+  .studio-hero__lede { max-width: 34rem; }
 
-@keyframes horizonIn {
-  to { opacity: 1; }
-}
-
-/* Light fade-in/out (no pulsing) */
-@keyframes lightOn {
-  0% { opacity: 0; }
-  10% { opacity: 1; }
-  92% { opacity: 0.9; }
-  100% { opacity: 0.18; }
-}
-
-/* Lighthouse-like sweep: drift across, return, settle */
-@keyframes lightPos {
-  0%   { --lx: 10%; --ly: 44%; }
-  28%  { --lx: 85%; --ly: 41%; }
-  58%  { --lx: 30%; --ly: 47%; }
-  78%  { --lx: 60%; --ly: 50%; }
-  100% { --lx: 50%; --ly: 62%; }
-}
-
-/* Lock-in final clarity (emboss only; glow can be added later) */
-@keyframes lockIn {
-  0%, 70% {
-    color: rgba(245, 240, 232, 0.22);
-    opacity: 0.22;
-    text-shadow: none;
+  .studio-hero__media {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: clamp(15rem, 30vw + 6rem, 26rem);
+    margin-top: 0.5rem;
   }
-  78% {
-    color: rgba(255, 252, 245, 0.92);
-    opacity: 0.95;
-    text-shadow:
-      0 6px 14px rgba(0, 0, 0, 0.45),
-      0 2px 4px rgba(0, 0, 0, 0.55);
+
+  .studio-hero__img {
+    object-position: 72% 46%;
+    -webkit-mask-image: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.55) 20%,
+      rgba(0, 0, 0, 1) 52%,
+      rgba(0, 0, 0, 1) 82%,
+      rgba(0, 0, 0, 0) 100%);
+    -webkit-mask-composite: source-over;
+    mask-image: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.55) 20%,
+      rgba(0, 0, 0, 1) 52%,
+      rgba(0, 0, 0, 1) 82%,
+      rgba(0, 0, 0, 0) 100%);
+    mask-composite: add;
   }
-  100% {
-    color: #f8f4ec;
-    opacity: 1;
-    text-shadow:
-      0 -1px 0 rgba(255, 255, 255, 0.35),
-      0 1px 1px rgba(0, 0, 0, 0.5),
-      0 8px 18px rgba(0, 0, 0, 0.55),
-      0 2px 6px rgba(0, 0, 0, 0.6);
+
+  .studio-hero__scrim {
+    background:
+      linear-gradient(to bottom,
+        #0a0f18 0%,
+        rgba(10, 15, 24, 0.55) 26%,
+        rgba(10, 15, 24, 0) 55%),
+      linear-gradient(to top,
+        #0a0f18 0%,
+        rgba(10, 15, 24, 0.5) 22%,
+        rgba(10, 15, 24, 0) 50%);
   }
-}
 
-@keyframes subtitleFadeIn {
-  to {
-    opacity: 1;
+  .studio-hero__cta {
+    gap: 1.25rem;
   }
+
+  .studio-cta--primary,
+  .studio-cta--ghost {
+    justify-content: center;
+  }
+
+  .studio-cta--primary { padding: 0.9rem 1.6rem; }
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .guiding-light { width: 360px; height: 360px; filter: blur(44px); }
-  .hero-clarity { --spot: 220px; --spot-soft: 140px; }
-  .horizon-glow { width: min(420px, 74vw); height: 170px; }
-}
-
-@media (max-width: 480px) {
-  .guiding-light { width: 280px; height: 280px; filter: blur(40px); }
-  .hero-clarity { --spot: 180px; --spot-soft: 130px; }
-  .horizon-glow { width: min(320px, 82vw); height: 140px; }
-}
-
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .hero-clarity { animation: none; --lx: 50%; --ly: 62%; }
-  .guiding-light { display: none; animation: none; }
-  .horizon-glow { opacity: 1; animation: none; }
-
-  .clarity-text-line1,
-  .clarity-subtitle {
-    opacity: 0.7;
-    -webkit-mask-image: none;
-    mask-image: none;
+  .studio-cta,
+  .studio-cta__arrow {
+    transition: none;
   }
 
-  .clarity-text-line2 {
-    opacity: 1;
-    -webkit-mask-image: none;
-    mask-image: none;
-    text-shadow:
-      0 -1px 0 rgba(255, 255, 255, 0.25),
-      0 1px 1px rgba(0, 0, 0, 0.4),
-      0 6px 14px rgba(0, 0, 0, 0.45),
-      0 2px 4px rgba(0, 0, 0, 0.55);
+  .studio-cta:hover .studio-cta__arrow,
+  .studio-cta:focus-visible .studio-cta__arrow {
+    transform: none;
+  }
+}
+
+/* ====================================
+   HOMEPAGE HERO — light theme
+   ------------------------------------
+   An alternate treatment of the same hero, not a redesign: layout, copy,
+   image, hierarchy and every responsive rule above are shared. Only surface
+   colours and the blend direction change.
+
+   Scoped to `html.light` because the theme class is written straight onto
+   <html> (appStore.setTheme, and the inline bootstrap in index.html). The
+   unscoped rules above therefore remain the dark baseline, untouched.
+
+   On gold: #F2C94C reads 1.47:1 on cream and #EBB109 only 1.80:1 — both
+   unusable as text. The accent and eyebrow instead use the *same hue and
+   saturation* dropped in lightness — hsl(41, 95%, 32%) and hsl(41, 96%, 28%)
+   against brand gold's hsl(44, 91%, 47%) — so they still read as BrightPath
+   gold while clearing WCAG AA. Brand gold stays intact where it's a
+   background rather than text: the primary CTA.
+   ==================================== */
+
+html.light .studio-hero {
+  background: #faf6ef;
+}
+
+/* The photograph is a dark interior, so on cream the blend has to work the
+   opposite way: partial mask alpha lets the cream through and lifts the
+   image rather than deepening it. The dissolve is given a longer runway
+   (full opacity at 60% instead of 52%) because a dark edge reads more
+   sharply against a light ground, and a small exposure lift keeps the photo
+   from sitting on the page as a heavy block. */
+html.light .studio-hero__img {
+  filter: brightness(1.06) saturate(1.03);
+  -webkit-mask-image:
+    linear-gradient(to right,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.04) 8%,
+      rgba(0, 0, 0, 0.34) 22%,
+      rgba(0, 0, 0, 0.84) 40%,
+      rgba(0, 0, 0, 1) 55%),
+    linear-gradient(to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 1) 18%,
+      rgba(0, 0, 0, 1) 76%,
+      rgba(0, 0, 0, 0) 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.04) 8%,
+      rgba(0, 0, 0, 0.34) 22%,
+      rgba(0, 0, 0, 0.84) 40%,
+      rgba(0, 0, 0, 1) 55%),
+    linear-gradient(to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 1) 18%,
+      rgba(0, 0, 0, 1) 76%,
+      rgba(0, 0, 0, 0) 100%);
+  mask-composite: intersect;
+}
+
+html.light .studio-hero__scrim {
+  background:
+    /* left-to-right dissolve into the cream field */
+    linear-gradient(100deg,
+      #faf6ef 0%,
+      #faf6ef 19%,
+      rgba(250, 246, 239, 0.72) 34%,
+      rgba(250, 246, 239, 0.24) 53%,
+      rgba(250, 246, 239, 0) 70%),
+    /* warm veil so the dark photo sits in the same light as the page */
+    linear-gradient(to right,
+      rgba(250, 246, 239, 0.1) 0%,
+      rgba(250, 246, 239, 0.06) 100%),
+    /* settle the bottom edge into the section below */
+    linear-gradient(to top,
+      rgba(241, 233, 218, 0.55) 0%,
+      rgba(241, 233, 218, 0) 27%);
+}
+
+html.light .studio-hero__eyebrow {
+  color: #8c6103;
+}
+
+html.light .studio-hero__eyebrow::before {
+  background: linear-gradient(to right, rgba(140, 97, 3, 0.85), rgba(140, 97, 3, 0.15));
+}
+
+html.light .studio-hero__title {
+  color: #1a2238;
+}
+
+html.light .studio-hero__accent {
+  color: #9e6e04;
+}
+
+html.light .studio-hero__lede {
+  color: rgba(26, 34, 56, 0.74);
+}
+
+/* Same outlined treatment on cream. Brand gold can't carry the label here —
+   #EBB109 is 1.80:1 on cream — so the resting label and border use the
+   deepened gold already established for the eyebrow and active nav (5.09:1),
+   then hand over to brand gold as the fill on hover. */
+html.light .studio-cta--primary {
+  border-color: #8c6103;
+  background: transparent;
+  color: #8c6103;
+}
+
+html.light .studio-cta--primary:hover {
+  background: #ebb109;
+  border-color: #ebb109;
+  color: #1a2238;
+}
+
+html.light .studio-cta--ghost {
+  color: rgba(26, 34, 56, 0.86);
+}
+
+html.light .studio-cta--ghost::after {
+  background: rgba(26, 34, 56, 0.26);
+}
+
+/* Uses the deeper eyebrow gold, not the accent gold: this is normal-size
+   text, so it needs 4.5:1 (5.09:1) rather than the accent's large-text 3:1. */
+html.light .studio-cta--ghost:hover {
+  color: #1a2238;
+}
+
+html.light .studio-cta--ghost:hover::after {
+  background: #8c6103;
+}
+
+/* Midnight ring in light mode — it stays visible against both the cream
+   ground and the gold primary fill, where a gold ring would disappear. */
+html.light .studio-cta:focus-visible {
+  outline-color: #1a2238;
+}
+
+/* Stacked composition — the light equivalents must live inside the same
+   breakpoint, because `html.light .studio-hero__img` outranks the unscoped
+   `.studio-hero__img` rule in the media query above and would otherwise
+   reinstate the desktop mask on small screens. */
+@media (max-width: 1023px) {
+  html.light .studio-hero__img {
+    -webkit-mask-image: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.5) 20%,
+      rgba(0, 0, 0, 1) 52%,
+      rgba(0, 0, 0, 1) 82%,
+      rgba(0, 0, 0, 0) 100%);
+    -webkit-mask-composite: source-over;
+    mask-image: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.5) 20%,
+      rgba(0, 0, 0, 1) 52%,
+      rgba(0, 0, 0, 1) 82%,
+      rgba(0, 0, 0, 0) 100%);
+    mask-composite: add;
   }
 
-  .clarity-cta { opacity: 1; animation: none; } 
+  html.light .studio-hero__scrim {
+    background:
+      linear-gradient(to bottom,
+        #faf6ef 0%,
+        rgba(250, 246, 239, 0.5) 26%,
+        rgba(250, 246, 239, 0) 55%),
+      linear-gradient(to top,
+        #faf6ef 0%,
+        rgba(250, 246, 239, 0.45) 22%,
+        rgba(250, 246, 239, 0) 50%),
+      linear-gradient(to right,
+        rgba(250, 246, 239, 0.14) 0%,
+        rgba(250, 246, 239, 0.1) 100%);
+  }
+}
 
+/* ====================================
+   HEADER — navigation + CTA refinement
+   ------------------------------------
+   Scoped experiment. Dedicated classes applied in
+   src/components/ui/Navbar.tsx; no global tokens are touched and nothing
+   here leaks to buttons elsewhere on the site. Delete this block and the
+   corresponding classNames in Navbar.tsx to revert.
+   ==================================== */
+
+/* --- Navigation links ------------------------------------------------- */
+.nav-link {
+  position: relative;
+  font-family: Lato, sans-serif;
+  letter-spacing: 0.015em;
+  transition: color 0.24s ease;
+}
+
+/* The active indicator: a hairline gold rule the width of the label. Sized
+   and positioned with a pseudo-element so it never affects layout, and kept
+   to 1px so it reads as an editorial rule rather than a UI underline. */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.15rem;
+  height: 1px;
+  background: #f2c94c;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* Active route. NavLink also sets aria-current="page", so the state is
+   exposed to assistive tech rather than being colour-only. */
+.nav-link--active {
+  color: #f2c94c;
+}
+
+.nav-link--active::after {
+  transform: scaleX(1);
+}
+
+/* Replaces the browser's default blue focus ring with one that belongs to
+   the palette. Still 2px and offset, so it stays obvious for keyboard use. */
+.nav-link:focus-visible,
+.nav-cta:focus-visible {
+  outline: 2px solid #f2c94c;
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* --- Header CTA ------------------------------------------------------- */
+/* Same family as the hero primary — gold, 2px radius, tracked Poppins — but
+   outlined rather than filled so it reads as quieter than the hero's call
+   and doesn't compete with the navigation beside it. */
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  padding: 0.6rem 1.15rem;
+  border-radius: 2px;
+  border: 1px solid rgba(242, 201, 76, 0.55);
+  background: transparent;
+  color: #f2c94c;
+  text-decoration: none;
+  transition: background-color 0.28s ease, border-color 0.28s ease, color 0.28s ease;
+}
+
+.nav-cta:hover {
+  background: #f2c94c;
+  border-color: #f2c94c;
+  color: #10192b;
+}
+
+/* Light theme: gold-on-white fails contrast as text, so the label is
+   midnight until the gold fill arrives on hover. */
+html.light .nav-link--active {
+  color: #8c6103;
+}
+
+html.light .nav-link::after,
+html.light .nav-link--active::after {
+  background: #8c6103;
+}
+
+html.light .nav-link:focus-visible,
+html.light .nav-cta:focus-visible {
+  outline-color: #8c6103;
+}
+
+/* 0.75 alpha, not lower: below ~0.7 the border drops under the 3:1
+   non-text contrast bar and starts reading as neutral grey rather than gold. */
+html.light .nav-cta {
+  border-color: rgba(140, 97, 3, 0.75);
+  color: #1a2238;
+}
+
+html.light .nav-cta:hover {
+  background: #ebb109;
+  border-color: #ebb109;
+  color: #1a2238;
+}
+
+/* Mobile menu: the rule treatment doesn't read at full-width block links,
+   so the active state there is a short leading gold marker instead. */
+.nav-link--mobile::after {
+  left: 0;
+  right: auto;
+  top: 0.9rem;
+  bottom: 0.9rem;
+  width: 2px;
+  height: auto;
+  transform: scaleY(0);
+  transform-origin: center top;
+  transition: transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.nav-link--mobile:hover::after,
+.nav-link--mobile.nav-link--active::after {
+  transform: scaleY(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-link,
+  .nav-link::after,
+  .nav-cta,
+  .nav-link--mobile::after {
+    transition: none;
+  }
+}
+
+/* ====================================
+   HOMEPAGE SECTION BACKGROUNDS
+   ------------------------------------
+   Background and section-transition treatment only, for "How I Help
+   Businesses" (#services) and "My Work". Cards, typography, spacing and
+   layout are untouched. Isolated block: delete it and the matching
+   classNames in HomePage.tsx / PortfolioSection.tsx to revert.
+   ==================================== */
+
+/* --- How I Help Businesses ------------------------------------------- */
+
+/* Dark base sits behind the artwork so the section's own edges already
+   match the hero before any overlay is applied. */
+html.dark .home-services {
+  background-color: #0a0f18;
+}
+
+/* The artwork itself is never replaced or re-exported — it's graded in the
+   browser. brightness pulls it out of the "too bright" range, saturate takes
+   the blue down from vivid to deep navy, and the slight contrast lift keeps
+   the topographic lines and route dots from muddying as it darkens. Every
+   detail of the source image survives; only its tonality moves. */
+html.dark .home-services__art {
+  filter: brightness(0.68) saturate(0.58) contrast(1.18);
+}
+
+html.dark .home-services__veil {
+  background:
+    /* fade the top edge out of the hero — kills the hard horizontal seam */
+    linear-gradient(to bottom,
+      #0a0f18 0%,
+      rgba(10, 15, 24, 0.55) 9%,
+      rgba(10, 15, 24, 0) 27%),
+    /* and settle the bottom edge into My Work */
+    linear-gradient(to top,
+      #0a0f18 0%,
+      rgba(10, 15, 24, 0.6) 10%,
+      rgba(10, 15, 24, 0) 30%),
+    /* re-light the warm glow on the right that the grade pulled down */
+    radial-gradient(58% 72% at 92% 34%,
+      rgba(242, 201, 76, 0.17) 0%,
+      rgba(242, 201, 76, 0.05) 45%,
+      rgba(242, 201, 76, 0) 72%),
+    /* and the lighthouse lamp itself, so it still reads as the light source */
+    radial-gradient(24% 38% at 6% 44%,
+      rgba(242, 201, 76, 0.14) 0%,
+      rgba(242, 201, 76, 0) 70%),
+    /* diagonal navy body — this is what keeps the section from going flat
+       black while still reading as midnight. Kept light on alpha so the
+       topographic lines, route dots and lighthouse stay legible through it. */
+    linear-gradient(158deg,
+      rgba(19, 30, 52, 0.34) 0%,
+      rgba(10, 15, 24, 0.1) 46%,
+      rgba(15, 24, 41, 0.36) 100%);
+}
+
+/* --- My Work ---------------------------------------------------------- */
+/* No slab. A shallow vertical gradient lifts the middle of the section a few
+   values above the midnight it starts and ends on, which reads as depth
+   rather than as a different-coloured band. */
+.home-work {
+  position: relative;
+}
+
+html.dark .home-work {
+  background: linear-gradient(to bottom,
+    #0a0f18 0%,
+    #0e1523 38%,
+    #0e1523 62%,
+    #0a0f18 100%);
+}
+
+html.light .home-work {
+  background: linear-gradient(to bottom,
+    #faf6ef 0%,
+    #f5efe3 42%,
+    #f5efe3 60%,
+    #faf6ef 100%);
+}
+
+/* Hairline separation instead of a colour change. Fading both ends keeps it
+   editorial — a full-width rule would just reinstate a band edge. */
+.home-work::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(to right,
+    rgba(242, 201, 76, 0) 0%,
+    rgba(242, 201, 76, 0.22) 24%,
+    rgba(242, 201, 76, 0.22) 76%,
+    rgba(242, 201, 76, 0) 100%);
+}
+
+html.light .home-work::before {
+  background: linear-gradient(to right,
+    rgba(140, 97, 3, 0) 0%,
+    rgba(140, 97, 3, 0.2) 24%,
+    rgba(140, 97, 3, 0.2) 76%,
+    rgba(140, 97, 3, 0) 100%);
+}
+
+/* --- Client Testimonials ---------------------------------------------- */
+/* Same approach as the services section: the compass-rose artwork is kept
+   and graded in CSS, never replaced. The grade is a touch lighter here
+   because this artwork carries less fine linework to lose. */
+
+html.dark .home-reviews {
+  background-color: #0a0f18;
+}
+
+html.dark .home-reviews__art {
+  filter: brightness(0.62) saturate(0.55) contrast(1.16);
+}
+
+html.dark .home-reviews__veil {
+  background:
+    linear-gradient(to bottom,
+      #0a0f18 0%,
+      rgba(10, 15, 24, 0.6) 10%,
+      rgba(10, 15, 24, 0) 30%),
+    linear-gradient(to top,
+      #0a0f18 0%,
+      rgba(10, 15, 24, 0.62) 11%,
+      rgba(10, 15, 24, 0) 32%),
+    /* keep the compass rose reading as the warm focal point */
+    radial-gradient(34% 62% at 84% 46%,
+      rgba(242, 201, 76, 0.16) 0%,
+      rgba(242, 201, 76, 0.04) 48%,
+      rgba(242, 201, 76, 0) 72%),
+    /* navy body angled the opposite way to services, so the section has its
+       own identity without leaving the family */
+    linear-gradient(202deg,
+      rgba(19, 30, 52, 0.3) 0%,
+      rgba(10, 15, 24, 0.08) 50%,
+      rgba(15, 24, 41, 0.34) 100%);
+}
+
+/* Light keeps the artwork exactly as it is — no grade, no tint. The veil only
+   feathers the two edges into cream so the section stops reading as a band. */
+html.light .home-reviews__veil {
+  background:
+    linear-gradient(to bottom,
+      #faf6ef 0%,
+      rgba(250, 246, 239, 0.55) 9%,
+      rgba(250, 246, 239, 0) 26%),
+    linear-gradient(to top,
+      #faf6ef 0%,
+      rgba(250, 246, 239, 0.6) 10%,
+      rgba(250, 246, 239, 0) 28%);
+}
+
+/* --- A Beacon in the Digital Fog -------------------------------------- */
+/* No artwork of its own, so identity comes from a soft warm pool on the left,
+   behind the lighthouse image — an echo of the illumination theme rather than
+   a change of section colour. */
+.home-story {
+  position: relative;
+}
+
+html.dark .home-story {
+  background:
+    radial-gradient(66% 88% at 24% 50%,
+      rgba(242, 201, 76, 0.06) 0%,
+      rgba(242, 201, 76, 0) 62%),
+    linear-gradient(to bottom,
+      #0a0f18 0%,
+      #0c121e 42%,
+      #0c121e 58%,
+      #0a0f18 100%);
+}
+
+html.light .home-story {
+  background:
+    radial-gradient(66% 88% at 24% 50%,
+      rgba(242, 201, 76, 0.1) 0%,
+      rgba(242, 201, 76, 0) 62%),
+    linear-gradient(to bottom,
+      #faf6ef 0%,
+      #f6f0e5 42%,
+      #f6f0e5 58%,
+      #faf6ef 100%);
+}
+
+/* Matches the My Work hairline so the gradient sections share one rhythm. */
+.home-story::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(to right,
+    rgba(242, 201, 76, 0) 0%,
+    rgba(242, 201, 76, 0.22) 24%,
+    rgba(242, 201, 76, 0.22) 76%,
+    rgba(242, 201, 76, 0) 100%);
+}
+
+html.light .home-story::before {
+  background: linear-gradient(to right,
+    rgba(140, 97, 3, 0) 0%,
+    rgba(140, 97, 3, 0.2) 24%,
+    rgba(140, 97, 3, 0.2) 76%,
+    rgba(140, 97, 3, 0) 100%);
+}
+
+/* --- Light-mode edge feathering for the services artwork --------------- */
+/* Matches what the testimonials veil does in light mode. The artwork itself
+   is untouched — no grade, no tint, no reposition — this only softens the two
+   horizontal boundaries so the section stops reading as a band. */
+html.light .home-services__veil {
+  background:
+    linear-gradient(to bottom,
+      #faf6ef 0%,
+      rgba(250, 246, 239, 0.55) 9%,
+      rgba(250, 246, 239, 0) 26%),
+    linear-gradient(to top,
+      #faf6ef 0%,
+      rgba(250, 246, 239, 0.6) 10%,
+      rgba(250, 246, 239, 0) 28%);
+}
+
+/* --- Global footer ----------------------------------------------------- */
+/* Surface only. Content, hierarchy, typography, links, the lighthouse mark,
+   spacing and alignment are all untouched — this replaces the slab background
+   and the grey top border with the page's own language.
+
+   The gradient deepens toward the bottom rather than returning to its start
+   value, which reads as the page closing out instead of another band. */
+.site-footer {
+  position: relative;
+}
+
+html.dark .site-footer {
+  background: linear-gradient(to bottom,
+    #0a0f18 0%,
+    #0b1220 42%,
+    #080c14 100%);
+}
+
+html.light .site-footer {
+  background: linear-gradient(to bottom,
+    #faf6ef 0%,
+    #f7f1e6 42%,
+    #f3ecdd 100%);
+}
+
+/* Replaces the old grey border-t with the hairline used between homepage
+   sections, so the footer joins the page the same way they join each other. */
+.site-footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(to right,
+    rgba(242, 201, 76, 0) 0%,
+    rgba(242, 201, 76, 0.22) 24%,
+    rgba(242, 201, 76, 0.22) 76%,
+    rgba(242, 201, 76, 0) 100%);
+}
+
+html.light .site-footer::before {
+  background: linear-gradient(to right,
+    rgba(140, 97, 3, 0) 0%,
+    rgba(140, 97, 3, 0.2) 24%,
+    rgba(140, 97, 3, 0.2) 76%,
+    rgba(140, 97, 3, 0) 100%);
+}
+
+/* ====================================
+   BRAND GOLD EMPHASIS
+   ------------------------------------
+   One flat, theme-aware gold for emphasised words, replacing the legacy
+   yellow→orange clipped gradient. Opt-in via
+   <BrightPathGradientTitle emphasis="solid">, so nothing changes anywhere
+   the prop isn't passed.
+
+   Same pair the approved hero uses: brand gold on midnight, and the same
+   hue dropped in lightness for cream, because #F2C94C measures 1.47:1 on
+   #FAF6EF and cannot carry text. hsl(41,95%,32%) vs brand gold's
+   hsl(44,91%,47%) — one gold family, adjusted only for contrast.
+   ==================================== */
+.text-brand-gold {
+  color: #9e6e04;
+}
+
+html.dark .text-brand-gold {
+  color: #f2c94c;
+}
+
+/* Footer emphasis, light theme only.
+   The homepage headings use #9E6E04, which is fine for large display text but
+   measures 3.81:1 against the deeper end of the footer's cream gradient — and
+   "Inspired by Edward Almeida" is body-size, so it needs 4.5:1. This drops to
+   the small-text gold already used for the hero eyebrow, the light active nav
+   link and the ghost CTA hover (4.67:1 at the footer's darkest point). Same
+   gold family, no new colour, scoped so the homepage headings are unaffected.
+   Dark mode needs no override: #F2C94C is 12:1+ on the footer's midnight. */
+html.light .site-footer .text-brand-gold {
+  color: #8c6103;
 }
