@@ -42,12 +42,15 @@ const FlipCard: React.FC<FlipCardProps> = ({
       <div className="flip-card relative w-full h-full transition-transform duration-700 transform-style-3d group-hover:rotate-y-180">
 
         {/* FRONT SIDE OF CARD */}
-        <div className="flip-card-front absolute w-full h-full backface-hidden rounded-xl p-3 sm:p-4 flex flex-col items-center justify-center text-white bg-[linear-gradient(to_right,#243B55,#141E30)] border border-primary/30 shadow-glow-primary">
+        <div className="flip-card-front flip-card-face--front absolute w-full h-full backface-hidden p-3 sm:p-4 flex flex-col items-center justify-center">
           {/* Icon */}
           <div className="mb-1">
             <img
               src={iconUrl}
-              alt={iconAlt}
+              /* WordPress often omits alt text for these phase icons, and React
+                 drops the attribute entirely when the value is undefined. They
+                 sit beside the phase title, so an empty alt is correct. */
+              alt={iconAlt ?? ""}
               className="w-full max-w-[180px] h-8 sm:h-10 object-contain drop-shadow-lg"
             />
           </div>
@@ -55,25 +58,27 @@ const FlipCard: React.FC<FlipCardProps> = ({
           <div className="flex flex-col items-center justify-start">
             <BrightPathGradientTitle
               as="span"
-              textColor="text-white"
+              emphasis="none"
+              textColor="text-foreground"
               className="card-heading text-center block">
               {mainHeading}
             </BrightPathGradientTitle>
             <BrightPathGradientTitle
               as="span"
-              textColor="text-white black:text-slate-200"
+              textColor="text-foreground"
               gradientWords={["Planning", "Prototyping", "Implementation", "Refining", "Deployment", "Support", "Updates"]}
+              emphasis="solid"
               className="card-subheading tracking-wide text-center block">
               {subheading}
             </BrightPathGradientTitle>
             {frontCardDescription && (
-              <p className="mt-1 text-gray-200 text-center text-shadow-md card-text line-clamp-2">{frontCardDescription}</p>
+              <p className="mt-1 services-body text-center card-text line-clamp-2">{frontCardDescription}</p>
             )}
           </div>
         </div>
 
         {/* BACK SIDE OF CARD */}
-        <div className="flip-card-back absolute inset-0 backface-hidden bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl p-3 sm:p-4 flex flex-col justify-between text-[#1A2238] rotate-y-180 shadow-glow-primary overflow-hidden">
+        <div className="flip-card-back flip-card-face--back absolute inset-0 backface-hidden p-3 sm:p-4 flex flex-col justify-between text-[#10192b] rotate-y-180 overflow-hidden">
           <div
             className="absolute inset-0 z-0 opacity-10"
             style={{
@@ -83,15 +88,15 @@ const FlipCard: React.FC<FlipCardProps> = ({
           />
 
           <div className="relative z-10">
-            <h3 className="card-subheading text-center mb-2 text-[#1A2238] text-shadow-md">
+            <h3 className="card-subheading text-center mb-2 text-[#10192b]">
               {backCardTitle}
             </h3>
 
-            <ul className="space-y-3 list-disc list-inside text-[#1A2238] card-text">
+            <ul className="space-y-3 list-disc list-inside text-[#10192b] card-text">
               {bulletPoints.slice(0, 3).map((point, index) => {
                 const p = point;
                 return (
-                  <li key={index} className="card-text text-[#1A2238]">
+                  <li key={index} className="card-text text-[#10192b]">
                     {p.text || p.list_item_text || p.bullet_point || p.bullet_text || ""}
                   </li>
                 );
@@ -103,7 +108,7 @@ const FlipCard: React.FC<FlipCardProps> = ({
             </p>
           </div>
         <Link to="/contact">
-          <button className="w-full mx-0 bg-[#1A2238] text-primary font-bold py-1.5 rounded-md transition-all duration-300 ease-in-out hover:bg-[#222c48] shadow-md card-text relative z-10">
+          <button className="flip-card-cta w-full mx-0 py-1.5 card-text relative z-10">
             {backCardButtonText}
             </button>
           </Link>

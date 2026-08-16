@@ -14,15 +14,12 @@ import {
   BarChart3,
   FileCheck2,
   Wrench,
-  ArrowRight,
   CheckCircle2,
 } from "lucide-react";
 import { FlipCardContainer } from "../components/ui/FlipCard";
-import { getFlipCardPhases } from "../services/api.service";
+import { getFlipCardPhases, ApiError } from "../services/api.service";
 import { PhaseCard } from "../types/phaseCard";
-import { useAppStore } from '@/store/appStore';
-import BrightPathGradientButton from "@/components/BrightPathGradientButton.legacy";
-import { BrightPathGradientTitle } from "@/components/portfolio";
+import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
 import { PageMeta } from "@/components/PageMeta";
 
 const SERVICES_META = {
@@ -55,14 +52,6 @@ const SERVICES_META = {
       description: 'End-to-end social media content programs including calendars, original photography and video, and multi-platform publishing.',
     },
   ],
-};
-
-// Lighthouse parallax background applied to hero, process, and CTA sections.
-// Note: backgroundAttachment: fixed doesn't work on iOS, so we use md:bg-fixed class instead
-const LIGHTHOUSE_BG_STYLE: React.CSSProperties = {
-  backgroundImage: "url('/images/BG-Lighthouse-Desktop.jpeg')",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
 };
 
 const SERVICES = [
@@ -109,26 +98,32 @@ const TECH_STACK = [
 ];
 
 const ServicesPage: React.FC = () => {
-  const { theme } = useAppStore();
   const [cards, setCards] = useState<PhaseCard[]>([]);
   const [processLoading, setProcessLoading] = useState(true);
   const [processError, setProcessError] = useState<string | null>(null);
+  const [processDetail, setProcessDetail] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCards = async () => {
       try {
-        const data = await getFlipCardPhases();
-        // Defensive normalize — the phases endpoint can return a non-array
-        // (e.g. a WP error envelope object) with a 200 status. Without this
-        // guard, FlipCardContainer's `cards.map(...)` crashes the section.
-        if (Array.isArray(data)) {
-          setCards(data);
-        } else {
-          console.warn('Phases endpoint returned non-array response:', data);
-          setProcessError("Process data isn't available right now");
-        }
+        // getFlipCardPhases now guarantees an array or throws an ApiError that
+        // says which failure it was, so no shape-guard is needed here.
+        setCards(await getFlipCardPhases());
       } catch (err) {
-        setProcessError(err instanceof Error ? err.message : "Couldn't load process data");
+        if (err instanceof ApiError) {
+          // The dev-proxy case is a local setup issue, not a site fault — name
+          // it so it isn't mistaken for a broken endpoint.
+          setProcessError(
+            err.kind === 'dev-proxy'
+              ? 'Process details are unavailable in this dev server.'
+              : "Process details couldn't load — but the rest of the page works. Refresh to try again.",
+          );
+          setProcessDetail(err.detail ?? err.message);
+          console.warn(`[phases] ${err.kind}: ${err.message}`, err.detail ?? '');
+        } else {
+          setProcessError("Process details couldn't load — but the rest of the page works. Refresh to try again.");
+          console.warn('[phases] unexpected failure', err);
+        }
       } finally {
         setProcessLoading(false);
       }
@@ -136,36 +131,48 @@ const ServicesPage: React.FC = () => {
     fetchCards();
   }, []);
 
-  const tintedSectionBg = theme === 'dark' ? 'bg-[#273442]/90' : 'bg-gray-100/90';
-  const cardBg = theme === 'dark'
-    ? 'bg-[#1A2238] border border-primary/20 shadow-glow-primary'
-    : 'bg-white border border-primary/50 shadow-xl';
-
   return (
-    <div style={LIGHTHOUSE_BG_STYLE} className="md:bg-fixed">
+    <div className="services-page">
       <PageMeta {...SERVICES_META} />
 
       {/* === HERO === */}
-      <section
-        className="relative min-h-[55vh] flex items-center justify-center px-4 pt-36 pb-20 overflow-hidden md:bg-fixed"
-        style={LIGHTHOUSE_BG_STYLE}
-      >
-        <div className="absolute inset-0 bg-black/55" aria-hidden="true" />
+      <section className="services-hero">
+        <div className="services-hero__media" aria-hidden="true">
+          <img
+            src="/images/lighthouse-hero-dark.webp"
+            alt=""
+            width={1717}
+            height={916}
+            fetchPriority="high"
+            decoding="async"
+            className="services-hero__img services-hero__img--dark"
+          />
+          <img
+            src="/images/lighthouse-hero-light.webp"
+            alt=""
+            width={1718}
+            height={915}
+            decoding="async"
+            className="services-hero__img services-hero__img--light"
+          />
+          <span className="services-hero__scrim" />
+        </div>
         <motion.div
-          className="relative z-10 container mx-auto max-w-4xl text-center"
+          className="services-hero__inner"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
           <BrightPathGradientTitle
             as="h1"
-            className="font-poppins font-bold mb-6 text-white"
-            gradientWords={["Services", "Perform"]}
-            textColor="text-white"
+            className="services-hero__title font-poppins font-bold mb-6"
+            gradientWords={["Perform"]}
+            emphasis="solid"
+            textColor="text-foreground"
           >
             Services Built to Perform
           </BrightPathGradientTitle>
-          <p className="text-base md:text-lg lg:text-xl text-white/90 font-lato max-w-2xl mx-auto leading-relaxed text-shadow-md">
+          <p className="services-hero__lede text-base md:text-lg lg:text-xl font-lato leading-relaxed">
             Front-end development, performance optimization, custom React and WordPress builds,
             and social media strategy — delivered with a focus on craft, clarity, and measurable results.
           </p>
@@ -173,17 +180,18 @@ const ServicesPage: React.FC = () => {
       </section>
 
       {/* === WHAT I BUILD === */}
-      <section className={`py-20 px-4 ${tintedSectionBg}`}>
+      <section className="services-section services-atmos services-atmos--build py-20 md:py-24 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <BrightPathGradientTitle
               as="h2"
               className="font-poppins font-bold mb-4"
               gradientWords={["Build"]}
+              emphasis="solid"
             >
               What I Build
             </BrightPathGradientTitle>
-            <p className="font-lato text-muted-foreground max-w-2xl mx-auto">
+            <p className="font-lato services-body max-w-2xl mx-auto">
               Four core service tracks — pick one or combine them for a full launch.
             </p>
           </div>
@@ -192,16 +200,16 @@ const ServicesPage: React.FC = () => {
             {SERVICES.map((service) => {
               const Icon = service.icon;
               return (
-                <div key={service.title} className={`p-8 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${cardBg}`}>
-                  <Icon className="h-10 w-10 mb-4 text-primary drop-shadow-md" aria-hidden="true" />
+                <div key={service.title} className="services-card p-8">
+                  <Icon className="services-card__icon h-10 w-10 mb-4" aria-hidden="true" />
                   <BrightPathGradientTitle
                     as="h3"
                     className="font-poppins font-semibold mb-3 text-xl"
-                    gradientWords={["Modernization", "Optimization", "Development", "Content"]}
+                    emphasis="none"
                   >
                     {service.title}
                   </BrightPathGradientTitle>
-                  <p className="font-lato text-muted-foreground leading-relaxed">
+                  <p className="font-lato services-body leading-relaxed">
                     {service.description}
                   </p>
                 </div>
@@ -212,48 +220,46 @@ const ServicesPage: React.FC = () => {
       </section>
 
       {/* === OUR PROCESS (existing — async-loaded FlipCards) === */}
-      <section
-        className="relative py-20 px-4 overflow-hidden md:bg-fixed"
-        style={LIGHTHOUSE_BG_STYLE}
-      >
-        <div className="absolute inset-0 bg-black/55" aria-hidden="true" />
+      <section className="services-section services-atmos services-atmos--process services-rule py-20 md:py-24 px-4">
         <motion.div
-          className="relative z-10 container mx-auto"
+          className="container mx-auto"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8 lg:gap-12 items-center">
-            <div className="text-white">
+            <div>
               <BrightPathGradientTitle
                 as="h2"
                 className="font-bold mb-4"
                 gradientWords={["Process"]}
-                textColor="text-white"
+                emphasis="solid"
               >
                 Our Process
               </BrightPathGradientTitle>
-              <p className="mb-6 text-shadow-md">
+              <p className="mb-6 services-body">
                 Every website I create follows a clear, purposeful path — from the first spark of an idea
                 to a seamless, fully launched experience.
               </p>
-              <p className="text-sm md:text-lg text-shadow-md mb-8">
+              <p className="text-sm md:text-lg services-body mb-8">
                 A six-phase approach so each project is thoughtfully planned, beautifully designed, and built to perform.
               </p>
-              <Link to="/contact">
-                <BrightPathGradientButton className="text-muted-foreground text-shadow-md font-bold py-3 px-6 rounded-md hover:bg-yellow-400 transition-colors">
-                  Start Your Project
-                </BrightPathGradientButton>
+              <Link to="/contact" className="studio-cta studio-cta--primary">
+                Start Your Project
+                <span className="studio-cta__arrow" aria-hidden="true">&#8594;</span>
               </Link>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 min-h-[200px]">
               {processLoading ? (
-                <div className="col-span-full text-center text-white/80 py-8">Loading process…</div>
+                <div className="col-span-full text-center services-body py-8">Loading process…</div>
               ) : processError ? (
-                <div className="col-span-full text-center text-red-300 py-8">
-                  Process details couldn't load — but the rest of the page works. Refresh to try again.
+                <div className="col-span-full text-center py-8" role="status">
+                  <p className="services-body">{processError}</p>
+                  {processDetail && (
+                    <p className="mt-2 text-xs services-body opacity-70 max-w-md mx-auto">{processDetail}</p>
+                  )}
                 </div>
               ) : (
                 <FlipCardContainer cards={cards} />
@@ -264,17 +270,18 @@ const ServicesPage: React.FC = () => {
       </section>
 
       {/* === WHAT'S INCLUDED === */}
-      <section className={`py-20 px-4 ${tintedSectionBg}`}>
+      <section className="services-section services-atmos services-atmos--included services-rule py-20 md:py-24 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <BrightPathGradientTitle
               as="h2"
               className="font-poppins font-bold mb-4"
               gradientWords={["Included"]}
+              emphasis="solid"
             >
               What's Included With Every Project
             </BrightPathGradientTitle>
-            <p className="font-lato text-muted-foreground max-w-2xl mx-auto">
+            <p className="font-lato services-body max-w-2xl mx-auto">
               These aren't add-ons — they're the baseline. Every site I build ships with all of them.
             </p>
           </div>
@@ -283,12 +290,12 @@ const ServicesPage: React.FC = () => {
             {INCLUDED.map((item) => {
               const Icon = item.icon;
               return (
-                <div key={item.title} className={`p-6 pr-8 rounded-lg ${cardBg}`}>
+                <div key={item.title} className="services-card p-6 pr-8">
                   <div className="flex items-start gap-4">
-                    <Icon className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" aria-hidden="true" />
+                    <Icon className="services-card__icon h-6 w-6 flex-shrink-0 mt-0.5" aria-hidden="true" />
                     <div>
-                      <h3 className="font-poppins font-semibold text-sm mb-2 text-primary">{item.title}</h3>
-                      <p className="font-lato text-sm text-muted-foreground leading-relaxed">{item.description}</p>
+                      <h3 className="font-poppins font-semibold text-sm mb-2 text-foreground">{item.title}</h3>
+                      <p className="font-lato text-sm services-body leading-relaxed">{item.description}</p>
                     </div>
                   </div>
                 </div>
@@ -299,23 +306,24 @@ const ServicesPage: React.FC = () => {
       </section>
 
       {/* === TECH STACK === */}
-      <section className={`py-20 px-4 ${theme === 'dark' ? 'bg-[#1A2238]/90' : 'bg-white/90'}`}>
+      <section className="services-section services-section--tonal services-atmos services-atmos--stack services-rule py-20 md:py-24 px-4">
         <div className="container mx-auto max-w-4xl text-center">
           <BrightPathGradientTitle
             as="h2"
             className="font-poppins font-bold mb-4"
             gradientWords={["Stack"]}
+            emphasis="solid"
           >
             Tech Stack
           </BrightPathGradientTitle>
-          <p className="font-lato text-muted-foreground mb-10 max-w-2xl mx-auto">
+          <p className="font-lato services-body mb-10 max-w-2xl mx-auto">
             The tools I reach for day to day. Whatever the right fit is for your project — custom React build or CMS-driven WordPress site — these are the building blocks.
           </p>
           <div className="flex flex-wrap justify-center gap-2 md:gap-3">
             {TECH_STACK.map((tool) => (
               <span
                 key={tool}
-                className={`px-4 py-2 rounded-full text-sm md:text-base font-medium border border-primary/40 ${theme === 'dark' ? 'bg-[#1A2238] text-foreground' : 'bg-white text-foreground'}`}
+                className="services-pill px-4 py-2 text-sm md:text-base font-medium"
               >
                 {tool}
               </span>
@@ -325,27 +333,28 @@ const ServicesPage: React.FC = () => {
       </section>
 
       {/* === MAINTENANCE === */}
-      <section className={`py-20 px-4 ${tintedSectionBg}`}>
+      <section className="services-section services-atmos services-atmos--warm services-rule py-20 md:py-24 px-4">
         <div className="container mx-auto max-w-3xl text-center">
-          <Wrench className="h-10 w-10 mx-auto mb-4 text-primary" aria-hidden="true" />
+          <Wrench className="services-card__icon h-10 w-10 mx-auto mb-4" aria-hidden="true" />
           <BrightPathGradientTitle
             as="h2"
             className="font-poppins font-bold mb-4"
             gradientWords={["Maintenance"]}
+            emphasis="solid"
           >
             Ongoing Maintenance
           </BrightPathGradientTitle>
-          <p className="font-lato text-muted-foreground mb-10 max-w-2xl mx-auto">
+          <p className="font-lato services-body mb-10 max-w-2xl mx-auto">
             Modern sites need periodic upkeep — security patches, dependency updates, content swaps.
             BrightPath offers a flat-rate monthly plan so you don't have to think about it.
           </p>
 
-          <div className={`p-8 md:p-10 rounded-lg ${cardBg} text-left max-w-2xl mx-auto`}>
+          <div className="services-card p-8 md:p-10 text-left max-w-2xl mx-auto">
             <div className="flex flex-col sm:flex-row items-baseline justify-between gap-2 mb-6">
               <h3 className="font-poppins font-bold text-2xl">Monthly Maintenance</h3>
               <div>
-                <span className="font-poppins font-bold text-3xl text-primary">$100</span>
-                <span className="text-muted-foreground">/month</span>
+                <span className="services-card__icon font-poppins font-bold text-3xl">$100</span>
+                <span className="services-body">/month</span>
               </div>
             </div>
 
@@ -358,13 +367,13 @@ const ServicesPage: React.FC = () => {
                 "Monthly check that analytics is still tracking properly",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3 text-foreground">
-                  <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <CheckCircle2 className="services-card__icon h-5 w-5 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <span>{item}</span>
                 </li>
               ))}
             </ul>
 
-            <p className="font-lato text-sm text-muted-foreground mt-6">
+            <p className="font-lato text-sm services-body mt-6">
               Billed on the same day each month. Larger changes (new sections, redesigns) are quoted separately.
             </p>
           </div>
@@ -372,28 +381,25 @@ const ServicesPage: React.FC = () => {
       </section>
 
       {/* === CTA === */}
-      <section
-        className="relative py-24 px-4 overflow-hidden md:bg-fixed"
-        style={LIGHTHOUSE_BG_STYLE}
-      >
-        <div className="absolute inset-0 bg-black/65" aria-hidden="true" />
-        <div className="relative z-10 container mx-auto max-w-3xl text-center text-white">
+      <section className="services-cta py-24 md:py-28 px-4">
+        <div className="services-cta__art" aria-hidden="true" />
+        <div className="services-cta__scrim" aria-hidden="true" />
+        <div className="services-cta__inner container mx-auto max-w-3xl text-center">
           <BrightPathGradientTitle
             as="h2"
-            className="font-poppins font-bold mb-4 text-white"
+            className="font-poppins font-bold mb-4"
             gradientWords={["project"]}
-            textColor="text-white"
+            emphasis="solid"
+            textColor="text-foreground"
           >
             Ready to start a project?
           </BrightPathGradientTitle>
-          <p className="font-lato text-white/90 text-shadow-md mb-8 max-w-xl mx-auto">
+          <p className="font-lato services-body mb-8 max-w-xl mx-auto">
             Tell me what you're building and where you're stuck. I'll get back within 24 hours with next steps.
           </p>
-          <Link to="/contact" className="inline-block">
-            <BrightPathGradientButton className="inline-flex items-center gap-2 text-shadow-md font-bold py-3 px-8 rounded-md hover:bg-yellow-400 transition-colors">
-              Get in touch
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </BrightPathGradientButton>
+          <Link to="/contact" className="studio-cta studio-cta--primary">
+            Get in touch
+            <span className="studio-cta__arrow" aria-hidden="true">&#8594;</span>
           </Link>
         </div>
       </section>
