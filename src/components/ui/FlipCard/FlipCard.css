@@ -32,3 +32,64 @@
 .flip-card-container:hover .flip-card {
   transform: rotateY(180deg);
 }
+/* ------------------------------------------------------------------
+   Card faces — Services redesign.
+   Front adopts the same surface as `.services-card` (hairline border, no
+   glow, 3px radius). Back uses solid brand gold rather than the old
+   yellow-400→yellow-500 gradient, with midnight type on top.
+   ------------------------------------------------------------------ */
+.flip-card-face--front {
+  border-radius: 3px;
+  border: 1px solid rgba(242, 201, 76, 0.16);
+  background: rgba(19, 28, 46, 0.78);
+}
+
+html.light .flip-card-face--front {
+  /* Decorative hairline in the light theme's single gold. */
+  border: 1px solid rgba(132, 99, 0, 0.2);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.flip-card-face--back {
+  border-radius: 3px;
+  background: #f2c94c;
+}
+
+/* The light theme's gold, matching every other gold fill in that theme. The
+   back-face copy is set in the markup as `text-[#10192b]`, which measures
+   only 2.83:1 on this deeper gold, so light overrides the whole face to
+   cream (5.18:1). Dark keeps midnight type on luminous gold, unchanged. */
+html.light .flip-card-face--back {
+  background: #846300;
+}
+
+html.light .flip-card-face--back,
+html.light .flip-card-face--back h3,
+html.light .flip-card-face--back li,
+html.light .flip-card-face--back p,
+html.light .flip-card-face--back span {
+  color: #faf6ef;
+}
+
+/* Back-face CTA: midnight fill, gold label — the inverse of the hero primary,
+   which reads correctly against a gold card. */
+.flip-card-cta {
+  border-radius: 2px;
+  background: #10192b;
+  color: #f2c94c;
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  transition: background-color 0.28s ease;
+}
+
+.flip-card-cta:hover { background: #1a2740; }
+
+.flip-card-cta:focus-visible {
+  outline: 2px solid #10192b;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flip-card-cta { transition: none; }
+}

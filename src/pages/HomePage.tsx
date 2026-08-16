@@ -69,7 +69,11 @@ const ServicesSection = ({ theme }: SectionProps) => {
           How I Help Businesses
         </BrightPathGradientTitle>
 
-        <p className="font-lato text-muted-foreground mb-12 max-w-2xl mx-auto">
+        {/* `.services-body` rather than `text-muted-foreground`: the latter
+            resolves to a mid-slate measuring 4.03:1 on the cream ground, under
+            the 4.5:1 bar for normal text. Colour only — family, size, weight,
+            spacing and width are unchanged. */}
+        <p className="font-lato services-body mb-12 max-w-2xl mx-auto">
           Transforming outdated websites into modern, high-performing digital experiences.
         </p>
 

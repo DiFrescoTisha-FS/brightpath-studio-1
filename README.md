@@ -1,8 +1,35 @@
-# React + TypeScript + Vite
+# BrightPath Web Studio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Portfolio site for Tisha Di Fresco / BrightPath Web Studio LLC. React 18 + TypeScript +
+Vite + Tailwind CSS + Framer Motion, deployed on Netlify with 12 statically prerendered
+routes.
 
-Currently, two official plugins are available:
+```bash
+npm run dev      # local dev server
+npm run build    # production build (set SKIP_PRERENDER=1 to skip prerender + its gate)
+npm run lint
+```
+
+## Before changing anything visual
+
+Read **`CLAUDE.md`** first. It records the approved visual system and the reasoning behind
+decisions that are easy to undo by accident. Two that matter most:
+
+- **One gold per theme.** Dark `#F2C94C`, light `#846300`, both driven by the `--primary`
+  token. Don't add per-role gold shades — several were built and rejected.
+- **Background artwork is meant to be visible.** The grading, feathering and scrim values
+  are deliberate; don't fade them back without a design reason.
+
+`CLAUDE.md` also covers the prerendering rules, which have several non-obvious constraints
+(never `hydrateRoot`, `/app.html` is the SPA fallback, the `verifyPrerender` build gate).
+
+Dated changelogs (`CHANGELOG-YYYY-MM-DD.md`) record what changed in each session.
+
+---
+
+## Vite + React tooling notes
+
+Two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh

@@ -58,8 +58,14 @@
     --services-card-icon: 44 91% 54%; /* #EBB109 */
     --services-card-paragraph-text: 0 0% 100%;/* #white  */
     
-    --primary: 44 91% 54%;          /* #EBB109 - Buttons, Gold */
-    --primary-foreground: 226 41% 16%;/* #1A2238 - Button Text */
+    /* THE light-theme gold. One value for every gold role — display text,
+       small text, fills, borders, hairlines, icons. hsl() form because
+       Tailwind composes it with opacity modifiers. #846300 is the deepest
+       point of the brand gold family that still reads as gold; it is set by
+       the text requirement (5.18:1 on cream), and a fill of it carries a
+       cream label at the same 5.18:1. */
+    --primary: 45 100% 25.9%;       /* #846300 - the single light-mode gold */
+    --primary-foreground: 38 52% 96%;/* #FAF6EF - cream label on a gold fill */
     --secondary: 226 41% 16%;       /* #1A2238 - Headings/Icons */
     --secondary-foreground: 226 41% 16%;/* #1A2238 - Paragraph Text (Dark Blue) */
     --muted: 220 15% 96%;           /* For muted text or backgrounds */
@@ -90,8 +96,11 @@
     --services-card-icon: 226 41% 16%; /* #1A2238 */
     --services-card-paragraph-text: 226 41% 16%; /* #1A2238 */
     
-    --primary: 44 91% 54%;           /* #EBB109 - Buttons, Gold */
-    --primary-foreground: 226 41% 16%;/* #1A2238 - Button Text */
+    /* THE dark-theme gold — luminous BrightPath gold, unchanged in value,
+       now also driving every `--primary` use so dark mode has exactly one
+       gold rather than #F2C94C alongside a second yellow. */
+    --primary: 45.2 86.5% 62.4%;     /* #F2C94C - the single dark-mode gold */
+    --primary-foreground: 226 41% 16%;/* #1A2238 - midnight label on gold, 10.1:1 */
     --secondary: 215 16.3% 46.9%;    /* #9CA5AF - Accent/Icon color, Dark */
     --secondary-foreground: 0 0% 100%;/* #FFFFFF - Paragraph Text */
 
@@ -154,6 +163,23 @@
        f_auto/q_auto:good/w_1920/c_limit/dpr_auto. */
     --timeline-bg-light: url('https://res.cloudinary.com/djqw1de3s/image/upload/f_auto/q_auto:good/w_1920/c_limit/dpr_auto/brightpath/background-images/2FA7BEB5-2F9F-4CA6-A6AC-312BD3DEF319_rydpdh.png');
     --timeline-bg-dark: url('https://res.cloudinary.com/djqw1de3s/image/upload/f_auto/q_auto:good/w_1920/c_limit/dpr_auto/brightpath/background-images/30C31BFE-DFC0-4B78-8092-B0977853A8B0_cspwa9.png');
+
+    /* The same homepage background artwork, exposed to CSS so the Services
+       sections can reuse the real motifs — lighthouse, topographic linework,
+       route dots, compass rose — instead of a separate invented decoration.
+       Same reason as the timeline vars above: CSS can't import from TS. */
+    --home-art-services-light: url('https://res.cloudinary.com/djqw1de3s/image/upload/f_auto/q_auto:good/w_1920/c_limit/dpr_auto/brightpath/background-images/09733844-51EB-4FED-9D45-96D27F6B5721_h0pgqv');
+    --home-art-services-dark: url('https://res.cloudinary.com/djqw1de3s/image/upload/f_auto/q_auto:good/w_1920/c_limit/dpr_auto/brightpath/background-images/39D0F6A1-1E44-47D3-AF62-76DA60A068D2_vrt9t4');
+    --home-art-compass-light: url('https://res.cloudinary.com/djqw1de3s/image/upload/f_auto/q_auto:good/w_1920/c_limit/dpr_auto/brightpath/background-images/773F3E3F-CEF6-4DA0-BB15-AC025AEAA336_qhyuw3');
+    --home-art-compass-dark: url('https://res.cloudinary.com/djqw1de3s/image/upload/f_auto/q_auto:good/w_1920/c_limit/dpr_auto/brightpath/background-images/A8DC3DBB-E83E-4F6D-8BE0-EB82145DF29A_cyrlwi');
+
+    /* Portrait-oriented variants of the same two artworks, at w_1200. The
+       homepage swaps to these below `md` so the wide desktop composition
+       doesn't crop badly on a phone; Services does the same. */
+    --home-art-services-light-mobile: url('https://res.cloudinary.com/djqw1de3s/image/upload/f_auto/q_auto:good/w_1200/c_limit/dpr_auto/brightpath/background-images/DD66B962-520A-4DB7-B601-AF7B05C10EA4_x49gkb');
+    --home-art-services-dark-mobile: url('https://res.cloudinary.com/djqw1de3s/image/upload/f_auto/q_auto:good/w_1200/c_limit/dpr_auto/brightpath/background-images/775767A6-F757-46B8-BEDB-07E2CAFAE02A_tzca8a.png');
+    --home-art-compass-light-mobile: url('https://res.cloudinary.com/djqw1de3s/image/upload/f_auto/q_auto:good/w_1200/c_limit/dpr_auto/brightpath/background-images/E163A136-43C0-4F7A-A3BC-D9F60A029A6E_nonghd');
+    --home-art-compass-dark-mobile: url('https://res.cloudinary.com/djqw1de3s/image/upload/f_auto/q_auto:good/w_1200/c_limit/dpr_auto/brightpath/background-images/786F78DB-EC9D-478E-9F21-52905E7BEB81_rsel8f');
   }
 
   .dark {
@@ -618,11 +644,11 @@ html.light .studio-hero__scrim {
 }
 
 html.light .studio-hero__eyebrow {
-  color: #8c6103;
+  color: #846300;
 }
 
 html.light .studio-hero__eyebrow::before {
-  background: linear-gradient(to right, rgba(140, 97, 3, 0.85), rgba(140, 97, 3, 0.15));
+  background: linear-gradient(to right, rgba(132, 99, 0, 0.9), rgba(132, 99, 0, 0.15));
 }
 
 html.light .studio-hero__title {
@@ -630,27 +656,34 @@ html.light .studio-hero__title {
 }
 
 html.light .studio-hero__accent {
-  color: #9e6e04;
+  color: #846300;
 }
 
 html.light .studio-hero__lede {
   color: rgba(26, 34, 56, 0.74);
 }
 
-/* Same outlined treatment on cream. Brand gold can't carry the label here —
-   #EBB109 is 1.80:1 on cream — so the resting label and border use the
-   deepened gold already established for the eyebrow and active nav (5.09:1),
-   then hand over to brand gold as the fill on hover. */
+/* Gold fill in both themes; only the gold itself differs. The label is cream
+   rather than midnight because this gold is deep enough to carry text on
+   cream (5.18:1) — which is the same property that makes midnight type fail
+   on it (2.83:1). Hover darkens the same gold via a filter rather than
+   declaring a second value, so the theme keeps exactly one gold. */
 html.light .studio-cta--primary {
-  border-color: #8c6103;
-  background: transparent;
-  color: #8c6103;
+  border-color: #846300;
+  background: #846300;
+  color: #faf6ef;
 }
 
 html.light .studio-cta--primary:hover {
-  background: #ebb109;
-  border-color: #ebb109;
-  color: #1a2238;
+  background: #846300;
+  border-color: #846300;
+  color: #faf6ef;
+  filter: brightness(0.88);
+}
+
+html.light .studio-hero__cta .studio-cta--primary,
+html.light .studio-hero__cta .studio-cta--primary:hover {
+  color: #faf6ef;
 }
 
 html.light .studio-cta--ghost {
@@ -661,14 +694,12 @@ html.light .studio-cta--ghost::after {
   background: rgba(26, 34, 56, 0.26);
 }
 
-/* Uses the deeper eyebrow gold, not the accent gold: this is normal-size
-   text, so it needs 4.5:1 (5.09:1) rather than the accent's large-text 3:1. */
 html.light .studio-cta--ghost:hover {
   color: #1a2238;
 }
 
 html.light .studio-cta--ghost:hover::after {
-  background: #8c6103;
+  background: #846300;
 }
 
 /* Midnight ring in light mode — it stays visible against both the cream
@@ -797,33 +828,40 @@ html.light .studio-cta:focus-visible {
   color: #10192b;
 }
 
-/* Light theme: gold-on-white fails contrast as text, so the label is
-   midnight until the gold fill arrives on hover. */
+/* Light theme reads as navy information plus a gold accent: the active label
+   is navy (distinct from the resting `text-gray-700`), while the hairline
+   under it stays luminous brand gold. The hairline is decorative — the active
+   route is already carried by the colour shift and `aria-current="page"` — so
+   it has no contrast requirement of its own. */
 html.light .nav-link--active {
-  color: #8c6103;
+  color: #846300;
 }
 
 html.light .nav-link::after,
 html.light .nav-link--active::after {
-  background: #8c6103;
+  background: #846300;
 }
 
+/* Focus rings sit 3px outside the control, so they are measured against the
+   page rather than the button fill: this gold is 5.58:1 on the white header. */
 html.light .nav-link:focus-visible,
 html.light .nav-cta:focus-visible {
-  outline-color: #8c6103;
+  outline-color: #846300;
 }
 
-/* 0.75 alpha, not lower: below ~0.7 the border drops under the 3:1
-   non-text contrast bar and starts reading as neutral grey rather than gold. */
+/* Same gold fill and cream label as the page CTAs, so every primary control
+   in the theme reads as one component family. */
 html.light .nav-cta {
-  border-color: rgba(140, 97, 3, 0.75);
-  color: #1a2238;
+  background: #846300;
+  border-color: #846300;
+  color: #faf6ef;
 }
 
 html.light .nav-cta:hover {
-  background: #ebb109;
-  border-color: #ebb109;
-  color: #1a2238;
+  background: #846300;
+  border-color: #846300;
+  color: #faf6ef;
+  filter: brightness(0.88);
 }
 
 /* Mobile menu: the rule treatment doesn't read at full-width block links,
@@ -875,39 +913,71 @@ html.dark .home-services {
    browser. brightness pulls it out of the "too bright" range, saturate takes
    the blue down from vivid to deep navy, and the slight contrast lift keeps
    the topographic lines and route dots from muddying as it darkens. Every
-   detail of the source image survives; only its tonality moves. */
+   detail of the source image survives; only its tonality moves.
+
+   These values are the page's master grade — `.services-atmos::before` reuses
+   them verbatim, so changing them here moves both pages together. The earlier
+   0.68/0.58 pair removed a third of the luminance and over 40% of the colour
+   before any overlay landed, which is what left the artwork imperceptible
+   (measured contribution of 6/255 mid-section). */
 html.dark .home-services__art {
-  filter: brightness(0.68) saturate(0.58) contrast(1.18);
+  filter: brightness(0.9) saturate(0.82) contrast(1.12);
+}
+
+/* Light mode needs the opposite treatment. There is almost no overlay here to
+   remove, so the faintness is the artwork's own low contrast against cream —
+   the only lever that moves it is grading the art itself.
+
+   It has to be `brightness`, not `contrast`. The light artwork is near-white
+   with its contour linework only a few values below the cream ground, so a
+   contrast lift clips all of it to pure white: a trial at contrast(1.14)
+   erased the topographic lines across these sections entirely, dropping the
+   share of the section carrying visible artwork from 95% to 2%. Easing
+   brightness down instead separates the artwork from the cream without
+   touching the top of the range, so the linework survives. */
+html.light .home-services__art {
+  filter: brightness(0.955) saturate(1.18);
 }
 
 html.dark .home-services__veil {
   background:
-    /* fade the top edge out of the hero — kills the hard horizontal seam */
+    /* Localized protection, sized to the heading and lede only. The cards
+       below carry their own surfaces, so the artwork stays open around them
+       instead of being washed flat across the whole section. */
+    radial-gradient(40% 21% at 50% 21%,
+      rgba(10, 15, 24, 0.66) 0%,
+      rgba(10, 15, 24, 0.36) 54%,
+      rgba(10, 15, 24, 0) 100%),
+    /* fade the top edge out of the hero — kills the hard horizontal seam.
+       The ramp ends at 16% rather than 27%: still a ~110px dissolve at
+       desktop height, but it hands two-thirds of the section back to the
+       artwork instead of two-fifths. */
     linear-gradient(to bottom,
       #0a0f18 0%,
-      rgba(10, 15, 24, 0.55) 9%,
-      rgba(10, 15, 24, 0) 27%),
+      rgba(10, 15, 24, 0.42) 5%,
+      rgba(10, 15, 24, 0) 16%),
     /* and settle the bottom edge into My Work */
     linear-gradient(to top,
       #0a0f18 0%,
-      rgba(10, 15, 24, 0.6) 10%,
-      rgba(10, 15, 24, 0) 30%),
+      rgba(10, 15, 24, 0.46) 5%,
+      rgba(10, 15, 24, 0) 17%),
     /* re-light the warm glow on the right that the grade pulled down */
     radial-gradient(58% 72% at 92% 34%,
-      rgba(242, 201, 76, 0.17) 0%,
-      rgba(242, 201, 76, 0.05) 45%,
+      rgba(242, 201, 76, 0.14) 0%,
+      rgba(242, 201, 76, 0.04) 45%,
       rgba(242, 201, 76, 0) 72%),
     /* and the lighthouse lamp itself, so it still reads as the light source */
     radial-gradient(24% 38% at 6% 44%,
-      rgba(242, 201, 76, 0.14) 0%,
+      rgba(242, 201, 76, 0.12) 0%,
       rgba(242, 201, 76, 0) 70%),
     /* diagonal navy body — this is what keeps the section from going flat
-       black while still reading as midnight. Kept light on alpha so the
-       topographic lines, route dots and lighthouse stay legible through it. */
+       black while still reading as midnight. It is the only layer covering
+       100% of the section, so every point of alpha here is a flat tax on
+       artwork visibility; held well under half its previous weight. */
     linear-gradient(158deg,
-      rgba(19, 30, 52, 0.34) 0%,
-      rgba(10, 15, 24, 0.1) 46%,
-      rgba(15, 24, 41, 0.36) 100%);
+      rgba(19, 30, 52, 0.2) 0%,
+      rgba(10, 15, 24, 0.04) 46%,
+      rgba(15, 24, 41, 0.22) 100%);
 }
 
 /* --- My Work ---------------------------------------------------------- */
@@ -953,10 +1023,10 @@ html.light .home-work {
 
 html.light .home-work::before {
   background: linear-gradient(to right,
-    rgba(140, 97, 3, 0) 0%,
-    rgba(140, 97, 3, 0.2) 24%,
-    rgba(140, 97, 3, 0.2) 76%,
-    rgba(140, 97, 3, 0) 100%);
+    rgba(132, 99, 0, 0) 0%,
+    rgba(132, 99, 0, 0.24) 24%,
+    rgba(132, 99, 0, 0.24) 76%,
+    rgba(132, 99, 0, 0) 100%);
 }
 
 /* --- Client Testimonials ---------------------------------------------- */
@@ -968,45 +1038,62 @@ html.dark .home-reviews {
   background-color: #0a0f18;
 }
 
+/* The compass artwork's own grade — a touch lighter than the services art,
+   since it carries less fine linework to lose. */
 html.dark .home-reviews__art {
-  filter: brightness(0.62) saturate(0.55) contrast(1.16);
+  filter: brightness(0.87) saturate(0.8) contrast(1.11);
+}
+
+html.light .home-reviews__art {
+  filter: brightness(0.955) saturate(1.18);
 }
 
 html.dark .home-reviews__veil {
   background:
+    /* Localized protection for the heading. The review cards below carry
+       their own surfaces, and the rose sits right of centre, so this stays a
+       narrow pool over the title rather than a section-wide wash. */
+    radial-gradient(34% 20% at 50% 20%,
+      rgba(10, 15, 24, 0.64) 0%,
+      rgba(10, 15, 24, 0.34) 54%,
+      rgba(10, 15, 24, 0) 100%),
     linear-gradient(to bottom,
       #0a0f18 0%,
-      rgba(10, 15, 24, 0.6) 10%,
-      rgba(10, 15, 24, 0) 30%),
+      rgba(10, 15, 24, 0.46) 5%,
+      rgba(10, 15, 24, 0) 17%),
     linear-gradient(to top,
       #0a0f18 0%,
-      rgba(10, 15, 24, 0.62) 11%,
-      rgba(10, 15, 24, 0) 32%),
+      rgba(10, 15, 24, 0.48) 6%,
+      rgba(10, 15, 24, 0) 18%),
     /* keep the compass rose reading as the warm focal point */
     radial-gradient(34% 62% at 84% 46%,
-      rgba(242, 201, 76, 0.16) 0%,
-      rgba(242, 201, 76, 0.04) 48%,
+      rgba(242, 201, 76, 0.13) 0%,
+      rgba(242, 201, 76, 0.03) 48%,
       rgba(242, 201, 76, 0) 72%),
     /* navy body angled the opposite way to services, so the section has its
        own identity without leaving the family */
     linear-gradient(202deg,
-      rgba(19, 30, 52, 0.3) 0%,
-      rgba(10, 15, 24, 0.08) 50%,
-      rgba(15, 24, 41, 0.34) 100%);
+      rgba(19, 30, 52, 0.18) 0%,
+      rgba(10, 15, 24, 0.03) 50%,
+      rgba(15, 24, 41, 0.2) 100%);
 }
 
-/* Light keeps the artwork exactly as it is — no grade, no tint. The veil only
-   feathers the two edges into cream so the section stops reading as a band. */
+/* Light feathers the two edges into cream so the section stops reading as a
+   band, plus the same localized pool behind the heading. */
 html.light .home-reviews__veil {
   background:
+    radial-gradient(34% 20% at 50% 20%,
+      rgba(250, 246, 239, 0.72) 0%,
+      rgba(250, 246, 239, 0.4) 54%,
+      rgba(250, 246, 239, 0) 100%),
     linear-gradient(to bottom,
       #faf6ef 0%,
-      rgba(250, 246, 239, 0.55) 9%,
-      rgba(250, 246, 239, 0) 26%),
+      rgba(250, 246, 239, 0.44) 5%,
+      rgba(250, 246, 239, 0) 16%),
     linear-gradient(to top,
       #faf6ef 0%,
-      rgba(250, 246, 239, 0.6) 10%,
-      rgba(250, 246, 239, 0) 28%);
+      rgba(250, 246, 239, 0.46) 6%,
+      rgba(250, 246, 239, 0) 17%);
 }
 
 /* --- A Beacon in the Digital Fog -------------------------------------- */
@@ -1059,26 +1146,46 @@ html.light .home-story {
 
 html.light .home-story::before {
   background: linear-gradient(to right,
-    rgba(140, 97, 3, 0) 0%,
-    rgba(140, 97, 3, 0.2) 24%,
-    rgba(140, 97, 3, 0.2) 76%,
-    rgba(140, 97, 3, 0) 100%);
+    rgba(132, 99, 0, 0) 0%,
+    rgba(132, 99, 0, 0.24) 24%,
+    rgba(132, 99, 0, 0.24) 76%,
+    rgba(132, 99, 0, 0) 100%);
 }
 
-/* --- Light-mode edge feathering for the services artwork --------------- */
-/* Matches what the testimonials veil does in light mode. The artwork itself
-   is untouched — no grade, no tint, no reposition — this only softens the two
-   horizontal boundaries so the section stops reading as a band. */
+/* --- Light-mode treatment for the services artwork --------------------- */
+/* Matches what the testimonials veil does in light mode: the two horizontal
+   boundaries are softened so the section stops reading as a band, and the
+   heading/lede block gets its own localized pool. */
 html.light .home-services__veil {
   background:
+    radial-gradient(40% 21% at 50% 21%,
+      rgba(250, 246, 239, 0.74) 0%,
+      rgba(250, 246, 239, 0.42) 54%,
+      rgba(250, 246, 239, 0) 100%),
     linear-gradient(to bottom,
       #faf6ef 0%,
-      rgba(250, 246, 239, 0.55) 9%,
-      rgba(250, 246, 239, 0) 26%),
+      rgba(250, 246, 239, 0.42) 5%,
+      rgba(250, 246, 239, 0) 15%),
     linear-gradient(to top,
       #faf6ef 0%,
-      rgba(250, 246, 239, 0.6) 10%,
-      rgba(250, 246, 239, 0) 28%);
+      rgba(250, 246, 239, 0.46) 5%,
+      rgba(250, 246, 239, 0) 16%);
+}
+
+/* --- Homepage services artwork: mobile framing ------------------------- */
+/* The portrait variant is 1920x3412. At `cover` in a ~390x1116 section the
+   whole 3412px height is squeezed in, which shrinks the lighthouse and beam
+   to nothing and leaves the measured contribution front-loaded (19/255 across
+   the top band, 2.6 through the middle, 1.8 at the foot — the artwork reads
+   as having run out). Zooming in and holding the lighthouse-and-beam band
+   spreads the interest down the section instead. */
+@media (max-width: 767px) {
+  /* Scoped through the section so it outranks Tailwind's `bg-cover bg-center`
+     on the same element, which is a single class like `.home-services__art`. */
+  .home-services .home-services__art {
+    background-size: 165% auto;
+    background-position: 24% 46%;
+  }
 }
 
 /* --- Global footer ----------------------------------------------------- */
@@ -1125,10 +1232,10 @@ html.light .site-footer {
 
 html.light .site-footer::before {
   background: linear-gradient(to right,
-    rgba(140, 97, 3, 0) 0%,
-    rgba(140, 97, 3, 0.2) 24%,
-    rgba(140, 97, 3, 0.2) 76%,
-    rgba(140, 97, 3, 0) 100%);
+    rgba(132, 99, 0, 0) 0%,
+    rgba(132, 99, 0, 0.24) 24%,
+    rgba(132, 99, 0, 0.24) 76%,
+    rgba(132, 99, 0, 0) 100%);
 }
 
 /* ====================================
@@ -1139,27 +1246,788 @@ html.light .site-footer::before {
    <BrightPathGradientTitle emphasis="solid">, so nothing changes anywhere
    the prop isn't passed.
 
-   Same pair the approved hero uses: brand gold on midnight, and the same
-   hue dropped in lightness for cream, because #F2C94C measures 1.47:1 on
-   #FAF6EF and cannot carry text. hsl(41,95%,32%) vs brand gold's
-   hsl(44,91%,47%) — one gold family, adjusted only for contrast.
+   Dark mode keeps brand gold on midnight, where it measures 12:1+.
+
+   Light mode no longer uses gold for emphasis text at all. #F2C94C is 1.47:1
+   on cream and misses even the 3:1 large-text bar by half, and every deepened
+   variant that did pass (#9E6E04/#8C6103, then the hue-corrected
+   #A27B00/#846300) read as ochre rather than as BrightPath gold. So the light
+   theme carries emphasis in navy — the same `--foreground` the surrounding
+   heading already uses — and gold returns as decoration only: hairlines,
+   section rules, card accents, glows and hover accents, which carry no
+   contrast requirement and so can run at full luminous #F2C94C.
+
+   Consequence worth knowing: in light mode an emphasised word is now the same
+   colour as the rest of its heading, so `emphasis="solid"` no longer produces
+   a visible colour shift there. Dark mode is unaffected.
    ==================================== */
 .text-brand-gold {
-  color: #9e6e04;
+  color: #846300;
 }
 
 html.dark .text-brand-gold {
   color: #f2c94c;
 }
 
-/* Footer emphasis, light theme only.
-   The homepage headings use #9E6E04, which is fine for large display text but
-   measures 3.81:1 against the deeper end of the footer's cream gradient — and
-   "Inspired by Edward Almeida" is body-size, so it needs 4.5:1. This drops to
-   the small-text gold already used for the hero eyebrow, the light active nav
-   link and the ghost CTA hover (4.67:1 at the footer's darkest point). Same
-   gold family, no new colour, scoped so the homepage headings are unaffected.
-   Dark mode needs no override: #F2C94C is 12:1+ on the footer's midnight. */
-html.light .site-footer .text-brand-gold {
-  color: #8c6103;
+/* --- Tailwind `--primary` as text, light theme only --------------------
+   `--primary` (#F4BC1F) is deliberately identical in both themes because it
+   is also the fill behind the header CTA, the Featured badge and the
+   "Read Our Reviews" button, where it carries midnight type and passes
+   comfortably. As *text* on the cream ground it does not: "Illuminating
+   Success" measured 1.54:1, and the portfolio and case-study category labels
+   1.54-1.74:1, all against a 4.5:1 requirement.
+
+   Overriding the text utility rather than the token leaves every fill,
+   border and dark-mode use untouched. */
+/* No override needed any more: `--primary` is now the theme gold itself, so
+   `text-primary` resolves to #846300 in light and #F2C94C in dark. */
+
+/* --- Tailwind `--primary` as a CTA fill, light theme only ---------------
+   `bg-primary` is used for two different things: solid CTA buttons, and small
+   decorative marks (the Featured badges, the 64x4 rule beside "Illuminating
+   Success", the Dale Tiffany slider handle). Only the buttons become navy —
+   scoping by element type keeps every decorative use on luminous brand gold,
+   which is exactly where the accent still belongs.
+
+   `text-primary-foreground` / `text-white` / `text-slate-800` sit on these
+   buttons as single utility classes, so (0,2,1) here takes the label with it.
+   Hover is a deeper navy plus a gold border accent rather than a colour the
+   label has to fight. Padding, radius, size and typography are untouched. */
+html.light button.bg-primary,
+html.light a.bg-primary {
+  color: #faf6ef;
+}
+
+html.light button.bg-primary:hover,
+html.light a.bg-primary:hover {
+  background-color: hsl(var(--primary));
+  color: #faf6ef;
+  filter: brightness(0.88);
+}
+
+/* The single exception to one-gold-per-theme, and it is a surface exception
+   rather than a second tier: the About hero name is gold text sitting on the
+   mountain photograph (backdrop luminance 0.30, measured) even in light mode.
+   The system's own rule is luminous gold on dark grounds and deep gold on
+   cream, so a dark ground takes the luminous value here — 2.02:1 against
+   1.65:1 for the deep gold.
+
+   Neither clears the 3:1 large-text bar. That is a pre-existing failure that
+   needs a scrim behind the copy, not a colour change, and is out of scope. */
+html.light h1.text-primary {
+  color: #f2c94c;
+}
+
+/* ====================================
+   SERVICES PAGE
+   ------------------------------------
+   Same surface language as the homepage (`.home-*`), applied to a page with
+   different needs. The lighthouse photograph appears twice on purpose — full
+   strength in the hero, then once more as a low glow behind the closing CTA —
+   instead of tiling behind every section as page-level wallpaper.
+   ==================================== */
+
+.services-page {
+  position: relative;
+}
+
+html.dark .services-page { background-color: #0a0f18; }
+html.light .services-page { background-color: #faf6ef; }
+
+/* --- Hero --------------------------------------------------------------
+   Same composition as the approved homepage hero: copy left, photograph
+   right, dissolved leftward with a mask + scrim rather than used as a
+   full-screen background. The panel is taller than the image's aspect, so
+   `cover` crops horizontally and the whole lighthouse — lantern included —
+   stays in frame. */
+.services-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+.services-hero__media {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 62%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.services-hero__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 72% 42%;
+
+  -webkit-mask-image:
+    linear-gradient(to right,
+      rgba(0,0,0,0) 0%, rgba(0,0,0,0.05) 9%, rgba(0,0,0,0.4) 23%,
+      rgba(0,0,0,0.88) 40%, rgba(0,0,0,1) 55%),
+    linear-gradient(to bottom,
+      rgba(0,0,0,0) 0%, rgba(0,0,0,1) 13%, rgba(0,0,0,1) 76%, rgba(0,0,0,0) 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right,
+      rgba(0,0,0,0) 0%, rgba(0,0,0,0.05) 9%, rgba(0,0,0,0.4) 23%,
+      rgba(0,0,0,0.88) 40%, rgba(0,0,0,1) 55%),
+    linear-gradient(to bottom,
+      rgba(0,0,0,0) 0%, rgba(0,0,0,1) 13%, rgba(0,0,0,1) 76%, rgba(0,0,0,0) 100%);
+  mask-composite: intersect;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* One image per theme */
+.services-hero__img--light { display: none; }
+html.light .services-hero__img--dark { display: none; }
+html.light .services-hero__img--light { display: block; }
+
+.services-hero__scrim { position: absolute; inset: 0; pointer-events: none; }
+
+html.dark .services-hero__scrim {
+  background:
+    linear-gradient(100deg, #0a0f18 0%, #0a0f18 19%,
+      rgba(10,15,24,0.7) 35%, rgba(10,15,24,0.22) 54%, rgba(10,15,24,0) 71%),
+    linear-gradient(to top, rgba(6,10,16,0.72) 0%, rgba(6,10,16,0) 26%);
+}
+
+html.light .services-hero__scrim {
+  background:
+    linear-gradient(100deg, #faf6ef 0%, #faf6ef 19%,
+      rgba(250,246,239,0.72) 35%, rgba(250,246,239,0.24) 54%, rgba(250,246,239,0) 71%),
+    linear-gradient(to top, rgba(243,236,221,0.6) 0%, rgba(243,236,221,0) 26%);
+}
+
+.services-hero__inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 9rem 1.5rem 4rem;
+}
+
+.services-hero__title,
+.services-hero__lede { max-width: 34rem; }
+
+.services-hero__lede { color: rgba(245, 240, 232, 0.88); }
+html.light .services-hero__lede { color: rgba(26, 34, 56, 0.82); }
+
+/* Body copy. `text-muted-foreground` resolves to a mid-slate that measures
+   4.15-4.42:1 on the cream ground - under the 4.5:1 bar for normal text. These
+   are the values the approved homepage lede already uses (6.49:1 on cream),
+   so Services inherits the same treatment rather than a competing one. */
+.services-body { color: rgba(245, 240, 232, 0.74); }
+html.light .services-body { color: rgba(26, 34, 56, 0.74); }
+
+/* Below the desktop breakpoint the photo becomes a band under the copy, the
+   same recomposition the homepage hero uses. */
+@media (max-width: 1023px) {
+  .services-hero { display: block; min-height: 0; }
+  .services-hero__inner { padding: 7.5rem 1.4rem 2.5rem; }
+  .services-hero__title, .services-hero__lede { max-width: none; }
+  .services-hero__media {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: clamp(16rem, 34vw + 6rem, 26rem);
+  }
+  .services-hero__img {
+    object-position: 72% 40%;
+    -webkit-mask-image: linear-gradient(to bottom,
+      rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 16%, rgba(0,0,0,1) 46%, rgba(0,0,0,1) 84%, rgba(0,0,0,0) 100%);
+    -webkit-mask-composite: source-over;
+    mask-image: linear-gradient(to bottom,
+      rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 16%, rgba(0,0,0,1) 46%, rgba(0,0,0,1) 84%, rgba(0,0,0,0) 100%);
+    mask-composite: add;
+  }
+  html.dark .services-hero__scrim {
+    background: linear-gradient(to bottom, #0a0f18 0%, rgba(10,15,24,0.45) 26%, rgba(10,15,24,0) 54%),
+      linear-gradient(to top, #0a0f18 0%, rgba(10,15,24,0.45) 20%, rgba(10,15,24,0) 48%);
+  }
+  html.light .services-hero__scrim {
+    background: linear-gradient(to bottom, #faf6ef 0%, rgba(250,246,239,0.45) 26%, rgba(250,246,239,0) 54%),
+      linear-gradient(to top, #faf6ef 0%, rgba(250,246,239,0.45) 20%, rgba(250,246,239,0) 48%);
+  }
+}
+
+/* --- Section rhythm ---------------------------------------------------- */
+/* Ground sections carry no background of their own — they sit on the page
+   colour, which is what stops the banding. */
+.services-section { position: relative; }
+
+/* A shallow tonal lift, same idea as `.home-work`. Used once, for Tech Stack. */
+html.dark .services-section--tonal {
+  background: linear-gradient(to bottom, #0a0f18 0%, #0e1523 40%, #0e1523 60%, #0a0f18 100%);
+}
+
+html.light .services-section--tonal {
+  background: linear-gradient(to bottom, #faf6ef 0%, #f5efe3 42%, #f5efe3 60%, #faf6ef 100%);
+}
+
+/* A warm pool, same idea as `.home-story`. Used once, for Maintenance. */
+html.dark .services-section--warm {
+  background:
+    radial-gradient(62% 86% at 50% 50%, rgba(242, 201, 76, 0.07) 0%, rgba(242, 201, 76, 0) 62%),
+    linear-gradient(to bottom, #0a0f18 0%, #0c121e 44%, #0a0f18 100%);
+}
+
+html.light .services-section--warm {
+  background:
+    radial-gradient(62% 86% at 50% 50%, rgba(242, 201, 76, 0.12) 0%, rgba(242, 201, 76, 0) 62%),
+    linear-gradient(to bottom, #faf6ef 0%, #f6f0e5 44%, #faf6ef 100%);
+}
+
+/* Closing CTA ------------------------------------------------------------
+   No lighthouse here: the hero already opens on it, and repeating the photo
+   made the page end where it began. This closes on the homepage compass
+   artwork instead — the navigation motif, centred and low, under a warm gold
+   focal glow — and settles into the footer's own opening colour rather than
+   back to the page ground, so the two read as one continuous close. */
+.services-cta { position: relative; isolation: isolate; overflow: hidden; }
+
+.services-cta__art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center 58%;
+  -webkit-mask-image: radial-gradient(88% 96% at 50% 54%, #000 0%, rgba(0,0,0,0.82) 56%, rgba(0,0,0,0) 92%);
+  mask-image: radial-gradient(88% 96% at 50% 54%, #000 0%, rgba(0,0,0,0.82) 56%, rgba(0,0,0,0) 92%);
+}
+
+html.dark .services-cta__art {
+  background-image: var(--home-art-compass-dark);
+  filter: brightness(0.87) saturate(0.8) contrast(1.11);
+}
+
+html.light .services-cta__art {
+  background-image: var(--home-art-compass-light);
+  filter: brightness(0.955) saturate(1.18);
+}
+
+.services-cta__scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+
+html.dark .services-cta__scrim {
+  background:
+    /* localized protection for the heading and lede, which sit centred */
+    radial-gradient(34% 30% at 50% 42%,
+      rgba(10, 15, 24, 0.6) 0%,
+      rgba(10, 15, 24, 0.32) 56%,
+      rgba(10, 15, 24, 0) 100%),
+    /* the focal glow the CTA closes on */
+    radial-gradient(44% 58% at 50% 44%,
+      rgba(242, 201, 76, 0.13) 0%,
+      rgba(242, 201, 76, 0.03) 46%,
+      rgba(242, 201, 76, 0) 74%),
+    /* feather in from Maintenance */
+    linear-gradient(to bottom,
+      #0a0f18 0%,
+      rgba(10, 15, 24, 0.48) 6%,
+      rgba(10, 15, 24, 0) 18%),
+    /* and hand off to the footer's opening value, not back to the ground */
+    linear-gradient(to top,
+      #0a0f18 0%,
+      rgba(10, 15, 24, 0.56) 7%,
+      rgba(10, 15, 24, 0) 22%),
+    linear-gradient(180deg,
+      rgba(19, 30, 52, 0.17) 0%,
+      rgba(10, 15, 24, 0.04) 48%,
+      rgba(15, 24, 41, 0.2) 100%);
+}
+
+html.light .services-cta__scrim {
+  background:
+    radial-gradient(34% 30% at 50% 42%,
+      rgba(250, 246, 239, 0.7) 0%,
+      rgba(250, 246, 239, 0.38) 56%,
+      rgba(250, 246, 239, 0) 100%),
+    radial-gradient(44% 58% at 50% 44%,
+      rgba(242, 201, 76, 0.13) 0%,
+      rgba(242, 201, 76, 0.03) 46%,
+      rgba(242, 201, 76, 0) 74%),
+    linear-gradient(to bottom,
+      #faf6ef 0%,
+      rgba(250, 246, 239, 0.48) 6%,
+      rgba(250, 246, 239, 0) 17%),
+    linear-gradient(to top,
+      #f7f1e6 0%,
+      rgba(247, 241, 230, 0.56) 7%,
+      rgba(250, 246, 239, 0) 22%);
+}
+
+/* Mobile: portrait variant, same as the atmosphere sections. */
+@media (max-width: 767px) {
+  .services-cta__art {
+    background-position: center center;
+    -webkit-mask-image: radial-gradient(96% 90% at 50% 56%, #000 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0) 94%);
+    mask-image: radial-gradient(96% 90% at 50% 56%, #000 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0) 94%);
+  }
+  html.dark .services-cta__art { background-image: var(--home-art-compass-dark-mobile); }
+  html.light .services-cta__art { background-image: var(--home-art-compass-light-mobile); }
+}
+
+.services-cta__inner { position: relative; z-index: 2; }
+
+/* --- Shared hairline --------------------------------------------------- */
+/* Scoped away from `.services-atmos`, which needs ::before for its artwork.
+   Those sections draw the same hairline as the first layer of their veil
+   instead — see the atmosphere block below. Without this exclusion the
+   hairline's `height: 1px` wins over the artwork's `inset: 0` and the
+   background paints into a one-pixel strip. */
+.services-rule:not(.services-atmos)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(to right,
+    rgba(242, 201, 76, 0) 0%,
+    rgba(242, 201, 76, 0.22) 24%,
+    rgba(242, 201, 76, 0.22) 76%,
+    rgba(242, 201, 76, 0) 100%);
+}
+
+html.light .services-rule:not(.services-atmos)::before {
+  background: linear-gradient(to right,
+    rgba(132, 99, 0, 0) 0%,
+    rgba(132, 99, 0, 0.24) 24%,
+    rgba(132, 99, 0, 0.24) 76%,
+    rgba(132, 99, 0, 0) 100%);
+}
+
+/* --- Cards ------------------------------------------------------------- */
+/* No glow, no heavy shadow, no gold ring on every card. A hairline border and
+   a slightly lifted surface; the icon carries the gold. */
+.services-card {
+  position: relative;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  transition: border-color 0.28s ease, background-color 0.28s ease;
+}
+
+html.dark .services-card {
+  background: rgba(19, 28, 46, 0.72);
+  border-color: rgba(242, 201, 76, 0.14);
+}
+
+html.dark .services-card:hover { border-color: rgba(242, 201, 76, 0.34); }
+
+html.light .services-card {
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(132, 99, 0, 0.2);
+}
+
+html.light .services-card:hover { border-color: rgba(132, 99, 0, 0.42); }
+
+/* Brand gold in both themes now — these icons are decorative (aria-hidden,
+   with a visible label beside them), so they carry no contrast requirement
+   and act as the card's accent. */
+.services-card__icon { color: #f2c94c; }
+
+/* Light theme takes the light gold — same value for the icons and for the
+   `$100` price that shares the class, since it clears 4.5:1 as text. */
+html.light .services-card__icon { color: #846300; }
+
+/* --- Tech stack pills --------------------------------------------------- */
+.services-pill {
+  border-radius: 2px;
+  border: 1px solid transparent;
+  transition: border-color 0.28s ease, color 0.28s ease;
+}
+
+html.dark .services-pill {
+  background: rgba(19, 28, 46, 0.6);
+  border-color: rgba(245, 240, 232, 0.14);
+  color: rgba(245, 240, 232, 0.86);
+}
+
+html.dark .services-pill:hover { border-color: rgba(242, 201, 76, 0.42); color: #f5f0e8; }
+
+html.light .services-pill {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(26, 34, 56, 0.14);
+  color: rgba(26, 34, 56, 0.84);
+}
+
+html.light .services-pill:hover { border-color: rgba(132, 99, 0, 0.45); color: #1a2238; }
+
+@media (prefers-reduced-motion: reduce) {
+  .services-card,
+  .services-pill { transition: none; }
+}
+
+/* ====================================
+   SERVICES — SECTION ATMOSPHERE
+   ------------------------------------
+   Reuses the homepage background artwork and its grading logic rather than a
+   separate decorative motif. Each section takes a different region of the
+   same art at homepage-equivalent opacity, so the page belongs to the system
+   while every section keeps its own identity.
+
+   Pattern, identical to `.home-services__art` / `__veil`:
+     ::before  the artwork, graded with filter and masked so it feathers out
+     ::after   a soft gold pool + the ground colour it dissolves into
+   ==================================== */
+
+.services-atmos { position: relative; isolation: isolate; }
+.services-atmos > * { position: relative; z-index: 1; }
+
+/* The same hairline `.services-rule` draws elsewhere, as a background layer so
+   it can ride on the veil rather than needing a pseudo-element of its own. */
+html.dark .services-atmos {
+  --services-hairline: linear-gradient(to right,
+    rgba(242, 201, 76, 0) 0%,
+    rgba(242, 201, 76, 0.22) 24%,
+    rgba(242, 201, 76, 0.22) 76%,
+    rgba(242, 201, 76, 0) 100%) top left / 100% 1px no-repeat;
+}
+
+html.light .services-atmos {
+  --services-hairline: linear-gradient(to right,
+    rgba(132, 99, 0, 0) 0%,
+    rgba(132, 99, 0, 0.24) 24%,
+    rgba(132, 99, 0, 0.24) 76%,
+    rgba(132, 99, 0, 0) 100%) top left / 100% 1px no-repeat;
+}
+
+.services-atmos::before,
+.services-atmos::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* The artwork runs at full opacity, exactly as `.home-services__art` and
+   `.home-reviews__art` do. Presence is controlled by grading and by how far
+   the veil above it feathers in — never by fading the art itself out, which
+   is what made the first pass read as flat. */
+.services-atmos::before {
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 1;
+}
+
+/* Homepage grading values, reused verbatim so the tonality matches — change
+   `.home-services__art` and this follows. Light mode is graded up rather than
+   left alone: with almost no overlay to remove, the artwork's own contrast
+   against cream is the whole limit, and only a filter moves it. */
+html.dark .services-atmos::before { filter: brightness(0.9) saturate(0.82) contrast(1.12); }
+html.light .services-atmos::before { filter: brightness(0.955) saturate(1.18); }
+
+/* Shared content scrims. Every atmosphere section except Our Process centres
+   its heading and lede at the top and puts cards (which carry their own
+   surfaces) below, so one localized pool serves them all. Declared as custom
+   properties because several sections replace `::after`'s background wholesale
+   and would otherwise each need their own copy. */
+html.dark .services-atmos {
+  --services-copy-scrim: radial-gradient(38% 20% at 50% 19%,
+    rgba(10, 15, 24, 0.66) 0%,
+    rgba(10, 15, 24, 0.36) 54%,
+    rgba(10, 15, 24, 0) 100%);
+  --services-feather-top: linear-gradient(to bottom,
+    #0a0f18 0%, rgba(10, 15, 24, 0.44) 5%, rgba(10, 15, 24, 0) 16%);
+  --services-feather-bottom: linear-gradient(to top,
+    #0a0f18 0%, rgba(10, 15, 24, 0.48) 5%, rgba(10, 15, 24, 0) 17%);
+}
+
+html.light .services-atmos {
+  --services-copy-scrim: radial-gradient(38% 20% at 50% 19%,
+    rgba(250, 246, 239, 0.74) 0%,
+    rgba(250, 246, 239, 0.42) 54%,
+    rgba(250, 246, 239, 0) 100%);
+  --services-feather-top: linear-gradient(to bottom,
+    #faf6ef 0%, rgba(250, 246, 239, 0.44) 5%, rgba(250, 246, 239, 0) 15%);
+  --services-feather-bottom: linear-gradient(to top,
+    #faf6ef 0%, rgba(250, 246, 239, 0.46) 5%, rgba(250, 246, 239, 0) 16%);
+}
+
+/* The veil is edge-feathering plus localized copy protection, not a wash. It
+   reaches full ground colour at the two horizontal boundaries and is clear
+   through the middle of the section, so the lighthouse, contours and route
+   dots are seen rather than sensed. The feather ramps end at 15-17% rather
+   than 26-30%, which roughly doubles the clear middle band. */
+html.dark .services-atmos::after {
+  background:
+    var(--services-hairline),
+    var(--services-copy-scrim),
+    var(--services-feather-top),
+    var(--services-feather-bottom),
+    linear-gradient(158deg,
+      rgba(19, 30, 52, 0.2) 0%,
+      rgba(10, 15, 24, 0.04) 46%,
+      rgba(15, 24, 41, 0.22) 100%);
+}
+
+html.light .services-atmos::after {
+  background:
+    var(--services-hairline),
+    var(--services-copy-scrim),
+    var(--services-feather-top),
+    var(--services-feather-bottom);
+}
+
+/* --- What I Build ------------------------------------------------------
+   The homepage services artwork at homepage presence: lighthouse on the
+   left, topographic linework and route dots across the body. Held at
+   `center 44%` so the lamp and the route detail both fall inside the band
+   the section crops to. --- */
+.services-atmos--build::before {
+  /* Positioned so the lighthouse falls in the left margin beside the card
+     grid rather than half-behind the first card. */
+  background-position: 24% center;
+}
+html.dark .services-atmos--build::before { background-image: var(--home-art-services-dark); }
+html.light .services-atmos--build::before { background-image: var(--home-art-services-light); }
+
+/* Re-light the lamp and the warm right edge the grade pulls down, exactly as
+   `.home-services__veil` does. */
+html.dark .services-atmos--build::after {
+  background:
+    var(--services-copy-scrim),
+    radial-gradient(24% 44% at 8% 46%,
+      rgba(242, 201, 76, 0.12) 0%,
+      rgba(242, 201, 76, 0) 70%),
+    radial-gradient(56% 70% at 92% 34%,
+      rgba(242, 201, 76, 0.13) 0%,
+      rgba(242, 201, 76, 0.03) 45%,
+      rgba(242, 201, 76, 0) 72%),
+    var(--services-feather-top),
+    var(--services-feather-bottom),
+    linear-gradient(158deg,
+      rgba(19, 30, 52, 0.2) 0%,
+      rgba(10, 15, 24, 0.04) 46%,
+      rgba(15, 24, 41, 0.22) 100%);
+}
+
+html.light .services-atmos--build::after {
+  background:
+    var(--services-copy-scrim),
+    radial-gradient(50% 66% at 90% 36%,
+      rgba(242, 201, 76, 0.1) 0%,
+      rgba(242, 201, 76, 0) 70%),
+    var(--services-feather-top),
+    var(--services-feather-bottom);
+}
+
+/* --- Our Process -------------------------------------------------------
+   The compass artwork from the homepage testimonials section. Anchored right
+   so the rose sits behind the outer edge of the flip-card grid rather than
+   under the cards themselves, and the left column keeps clear ground for the
+   heading and CTA. --- */
+.services-atmos--process::before {
+  /* Mirrored, which is the whole trick here: on the homepage the rose sits
+     top-right, but on this layout the flip-card grid occupies that corner and
+     would simply hide it. Flipping the same artwork puts the rose over the
+     open left column and sends the dotted route out under the cards instead
+     of behind them — visible, and out of the cards' way. */
+  transform: scaleX(-1);
+  /* Sized and top-anchored so the whole rose is inside the section.
+
+     The previous rule lifted the layer by a fixed -199px to push the rose off
+     the heading, which cut its top clean off against the section boundary —
+     a hard horizontal slice, most obvious in light mode. Anchoring to `top`
+     instead keeps the rose whole; the overlap with the heading it was trying
+     to avoid is now handled by the localized scrim in `::after`, which is the
+     right tool for it because it protects the text without erasing the art.
+
+     The size stays height-driven — that is what keeps the rose a consistent
+     size — but a purely height-driven width stops short of the section on
+     wide displays, and the mirror puts the resulting bare strip on the right.
+     `max()` raises the scale once the viewport passes that point so the layer
+     always spans the full width: the art is 1920x800, so painted width is
+     2.4x painted height, and 42.5vw x 2.4 = 102vw. The 92% branch keeps the
+     rose off the heading on tall/narrow sections where 42.5vw is the smaller
+     of the two. */
+  background-size: auto max(92%, 42.5vw);
+  background-position: right top;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 44%, rgba(0,0,0,0.6) 74%, rgba(0,0,0,0.34) 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 44%, rgba(0,0,0,0.6) 74%, rgba(0,0,0,0.34) 100%);
+}
+html.dark .services-atmos--process::before {
+  background-image: var(--home-art-compass-dark);
+  /* The compass artwork's own grade, matching `.home-reviews__art`. */
+  filter: brightness(0.87) saturate(0.8) contrast(1.11);
+}
+/* The light rose is a solid warm brown rather than fine linework. The old
+   mask released it to 0.34 by 27% of the section and 0.14 by the foot, which
+   measured a contribution of 1.2/255 — effectively invisible. Dark navy copy
+   over a warm rose is a far softer contrast problem than white copy over one,
+   so light can carry it much closer to full strength. */
+html.light .services-atmos--process::before {
+  background-image: var(--home-art-compass-light);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 42%, rgba(0,0,0,0.62) 72%, rgba(0,0,0,0.38) 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 42%, rgba(0,0,0,0.62) 72%, rgba(0,0,0,0.38) 100%);
+}
+
+/* Keep the rose reading as the warm focal point, as `.home-reviews__veil`
+   does, and angle the navy body the opposite way to What I Build so the
+   section has its own identity without leaving the family. */
+/* Our Process is the one section whose copy is not a centred block at the top
+   — at `lg` it becomes a left column running the full height, with the flip
+   cards to its right. So it overrides the shared scrim with an ellipse over
+   that column. This is what lets the rose sit whole and bright above and
+   around the copy instead of being masked away to avoid it. Below `lg` the
+   layout stacks and the shared centred scrim is already correct. */
+/* Centred on the heading rather than the middle of the column: the rose's
+   bright core lands right behind "Our Process", and the gold emphasis word
+   measured 2.83:1 (dark) and 2.05:1 (light) against it — under the 3:1 bar
+   for large text. The pool is anchored at the heading line and releases
+   downward and outward, so the rose's upper half and outer rays stay at full
+   strength and only the band carrying copy is protected. */
+@media (min-width: 1024px) {
+  html.dark .services-atmos--process {
+    --services-copy-scrim: radial-gradient(24% 40% at 19% 38%,
+      rgba(10, 15, 24, 0.88) 0%,
+      rgba(10, 15, 24, 0.5) 52%,
+      rgba(10, 15, 24, 0) 100%);
+  }
+  /* Centred on the heading line (measured: the gold word spans x 9.7-21.5%,
+     y 23.5-31.9% of the section), not on the middle of the column. The light
+     display gold is lighter than the gold it replaced, so it needs the rose
+     taken off that line to clear 3:1 — but centring the pool on the text lets
+     it stay small. A wider pool placed lower cost 10 points of visible
+     artwork to buy the same contrast. The body copy below is navy at ~6:1 and
+     needs no protection of its own. */
+  html.light .services-atmos--process {
+    --services-copy-scrim: radial-gradient(23% 19% at 15.5% 28%,
+      rgba(250, 246, 239, 0.98) 0%,
+      rgba(250, 246, 239, 0.74) 52%,
+      rgba(250, 246, 239, 0) 100%);
+  }
+}
+
+html.dark .services-atmos--process::after {
+  background:
+    var(--services-hairline),
+    var(--services-copy-scrim),
+    radial-gradient(34% 62% at 16% 30%,
+      rgba(242, 201, 76, 0.13) 0%,
+      rgba(242, 201, 76, 0.03) 48%,
+      rgba(242, 201, 76, 0) 72%),
+    var(--services-feather-top),
+    var(--services-feather-bottom),
+    linear-gradient(202deg,
+      rgba(19, 30, 52, 0.18) 0%,
+      rgba(10, 15, 24, 0.03) 50%,
+      rgba(15, 24, 41, 0.2) 100%);
+}
+
+html.light .services-atmos--process::after {
+  background:
+    var(--services-hairline),
+    var(--services-copy-scrim),
+    radial-gradient(34% 62% at 16% 30%,
+      rgba(242, 201, 76, 0.11) 0%,
+      rgba(242, 201, 76, 0) 72%),
+    var(--services-feather-top),
+    var(--services-feather-bottom);
+}
+
+/* --- What's Included ---------------------------------------------------
+   The same services artwork, but pushed off its lighthouse and onto the
+   topographic right side, and scaled up so the contour lines and route dots
+   read at full size rather than as a miniature of What I Build. --- */
+.services-atmos--included::before {
+  /* Zoomed past the lighthouse so this section carries only the contour and
+     route side of the artwork — What I Build already owns the lighthouse. */
+  background-size: 135% auto;
+  background-position: right 30%;
+}
+html.dark .services-atmos--included::before { background-image: var(--home-art-services-dark); }
+/* The light artwork's right side is almost pure glow, so this crop sits a
+   little further left to pick up the route dots. The contrast lift this rule
+   used to carry is now the light default on `.services-atmos::before`, so it
+   only needs the crop. */
+html.light .services-atmos--included::before {
+  background-image: var(--home-art-services-light);
+  background-position: 62% 30%;
+}
+
+/* --- Tech Stack --------------------------------------------------------
+   The quietest section, but no longer empty: the same contour artwork drawn
+   right down and held back by a vignette, so it reads as connected texture
+   under the tonal lift the section already carries. --- */
+.services-atmos--stack::before {
+  /* This section had three independent reductions stacked in the same place:
+     a mask that confined the artwork to the bottom edge, an `opacity: 0.62`
+     multiplier on top of that, and the shared veil — which paints solid
+     ground colour at exactly that bottom edge. The strongest part of the art
+     coincided with the strongest part of the veil, and the section measured
+     0.5-4.1/255. It was the least visible artwork on either page.
+
+     Now the mask peaks mid-section, where the feathers have released to zero,
+     and the opacity multiplier is gone — presence is set by grading and mask
+     phase alone, as everywhere else. Still the quietest section on the page:
+     it is cropped to the dotted route and contour lines rather than the
+     lighthouse, which What I Build already owns. */
+  background-size: 118% auto;
+  background-position: center 62%;
+  -webkit-mask-image: linear-gradient(to bottom,
+    rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 26%, #000 50%, rgba(0,0,0,0.78) 74%, rgba(0,0,0,0.28) 100%);
+  mask-image: linear-gradient(to bottom,
+    rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 26%, #000 50%, rgba(0,0,0,0.78) 74%, rgba(0,0,0,0.28) 100%);
+}
+html.dark .services-atmos--stack::before { background-image: var(--home-art-services-dark); }
+html.light .services-atmos--stack::before { background-image: var(--home-art-services-light); }
+
+/* --- Ongoing Maintenance: the warm gold pool, matching `.home-story`. --- */
+.services-atmos--warm::before { background-image: none; }
+
+html.dark .services-atmos--warm::after {
+  background:
+    var(--services-hairline),
+    radial-gradient(66% 88% at 50% 50%, rgba(242,201,76,0.08) 0%, rgba(242,201,76,0) 62%),
+    linear-gradient(to bottom, #0a0f18 0%, #0c121e 42%, #0c121e 58%, #0a0f18 100%);
+}
+html.light .services-atmos--warm::after {
+  background:
+    var(--services-hairline),
+    radial-gradient(66% 88% at 50% 50%, rgba(242,201,76,0.13) 0%, rgba(242,201,76,0) 62%),
+    linear-gradient(to bottom, #faf6ef 0%, #f6f0e5 42%, #f6f0e5 58%, #faf6ef 100%);
+}
+
+/* Mobile: keep the artwork, but swap to the portrait-oriented variants the
+   homepage uses below `md` — the wide desktop composition crops to nothing
+   on a phone, and the 1200px assets are the ones already being fetched
+   elsewhere. Masks that assume a wide canvas are dropped. */
+@media (max-width: 767px) {
+  .services-atmos::before {
+    background-position: center center;
+    background-size: cover;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  html.dark .services-atmos--build::before { background-image: var(--home-art-services-dark-mobile); }
+  html.light .services-atmos--build::before { background-image: var(--home-art-services-light-mobile); }
+
+  html.dark .services-atmos--process::before { background-image: var(--home-art-compass-dark-mobile); }
+  html.light .services-atmos--process::before { background-image: var(--home-art-compass-light-mobile); }
+
+  html.dark .services-atmos--included::before { background-image: var(--home-art-services-dark-mobile); }
+  html.light .services-atmos--included::before { background-image: var(--home-art-services-light-mobile); }
+
+  /* Tech Stack stays the quiet one on mobile too — texture only — but the
+     same fix applies: the peak moves off the bottom edge, where the veil is
+     solid, to mid-section where it can actually be seen. */
+  .services-atmos--stack::before {
+    background-size: cover;
+    background-position: center 58%;
+    -webkit-mask-image: linear-gradient(to bottom,
+      rgba(0,0,0,0) 0%, rgba(0,0,0,0.62) 28%, rgba(0,0,0,0.9) 52%, rgba(0,0,0,0.6) 78%, rgba(0,0,0,0.2) 100%);
+    mask-image: linear-gradient(to bottom,
+      rgba(0,0,0,0) 0%, rgba(0,0,0,0.62) 28%, rgba(0,0,0,0.9) 52%, rgba(0,0,0,0.6) 78%, rgba(0,0,0,0.2) 100%);
+  }
 }

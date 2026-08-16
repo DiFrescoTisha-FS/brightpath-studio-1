@@ -16,9 +16,10 @@ Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with Re
 - **Theme**: Light/dark mode via `useAppStore` (Zustand)
 - **Responsive**: Mobile-first, breakpoints at `md` (768px) and `lg` (1024px)
 - **Typography**: Poppins for headings, Lato for body, Open Sans occasionally
-- **Colors**: Primary gold (#F2C94C), midnight blue (#1A2238), BrightPath blue.
-  The approved homepage adds near-black `#0A0F18` and warm cream `#FAF6EF` as its
-  two grounds, plus a light-mode gold pair — see "Homepage Visual System" below.
+- **Colors**: Midnight blue `#1A2238`, near-black ground `#0A0F18`, warm cream ground
+  `#FAF6EF`. **One gold per theme** — dark `#F2C94C`, light `#846300`. Both are driven
+  by the `--primary` token so every gold role resolves from a single value. See
+  "Gold System" below; do not reintroduce per-role gold shades.
 - **Text on mobile**: 14px (`text-sm`) for paragraphs, `leading-normal` for tighter line spacing
 
 ## Important Files
@@ -28,9 +29,13 @@ Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with Re
 - `src/components/ClarityHero.tsx` - Structural mirror of the static hero. NOT a Tailwind
   class manifest any more — the hero uses dedicated CSS classes, so nothing here is
   load-bearing for purging. Keep it in step with the markup in vite.config.ts
-- `src/styles/globals.css` - Carries the approved homepage visual system: `.studio-hero*`,
-  `.studio-cta*`, `.nav-link*` / `.nav-cta`, `.home-*` section backgrounds, `.site-footer`,
-  `.text-brand-gold`
+- `src/styles/globals.css` - Carries the whole approved visual system: the `--primary`
+  gold token per theme, `.studio-hero*`, `.studio-cta*`, `.nav-link*` / `.nav-cta`,
+  `.home-*` homepage backgrounds, `.services-*` / `.services-atmos*` Services
+  backgrounds, `.site-footer`, `.text-brand-gold`
+- `src/components/ui/FlipCard/FlipCard.css` - Flip-card faces. The light back face uses
+  the light theme gold and overrides the markup's hard-coded `text-[#10192b]` to cream,
+  because midnight type measures only 2.83:1 on that gold
 - `vite.config.ts` - Static hero HTML injection, prerender config, Chrome resolution, build-time verification
 - `src/pages/ServicesPage.tsx` - Services, process flip cards, pricing
 - `src/pages/PortfolioDemoPage.tsx` - Portfolio grid with case study views
@@ -100,24 +105,20 @@ beneath the copy rather than shrinking, because a portrait-tablet side panel mak
 **Theme grounds.** Dark: near-black `#0A0F18`. Light: warm cream `#FAF6EF`. Light is not an
 inversion of dark — the image grade, scrim direction and gold values all differ.
 
-**Gold.** Dark `#F2C94C`. Light needs the same hue darkened because `#F2C94C` measures
-1.47:1 on cream: `#9E6E04` for large display text, `#8C6103` for normal-size text. One gold
-family, adjusted only for contrast. Brand gold survives as a *surface* (the header CTA fill,
-the Featured badge), just not as light-mode text.
-
 **Header / nav / CTAs.** Header background matches the hero at `#0A0F18`. Active route is a
 1px gold hairline the width of the label plus a gold text shift, via `NavLink` (which also
 sets `aria-current="page"`). Browser-default blue focus rings are replaced by palette rings.
-Both the hero primary and header CTA are outlined-gold that fill on hover; the hero secondary
-stays a text link with a pseudo-element rule. A mid-blue header was trialled against four
-candidates and **rejected** — it broke the midnight/gold/cream palette. Don't re-propose it.
+The hero secondary stays a text link with a pseudo-element rule. A mid-blue header was
+trialled against four candidates and **rejected** — it broke the midnight/gold/cream
+palette. Don't re-propose it. CTA colour is covered under "Gold System" below.
 
 **Section backgrounds.** The alternating horizontal-band effect is gone. Artwork sections
 (`home-services`, `home-reviews`) keep their original artwork, graded in CSS via `filter` and
 feathered into the ground at both edges. Flat-slab sections (`home-work`, `home-story`) became
 shallow gradients that lift a few values mid-section, each opening with a faded gold hairline.
 The rhythm is artwork-section → gradient-section, so sections stay distinguishable through
-artwork and depth rather than colour steps.
+artwork and depth rather than colour steps. Grading and feather values were revised on
+Aug 15 — see "Background System" below for the current numbers.
 
 **Footer.** `site-footer` is part of the same system: a gradient that deepens toward the
 bottom (so the page reads as closing out, not banding), with the same hairline instead of the
@@ -129,7 +130,221 @@ homepage*. `BrightPathGradientTitle` gained an optional `emphasis` prop:
 via `.text-brand-gold`), `'none'` (no emphasis at all). `'none'` exists because omitting
 `gradientWords` makes the component gradient the *entire* title. Section headings use
 `'solid'`; service-card and project titles use `'none'`, leaving the gold icon and the
-Featured badge as each card's accent.
+Featured badge as each card's accent. In light mode the emphasis word *is* still gold, so
+`'solid'` continues to produce a visible shift in both themes.
+
+## Gold System (approved Aug 15, 2026 — ONE GOLD PER THEME)
+
+**This is the rule: each theme has exactly one gold, used for every gold role.** Do not
+create per-role shades (display gold vs. small-text gold vs. button gold) to optimise
+individual elements. Visual consistency beats per-element optimisation. Both values are
+set on the `--primary` token, so `bg-primary` / `text-primary` / `border-primary` and every
+opacity modifier resolve from the single value automatically.
+
+| Theme | Gold | Token | Label on a gold fill |
+|---|---|---|---|
+| Dark | **`#F2C94C`** | `--primary: 45.2 86.5% 62.4%` | `#1A2238` (10.13:1) |
+| Light | **`#846300`** | `--primary: 45 100% 25.9%` | `#FAF6EF` cream (5.18:1) |
+
+`.text-brand-gold` resolves to `#846300` (base) and `#F2C94C` under `html.dark`.
+
+**Both golds cover the same roles**: display emphasis text, section emphasis words, hero
+eyebrow, active nav label + indicator hairline, focus rings, primary CTA fills, gold
+borders, section hairlines, card and pill accents, icons, footer brand treatments, badges.
+
+**Why light mode is a deeper mustard, and why that is deliberate.** `#F2C94C` measures
+**1.47:1** on cream — it misses even the 3:1 large-text bar by half, so it cannot carry
+light-mode text at any size. `#846300` is the deepest member of the brand gold family and
+the only value that satisfies *every* role at once. It is an approved part of the light
+identity, not a fallback.
+
+**Do not reintroduce** any of: mustard text alongside bright-yellow buttons; separate
+display-gold and small-text-gold tiers (`#9E6E04`/`#8C6103`, or the hue-corrected
+`#A27B00`/`#846300` pair); navy-only emphasis across light mode; or several near-identical
+golds. All of these were built and rejected during Aug 15.
+
+**Primary CTAs use their theme's gold as the fill.** Light mode must **not** revert to
+navy-filled primary CTAs — that combination was trialled and rejected, because deep-gold
+emphasis text beside a bright-yellow or navy button made the theme read as two systems.
+Hover darkens the same gold with `filter: brightness(0.88)` rather than declaring a second
+value.
+
+**The one unavoidable exception, and it is a label colour, not a second gold.** A light gold
+fill cannot carry a navy label: `#1A2238` on `#846300` is 2.83:1. The constraints are
+mutually exclusive — gold *text* on cream needs luminance ≤ 0.1666, a navy label on gold
+needs ≥ 0.2492 (even black needs ≥ 0.175). So light-mode button labels are cream. Two
+consequences follow from the same fact: the flip-card light back face overrides its
+hard-coded `text-[#10192b]` to cream, and `html.light h1.text-primary` (the About hero name,
+which sits on a *dark* photograph even in light mode) keeps `#F2C94C`, since a dark ground
+takes the luminous value.
+
+## Background System (approved Aug 15, 2026)
+
+**Principle: the artwork is part of the design language and must be clearly perceptible —
+not reduced to a barely-visible texture.** It still sits behind the content hierarchy, but
+do not fade it back without a specific design reason.
+
+**Grades (current production values).**
+
+```css
+html.dark  .home-services__art,
+html.dark  .services-atmos::before { filter: brightness(0.9)   saturate(0.82) contrast(1.12); }
+html.dark  .home-reviews__art,
+html.dark  .services-cta__art      { filter: brightness(0.87)  saturate(0.8)  contrast(1.11); }
+html.light .home-services__art,
+html.light .home-reviews__art,
+html.light .services-atmos::before { filter: brightness(0.955) saturate(1.18); }
+```
+
+The old dark grade was `brightness(0.68) saturate(0.58)`, which removed a third of the
+luminance and over 40% of the colour *before* any overlay landed; that is what made the
+artwork imperceptible. **Light mode is now deliberately graded** — it used to be
+`filter: none`, on the theory that cream-keyed artwork needed no help, but the artwork's own
+low contrast against cream was the entire limit.
+
+**Light grading must use `brightness`, not `contrast`.** The light artwork is near-white
+with linework only a few values below the cream ground, so a contrast lift clips it all to
+pure white. A trial at `contrast(1.14)` erased the topographic lines completely, dropping the
+share of the section carrying visible artwork from 95% to 2%.
+
+**Feathers.** Edge ramps end at **15–17%** of section height (they were 26–30%), which
+roughly doubles the clear middle band. They still reach full ground colour at the boundary,
+which is what keeps section joins seamless — shorten further only with measurement.
+
+**Section-wide washes → localized copy protection.** The full-coverage diagonal navy dropped
+from `0.34 / 0.10 / 0.36` alpha to `0.20 / 0.04 / 0.22`. Readability is bought instead with
+`--services-copy-scrim`, an ellipse sized to the heading/lede block. Cards carry their own
+surfaces and need no protection.
+
+**Per-section fixes that must not regress:**
+
+- **Tech Stack** had three reductions stacked in one place — a mask confining the artwork to
+  the bottom edge, an `opacity: 0.62` multiplier, *and* the veil painting solid ground colour
+  at exactly that edge. The `opacity` is gone and the mask now peaks mid-section
+  (`background-size: 118% auto; background-position: center 62%`).
+- **Our Process** artwork is `background-size: auto max(92%, 42.5vw); background-position:
+  right top`. The previous fixed `-199px` lift sliced the compass rose against the section
+  boundary. It is top-anchored so the rose stays whole; the heading is protected by a scrim
+  centred on the heading line rather than by masking the artwork away.
+- **Homepage Services on mobile** is reframed to `background-size: 165% auto;
+  background-position: 24% 46%` (below `md`). At plain `cover` the portrait artwork put all
+  its interest in the top third and read as having run out.
+
+**Architecture — the two pages differ, keep the distinction.**
+
+- **Homepage** uses real DOM layers: `.home-services__art` / `.home-reviews__art` (two each,
+  swapped at `md` for portrait vs. landscape crops) plus a sibling `__veil` div.
+- **Services** is pseudo-element based: `.services-atmos::before` is the artwork,
+  `::after` is the veil, with the hairline riding as `::after`'s first background layer.
+  The closing CTA is the exception and uses a real DOM layer, `.services-cta__art`.
+
+**`.services-rule:not(.services-atmos)::before` — do not remove the exclusion.** Sections
+carrying `.services-rule` draw their hairline with `::before`, but `.services-atmos` sections
+already use `::before` for artwork. Without the `:not()`, the hairline's `height: 1px` wins
+over the artwork's `inset: 0` and the artwork paints into a one-pixel strip — which is how
+the Services backgrounds went invisible once before. Atmosphere sections get the same
+hairline via the `--services-hairline` background layer instead.
+
+**Atmosphere glows stay luminous in both themes.** The gold radial pools inside the veils and
+scrims (`home-story`, `services-cta__scrim`, `services-atmos--build/process`) use
+`rgba(242, 201, 76, …)` even in light mode. They are atmospheric light within the background
+system, not UI gold, and are deliberately exempt from the one-gold-per-theme rule.
+
+## Accessibility (conclusions from Aug 15 testing)
+
+- **Measure against the actual rendered backdrop**, not the stylesheet — especially where
+  artwork or scrims sit behind copy. Sampling the rendered pixels is how the light-mode
+  homepage lede was found at 4.03:1 and how the "Process" heading was caught at 2.90:1.
+- Two measurement traps that produced wrong answers during this work, both worth avoiding:
+  hiding an element with `visibility: hidden` to sample its backdrop also removes *its own
+  background* (this made a passing button look like a 1.22:1 failure); and a near-black
+  coverage mask collides with the `#0A0F18` ground.
+- **Thresholds**: normal text ≥ 4.5:1; large display text (≥24px, or ≥18.66px bold) ≥ 3:1;
+  UI component boundaries and focus indicators ≥ 3:1. Purely decorative marks — hairlines,
+  glows, aria-hidden icons beside a visible label — carry no requirement.
+- **`#F2C94C` is excellent on navy (12.09:1) and unusable as text on cream (1.47:1).** That
+  single fact is why the light theme has its own gold.
+- Final light-mode measurements, worth keeping as a regression guard: gold text
+  **4.73–5.58:1**; gold CTA fill with cream label **5.18:1** (hover 4.76:1); CTA boundary vs
+  cream **5.18:1**. Dark-mode gold emphasis **11.10–12.39:1**; gold fill with midnight label
+  **10.13:1**.
+- Fixed during this pass: the homepage services lede (4.03:1 → passing, now uses
+  `.services-body`), and every `text-primary` label on light grounds (was 1.54–1.74:1).
+
+## Metallic Gold Gradient — EXPERIMENT ONLY, not production
+
+A "signature gold gradient" was built and tested against real BrightPath typography, then
+**not adopted**. Do not assume it is part of the design system.
+
+```css
+linear-gradient(110deg, #B8860B 0%, #D4AF37 22%, #F2C94C 46%,
+                        #FFD966 54%, #D4AF37 67%, #A97C00 100%)
+```
+
+Findings: attractive on large dark-mode display type and strong on navy (min **5.16:1**,
+max 14.04:1). On cream it fails badly — min **1.27:1** — and the limiting region is the
+`#FFD966` highlight itself, so the very thing that reads as polished metal is the lowest-
+contrast part. It also scales with the element box, not the type: the gradient line runs
+399px across the hero accent but only 79px across "Beacon" at 390px wide, so the same
+declaration reads as several different materials. Short words compress the ramp; multi-line
+headings run the axis diagonally across the whole block and colour each line differently.
+
+The test harness lives **outside the repo** in the session scratchpad. Keep it there.
+
+## Parallax — discussed, NOT implemented
+
+No **scroll-transform** parallax exists, and none was built on Aug 15. Note the separate,
+older thing that does exist: `md:bg-fixed` (`background-attachment: fixed`) still ships on
+AboutPage, ContactPage, PortfolioDemoPage and MultiPageFlowSection — desktop-only, because
+it doesn't work on iOS. That is attachment-based, predates the current artwork system, and
+is not on the Homepage or Services page.
+
+If transform parallax is explored later, the two strongest candidates are
+**Homepage Reviews** (`.home-reviews__art`) and the **Services CTA** (`.services-cta__art`),
+because both are real DOM layers that can be transformed independently of their veils — the
+`.services-atmos::before` pseudo-elements already carry tuned `transform`/`background-position`
+maths and are poor candidates.
+
+If implemented: subtle `translate3d` only, rAF-throttled passive scroll listener, gated behind
+`prefers-reduced-motion: reduce`, disabled below `md` unless testing proves otherwise, and
+**never `background-attachment: fixed`** (it does not work on iOS — see iOS Safari notes).
+
+## Current Approved Visual State (as of August 15, 2026)
+
+Do not reopen these without a specific reason:
+
+- Homepage background visibility — **approved**
+- Services background visibility — **approved**
+- Light-mode background visibility — **approved**
+- Dark-mode background visibility — **approved**
+- Background clipping/cutoff issues from this pass (sliced compass rose, Tech Stack stacking,
+  mobile Services framing) — **resolved**
+- Light and dark gold systems (one gold per theme) — **approved**
+- Primary CTA colour coordination with each theme's gold — **approved**
+- Typography, layout, copy and component structure — **not intentionally redesigned** in this
+  pass; the only type change was a colour correction to the homepage services lede
+- Metallic gradient — **not production**
+- Parallax — **not implemented**
+
+## Recent Session Work (August 15, 2026) — approved, not yet committed
+
+Branch `feature/services-page-redesign`. Background visibility pass plus the gold-system
+consolidation. Detail lives in "Gold System", "Background System", "Accessibility" and
+"Current Approved Visual State" above — this is just the shape of the session.
+
+- **Backgrounds made visible.** Dark grade eased, light grade introduced, feathers shortened,
+  section-wide washes cut in favour of localized copy scrims. Tech Stack, Our Process and
+  mobile Homepage Services each had a specific geometry bug fixed. Verified with a headless
+  Chrome harness measuring artwork contribution per section × theme × viewport, plus a
+  row-to-row luminance scan confirming no hard section seams.
+- **Gold consolidated to one value per theme.** Reached after three rejected intermediate
+  systems: hue-corrected mustard pair, navy-only light emphasis, and mixed
+  mustard-text/yellow-button. Dark also lost a second yellow — `--primary` was `#F4BC1F`
+  alongside `#F2C94C` and is now brand gold, verified by a pixel diff whose `maxDelta` was
+  exactly 45, the distance between those two colours.
+- **Accessibility fixes carried along**: homepage services lede, all `text-primary` labels on
+  light grounds, and the flip-card light back face.
+- **Not adopted**: metallic gradient (experiment, outside the repo), parallax (not built).
 
 ## Recent Session Work (August 11–12, 2026)
 
@@ -205,6 +420,13 @@ pixel-identical throughout (maxDelta 0).
 - **Pre-existing lint**: `netlify/functions/get-case-studies.ts:178` unused `_context`
   (error) and `src/components/ui/GuidingLight.tsx:230` missing hook dependency (warning).
   Both predate this work and were left alone.
+- **About hero name fails contrast**: `TISHA DI FRESCO` is gold text over the mountain
+  photograph (backdrop luminance 0.30 measured), giving ~2.02:1 against a 3:1 bar. It needs
+  a scrim behind the copy, not a colour change — every gold value makes it worse, and it was
+  left alone on Aug 15 for that reason.
+- **Legacy `--services-card-*` tokens** in `globals.css` still carry the retired
+  `44 91% 54%` gold, but nothing references them. Left in place rather than removed as
+  unrelated cleanup.
 
 ---
 
@@ -244,7 +466,9 @@ pixel-identical throughout (maxDelta 0).
 - Contact form Google Workspace integration (Apps Script + honeypot)
 - Responsive theme-aware backgrounds on Contact and Portfolio pages
 - iOS Safari `bg-fixed` fix across all pages
-- Services page semi-transparent sections for parallax effect
+- Services page semi-transparent sections for parallax effect —
+  **superseded**: the Services page now uses the `.services-atmos` artwork system
+  (see "Background System"), not `bg-fixed` semi-transparent slabs
 - AweStruck case study content corrections
 
 ## Commit History (Recent)
