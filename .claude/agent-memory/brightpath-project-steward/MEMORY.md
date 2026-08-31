@@ -12,3 +12,6 @@
 - [Rejected explorations](rejected-explorations.md) — metallic gold gradient and scroll parallax were tested and explicitly not adopted.
 - [Services branch scope rules](services-branch-scope-rules.md) — branch pushed but unmerged to main; leave backend/netlify/wordpress + known issues alone.
 - [Commit message policy approved](commit-message-policy-approved.md) — no AI/Claude/Anthropic attribution in commits, ever; memory-only rule, no enforcing hook exists.
+- [Phase 2 trust evidence approved](phase-2-trust-evidence-approved.md) — Angel City Lighthouse chip + routing, Dale Tiffany routing, AweStruck/Bamvsthewrld deliberately unchanged; user-approved.
+- [Dale Tiffany case study URL deferred](dale-tiffany-case-study-url-deferred.md) — ?project= query-param homepage link is a stopgap, not SEO-crawlable; real route is deferred future work.
+- [Reviews testimonials content gap deferred](reviews-testimonials-content-gap-deferred.md) — Robin Walsh/Gavin Di Fresco testimonials maybe missing from WordPress feed; code confirmed correct, this is a content task.

@@ -12,7 +12,7 @@ import {
 import AngelCityCaseStudy from '../components/features/AngelCityMassageCaseStudy';
 import { awestruckIntelligenceCaseStudy, bamvsthewrldCaseStudy } from '@/data/caseStudies';
 import { useAppStore } from '@/store/appStore';
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { trackEvent } from '@/utils/analytics';
 import { PageMeta } from '@/components/PageMeta';
 
@@ -35,6 +35,7 @@ export default function PortfolioDemoPage() {
   const [view, setView] = useState<ViewState>('grid');
 
   const { slug } = useParams();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     if (slug) {
@@ -45,6 +46,16 @@ export default function PortfolioDemoPage() {
       });
     }
   }, [slug]);
+
+  // Dale Tiffany's web/B2B case study has no dedicated route (it isn't part
+  // of the shared case-study data model), so a direct homepage link lands
+  // here via ?project= and opens the case study immediately.
+  useEffect(() => {
+    const project = searchParams.get('project');
+    if (project === 'dale-tiffany') {
+      setView('dale-tiffany');
+    }
+  }, [searchParams]);
 
   if (view === 'dale-tiffany') {
     return <DaleTiffanyCaseStudy onBack={() => setView('grid')} theme={theme} />;

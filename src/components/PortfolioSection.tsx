@@ -27,14 +27,14 @@ const portfolioItems: PortfolioItem[] = [
     title: 'Dale Tiffany Lighting',
     description: 'Legacy PHP platform re-architected into a modern React + Supabase system — role-based B2B retailer portal and integrated admin CRM.',
     imageUrl: cloudinaryAssets.daleTiffanyLongFull,
-    href: '/portfolio',
+    href: '/portfolio?project=dale-tiffany',
   },
   {
     id: 3,
     title: 'Angel City Massage',
     description: 'WordPress modernization with a Lighthouse desktop lift from 62 to 99.',
     imageUrl: cloudinaryAssets.angelCityHomepage,
-    href: '/portfolio',
+    href: '/case-study',
   },
   {
     id: 4,

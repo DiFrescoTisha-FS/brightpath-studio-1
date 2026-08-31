@@ -42,3 +42,10 @@ Distinct from, and should not be merged into, [[trust-evidence-integrity-open-is
 (which covers a live contradiction and an unsupported claim, both already actioned in
 Phase 1 per the coordinator) — this is a different kind of item: a scheduled
 re-verification of otherwise-consistent data, not a currently-known defect.
+
+**Reaffirmed 2026-08-31 (Phase 2 approval):** Phase 2 (trust/evidence improvements for
+Angel City Massage and Dale Tiffany web/B2B routing — see
+[[phase-2-trust-evidence-approved]]) explicitly did not touch Dale Tiffany Social or
+Living Better Life statistics. This deferral stands unchanged; nothing about Phase 2
+alters the "plausible/self-consistent but unconfirmed" status of the figures described
+above.

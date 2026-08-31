@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, Smartphone, Palette, Gift } from 'lucide-react';
+import { ArrowRight, Smartphone, Palette, Zap } from 'lucide-react';
 import BrightPathGradientButton from '@/components/BrightPathGradientButton';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
 import { cloudinaryAssets } from '@/data/cloudinaryAssets';
@@ -74,11 +74,15 @@ export function AngelCityMassageCard({ onViewCaseStudy, className = '' }: AngelC
 
         {/* Description */}
         <p className="text-sm text-muted-foreground mb-4 line-clamp-2 font-lato">
-          Designed and optimized a high-performance WordPress platform with custom CSS architecture, responsive layout systems, and SEO-driven structure.
+          WordPress modernization with a Lighthouse desktop lift from 62 to 99.
         </p>
 
         {/* Key Features Icons */}
         <div className="flex items-center gap-4 mb-4">
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Zap className="w-4 h-4 text-primary" />
+            <span>Lighthouse 99</span>
+          </div>
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <Smartphone className="w-4 h-4 text-primary" />
             <span>Responsive</span>
@@ -86,10 +90,6 @@ export function AngelCityMassageCard({ onViewCaseStudy, className = '' }: AngelC
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <Palette className="w-4 h-4 text-primary" />
             <span>UI/UX</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <Gift className="w-4 h-4 text-primary" />
-            <span>Gift Cards</span>
           </div>
         </div>
 
