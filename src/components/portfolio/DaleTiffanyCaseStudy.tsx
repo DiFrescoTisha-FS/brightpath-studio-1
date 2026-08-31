@@ -19,7 +19,6 @@ import {
   Bot,
   Moon,
   Sun,
-  TrendingUp,
   RefreshCw,
   Building2,
   Lock,
@@ -373,31 +372,10 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
           </BrightPathGradientTitle>
 
           <p className="text-center text-muted-foreground mb-12 max-w-xl mx-auto font-lato">
-            Quantifiable results following modernization.
+            Verified outcomes and platform capabilities following modernization.
           </p>
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {/* Card 1 */}
-            <div className="p-7 rounded-xl bg-card border border-primary/40 dark:shadow-glow-primary">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <TrendingUp className="w-6 h-6 text-primary" />
-                </div>
-
-                <div className="min-w-0">
-                  <div className="text-4xl font-bold tracking-tight text-primary leading-none">
-                    40%
-                  </div>
-                  <div className="mt-1 text-base font-semibold text-foreground">
-                    Faster load time
-                  </div>
-                  <div className="mt-1 text-sm text-muted-foreground font-lato">
-                    Improved performance across key pages
-                  </div>
-                </div>
-              </div>
-            </div>
-
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {/* Card 2 */}
             <div className="p-7 rounded-xl bg-card border border-primary/40 dark:shadow-glow-primary">
               <div className="flex items-start gap-4">
@@ -427,11 +405,8 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
                 </div>
 
                 <div className="min-w-0">
-                  <div className="text-4xl font-bold tracking-tight text-primary leading-none">
-                    Faster
-                  </div>
-                  <div className="mt-1 text-base font-semibold text-foreground">
-                    Retailer onboarding
+                  <div className="text-lg font-semibold text-foreground">
+                    Faster retailer onboarding
                   </div>
                   <div className="mt-1 text-sm text-muted-foreground font-lato">
                     Reduced manual setup + improved workflow
@@ -448,11 +423,8 @@ export function DaleTiffanyCaseStudy({ onBack, theme = 'dark' }: DaleTiffanyCase
                 </div>
 
                 <div className="min-w-0">
-                  <div className="text-4xl font-bold tracking-tight text-primary leading-none">
-                    Unified
-                  </div>
-                  <div className="mt-1 text-base font-semibold text-foreground">
-                    Distributor management
+                  <div className="text-lg font-semibold text-foreground">
+                    Unified distributor management
                   </div>
                   <div className="mt-1 text-sm text-muted-foreground font-lato">
                     Centralized access to partner data

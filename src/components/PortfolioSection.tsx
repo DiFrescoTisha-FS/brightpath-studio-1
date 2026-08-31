@@ -25,7 +25,7 @@ const portfolioItems: PortfolioItem[] = [
   {
     id: 2,
     title: 'Dale Tiffany Lighting',
-    description: 'An elegant e-commerce site for a luxury lighting brand.',
+    description: 'Legacy PHP platform re-architected into a modern React + Supabase system — role-based B2B retailer portal and integrated admin CRM.',
     imageUrl: cloudinaryAssets.daleTiffanyLongFull,
     href: '/portfolio',
   },

@@ -34,13 +34,13 @@ export const livingBetterLifeSocialCaseStudy: SocialMediaCaseStudy = {
   role: 'Social Media Content Strategist',
   strategySummary:
     'Strategy focused on storytelling, educational content, and community spotlight posts designed to increase visibility and engagement across multiple platforms.',
-  quickImpact: [
-    { label: 'Social Media Posts Created', value: '48' },
-    { label: 'Impressions', value: '948' },
-    { label: 'Reach', value: '253' },
-    { label: 'Visibility Growth', value: '114%' },
-    { label: 'Total Engagements', value: '73' },
-  ],
+  // Numeric performance metrics for this project are withheld pending data
+  // reconciliation — the source figures conflicted internally by roughly
+  // three orders of magnitude with no documented explanation. See
+  // .claude/agent-memory/brightpath-project-steward/trust-evidence-integrity-open-issues.md.
+  // Original figures remain recoverable via git history; do not restore them
+  // here without independent verification against source analytics.
+  quickImpact: [],
   campaignPeriod: 'January 2026',
   postFrequency: '4-6 posts per week',
 
@@ -118,22 +118,14 @@ export const livingBetterLifeSocialCaseStudy: SocialMediaCaseStudy = {
     },
   ],  
 
-  metrics: {
-    impressions: '1.8M+',
-    reach: '620K+',
-    engagement: '5.2%',
-    followers: '32K+',
-    growth: '+185%',
-  },
+  metrics: {},
 
   results: [
-    'Achieved 185% follower growth through mission-driven, organic content',
-    'Sustained a 5.2% engagement rate through community-centered storytelling',
     'Increased visibility for programs, workshops, and incubator initiatives',
     'Strengthened trust and recognition within the local and regional community',
     'Expanded reach to new audiences seeking education and opportunity',
     'Built a highly engaged audience with strong save and share behavior',
-  ],  
+  ],
 
   contentSamples: [
     {
