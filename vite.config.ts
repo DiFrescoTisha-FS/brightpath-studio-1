@@ -299,7 +299,7 @@ function injectStaticHero(): Plugin {
     <div class="studio-hero__copy">
       <p class="studio-hero__eyebrow">WEBSITES BUILT FOR BUSINESS</p>
       <h1 class="studio-hero__title">Websites That Work <span class="studio-hero__accent">Beautifully.</span></h1>
-      <p class="studio-hero__lede">Custom websites built for speed, clarity, and growth&#8212;so your online presence works as hard as you do.</p>
+      <p class="studio-hero__lede">Custom websites built for speed, clarity, and growth&#8212;so your online presence works as hard as you do and makes it easier for customers to understand, trust, and engage with your business.</p>
       <div class="studio-hero__cta">
         <a href="/contact" class="studio-cta studio-cta--primary">Start Your Project <span class="studio-cta__arrow" aria-hidden="true">&#8594;</span></a>
         <a href="/portfolio" class="studio-cta studio-cta--ghost">View Our Work <span class="studio-cta__arrow" aria-hidden="true">&#8594;</span></a>

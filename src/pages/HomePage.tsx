@@ -98,6 +98,10 @@ const ServicesSection = ({ theme }: SectionProps) => {
             </div>
           ))}
         </div>
+
+        <p className="font-lato services-body mt-12 max-w-2xl mx-auto">
+          And support doesn't end at launch. <Link to="/services#maintenance" className="text-primary hover:underline">Ongoing maintenance</Link> helps keep your site secure, current, and running smoothly.
+        </p>
       </div>
     </section>
   );

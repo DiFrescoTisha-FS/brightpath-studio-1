@@ -7,9 +7,9 @@ import { useAppStore } from './store/appStore';
 import AnalyticsTracker from "./components/AnalyticsTracker"
 import { loadAnalytics } from "./utils/analytics";
 
-// Scroll to top on route change
+// Scroll to top on route change, or to the #hash target if the URL has one.
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
     // Temporarily disable smooth scroll, scroll to top, then restore
@@ -17,13 +17,31 @@ function ScrollToTop() {
     const originalScrollBehavior = html.style.scrollBehavior;
     html.style.scrollBehavior = 'auto';
 
-    window.scrollTo(0, 0);
+    if (hash) {
+      // The target route is often React.lazy-loaded, so the hash target may
+      // not exist in the DOM yet on the frame this effect first runs. Retry
+      // across a bounded number of frames until it mounts.
+      const id = hash.slice(1);
+      let attempts = 0;
+      const tryScrollToHash = () => {
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'auto', block: 'start' });
+        } else if (attempts < 50) {
+          attempts += 1;
+          requestAnimationFrame(tryScrollToHash);
+        }
+      };
+      tryScrollToHash();
+    } else {
+      window.scrollTo(0, 0);
+    }
 
     // Restore after a frame
     requestAnimationFrame(() => {
       html.style.scrollBehavior = originalScrollBehavior;
     });
-  }, [pathname]);
+  }, [pathname, hash]);
 
   return null;
 }

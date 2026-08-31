@@ -333,7 +333,7 @@ const ServicesPage: React.FC = () => {
       </section>
 
       {/* === MAINTENANCE === */}
-      <section className="services-section services-atmos services-atmos--warm services-rule py-20 md:py-24 px-4">
+      <section id="maintenance" className="services-section services-atmos services-atmos--warm services-rule py-20 md:py-24 px-4 scroll-mt-24">
         <div className="container mx-auto max-w-3xl text-center">
           <Wrench className="services-card__icon h-10 w-10 mx-auto mb-4" aria-hidden="true" />
           <BrightPathGradientTitle

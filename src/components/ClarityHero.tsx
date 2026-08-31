@@ -26,7 +26,8 @@ export default function ClarityHeroStructureMirror() {
           </h1>
           <p className="studio-hero__lede">
             Custom websites built for speed, clarity, and growth—so your online presence
-            works as hard as you do.
+            works as hard as you do and makes it easier for customers to understand, trust,
+            and engage with your business.
           </p>
           <div className="studio-hero__cta">
             <a href="/contact" className="studio-cta studio-cta--primary">

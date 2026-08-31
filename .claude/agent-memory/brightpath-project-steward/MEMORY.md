@@ -15,3 +15,4 @@
 - [Phase 2 trust evidence approved](phase-2-trust-evidence-approved.md) — Angel City Lighthouse chip + routing, Dale Tiffany routing, AweStruck/Bamvsthewrld deliberately unchanged; user-approved.
 - [Dale Tiffany case study URL deferred](dale-tiffany-case-study-url-deferred.md) — ?project= query-param homepage link is a stopgap, not SEO-crawlable; real route is deferred future work.
 - [Reviews testimonials content gap deferred](reviews-testimonials-content-gap-deferred.md) — Robin Walsh/Gavin Di Fresco testimonials maybe missing from WordPress feed; code confirmed correct, this is a content task.
+- [Phase 3 hero + support approved](phase-3-hero-support-approved.md) — new hero client-outcome lede, homepage support sentence + /services#maintenance anchor, ScrollToTop hash-nav extension; user-approved.
