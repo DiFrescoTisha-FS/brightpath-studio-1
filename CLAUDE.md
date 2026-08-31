@@ -326,11 +326,13 @@ Do not reopen these without a specific reason:
 - Metallic gradient — **not production**
 - Parallax — **not implemented**
 
-## Recent Session Work (August 15, 2026) — approved, not yet committed
+## Recent Session Work (August 15, 2026) — approved, committed and pushed
 
-Branch `feature/services-page-redesign`. Background visibility pass plus the gold-system
-consolidation. Detail lives in "Gold System", "Background System", "Accessibility" and
-"Current Approved Visual State" above — this is just the shape of the session.
+Branch `feature/services-page-redesign`, committed as `8bea351` (feat: refine services page
+experience) and `fb8b2be` (style: refine backgrounds and theme gold system), pushed to
+origin. Background visibility pass plus the gold-system consolidation. Detail lives in "Gold
+System", "Background System", "Accessibility" and "Current Approved Visual State" above —
+this is just the shape of the session.
 
 - **Backgrounds made visible.** Dark grade eased, light grade introduced, feathers shortened,
   section-wide washes cut in favour of localized copy scrims. Tech Stack, Our Process and

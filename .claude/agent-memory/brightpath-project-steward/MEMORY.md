@@ -1,0 +1,10 @@
+- [CLAUDE.md drift: services branch](claude-md-drift-services-branch.md) — Aug 15 gold/bg work is committed AND pushed, not "not yet committed" as CLAUDE.md says.
+- [Gold system approved](gold-system-approved.md) — one gold per theme, dark #F2C94C / light #846300 via --primary; verified in globals.css.
+- [Background system approved](background-system-approved.md) — artwork must stay visible; .services-rule:not(.services-atmos) exclusion is load-bearing.
+- [Homepage visual system approved](homepage-visual-system-approved.md) — hero/nav/footer/typography baseline from 7927270; mid-blue header rejected.
+- [Hero injection mirror fact](hero-injection-mirror-fact.md) — hero copy lives in vite.config.ts injected string + ClarityHero.tsx mirror; edit both.
+- [Prerender architecture facts](prerender-architecture-facts.md) — 12-route allowlist verified, /services+/reviews excluded, createRoot-always confirmed.
+- [Blackmont consultant recommendations](blackmont-consultant-recommendations.md) — Grace Lo feedback on copy/trust-evidence/support visibility; NOT approved.
+- [Strategy gap analysis](strategy-gap-analysis.md) — prior session's repo review re Blackmont feedback; recommendation only, not approved.
+- [Rejected explorations](rejected-explorations.md) — metallic gold gradient and scroll parallax were tested and explicitly not adopted.
+- [Services branch scope rules](services-branch-scope-rules.md) — branch pushed but unmerged to main; leave backend/netlify/wordpress + known issues alone.
