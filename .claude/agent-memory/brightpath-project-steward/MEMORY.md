@@ -11,3 +11,4 @@
 - [Strategy gap analysis](strategy-gap-analysis.md) — prior session's repo review re Blackmont feedback; recommendation only, not approved.
 - [Rejected explorations](rejected-explorations.md) — metallic gold gradient and scroll parallax were tested and explicitly not adopted.
 - [Services branch scope rules](services-branch-scope-rules.md) — branch pushed but unmerged to main; leave backend/netlify/wordpress + known issues alone.
+- [Commit message policy approved](commit-message-policy-approved.md) — no AI/Claude/Anthropic attribution in commits, ever; memory-only rule, no enforcing hook exists.
