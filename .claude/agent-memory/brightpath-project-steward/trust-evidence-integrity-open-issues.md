@@ -1,17 +1,27 @@
 ---
 name: trust-evidence-integrity-open-issues
-description: Two unresolved evidence-integrity problems surfaced by a read-only trust-evidence audit (2026-08-31) — Living Better Life's contradictory metrics and Dale Tiffany's unsupported/qualitative "metric" cards. NOT resolved, NOT validated.
+description: Two evidence-integrity problems surfaced by a read-only trust-evidence audit (2026-08-31) — Living Better Life's contradictory metrics and Dale Tiffany's unsupported/qualitative "metric" cards. Coordinator reports both were addressed by Phase 1 cleanup; not independently verified against code by this steward.
 metadata:
   type: project
 ---
 
-**Status:** Known technical debt / open evidence-integrity issue. Explicitly NOT
-resolved and NOT validated — do not let [[social-media-metrics-policy-approved]]'s
-approval be read as fixing or verifying either item below (that policy's point 6 says so
-directly). This steward has not independently re-derived these findings from the raw
-data files in this session; they are relayed from a read-only audit run by the
-coordinator across the homepage `PortfolioSection`, Portfolio cards, case-study data
-files, and the Reviews system, as of 2026-08-31.
+**Status:** Known technical debt / evidence-integrity issue, originally recorded as
+open and NOT resolved/NOT validated. **Update (2026-08-31, later in the same day):** the
+coordinator subsequently reported that "Phase 1 evidence-integrity cleanup" has already
+been implemented for both items below — Living Better Life's contradictory numbers and
+Dale Tiffany's unsupported "40% faster" claim / qualitative-labels-as-metrics. **This
+steward has not independently re-verified that implementation against the actual code
+in this session** — the report was relayed via a coordinator message in the context of
+a separate, unrelated memory task (recording [[dale-tiffany-social-stats-deferred-review]]),
+not confirmed by re-reading the source files. Treat the two items below as
+"reported fixed, pending independent verification," not as confirmed-resolved by this
+steward's own inspection. A future session should re-read
+`src/data/caseStudies/livingBetterLifeSocial.ts` and
+`src/components/portfolio/DaleTiffanyCaseStudy.tsx` to confirm before fully closing this
+memory out. Do not let [[social-media-metrics-policy-approved]]'s approval alone be read
+as fixing or verifying either item (that policy's point 6 says so directly) — it is the
+separately-reported Phase 1 implementation, not the policy itself, that is claimed to
+have addressed them.
 
 **1. Living Better Life Social Media** —
 `src/data/caseStudies/livingBetterLifeSocial.ts`. The file's `quickImpact` field (48

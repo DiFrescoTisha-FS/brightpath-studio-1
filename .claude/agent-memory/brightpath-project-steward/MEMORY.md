@@ -3,7 +3,8 @@
 - [Background system approved](background-system-approved.md) — artwork must stay visible; .services-rule:not(.services-atmos) exclusion is load-bearing.
 - [Homepage visual system approved](homepage-visual-system-approved.md) — hero/nav/footer/typography baseline from 7927270; mid-blue header rejected.
 - [Social media metrics policy approved](social-media-metrics-policy-approved.md) — durable outcomes surfaced prominently; social analytics only as dated historical snapshots, never current results.
-- [Trust evidence integrity open issues](trust-evidence-integrity-open-issues.md) — Living Better Life's contradictory metrics + Dale Tiffany's unsupported "40% Faster" stat; NOT resolved by the metrics policy.
+- [Trust evidence integrity open issues](trust-evidence-integrity-open-issues.md) — Living Better Life + Dale Tiffany web/B2B issues; coordinator reports Phase 1 fixed both, not independently re-verified.
+- [Dale Tiffany social stats deferred review](dale-tiffany-social-stats-deferred-review.md) — self-consistent but unverified social numbers; scheduled future re-check, not a known contradiction.
 - [Hero injection mirror fact](hero-injection-mirror-fact.md) — hero copy lives in vite.config.ts injected string + ClarityHero.tsx mirror; edit both.
 - [Prerender architecture facts](prerender-architecture-facts.md) — 12-route allowlist verified, /services+/reviews excluded, createRoot-always confirmed.
 - [Blackmont consultant recommendations](blackmont-consultant-recommendations.md) — Grace Lo feedback on copy/trust-evidence/support visibility; NOT approved.
