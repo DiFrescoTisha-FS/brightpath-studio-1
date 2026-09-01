@@ -351,7 +351,7 @@ const ContactPage: React.FC = () => {
                 <div className="text-center text-gold font-lato">Sending message...</div>
               )}
               {status === 'success' && (
-                <div className="text-center text-green-500 font-lato">Thank you! Your message has been sent successfully.</div>
+                <div className="text-center text-green-500 font-lato">Thank you! Your message has been sent successfully. We typically respond within 24 hours.</div>
               )}
               {status === 'error' && (
                 <div className="text-center text-red-500 font-lato">An error occurred. Please try again later.</div>

@@ -77,9 +77,14 @@ const ReviewsPage = () => {
         <div className="text-center text-lg text-muted-foreground">No reviews to display yet.</div>
       )}
 
-      <div className="text-center mt-12">
-        <Link to="/">
+      <div className="text-center mt-12 flex flex-col items-center gap-4">
+        <Link to="/contact">
           <Button size="lg" className={buttonClasses}>
+            Start Your Project
+          </Button>
+        </Link>
+        <Link to="/">
+          <Button size="lg" variant="link">
             Return to Homepage
           </Button>
         </Link>

@@ -142,9 +142,9 @@ const BrandStorySection = () => (
             Illuminating Success
           </span>
         </div>
-        <Link to="/reviews">
+        <Link to="/contact">
           <button className="mt-8 bg-primary text-primary-foreground font-bold font-lato py-2 px-6 rounded-md text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl text-shadow-md">
-            Read Our Reviews
+            Start Your Project
           </button>
         </Link>
       </div>

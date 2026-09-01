@@ -16,3 +16,5 @@
 - [Dale Tiffany case study URL deferred](dale-tiffany-case-study-url-deferred.md) — ?project= query-param homepage link is a stopgap, not SEO-crawlable; real route is deferred future work.
 - [Reviews testimonials content gap deferred](reviews-testimonials-content-gap-deferred.md) — Robin Walsh/Gavin Di Fresco testimonials maybe missing from WordPress feed; code confirmed correct, this is a content task.
 - [Phase 3 hero + support approved](phase-3-hero-support-approved.md) — new hero client-outcome lede, homepage support sentence + /services#maintenance anchor, ScrollToTop hash-nav extension; user-approved.
+- [Phase 4 conversion paths approved](phase-4-conversion-paths-approved.md) — Brand Story CTA → Contact, Reviews page gains "Start Your Project" CTA, Contact success message adds 24hr line; user-approved.
+- [Contact form architecture debt deferred](contact-form-architecture-debt-deferred.md) — hardcoded Apps Script URL, no dev/prod split, opaque no-cors failures, unused GoHighLevel Netlify function; discovered, not actioned.
