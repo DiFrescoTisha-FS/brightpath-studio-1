@@ -297,11 +297,11 @@ function injectStaticHero(): Plugin {
 <section id="hero-clarity-static" class="studio-hero">
   <div class="studio-hero__inner">
     <div class="studio-hero__copy">
-      <p class="studio-hero__eyebrow">WEBSITES BUILT FOR BUSINESS</p>
+      <p class="studio-hero__eyebrow">BUILT AROUND YOUR BUSINESS</p>
       <h1 class="studio-hero__title">Websites That Work <span class="studio-hero__accent">Beautifully.</span></h1>
-      <p class="studio-hero__lede">Custom websites built for speed, clarity, and growth&#8212;so your online presence works as hard as you do and makes it easier for customers to understand, trust, and engage with your business.</p>
+      <p class="studio-hero__lede">Your business isn&#8217;t one-size-fits-all. Your website shouldn&#8217;t be either. I take the time to understand how your business works, what your customers need, and where your website can work harder for you.</p>
       <div class="studio-hero__cta">
-        <a href="/contact" class="studio-cta studio-cta--primary">Start Your Project <span class="studio-cta__arrow" aria-hidden="true">&#8594;</span></a>
+        <a href="/contact" class="studio-cta studio-cta--primary">Let&#8217;s Talk <span class="studio-cta__arrow" aria-hidden="true">&#8594;</span></a>
         <a href="/portfolio" class="studio-cta studio-cta--ghost">View Our Work <span class="studio-cta__arrow" aria-hidden="true">&#8594;</span></a>
       </div>
     </div>

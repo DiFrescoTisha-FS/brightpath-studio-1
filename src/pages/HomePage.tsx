@@ -18,21 +18,21 @@ type SectionProps = {
 const ServicesSection = ({ theme }: SectionProps) => {
   const services = [
     {
-      title: "Website Modernization",
+      title: "Make Your Website Work Better",
       description:
-        "Updating outdated websites with modern responsive layouts, improved accessibility, and enhanced user experience.",
+        "If your website feels outdated, confusing, or difficult to use, I’ll identify what’s getting in the way and improve the experience for you and your customers.",
       icon: <RefreshCcw className="h-8 w-8 mb-4 drop-shadow-md text-primary" aria-hidden="true" />,
     },
     {
-      title: "Performance Optimization",
+      title: "Turn More Visits Into Action",
       description:
-        "Improving site speed, Lighthouse scores, and Core Web Vitals through asset optimization and layout restructuring.",
+        "Make it easier for customers to book, call, contact you, or take the next step with clear messaging and a customer journey built around your business.",
       icon: <Zap className="h-8 w-8 mb-4 drop-shadow-md text-primary" aria-hidden="true" />,
     },
     {
-      title: "Custom Front-End Development",
+      title: "Build What Your Business Needs",
       description:
-        "Building polished web experiences with responsive layouts, custom styling, and performance-focused implementation.",
+        "When an off-the-shelf solution isn’t enough, I’ll create the functionality and web experience your business actually needs—without adding things you don’t.",
       icon: <Code className="h-8 w-8 mb-4 drop-shadow-md text-primary" aria-hidden="true" />,
     },
   ];
@@ -74,7 +74,7 @@ const ServicesSection = ({ theme }: SectionProps) => {
             the 4.5:1 bar for normal text. Colour only — family, size, weight,
             spacing and width are unchanged. */}
         <p className="font-lato services-body mb-12 max-w-2xl mx-auto">
-          Transforming outdated websites into modern, high-performing digital experiences.
+          Your website should support the way you work—and make it easier for customers to choose you.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -131,20 +131,14 @@ const BrandStorySection = () => (
           A Beacon in the Digital Fog
         </BrightPathGradientTitle>
         <p className="font-lato text-muted-foreground leading-relaxed text-sm md:text-lg mb-6">
-          In a crowded online world, clarity is everything. Like a lighthouse on
-          a rocky coast, BrightPath provides unwavering guidance. We cut through
-          the complexity with clear strategy and brilliant design, ensuring your
-          business safely reaches its destination and shines for all to see.
+          You don’t need to know exactly what your website needs before we talk.
+          That’s where I come in. I’ll take the time to understand your business,
+          your customers, and what’s getting in the way—then help you find the
+          right path forward.
         </p>
-        <div className="flex items-center space-x-4">
-          <div className="w-16 h-1 bg-primary rounded-full"></div>
-          <span className="text-primary font-lato font-bold">
-            Illuminating Success
-          </span>
-        </div>
         <Link to="/contact">
           <button className="mt-8 bg-primary text-primary-foreground font-bold font-lato py-2 px-6 rounded-md text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl text-shadow-md">
-            Start Your Project
+            Tell Me About Your Business
           </button>
         </Link>
       </div>

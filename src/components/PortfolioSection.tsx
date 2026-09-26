@@ -17,7 +17,7 @@ const portfolioItems: PortfolioItem[] = [
   {
     id: 1,
     title: 'AweStruck Intelligence',
-    description: 'Custom React + TypeScript build with a performance-first architecture — Lighthouse mobile 26 → 100.',
+    description: 'Bringing a unique educational vision to life through an immersive, fast, and engaging digital experience.',
     imageUrl: cloudinaryAssets.awestruckCardHeroFull,
     href: '/portfolio/awestruck-intelligence',
     badge: 'Featured',
@@ -25,21 +25,21 @@ const portfolioItems: PortfolioItem[] = [
   {
     id: 2,
     title: 'Dale Tiffany Lighting',
-    description: 'Legacy PHP platform re-architected into a modern React + Supabase system — role-based B2B retailer portal and integrated admin CRM.',
+    description: 'Creating an elegant online experience that showcases a luxury lighting collection and makes products easy to explore.',
     imageUrl: cloudinaryAssets.daleTiffanyLongFull,
     href: '/portfolio?project=dale-tiffany',
   },
   {
     id: 3,
     title: 'Angel City Massage',
-    description: 'WordPress modernization with a Lighthouse desktop lift from 62 to 99.',
+    description: 'Transforming an outdated website into a fast, mobile-friendly experience that makes services and booking easier to navigate.',
     imageUrl: cloudinaryAssets.angelCityHomepage,
     href: '/case-study',
   },
   {
     id: 4,
     title: 'Bamvsthewrld',
-    description: 'Full-stack MERN platform for music artist — immersive 3D, Firebase auth, embedded media.',
+    description: 'Bringing an artist’s music, story, and visual identity together in one immersive digital home.',
     imageUrl: cloudinaryAssets.bamvsthewrldScrollFull,
     href: '/portfolio/bamvsthewrld',
   },

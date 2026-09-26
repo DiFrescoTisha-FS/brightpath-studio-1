@@ -20,18 +20,18 @@ export default function ClarityHeroStructureMirror() {
     <section id="hero-clarity-static" className="studio-hero">
       <div className="studio-hero__inner">
         <div className="studio-hero__copy">
-          <p className="studio-hero__eyebrow">WEBSITES BUILT FOR BUSINESS</p>
+          <p className="studio-hero__eyebrow">BUILT AROUND YOUR BUSINESS</p>
           <h1 className="studio-hero__title">
             Websites That Work <span className="studio-hero__accent">Beautifully.</span>
           </h1>
           <p className="studio-hero__lede">
-            Custom websites built for speed, clarity, and growth—so your online presence
-            works as hard as you do and makes it easier for customers to understand, trust,
-            and engage with your business.
+            Your business isn’t one-size-fits-all. Your website shouldn’t be either. I take
+            the time to understand how your business works, what your customers need, and
+            where your website can work harder for you.
           </p>
           <div className="studio-hero__cta">
             <a href="/contact" className="studio-cta studio-cta--primary">
-              Start Your Project{' '}
+              Let’s Talk{' '}
               <span className="studio-cta__arrow" aria-hidden="true">
                 →
               </span>
