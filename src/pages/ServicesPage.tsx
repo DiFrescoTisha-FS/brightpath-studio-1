@@ -23,71 +23,71 @@ import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
 import { PageMeta } from "@/components/PageMeta";
 
 const SERVICES_META = {
-  title: "Services",
-  description: "Front-end development, performance optimization, and custom React + WordPress builds. BrightPath Web Studio's full service offering and step-by-step project process.",
+  title: "Web Design & Development Services",
+  description: "Websites built around how your business works and what your customers need — from improving the site you have to building something new, with support after launch.",
   path: "/services",
   jsonLd: [
     {
       '@context': 'https://schema.org',
       '@type': 'Service',
-      name: 'Website Modernization',
-      description: 'Bringing legacy sites into 2026 with modern responsive layouts, improved accessibility, and refreshed visual systems.',
+      name: 'Website Improvement',
+      description: 'Updating outdated or hard-to-use websites so they are easier for customers to use and easier for business owners to manage.',
     },
     {
       '@context': 'https://schema.org',
       '@type': 'Service',
-      name: 'Performance Optimization',
-      description: 'Lighthouse score lifts, Core Web Vitals improvements, image and asset optimization, and bundle tuning.',
+      name: 'Customer Conversion',
+      description: 'Clear messaging and a simpler customer journey that make it easier for visitors to call, book, get in touch, or take the next step.',
     },
     {
       '@context': 'https://schema.org',
       '@type': 'Service',
-      name: 'Custom Front-End Development',
-      description: 'Hand-built React + TypeScript applications and Divi-based WordPress sites with pixel-precise design and scalable architecture.',
+      name: 'Custom Website Development',
+      description: 'Custom-built websites and functionality for businesses whose needs go beyond an off-the-shelf solution.',
     },
     {
       '@context': 'https://schema.org',
       '@type': 'Service',
-      name: 'Social Media Strategy & Content',
-      description: 'End-to-end social media content programs including calendars, original photography and video, and multi-platform publishing.',
+      name: 'Social Media Content & Management',
+      description: 'Content planning, creation, and posting that keeps a business consistent on social media without managing it all in-house.',
     },
   ],
 };
 
 const SERVICES = [
   {
-    title: "Website Modernization",
+    title: "Make Your Website Work Better",
     description:
-      "Bringing legacy sites into 2026 with modern responsive layouts, improved accessibility, and refreshed visual systems. Ideal for sites that look or perform like they were built years ago.",
+      "Update an outdated or frustrating website so it’s easier for your customers to use—and easier for you to manage.",
     icon: RefreshCcw,
   },
   {
-    title: "Performance Optimization",
+    title: "Turn More Visits Into Action",
     description:
-      "Lighthouse score lifts, Core Web Vitals improvements, image and asset optimization, and bundle tuning. Recent client work moved a Lighthouse mobile score from 26 to 100.",
+      "Make it easier for customers to call, book, contact you, or take the next step.",
     icon: Zap,
   },
   {
-    title: "Custom Front-End Development",
+    title: "Build What Your Business Needs",
     description:
-      "Hand-built React + TypeScript applications and Divi-based WordPress sites. Pixel-precise designs, smooth animations, and architecture built to scale with your business.",
+      "When an off-the-shelf solution isn’t enough, I’ll build the functionality your business actually needs.",
     icon: Code,
   },
   {
-    title: "Social Media Strategy & Content",
+    title: "Social Media That Supports Your Business",
     description:
-      "End-to-end social media program management — content calendars, original photography and video, posts and reels production, and multi-platform publishing across Facebook, Instagram, LinkedIn, and TikTok.",
+      "Stay consistent with thoughtful content, planning, and posting without having to manage it all yourself.",
     icon: Megaphone,
   },
 ];
 
 const INCLUDED = [
-  { title: "Mobile-First Responsive Design", icon: Smartphone, description: "Every site is designed for the phone first, then scaled up — not the other way around." },
-  { title: "Performance Optimization", icon: Zap, description: "Lighthouse-tuned out of the box. Target: 90+ on mobile, with real-world Core Web Vitals in mind." },
-  { title: "SEO Foundations", icon: Search, description: "Per-page titles and descriptions, canonical URLs, structured data (JSON-LD), robots.txt, and sitemap.xml." },
-  { title: "Accessibility Standards", icon: Accessibility, description: "Semantic HTML, ARIA labeling, keyboard navigation, and WCAG AA color contrast." },
-  { title: "Analytics Integration", icon: BarChart3, description: "GA4 wired in, deferred to stay out of the critical render path. Page views and events configured." },
-  { title: "Documentation & Handoff", icon: FileCheck2, description: "A clear handoff packet so you (or your team) can take it from here — what's where, how to update content, and what to expect." },
+  { title: "Works on Every Device", icon: Smartphone, description: "Designed for phones first, so your site is easy to read and use wherever your customers find you." },
+  { title: "Fast Loading", icon: Zap, description: "Pages load quickly, so visitors don't give up and leave before they see what you offer." },
+  { title: "Search-Friendly Foundations", icon: Search, description: "Each page is set up so search engines can understand your business and help the right customers find you." },
+  { title: "Accessible to Everyone", icon: Accessibility, description: "Built so people who use a keyboard, a screen reader, or other assistive tools can use your site too." },
+  { title: "Visitor Insights", icon: BarChart3, description: "Analytics set up from day one, so you can see how people find your site and what they do there." },
+  { title: "Clear Handoff", icon: FileCheck2, description: "Simple guidance on how your site works and how to update it, so you're never left guessing." },
 ];
 
 const TECH_STACK = [
@@ -163,19 +163,26 @@ const ServicesPage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
+          <p className="studio-hero__eyebrow">BUILT AROUND YOUR BUSINESS</p>
           <BrightPathGradientTitle
             as="h1"
             className="services-hero__title font-poppins font-bold mb-6"
-            gradientWords={["Perform"]}
+            gradientWords={["Business"]}
             emphasis="solid"
             textColor="text-foreground"
           >
-            Services Built to Perform
+            Web Solutions Built Around Your Business
           </BrightPathGradientTitle>
           <p className="services-hero__lede text-base md:text-lg lg:text-xl font-lato leading-relaxed">
-            Front-end development, performance optimization, custom React and WordPress builds,
-            and social media strategy — delivered with a focus on craft, clarity, and measurable results.
+            Every business works a little differently. I take the time to understand yours — how you
+            work, who your customers are, and what they need — then build a website that fits.
           </p>
+          <div className="mt-8">
+            <Link to="/contact" className="studio-cta studio-cta--primary">
+              Let&rsquo;s Talk
+              <span className="studio-cta__arrow" aria-hidden="true">&#8594;</span>
+            </Link>
+          </div>
         </motion.div>
       </section>
 
@@ -192,7 +199,7 @@ const ServicesPage: React.FC = () => {
               What I Build
             </BrightPathGradientTitle>
             <p className="font-lato services-body max-w-2xl mx-auto">
-              Four core service tracks — pick one or combine them for a full launch.
+              Solutions shaped around what your business actually needs.
             </p>
           </div>
 
@@ -238,15 +245,11 @@ const ServicesPage: React.FC = () => {
               >
                 Our Process
               </BrightPathGradientTitle>
-              <p className="mb-6 services-body">
-                Every website I create follows a clear, purposeful path — from the first spark of an idea
-                to a seamless, fully launched experience.
-              </p>
               <p className="text-sm md:text-lg services-body mb-8">
-                A six-phase approach so each project is thoughtfully planned, beautifully designed, and built to perform.
+                Every project follows a clear, collaborative process—from planning and design through launch and support—so you always know where your project stands.
               </p>
               <Link to="/contact" className="studio-cta studio-cta--primary">
-                Start Your Project
+                Let&rsquo;s Talk
                 <span className="studio-cta__arrow" aria-hidden="true">&#8594;</span>
               </Link>
             </div>
@@ -282,7 +285,7 @@ const ServicesPage: React.FC = () => {
               What's Included With Every Project
             </BrightPathGradientTitle>
             <p className="font-lato services-body max-w-2xl mx-auto">
-              These aren't add-ons — they're the baseline. Every site I build ships with all of them.
+              The essentials, built in.
             </p>
           </div>
 
@@ -317,7 +320,7 @@ const ServicesPage: React.FC = () => {
             Tech Stack
           </BrightPathGradientTitle>
           <p className="font-lato services-body mb-10 max-w-2xl mx-auto">
-            The tools I reach for day to day. Whatever the right fit is for your project — custom React build or CMS-driven WordPress site — these are the building blocks.
+            You don&rsquo;t need to know anything about these tools — that&rsquo;s my job. I choose the right ones for your business, so your website is reliable and easy to keep up to date.
           </p>
           <div className="flex flex-wrap justify-center gap-2 md:gap-3">
             {TECH_STACK.map((tool) => (
@@ -345,8 +348,8 @@ const ServicesPage: React.FC = () => {
             Ongoing Maintenance
           </BrightPathGradientTitle>
           <p className="font-lato services-body mb-10 max-w-2xl mx-auto">
-            Modern sites need periodic upkeep — security patches, dependency updates, content swaps.
-            BrightPath offers a flat-rate monthly plan so you don't have to think about it.
+            Your website needs a little care after launch to stay secure and up to date. A simple monthly
+            plan takes care of it for you, so you can stay focused on running your business.
           </p>
 
           <div className="services-card p-8 md:p-10 text-left max-w-2xl mx-auto">
@@ -388,17 +391,17 @@ const ServicesPage: React.FC = () => {
           <BrightPathGradientTitle
             as="h2"
             className="font-poppins font-bold mb-4"
-            gradientWords={["project"]}
+            gradientWords={["talk"]}
             emphasis="solid"
             textColor="text-foreground"
           >
-            Ready to start a project?
+            Not sure what your website needs? Let’s talk.
           </BrightPathGradientTitle>
           <p className="font-lato services-body mb-8 max-w-xl mx-auto">
-            Tell me what you're building and where you're stuck. I'll get back within 24 hours with next steps.
+            That&rsquo;s completely fine. Tell me a little about your business and what&rsquo;s on your mind, and I&rsquo;ll get back to you within one business day with the right next step.
           </p>
           <Link to="/contact" className="studio-cta studio-cta--primary">
-            Get in touch
+            Let&rsquo;s Talk
             <span className="studio-cta__arrow" aria-hidden="true">&#8594;</span>
           </Link>
         </div>
