@@ -76,6 +76,10 @@ and [[social-media-metrics-policy-approved]]. Recorded 2026-08-31.
    reconciliation noted in [[trust-evidence-integrity-open-issues]]. None of these should
    be treated as touched or resolved by Phase 3.
 
+**Superseded 2026-09-26:** the hero lede in point 1 and the three homepage service cards
+were rewritten in [[phase-5-business-first-copy-approved]]. Points 2–4 (support sentence,
+`#maintenance` anchor, `ScrollToTop` hash handling) are still current.
+
 **Why this matters:** this is the user converting the second and final open item from
 [[blackmont-consultant-recommendations]] (points 3 and 4) into approved, implemented
 work — following Phase 2's conversion of point 5. Per [[strategy-gap-analysis]], this

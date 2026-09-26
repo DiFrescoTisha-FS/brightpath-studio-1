@@ -1,11 +1,13 @@
 ---
 name: claude-md-drift-services-branch
-description: CLAUDE.md says Aug 15 gold/background work is "approved, not yet committed" — this is stale; both commits are committed AND pushed to origin.
+description: RESOLVED — CLAUDE.md once called the Aug 15 work "not yet committed"; corrected, and the branch is now merged to main.
 metadata:
   type: project
 ---
 
-**Status:** Known technical debt (documentation drift) — flag for correction, do not fix yourself.
+**Status: RESOLVED (verified 2026-09-26).** CLAUDE.md's Aug 15 header now reads
+"approved, committed and pushed", and the branch has since been merged to `main`
+(see [[services-branch-scope-rules]]). Kept only as history; nothing to action.
 
 CLAUDE.md's "Recent Session Work (August 15, 2026)" section header currently reads
 "approved, not yet committed." Verified against git on 2026-08-31 (initialization review):

@@ -11,6 +11,13 @@ Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with Re
 - **Images**: Cloudinary for optimized delivery
 - **Analytics**: GA4
 - **Prerendering**: `vite-plugin-prerender` + Puppeteer, 12 static routes (see below)
+- **Local dev**: `npm run dev` (Vite, :5173) has no Netlify functions, so `/api/phases` and
+  `/api/reviews` fail there. To review the WordPress-driven phase cards or reviews, run
+  `npx netlify dev` (:8888) — it pulls `WORDPRESS_API_URL`/`WORDPRESS_APP_PASSWORD` from the
+  linked Netlify site, no `.env` needed. The global `netlify` binary isn't on PATH; use `npx`.
+- **Decision log**: detailed approved decisions and deferred items live in
+  `.claude/agent-memory/brightpath-project-steward/` (index: `MEMORY.md`). This file is the
+  overview; check there before reopening anything marked approved.
 
 ## Key Design Patterns
 - **Theme**: Light/dark mode via `useAppStore` (Zustand)
@@ -326,6 +333,25 @@ Do not reopen these without a specific reason:
 - Metallic gradient — **not production**
 - Parallax — **not implemented**
 
+## Recent Session Work (September 26, 2026) — approved, merged to `main` and pushed
+
+**Business-first copy rewrite of the homepage and Services page** (Phase 5). Copy only — no
+layout, styling or component changes beyond the Services hero gaining an eyebrow and a CTA
+that reuse existing classes. Commits `3dd1df7` (homepage) and `f66aa58` (Services);
+`feature/services-page-redesign` was then fast-forwarded into `main` (`b9e4aa7..f66aa58`)
+and pushed, which triggers Netlify's production deploy. Full decisions and deferred loose
+ends: `phase-5-business-first-copy-approved.md` in the steward memory.
+
+- Primary CTA vocabulary is now **"Let's Talk" → `/contact`** on both pages.
+- Homepage My Work cards and the Services page **no longer show technical metrics**
+  (26→100, 62→99) — a deliberate choice; Portfolio cards and case studies keep them.
+- Brand Story lost the "Illuminating Success" tagline and rule; its CTA reads "Tell Me About
+  Your Business".
+- Services phase cards were rewritten by the user **in WordPress/ACF** and must stay
+  WordPress-driven — never hard-code them.
+- Deferred: response time now reads "one business day" on Services but "24 hours" on
+  Contact; Reviews page still says "Start Your Project".
+
 ## Recent Session Work (August 15, 2026) — approved, committed and pushed
 
 Branch `feature/services-page-redesign`, committed as `8bea351` (feat: refine services page
@@ -474,7 +500,14 @@ pixel-identical throughout (maxDelta 0).
 - AweStruck case study content corrections
 
 ## Commit History (Recent)
-- `7927270` - Redesign homepage visual system: hero, backgrounds, and typography
+- `f66aa58` - feat: update services page copy for business-first positioning (current `main`)
+- `3dd1df7` - feat: update homepage copy for business-first positioning
+- `62154f5` / `d2c77e2` / `d5751a3` / `e94c235` - Phases 4 / 3 / 2 / 1 (conversion paths,
+  hero + support visibility, portfolio trust evidence, evidence-integrity cleanup)
+- `fb8b2be` / `8bea351` - Aug 15 backgrounds + gold system / Services page refinement
+- `6834ccc` - Redesign homepage visual system. **Note:** this file cites it as `7927270`
+  elsewhere; that hash was rewritten and is no longer on any branch — `6834ccc` is the one
+  on `main`.
 - `c04bb8d` - Merge PR #21 (test-netlify-prerender)
 - `3a1e994` - Optimize About page and improve prerender visibility
 - `409f6c0` - Fix prerendering for Netlify builds

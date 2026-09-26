@@ -1,16 +1,16 @@
-- [CLAUDE.md drift: services branch](claude-md-drift-services-branch.md) — Aug 15 gold/bg work is committed AND pushed, not "not yet committed" as CLAUDE.md says.
+- [CLAUDE.md drift: services branch](claude-md-drift-services-branch.md) — RESOLVED 2026-09-26; history only.
 - [Gold system approved](gold-system-approved.md) — one gold per theme, dark #F2C94C / light #846300 via --primary; verified in globals.css.
 - [Background system approved](background-system-approved.md) — artwork must stay visible; .services-rule:not(.services-atmos) exclusion is load-bearing.
 - [Homepage visual system approved](homepage-visual-system-approved.md) — hero/nav/footer/typography baseline from 7927270; mid-blue header rejected.
 - [Social media metrics policy approved](social-media-metrics-policy-approved.md) — durable outcomes surfaced prominently; social analytics only as dated historical snapshots, never current results.
 - [Trust evidence integrity open issues](trust-evidence-integrity-open-issues.md) — Living Better Life + Dale Tiffany web/B2B issues; coordinator reports Phase 1 fixed both, not independently re-verified.
 - [Dale Tiffany social stats deferred review](dale-tiffany-social-stats-deferred-review.md) — self-consistent but unverified social numbers; scheduled future re-check, not a known contradiction.
-- [Hero injection mirror fact](hero-injection-mirror-fact.md) — hero copy lives in vite.config.ts injected string + ClarityHero.tsx mirror; edit both.
+- [Hero injection mirror fact](hero-injection-mirror-fact.md) — hero copy lives in vite.config.ts injected string + ClarityHero.tsx mirror; edit both. Current copy: Phase 5.
 - [Prerender architecture facts](prerender-architecture-facts.md) — 12-route allowlist verified, /services+/reviews excluded, createRoot-always confirmed.
 - [Blackmont consultant recommendations](blackmont-consultant-recommendations.md) — Grace Lo feedback on copy/trust-evidence/support visibility; NOT approved.
 - [Strategy gap analysis](strategy-gap-analysis.md) — prior session's repo review re Blackmont feedback; recommendation only, not approved.
 - [Rejected explorations](rejected-explorations.md) — metallic gold gradient and scroll parallax were tested and explicitly not adopted.
-- [Services branch scope rules](services-branch-scope-rules.md) — branch pushed but unmerged to main; leave backend/netlify/wordpress + known issues alone.
+- [Services branch scope rules](services-branch-scope-rules.md) — merged to main 2026-09-26 (f66aa58); merge only on explicit request; leave backend/netlify/wordpress + known issues alone.
 - [Commit message policy approved](commit-message-policy-approved.md) — no AI/Claude/Anthropic attribution in commits, ever; memory-only rule, no enforcing hook exists.
 - [Phase 2 trust evidence approved](phase-2-trust-evidence-approved.md) — Angel City Lighthouse chip + routing, Dale Tiffany routing, AweStruck/Bamvsthewrld deliberately unchanged; user-approved.
 - [Dale Tiffany case study URL deferred](dale-tiffany-case-study-url-deferred.md) — ?project= query-param homepage link is a stopgap, not SEO-crawlable; real route is deferred future work.
@@ -18,3 +18,4 @@
 - [Phase 3 hero + support approved](phase-3-hero-support-approved.md) — new hero client-outcome lede, homepage support sentence + /services#maintenance anchor, ScrollToTop hash-nav extension; user-approved.
 - [Phase 4 conversion paths approved](phase-4-conversion-paths-approved.md) — Brand Story CTA → Contact, Reviews page gains "Start Your Project" CTA, Contact success message adds 24hr line; user-approved.
 - [Contact form architecture debt deferred](contact-form-architecture-debt-deferred.md) — hardcoded Apps Script URL, no dev/prod split, opaque no-cors failures, unused GoHighLevel Netlify function; discovered, not actioned.
+- [Phase 5 business-first copy approved](phase-5-business-first-copy-approved.md) — homepage + Services copy rewrite, "Let's Talk" CTAs, metrics off homepage/Services cards, phase cards stay WordPress-driven; live on main f66aa58. Lists deferred loose ends.

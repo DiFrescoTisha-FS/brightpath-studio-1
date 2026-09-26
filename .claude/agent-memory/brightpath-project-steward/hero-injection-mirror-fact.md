@@ -32,6 +32,12 @@ character-identical in both locations and confirmed baked into the prerendered
 preserved unchanged. Treat the lede text above as historical; see
 [[phase-3-hero-support-approved]] for the current approved wording.
 
+**Superseded again 2026-09-26 (Phase 5, approved, live on main):** eyebrow is now "BUILT
+AROUND YOUR BUSINESS", the lede was rewritten, and the primary CTA is "Let's Talk"
+(→ `/contact`). H1 and "View Our Work" unchanged. Both locations were edited together and
+the new text confirmed in the prerendered `dist/index.html`. See
+[[phase-5-business-first-copy-approved]].
+
 **Why this matters for the Strategy Gap discussion:** any homepage hero copy change
 proposed to better translate capability into client outcome (see
 [[blackmont-consultant-recommendations]]) has an architectural cost most people won't

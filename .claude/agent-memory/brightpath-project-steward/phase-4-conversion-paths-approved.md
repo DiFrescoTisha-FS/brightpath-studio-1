@@ -52,6 +52,11 @@ diff matched the described changes exactly, three files only.
    `src/pages/ContactPage.tsx` only. Commit message: "feat: improve conversion paths
    across key pages".
 
+**Updated 2026-09-26:** point 1's Brand Story CTA still routes to `/contact`, but its text
+is now "Tell Me About Your Business" ([[phase-5-business-first-copy-approved]]). Points 2–3
+are unchanged; their "Start Your Project" and "24 hours" wording now differs from the rest
+of the site — logged as deferred there.
+
 **Why this matters:** this closes homepage-to-Reviews-to-dead-end and
 Reviews-to-homepage-only loops with an actual forward path to Contact, complementing the
 messaging work in [[phase-3-hero-support-approved]] — Phase 3 made the value proposition

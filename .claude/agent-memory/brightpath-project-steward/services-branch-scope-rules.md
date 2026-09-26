@@ -1,6 +1,6 @@
 ---
 name: services-branch-scope-rules
-description: feature/services-page-redesign is committed+pushed but not merged to main; leave backend/netlify/wordpress dirs and known pre-existing issues alone absent a specific task.
+description: feature/services-page-redesign was merged to main 2026-09-26 (f66aa58); main auto-deploys, so merge only on explicit request. Leave backend/netlify/wordpress dirs and known pre-existing issues alone absent a specific task.
 metadata:
   type: feedback
 ---
@@ -16,6 +16,12 @@ merged to main.** This steward does not know of any explicit "don't merge yet" s
 from the user beyond CLAUDE.md's framing of this work as a still-active session — treat
 non-merge as the current state to report accurately, not as a rule to enforce
 unprompted.
+
+**Update 2026-09-26 — merged.** At the user's explicit request, after local review and
+approval, `feature/services-page-redesign` was fast-forwarded into `main` and pushed:
+`main` = `origin/main` = `f66aa58` (12 commits brought in, `b9e4aa7..f66aa58`). The
+paragraph above is historical. Pushing `main` triggers Netlify's production deploy; no
+manual deploy was run. Work continues on the same branch, which is level with `main`.
 
 **Reason:** Do not merge, commit, or push on this steward's own initiative under any
 circumstance — that's a hard constraint from this agent's role definition, independent

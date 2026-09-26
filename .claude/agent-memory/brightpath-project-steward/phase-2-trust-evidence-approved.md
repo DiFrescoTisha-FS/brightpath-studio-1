@@ -42,6 +42,11 @@ metadata:
    not an oversight — do not "complete" Bamvsthewrld with an invented number later
    without a genuine verified metric to report.
 
+**Updated 2026-09-26:** "AweStruck already surfaces its Lighthouse 26→100 metric
+everywhere" is no longer true of the homepage card or the Services page — both dropped
+metrics in [[phase-5-business-first-copy-approved]]. The Portfolio page cards (including
+the Angel City "Lighthouse 99" chip) and the case studies still carry them.
+
 **Why this matters:** this is the user's explicit approval converting part of
 [[blackmont-consultant-recommendations]] (point 5, stronger visible trust evidence) from
 recommendation to approved-and-implemented, following the review this steward performed
