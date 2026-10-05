@@ -143,7 +143,10 @@ const ServicesPage: React.FC = () => {
             alt=""
             width={1717}
             height={916}
-            fetchPriority="high"
+            // React 18 doesn't know the camelCase `fetchPriority` prop and warns on it;
+            // the lowercase attribute passes straight through to the DOM. The spread
+            // keeps TypeScript (whose React 18 types only declare the camelCase name) happy.
+            {...{ fetchpriority: 'high' }}
             decoding="async"
             className="services-hero__img services-hero__img--dark"
           />

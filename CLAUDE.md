@@ -355,11 +355,15 @@ Do not reopen these without a specific reason:
 - Metallic gradient — **not production**
 - Parallax — **not implemented**
 
-## Recent Session Work (October 5, 2026) — approved, committed and pushed to the feature branch (not merged)
+## Recent Session Work (October 5, 2026) — approved, merged to `main` and deployed
 
 Branch `feature/about-page-refresh` (from `main` at `4d9d80f`); commits `6f54b89` (refresh,
-metadata, prerender and hero accessibility) and a follow-up for the About section
-backgrounds. Not merged to `main`, not deployed. About page refresh plus the
+metadata, prerender and hero accessibility) and `0f8dae7` (About section backgrounds).
+`main` was fast-forwarded to `0f8dae7` and deployed to production (Netlify deploy
+`6ac3f2688449550007a9a062`). Post-deploy production verification passed: new content live,
+timeline backgrounds fixed from `md` up and scrolling below, Selected Work/Skills solid,
+hero buttons correct, all About links working, one `<h1>` per page, no layout regressions
+at 390/768/1440. A follow-up commit on `main` fixed the `fetchPriority` warning below. About page refresh plus the
 related metadata, prerender and accessibility fixes. Full decisions:
 `about-page-refresh.md` in the steward memory.
 
@@ -410,6 +414,17 @@ related metadata, prerender and accessibility fixes. Full decisions:
     and change the approved appearance — treat it as a design change, not a bug fix.
   - Measuring note: `md:bg-fixed` backgrounds render wrongly in full-page screenshots.
     Sample contrast from viewport screenshots with the element scrolled into view.
+- **`fetchPriority` console warning — found after deploy, fixed.** React 18.3 doesn't know
+  the camelCase `fetchPriority` prop and logs "React does not recognize the
+  `fetchPriority` prop". It already fired on `/services` (`ServicesPage.tsx` hero image)
+  before this work; the new `ClarityHero` fallback exposed it on About → Home as well.
+  Fix in both files: `{...{ fetchpriority: 'high' }}` — the lowercase attribute passes
+  through to the DOM unchanged (same `fetchpriority="high"` as `STATIC_HERO_HTML`), and the
+  spread sidesteps React 18's TypeScript types, which only declare the camelCase name.
+  Verified on a `NODE_ENV=development` build (the build Netlify ships): no warning on
+  direct Home/About/Services, About → Home, Home → Services or About → Services; images
+  still load with `fetchpriority="high"`. `SocialMediaCard.tsx` still uses the camelCase
+  prop — deliberately out of that fix's scope.
 
 ## Recent Session Work (September 26, 2026) — approved, merged to `main` and pushed
 
@@ -528,6 +543,16 @@ pixel-identical throughout (maxDelta 0).
   Both predate this work and were left alone.
 - ~~About hero name fails contrast~~ — **resolved Oct 5, 2026** with `.about-hero__scrim`
   (a localized copy scrim, not a colour change). See "Recent Session Work (October 5, 2026)".
+- **Production ships React's development build.** The Netlify site environment sets
+  `NODE_ENV=development`, so `vite build` on Netlify emits development React: the
+  `react-vendor` chunk is ~340 KB in production vs ~142 KB in a local build, and dev-only
+  warnings (like the `fetchPriority` one) appear in the live console. Discovered Oct 5,
+  2026; pre-existing (also on deploy `4d9d80f`) and **not changed** — it's a Netlify
+  setting, and the variable may exist so devDependencies install. Fixing it needs its own
+  decision and a check that the build still installs and prerenders.
+- **`SocialMediaCard.tsx` still passes camelCase `fetchPriority`** (two `<img>`s), so the
+  React warning can still appear on the portfolio/social pages. Same one-line fix as
+  ClarityHero/ServicesPage if wanted.
 - **`bg-midnight/60` generates no CSS** (no `midnight` colour in `tailwind.config.js`). Used
   on AboutPage's three timeline-artwork sections, where the resulting *unveiled* artwork is
   the approved appearance. Left as-is on purpose — see the Oct 5 "About page backgrounds".

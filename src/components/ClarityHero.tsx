@@ -52,7 +52,10 @@ export default function ClarityHeroStructureMirror() {
           src="/images/brightpath-hero-image.webp"
           width={1672}
           height={941}
-          fetchPriority="high"
+          // React 18 doesn't know the camelCase `fetchPriority` prop and warns on it;
+          // the lowercase attribute passes straight through to the DOM. The spread
+          // keeps TypeScript (whose React 18 types only declare the camelCase name) happy.
+          {...{ fetchpriority: 'high' }}
           decoding="async"
           className="studio-hero__img"
           alt="A laptop on a studio desk showing a BrightPath-built client website, beside a BrightPath mug and design books."

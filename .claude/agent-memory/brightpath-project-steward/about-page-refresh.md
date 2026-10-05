@@ -1,14 +1,17 @@
 ---
-name: about-page-refresh
+description: About page refresh (2026-10-05) — Founder & Frontend Engineer positioning, Selected Work, grouped skills, hero scrim, metadata + hidden-hero <h1> fix, approved timeline-artwork backgrounds (bg-midnight/60 is a deliberate no-op); merged to main at 0f8dae7 and deployed, plus a fetchPriority warning fix.
 description: About page refresh (2026-10-05) — Founder & Frontend Engineer positioning, Selected Work, grouped skills, hero scrim, metadata + hidden-hero <h1> fix, and the approved timeline-artwork backgrounds (bg-midnight/60 is a deliberate no-op); committed and pushed on feature/about-page-refresh, NOT merged.
 metadata:
   type: project
 ---
 
-**Status:** Approved by the user and committed on branch `feature/about-page-refresh`
-(branched from `main` at `4d9d80f`): `6f54b89` (refresh, metadata, prerender, hero
-accessibility) plus a follow-up commit for the About section backgrounds, both pushed to
-GitHub. **Not merged to `main`, not deployed.** Record the merge here when it happens.
+**Status:** Approved, merged and deployed. Built on `feature/about-page-refresh` (from
+`main` at `4d9d80f`): `6f54b89` (refresh, metadata, prerender, hero accessibility) and
+`0f8dae7` (About section backgrounds). On 2026-10-05 `main` was fast-forwarded to `0f8dae7`,
+pushed, and deployed to production (Netlify deploy `6ac3f2688449550007a9a062`).
+Post-deploy production verification passed (content, backgrounds, hero buttons, links,
+one `<h1>` per page, layouts at 390/768/1440). A follow-up commit on `main` fixed the
+`fetchPriority` warning described below.
 
 **Goal.** One page that works for two readers at once without becoming a résumé site:
 a prospective client ("she understands businesses and can build what we need") and a
@@ -86,4 +89,20 @@ CTA `.services-cta*` treatment (edge mask left ~20% artwork visible); the homepa
 defined in `tailwind.config.js`, so the class emits no CSS (computed overlay
 `rgba(0,0,0,0)`). Defining it would darken all three sections — a design change, not a fix.
 
-**Open items:** new résumé (set `RESUME_URL`); Dale Tiffany still lacks a crawlable route.
+**`fetchPriority` warning — found in post-deploy verification, fixed.** React 18.3 logs
+"React does not recognize the `fetchPriority` prop". It pre-existed on `/services`
+(`ServicesPage.tsx` hero image, confirmed on the `4d9d80f` deploy) and became exposed on
+About → Home through the new `ClarityHero` fallback. Fixed in both files with
+`{...{ fetchpriority: 'high' }}` (lowercase attribute passes through; spread avoids React 18's
+camelCase-only TS types). Same rendered `fetchpriority="high"`, same loading behaviour.
+Verified on a `NODE_ENV=development` build: no warning on direct Home/About/Services,
+About → Home, Home → Services, About → Services.
+
+**Found alongside it, NOT changed (needs its own decision):**
+- Netlify's site env sets `NODE_ENV=development`, so production ships React's development
+  build (`react-vendor` ~340 KB vs ~142 KB locally) — which is why dev warnings show in the
+  live console at all. Pre-existing.
+- `SocialMediaCard.tsx` still uses camelCase `fetchPriority` (out of the fix's scope).
+
+**Open items:** new résumé (set `RESUME_URL`); Dale Tiffany still lacks a crawlable route;
+the two items directly above.
