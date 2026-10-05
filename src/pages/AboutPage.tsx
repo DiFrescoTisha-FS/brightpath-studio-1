@@ -486,15 +486,26 @@ const AboutPage = () => {
         </div>
       </motion.section>
 
-      {/* --- VALUES SECTION --- */}
+      {/* --- VALUES SECTION ---
+          Same background treatment as the My Journey section: the timeline
+          artwork via --timeline-bg-*, cover/centre, fixed attachment from md
+          up, and the same overlay element. Approved as-is: note `bg-midnight/60`
+          generates no CSS (no `midnight` colour is configured), so the artwork
+          shows unveiled. Don't "fix" it without a design decision. */}
       <motion.section
-        className={`py-12 md:py-20 px-4 md:px-8 ${theme === 'light' ? 'bg-gray-200' : 'bg-[#273442]'}`}
+        className="relative py-12 md:py-20 px-4 md:px-8 bg-cover bg-center md:bg-fixed"
+        style={{
+          backgroundImage: theme === 'light'
+            ? 'var(--timeline-bg-light)'
+            : 'var(--timeline-bg-dark)',
+        }}
         initial={revealFrom({ opacity: 0, y: 50 })}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="container mx-auto max-w-5xl">
+        <div className="absolute inset-0 bg-midnight/60 z-10"></div>
+        <div className="container mx-auto max-w-5xl relative z-20">
           <div className="text-center mb-8 md:mb-12">
             <BrightPathGradientTitle
               as="h2"
@@ -503,7 +514,9 @@ const AboutPage = () => {
             >
               Why Work With Me
             </BrightPathGradientTitle>
-            <p className="font-lato text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto leading-normal md:leading-relaxed">
+            {/* Light mode takes `.services-body` (the Services CTA body colour);
+                it measures 6.1–6.25:1 over the light timeline artwork. */}
+            <p className={`font-lato ${theme === 'light' ? 'services-body' : 'text-muted-foreground'} text-sm md:text-lg max-w-2xl mx-auto leading-normal md:leading-relaxed`}>
               Good websites start with understanding the business behind them.
             </p>
           </div>
@@ -585,15 +598,26 @@ const AboutPage = () => {
         </div>
       </motion.section>
 
-      {/* --- CTA SECTION --- */}
+      {/* --- CTA SECTION ---
+          Same background treatment as the My Journey section: the timeline
+          artwork via --timeline-bg-*, cover/centre, fixed attachment from md
+          up, and the same overlay element. Approved as-is: note `bg-midnight/60`
+          generates no CSS (no `midnight` colour is configured), so the artwork
+          shows unveiled. Don't "fix" it without a design decision. */}
       <motion.section
-        className={`py-12 md:py-20 px-4 md:px-8 ${theme === 'light' ? 'bg-gray-200' : 'bg-[#273442]'}`}
+        className="relative py-24 md:py-28 px-4 md:px-8 bg-cover bg-center md:bg-fixed"
+        style={{
+          backgroundImage: theme === 'light'
+            ? 'var(--timeline-bg-light)'
+            : 'var(--timeline-bg-dark)',
+        }}
         initial={revealFrom({ opacity: 0, y: 50 })}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="container mx-auto text-center max-w-3xl">
+        <div className="absolute inset-0 bg-midnight/60 z-10"></div>
+        <div className="container mx-auto text-center max-w-3xl relative z-20">
           <BrightPathGradientTitle
             as="h2"
             className="font-poppins font-bold mb-4 md:mb-6 leading-tight text-2xl md:text-3xl lg:text-4xl"
@@ -601,7 +625,10 @@ const AboutPage = () => {
           >
             Have a Project in Mind?
           </BrightPathGradientTitle>
-          <p className="font-lato text-muted-foreground text-sm md:text-lg mb-6 md:mb-8 leading-normal md:leading-relaxed">
+          {/* Light mode takes the Services CTA body colour (`.services-body`) for
+              this line and the profile links below; it measures 6.0–6.4:1 over
+              the light timeline artwork. */}
+          <p className={`font-lato ${theme === 'light' ? 'services-body' : 'text-muted-foreground'} text-sm md:text-lg mb-6 md:mb-8 leading-normal md:leading-relaxed`}>
             Tell me about your business and what you need your website to do.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
@@ -627,7 +654,7 @@ const AboutPage = () => {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-sm font-lato text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                    className={`inline-flex items-center gap-2 rounded-sm font-lato text-sm ${theme === 'light' ? 'services-body' : 'text-muted-foreground'} transition-colors hover:!text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2`}
                   >
                     <Icon className="h-4 w-4" aria-hidden="true" />
                     {label}

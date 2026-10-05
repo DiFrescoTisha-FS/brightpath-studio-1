@@ -32,8 +32,10 @@ Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with Re
 ## Important Files
 - `src/pages/AboutPage.tsx` - Hero (scroll-based grayscale on desktop, copy scrim,
   "Founder & Frontend Engineer" role line), My Journey timeline, Selected Work, Why Work
-  With Me, grouped Skills, closing CTA + GitHub/LinkedIn row. `RESUME_URL` is deliberately
-  `null` — see "Recent Session Work (October 5, 2026)"
+  With Me, grouped Skills, closing CTA + GitHub/LinkedIn row. My Journey, Why Work With Me
+  and the closing CTA share the approved timeline-artwork background (see "About page
+  backgrounds" in the Oct 5 section). `RESUME_URL` is deliberately `null` — see "Recent
+  Session Work (October 5, 2026)"
 - `src/pages/HomePage.tsx` - Hero injected via Vite plugin for LCP optimization; renders
   `ClarityHero` itself only when the static hero is absent (see below). Also wires the
   section background classes (`home-services`, `home-reviews`, `home-story`)
@@ -320,8 +322,11 @@ The test harness lives **outside the repo** in the session scratchpad. Keep it t
 No **scroll-transform** parallax exists, and none was built on Aug 15. Note the separate,
 older thing that does exist: `md:bg-fixed` (`background-attachment: fixed`) still ships on
 AboutPage, ContactPage, PortfolioDemoPage and MultiPageFlowSection — desktop-only, because
-it doesn't work on iOS. That is attachment-based, predates the current artwork system, and
-is not on the Homepage or Services page.
+it doesn't work on iOS. That is attachment-based and is not on the Homepage or Services
+page. On AboutPage it is now an **approved** part of the design (Oct 5, 2026): the
+timeline background with `bg-cover bg-center md:bg-fixed` on My Journey, Why Work With Me
+and the closing CTA. That approval covers the existing attachment-based effect only — it
+is not a green light for transform parallax.
 
 If transform parallax is explored later, the two strongest candidates are
 **Homepage Reviews** (`.home-reviews__art`) and the **Services CTA** (`.services-cta__art`),
@@ -350,9 +355,11 @@ Do not reopen these without a specific reason:
 - Metallic gradient — **not production**
 - Parallax — **not implemented**
 
-## Recent Session Work (October 5, 2026) — user-reviewed, NOT yet committed
+## Recent Session Work (October 5, 2026) — approved, committed and pushed to the feature branch (not merged)
 
-Branch `feature/about-page-refresh` (from `main` at `4d9d80f`). About page refresh plus the
+Branch `feature/about-page-refresh` (from `main` at `4d9d80f`); commits `6f54b89` (refresh,
+metadata, prerender and hero accessibility) and a follow-up for the About section
+backgrounds. Not merged to `main`, not deployed. About page refresh plus the
 related metadata, prerender and accessibility fixes. Full decisions:
 `about-page-refresh.md` in the steward memory.
 
@@ -382,6 +389,27 @@ related metadata, prerender and accessibility fixes. Full decisions:
   with `jobTitle`, degree credential, awards and GitHub/LinkedIn `sameAs`.
 - **Left alone on purpose:** the legacy yellow→orange gradient section headings (site-wide
   design-system question).
+- **About page backgrounds (approved after visual review).** My Journey, Why Work With Me
+  and "Have a Project in Mind?" all use the *same* treatment, copied from My Journey:
+  `--timeline-bg-dark` / `--timeline-bg-light` as an inline `backgroundImage`, classes
+  `bg-cover bg-center md:bg-fixed`, an `absolute inset-0 bg-midnight/60 z-10` overlay
+  element, and content at `relative z-20`. Selected Work and Skills & Expertise stay plain
+  deep navy (`#1A2238`; `bg-gray-100` in light), giving the approved rhythm
+  artwork → plain → artwork → plain → artwork. Section edges are deliberately hard (no
+  feathers or veils). Light-mode text on the two new artwork sections uses `.services-body`
+  (6.0–6.4:1 measured); dark-mode text is 16–19:1. The closing CTA keeps `py-24 md:py-28`.
+  - **Rejected along the way, don't re-propose for these sections:** the flat
+    `#273442` / `bg-gray-200` slab (read as the old grey system); the Services closing-CTA
+    treatment `.services-cta*` (its edge mask left only ~20% of the section showing
+    artwork); and the homepage `.home-services` / `.home-reviews` treatments (approved on
+    the homepage, but not the look wanted here).
+  - **`bg-midnight/60` is a no-op — and the approved look depends on that.** No `midnight`
+    colour exists in `tailwind.config.js`, so the class generates no CSS and the overlay
+    computes to `rgba(0,0,0,0)`. All three sections therefore show their artwork unveiled.
+    Defining `midnight` (or "fixing" the class) would darken all three sections at once
+    and change the approved appearance — treat it as a design change, not a bug fix.
+  - Measuring note: `md:bg-fixed` backgrounds render wrongly in full-page screenshots.
+    Sample contrast from viewport screenshots with the element scrolled into view.
 
 ## Recent Session Work (September 26, 2026) — approved, merged to `main` and pushed
 
@@ -500,6 +528,9 @@ pixel-identical throughout (maxDelta 0).
   Both predate this work and were left alone.
 - ~~About hero name fails contrast~~ — **resolved Oct 5, 2026** with `.about-hero__scrim`
   (a localized copy scrim, not a colour change). See "Recent Session Work (October 5, 2026)".
+- **`bg-midnight/60` generates no CSS** (no `midnight` colour in `tailwind.config.js`). Used
+  on AboutPage's three timeline-artwork sections, where the resulting *unveiled* artwork is
+  the approved appearance. Left as-is on purpose — see the Oct 5 "About page backgrounds".
 - **Legacy `--services-card-*` tokens** in `globals.css` still carry the retired
   `44 91% 54%` gold, but nothing references them. Left in place rather than removed as
   unrelated cleanup.

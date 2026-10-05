@@ -1,14 +1,14 @@
 ---
 name: about-page-refresh
-description: About page refresh (2026-10-05) — Founder & Frontend Engineer positioning, Selected Work (AweStruck + Dale Tiffany), grouped skills, hero scrim, metadata cleanup and hidden-hero <h1> fix; user-reviewed on feature/about-page-refresh, NOT yet committed.
+description: About page refresh (2026-10-05) — Founder & Frontend Engineer positioning, Selected Work, grouped skills, hero scrim, metadata + hidden-hero <h1> fix, and the approved timeline-artwork backgrounds (bg-midnight/60 is a deliberate no-op); committed and pushed on feature/about-page-refresh, NOT merged.
 metadata:
   type: project
 ---
 
-**Status:** Implemented on branch `feature/about-page-refresh` (branched from `main` at
-`4d9d80f`) and reviewed by the user in two rounds on 2026-10-05. **Not committed, not
-merged, not deployed** as of this note. When it is committed, record the hash here
-rather than creating a new note.
+**Status:** Approved by the user and committed on branch `feature/about-page-refresh`
+(branched from `main` at `4d9d80f`): `6f54b89` (refresh, metadata, prerender, hero
+accessibility) plus a follow-up commit for the About section backgrounds, both pushed to
+GitHub. **Not merged to `main`, not deployed.** Record the merge here when it happens.
 
 **Goal.** One page that works for two readers at once without becoming a résumé site:
 a prospective client ("she understands businesses and can build what we need") and a
@@ -70,5 +70,20 @@ and `verifyPrerender` guards both.
 Around Your Business", business-first description, keywords without "WordPress developer,
 Divi". About: title "About Tisha Di Fresco", Person JSON-LD with degree credential, awards,
 `sameAs`.
+
+**About section backgrounds (approved after visual review, 2026-10-05).** My Journey, Why
+Work With Me and the closing "Have a Project in Mind?" CTA share one treatment, copied from
+My Journey: `--timeline-bg-dark/-light` inline `backgroundImage`, `bg-cover bg-center
+md:bg-fixed`, an `absolute inset-0 bg-midnight/60 z-10` overlay element, content at
+`relative z-20`. Selected Work and Skills stay plain navy → approved rhythm artwork / plain /
+artwork / plain / artwork. Hard section edges are intentional. Light-mode text on the two
+new artwork sections uses `.services-body` (6.0–6.4:1); CTA spacing `py-24 md:py-28`.
+Rejected for these sections (don't re-propose): flat `#273442`/`bg-gray-200`; the Services
+CTA `.services-cta*` treatment (edge mask left ~20% artwork visible); the homepage
+`.home-services` / `.home-reviews` treatments. `globals.css` was not changed for any of this.
+
+**`bg-midnight/60` is a no-op, and the approved look relies on it.** `midnight` is not
+defined in `tailwind.config.js`, so the class emits no CSS (computed overlay
+`rgba(0,0,0,0)`). Defining it would darken all three sections — a design change, not a fix.
 
 **Open items:** new résumé (set `RESUME_URL`); Dale Tiffany still lacks a crawlable route.
