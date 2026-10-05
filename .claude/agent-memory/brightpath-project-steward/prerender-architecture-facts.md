@@ -43,4 +43,11 @@ not; `app.html` exists and does not. Its success line reads "12 routes and the S
 verified." Verified in a build on 2026-10-05: every non-home route and `app.html` have zero
 or one `<h1>`, never the homepage's.
 
+**Intermittent failure observed 2026-10-05:** Netlify's first build of `6a43b8a` failed the
+guard with "/privacy-policy: contains the hidden homepage hero" although every route
+rendered. Config was correct (route listed and routed; same config deployed at `0f8dae7`;
+local builds clean). A retry with no changes passed (deploy `6ac3fb855f4d1bf95bb3567a`).
+Cause unknown — record it as intermittent, retry first if it recurs, and never weaken the
+guard in response. Details in [[about-page-refresh]].
+
 See also [[hero-injection-mirror-fact]].

@@ -98,7 +98,8 @@ AI crawlers, which don't run JS) get real content. `/services` and `/reviews` ar
   metadata is duplicated, or a canonical doesn't match its route. `vite-plugin-prerender`
   swallows its own errors, so this is the only thing standing between a broken prerender
   and a silently un-prerendered deploy. `SKIP_PRERENDER=1` skips prerender *and* the check
-  together.
+  together. It has failed once intermittently on Netlify (Oct 5, 2026, `/privacy-policy`,
+  passed on retry with no changes) — see that session's notes before "fixing" anything.
 - **Scroll animations need `revealFrom()`.** `whileInView` reveals emit `opacity: 0` into
   the snapshot, which is invisible to crawlers that never scroll. `revealFrom()` in
   `AboutPage.tsx` returns `false` during the snapshot (via `IS_PRERENDER`) so the settled
@@ -363,9 +364,10 @@ metadata, prerender and hero accessibility) and `0f8dae7` (About section backgro
 `6ac3f2688449550007a9a062`). Post-deploy production verification passed: new content live,
 timeline backgrounds fixed from `md` up and scrolling below, Selected Work/Skills solid,
 hero buttons correct, all About links working, one `<h1>` per page, no layout regressions
-at 390/768/1440. A follow-up commit on `main` fixed the `fetchPriority` warning below. About page refresh plus the
-related metadata, prerender and accessibility fixes. Full decisions:
-`about-page-refresh.md` in the steward memory.
+at 390/768/1440. Follow-up `6a43b8a` on `main` fixed the `fetchPriority` warning below;
+its first Netlify deploy failed on an intermittent prerender check (see below), and a
+retry of the same commit with no changes published as deploy
+`6ac3fb855f4d1bf95bb3567a`. Full decisions: `about-page-refresh.md` in the steward memory.
 
 - **Positioning.** About now presents Tisha as **"Founder & Frontend Engineer, BrightPath
   Web Studio"** while keeping Phase 5's business-first voice. Two readers: a prospective
@@ -423,8 +425,22 @@ related metadata, prerender and accessibility fixes. Full decisions:
   spread sidesteps React 18's TypeScript types, which only declare the camelCase name.
   Verified on a `NODE_ENV=development` build (the build Netlify ships): no warning on
   direct Home/About/Services, About → Home, Home → Services or About → Services; images
-  still load with `fetchpriority="high"`. `SocialMediaCard.tsx` still uses the camelCase
-  prop — deliberately out of that fix's scope.
+  still load with `fetchpriority="high"`. Verified again in production after deploy
+  `6ac3fb855f4d1bf95bb3567a`: zero "does not recognize" warnings on direct Home, About,
+  Services and Privacy Policy, About → Home, Home → Services, About → Services and
+  Privacy → Home. `SocialMediaCard.tsx` still uses the camelCase prop — deliberately out
+  of that fix's scope.
+- **Intermittent prerender failure on `/privacy-policy` (Oct 5, 2026) — unexplained.**
+  The first Netlify deploy of `6a43b8a` failed with `[verify-prerender] … /privacy-policy:
+  contains the hidden homepage hero (and its <h1>)`, even though vite-plugin-prerender
+  reported "All routes rendered successfully!". `/privacy-policy` is correctly listed in
+  `PRERENDER_ROUTES` and routed in `main.tsx`; the same commit prerendered cleanly locally
+  (both normal and `NODE_ENV=development` builds); the identical config deployed fine at
+  `0f8dae7`. No code or config was changed — a retry of the exact same commit succeeded
+  (deploy `6ac3fb855f4d1bf95bb3567a`). Treat it as intermittent, **not** a missing route or
+  config error. The guard did its job: it blocked un-prerendered/hero-carrying HTML from
+  shipping. If it recurs, retry first and capture the full build log; never respond by
+  removing the check, dropping routes, or using `SKIP_PRERENDER=1`.
 
 ## Recent Session Work (September 26, 2026) — approved, merged to `main` and pushed
 
@@ -543,6 +559,9 @@ pixel-identical throughout (maxDelta 0).
   Both predate this work and were left alone.
 - ~~About hero name fails contrast~~ — **resolved Oct 5, 2026** with `.about-hero__scrim`
   (a localized copy scrim, not a colour change). See "Recent Session Work (October 5, 2026)".
+- **Intermittent prerender verification failure** — seen once on Netlify (Oct 5, 2026,
+  `/privacy-policy` snapshot carried the homepage hero); cause unknown, retry passed. See
+  the Oct 5 session notes.
 - **Production ships React's development build.** The Netlify site environment sets
   `NODE_ENV=development`, so `vite build` on Netlify emits development React: the
   `react-vendor` chunk is ~340 KB in production vs ~142 KB in a local build, and dev-only

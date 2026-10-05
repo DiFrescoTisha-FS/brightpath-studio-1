@@ -10,8 +10,9 @@ metadata:
 `0f8dae7` (About section backgrounds). On 2026-10-05 `main` was fast-forwarded to `0f8dae7`,
 pushed, and deployed to production (Netlify deploy `6ac3f2688449550007a9a062`).
 Post-deploy production verification passed (content, backgrounds, hero buttons, links,
-one `<h1>` per page, layouts at 390/768/1440). A follow-up commit on `main` fixed the
-`fetchPriority` warning described below.
+one `<h1>` per page, layouts at 390/768/1440). Follow-up `6a43b8a` on `main` fixed the
+`fetchPriority` warning described below; its first deploy failed intermittently and a retry
+of the same commit published as deploy `6ac3fb855f4d1bf95bb3567a` (see below).
 
 **Goal.** One page that works for two readers at once without becoming a résumé site:
 a prospective client ("she understands businesses and can build what we need") and a
@@ -96,7 +97,27 @@ About → Home through the new `ClarityHero` fallback. Fixed in both files with
 `{...{ fetchpriority: 'high' }}` (lowercase attribute passes through; spread avoids React 18's
 camelCase-only TS types). Same rendered `fetchpriority="high"`, same loading behaviour.
 Verified on a `NODE_ENV=development` build: no warning on direct Home/About/Services,
-About → Home, Home → Services, About → Services.
+About → Home, Home → Services, About → Services. Verified again in production on deploy
+`6ac3fb855f4d1bf95bb3567a`: zero warnings on those flows plus direct Privacy Policy and
+Privacy → Home; hero images still `fetchpriority="high"` and loading.
+
+**Deploy of `6a43b8a` — first attempt failed, retry succeeded (2026-10-05).**
+- First Netlify deploy (`6ac3f56cbffec3000830f26d`) failed: `[verify-prerender]
+  /privacy-policy: contains the hidden homepage hero (and its <h1>)`, after the plugin had
+  reported "All routes rendered successfully!".
+- Checked and ruled out: `/privacy-policy` is already in `PRERENDER_ROUTES`, routed in
+  `main.tsx` (`PrivacyPage`), and the identical config deployed at `0f8dae7`. The same
+  commit prerendered correctly locally (one `<h1>`, no hero, correct title/canonical).
+- **No code or configuration change was made.** A retry of the exact same commit
+  (via Netlify's build API) succeeded: deploy `6ac3fb855f4d1bf95bb3567a`, published
+  2026-10-05 19:33:57 UTC.
+- Production verification passed on that deploy: `/privacy-policy`, `/`, `/about`,
+  `/services` (one appropriate `<h1>`, hero only on `/`, correct titles/canonicals) and the
+  navigation flows above.
+- Classification: **intermittent, cause unexplained** — not a missing route or config
+  error. The guard worked as intended by blocking HTML that carried the homepage hero. If
+  it recurs: retry first, capture the full build log, and never weaken the check, drop
+  routes, or use `SKIP_PRERENDER=1`.
 
 **Found alongside it, NOT changed (needs its own decision):**
 - Netlify's site env sets `NODE_ENV=development`, so production ships React's development
