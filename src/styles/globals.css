@@ -708,6 +708,113 @@ html.light .studio-cta:focus-visible {
   outline-color: #1a2238;
 }
 
+/* ---- About hero copy scrim ----
+   The hero copy (white eyebrow/role/lede, gold name) sits directly on the
+   mountain photograph in both themes. Unprotected, its rendered backdrop gave
+   the eyebrow ~1.1:1 and the name 1.2–1.5:1 on phones and tablets, where the
+   copy lands on bright sky. This is a localized gradient behind the copy only,
+   fading out before the portrait and the lower photo, so it reads as a
+   vignette rather than a darkened hero.
+
+   The stops are the lightest that measured as passing, with ~10% margin, at
+   390 / 768 / 1024 / 1440 in both themes and in both the grayscale (scroll 0)
+   and full-colour states: at least 95% of the backdrop pixels behind each
+   element meet 4.5:1 (eyebrow, lede, role below 24px) or 3:1 (name, role at
+   24px). Lighter stops failed the name on phones (2.76:1). Retune by
+   measurement, not by eye — the photo varies a lot under the copy.
+
+   Same colour in both themes: the ground is the photograph, not the theme. */
+.about-hero__scrim {
+  background: linear-gradient(to bottom,
+    rgba(10, 15, 24, 0.66) 0%,
+    rgba(10, 15, 24, 0.56) 35%,
+    rgba(10, 15, 24, 0) 55%);
+}
+
+/* Two-column from md: the copy is the left column, so the gradient runs
+   left-to-right. 768–1023 keeps the stronger stops — the narrow column puts
+   the name over the brightest sky. */
+@media (min-width: 768px) {
+  .about-hero__scrim {
+    background: linear-gradient(to right,
+      rgba(10, 15, 24, 0.66) 0%,
+      rgba(10, 15, 24, 0.54) 40%,
+      rgba(10, 15, 24, 0) 62%);
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-hero__scrim {
+    background: linear-gradient(to right,
+      rgba(10, 15, 24, 0.56) 0%,
+      rgba(10, 15, 24, 0.45) 40%,
+      rgba(10, 15, 24, 0) 60%);
+  }
+}
+
+/* ---- About hero CTAs ----
+   These sit on the mountain photograph in BOTH themes, so they can't borrow
+   the homepage treatments above: the dark outlined primary reads its gold
+   label against the photo, and the light ghost link is midnight text on it —
+   both fail there. The primary is filled with the theme's single gold and its
+   approved label colour (via the --primary tokens), so its contrast never
+   depends on the photo: 10.13:1 dark, 5.18:1 light. Hover darkens the same
+   gold with a filter, as the light theme already does. The secondary can't
+   stay a bare text link here: white type straight on the photo measured
+   2.6–5.0:1 depending on where it lands. It gets a translucent midnight
+   backing instead, which holds the label above 4.5:1 over the brightest part
+   of the photo while still reading as the quieter of the two.
+   The rules repeat under `html.light` only to outrank the theme rules above. */
+.about-hero__cta .studio-cta--primary,
+html.light .about-hero__cta .studio-cta--primary {
+  background: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+.about-hero__cta .studio-cta--primary:hover,
+html.light .about-hero__cta .studio-cta--primary:hover {
+  background: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  filter: brightness(0.88);
+}
+
+.about-hero__cta .studio-cta--ghost,
+html.light .about-hero__cta .studio-cta--ghost,
+html.light .about-hero__cta .studio-cta--ghost:hover {
+  padding: calc(1.05rem - 1px) calc(1.6rem - 1px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 2px;
+  background: rgba(10, 15, 24, 0.62);
+  color: #ffffff;
+}
+
+.about-hero__cta .studio-cta--ghost::after,
+html.light .about-hero__cta .studio-cta--ghost::after {
+  display: none;
+}
+
+/* Dark backing in either theme, so the hover border takes the luminous gold —
+   the same reasoning as `html.light h1.text-primary` further down. */
+.about-hero__cta .studio-cta--ghost:hover,
+html.light .about-hero__cta .studio-cta--ghost:hover {
+  border-color: #f2c94c;
+}
+
+@media (max-width: 1023px) {
+  .about-hero__cta .studio-cta--ghost,
+  html.light .about-hero__cta .studio-cta--ghost {
+    padding: calc(0.9rem - 1px) calc(1.6rem - 1px);
+  }
+}
+
+.about-hero__cta .studio-cta:focus-visible,
+html.light .about-hero__cta .studio-cta:focus-visible {
+  outline-color: #f5f0e8;
+}
+
 /* Stacked composition — the light equivalents must live inside the same
    breakpoint, because `html.light .studio-hero__img` outranks the unscoped
    `.studio-hero__img` rule in the media query above and would otherwise

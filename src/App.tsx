@@ -6,6 +6,7 @@ import Footer from "./components/ui/Footer";
 import { useAppStore } from './store/appStore';
 import AnalyticsTracker from "./components/AnalyticsTracker"
 import { loadAnalytics } from "./utils/analytics";
+import { IS_PRERENDER } from "./utils/isPrerender";
 
 // Scroll to top on route change, or to the #hash target if the URL has one.
 function ScrollToTop() {
@@ -52,14 +53,27 @@ function ScrollToTop() {
  * other than `/`. Without this, the static hero stays visible at the
  * top of every page — /portfolio, /about, /contact all look like the
  * homepage with mystery content scrolled below the fold.
+ *
+ * During the prerender snapshot the hero is removed outright instead. A
+ * `display: none` element still ships in the static HTML, so every
+ * non-home route's snapshot carried the homepage's <h1> ahead of its own —
+ * and crawlers that don't apply CSS read it as that page's first heading.
+ * app.html — the fallback that serves /services and /reviews — is built
+ * without it for the same reason (snapshotSpaFallback in vite.config.ts).
+ * HomePage renders the ClarityHero mirror when the static hero is absent,
+ * which covers a visitor who lands on one of those pages and then navigates
+ * home.
  */
 function StaticHeroRouteGate() {
   const { pathname } = useLocation();
   useEffect(() => {
     const hero = document.getElementById('hero-clarity-static');
-    if (hero) {
-      hero.style.display = pathname === '/' ? '' : 'none';
+    if (!hero) return;
+    if (IS_PRERENDER && pathname !== '/') {
+      hero.remove();
+      return;
     }
+    hero.style.display = pathname === '/' ? '' : 'none';
   }, [pathname]);
   return null;
 }

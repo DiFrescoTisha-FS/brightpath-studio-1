@@ -30,12 +30,19 @@ Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with Re
 - **Text on mobile**: 14px (`text-sm`) for paragraphs, `leading-normal` for tighter line spacing
 
 ## Important Files
-- `src/pages/AboutPage.tsx` - Hero with scroll-based grayscale (desktop only), Timeline, Skills, Values, CTA
-- `src/pages/HomePage.tsx` - Hero injected via Vite plugin for LCP optimization; also wires
-  the section background classes (`home-services`, `home-reviews`, `home-story`)
-- `src/components/ClarityHero.tsx` - Structural mirror of the static hero. NOT a Tailwind
-  class manifest any more — the hero uses dedicated CSS classes, so nothing here is
-  load-bearing for purging. Keep it in step with the markup in vite.config.ts
+- `src/pages/AboutPage.tsx` - Hero (scroll-based grayscale on desktop, copy scrim,
+  "Founder & Frontend Engineer" role line), My Journey timeline, Selected Work, Why Work
+  With Me, grouped Skills, closing CTA + GitHub/LinkedIn row. `RESUME_URL` is deliberately
+  `null` — see "Recent Session Work (October 5, 2026)"
+- `src/pages/HomePage.tsx` - Hero injected via Vite plugin for LCP optimization; renders
+  `ClarityHero` itself only when the static hero is absent (see below). Also wires the
+  section background classes (`home-services`, `home-reviews`, `home-story`)
+- `src/components/ClarityHero.tsx` - **Load-bearing React copy of the static hero**
+  (`STATIC_HERO_HTML` in vite.config.ts). The static hero only ships in the `/` HTML, so a
+  visitor who enters on any other page and navigates home sees *this* component instead.
+  Any drift between the two makes the homepage look different depending on the entry page.
+  Edit both together and keep `id="hero-clarity-static"` and the `.studio-hero*` classes.
+  Not a Tailwind manifest — the hero uses dedicated CSS classes
 - `src/styles/globals.css` - Carries the whole approved visual system: the `--primary`
   gold token per theme, `.studio-hero*`, `.studio-cta*`, `.nav-link*` / `.nav-cta`,
   `.home-*` homepage backgrounds, `.services-*` / `.services-atmos*` Services
@@ -43,7 +50,8 @@ Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with Re
 - `src/components/ui/FlipCard/FlipCard.css` - Flip-card faces. The light back face uses
   the light theme gold and overrides the markup's hard-coded `text-[#10192b]` to cream,
   because midnight type measures only 2.83:1 on that gold
-- `vite.config.ts` - Static hero HTML injection, prerender config, Chrome resolution, build-time verification
+- `vite.config.ts` - Static hero HTML (`STATIC_HERO_HTML`) injection, hero-stripped `app.html`
+  fallback, prerender config, Chrome resolution, build-time verification
 - `src/pages/ServicesPage.tsx` - Services, process flip cards, pricing
 - `src/pages/PortfolioDemoPage.tsx` - Portfolio grid with case study views
 - `src/pages/ContactPage.tsx` - Contact form with Google Apps Script integration + honeypot spam protection
@@ -94,6 +102,15 @@ AI crawlers, which don't run JS) get real content. `/services` and `/reviews` ar
   `AboutPage.tsx` returns `false` during the snapshot (via `IS_PRERENDER`) so the settled
   state is emitted; visitors still get the animation. Apply the same pattern to any new
   `whileInView` section carrying meaningful copy.
+- **The static homepage hero ships only in the `/` HTML.** It's injected into the shell
+  before `#root`, and used to stay in every other route's HTML as `display: none` — which
+  still handed crawlers the homepage `<h1>` ("Websites That Work Beautifully.") as the first
+  heading of /about, /services, etc. Now `StaticHeroRouteGate` (App.tsx) *removes* it during
+  the prerender snapshot on non-home routes, and `snapshotSpaFallback` writes `app.html`
+  with `STATIC_HERO_HTML` stripped (it throws if the string isn't found). At runtime the gate
+  still hides/shows the hero on in-app navigation, and HomePage renders `ClarityHero` when
+  the static copy is missing. `verifyPrerender` fails the build if `/` lacks the hero, or
+  any other prerendered route or `app.html` contains it.
 
 ## Homepage Visual System (approved — treat as the baseline)
 
@@ -182,7 +199,7 @@ mutually exclusive — gold *text* on cream needs luminance ≤ 0.1666, a navy l
 needs ≥ 0.2492 (even black needs ≥ 0.175). So light-mode button labels are cream. Two
 consequences follow from the same fact: the flip-card light back face overrides its
 hard-coded `text-[#10192b]` to cream, and `html.light h1.text-primary` (the About hero name,
-which sits on a *dark* photograph even in light mode) keeps `#F2C94C`, since a dark ground
+which sits on a *dark*, scrimmed photograph even in light mode) keeps `#F2C94C`, since a dark ground
 takes the luminous value.
 
 ## Background System (approved Aug 15, 2026)
@@ -333,6 +350,39 @@ Do not reopen these without a specific reason:
 - Metallic gradient — **not production**
 - Parallax — **not implemented**
 
+## Recent Session Work (October 5, 2026) — user-reviewed, NOT yet committed
+
+Branch `feature/about-page-refresh` (from `main` at `4d9d80f`). About page refresh plus the
+related metadata, prerender and accessibility fixes. Full decisions:
+`about-page-refresh.md` in the steward memory.
+
+- **Positioning.** About now presents Tisha as **"Founder & Frontend Engineer, BrightPath
+  Web Studio"** while keeping Phase 5's business-first voice. Two readers: a prospective
+  client and a technical hiring manager. No recruiter / "open to work" language.
+- **Structure:** Hero → My Journey (4 cards, lighthouse story kept verbatim) → Selected Work
+  (AweStruck + Dale Tiffany only, no metrics — those stay on the case studies) → Why Work
+  With Me → Skills (4 groups) → closing "Let's Talk" + quiet GitHub/LinkedIn row.
+- **Skills rule:** only what shipped work or the existing list supports. Divi removed; no
+  testing tools (no test runner exists in the repo); Figma kept by request.
+- **Résumé link is intentionally off.** `RESUME_URL = null` in AboutPage.tsx. The current
+  `public/assets/Tisha-DiFresco-Resume.pdf` is outdated ("WordPress Developer", Divi). Don't
+  link or edit it; replace it with the new React/TypeScript résumé, then set `RESUME_URL`.
+- **Hero contrast.** `.about-hero__scrim` (localized gradient, per-breakpoint stops) plus
+  `.about-hero__cta` (filled theme-gold primary, midnight-backed secondary) in globals.css.
+  Measured on rendered pixels, both themes, 390/768/1024/1440, grayscale and colour states:
+  ≥95% of backdrop pixels behind each text element pass 4.5:1 (3:1 for the 30–60px name and
+  the 24px role line). Before: eyebrow ~1.1:1, name 1.2–1.5:1 on phones/tablets. Lighter
+  stops failed (name 2.76:1 on phones) — retune only by measurement. The old
+  `hover:bg-yellow-400` second yellow is gone.
+- **Hidden-hero `<h1>` fix** across all non-home HTML including `app.html` — see the
+  Static Prerendering rule above. `ClarityHero.tsx` is now load-bearing.
+- **Metadata.** Homepage + `index.html` defaults: "BrightPath Web Studio — Websites Built
+  Around Your Business", business-first description, keywords and ProfessionalService
+  schema without "WordPress developer"/Divi. About: "About Tisha Di Fresco", Person JSON-LD
+  with `jobTitle`, degree credential, awards and GitHub/LinkedIn `sameAs`.
+- **Left alone on purpose:** the legacy yellow→orange gradient section headings (site-wide
+  design-system question).
+
 ## Recent Session Work (September 26, 2026) — approved, merged to `main` and pushed
 
 **Business-first copy rewrite of the homepage and Services page** (Phase 5). Copy only — no
@@ -448,10 +498,8 @@ pixel-identical throughout (maxDelta 0).
 - **Pre-existing lint**: `netlify/functions/get-case-studies.ts:178` unused `_context`
   (error) and `src/components/ui/GuidingLight.tsx:230` missing hook dependency (warning).
   Both predate this work and were left alone.
-- **About hero name fails contrast**: `TISHA DI FRESCO` is gold text over the mountain
-  photograph (backdrop luminance 0.30 measured), giving ~2.02:1 against a 3:1 bar. It needs
-  a scrim behind the copy, not a colour change — every gold value makes it worse, and it was
-  left alone on Aug 15 for that reason.
+- ~~About hero name fails contrast~~ — **resolved Oct 5, 2026** with `.about-hero__scrim`
+  (a localized copy scrim, not a colour change). See "Recent Session Work (October 5, 2026)".
 - **Legacy `--services-card-*` tokens** in `globals.css` still carry the retired
   `44 91% 54%` gold, but nothing references them. Left in place rather than removed as
   unrelated cleanup.

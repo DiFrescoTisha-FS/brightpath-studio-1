@@ -1,6 +1,6 @@
 ---
 name: prerender-architecture-facts
-description: 12-route prerender allowlist, /services + /reviews deliberately excluded (live data), createRoot-always / never hydrateRoot, app.html SPA fallback, verifyPrerender build gate.
+description: 12-route prerender allowlist, /services + /reviews deliberately excluded (live data), createRoot-always / never hydrateRoot, app.html SPA fallback (hero-stripped since 2026-10-05), verifyPrerender build gate incl. static-hero checks.
 metadata:
   type: project
 ---
@@ -34,5 +34,13 @@ stale live-data content into the static snapshot; switching to `hydrateRoot` wou
 every prerendered page; missing the `:not()` exclusion equivalent pattern (see
 [[background-system-approved]]) or the `data-rh` tags would cause silent metadata bugs
 crawlers rely on.
+
+**Added 2026-10-05 ([[about-page-refresh]]):** the static homepage hero ships only in
+`dist/index.html`. Prerendered non-home routes remove it before the snapshot, and
+`snapshotSpaFallback()` writes `app.html` with `STATIC_HERO_HTML` stripped. `verifyPrerender`
+now also checks: `/` contains `id="hero-clarity-static"`; every other prerendered route does
+not; `app.html` exists and does not. Its success line reads "12 routes and the SPA fallback
+verified." Verified in a build on 2026-10-05: every non-home route and `app.html` have zero
+or one `<h1>`, never the homepage's.
 
 See also [[hero-injection-mirror-fact]].

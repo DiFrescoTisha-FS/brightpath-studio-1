@@ -4,10 +4,19 @@ import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import useTheme from "../hooks/useTheme";
 import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
-import BrightPathGradientButton from "@/components/BrightPathGradientButton.legacy";
 import { PageMeta } from "@/components/PageMeta";
 import { cloudinaryAssets } from "@/data/cloudinaryAssets";
-import { Heart, MessageCircle, Users, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  Briefcase,
+  FileText,
+  Github,
+  Linkedin,
+  MessageCircle,
+  ShieldCheck,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 
 /**
  * Starting state for a scroll-triggered entrance animation.
@@ -22,22 +31,92 @@ import { Heart, MessageCircle, Users, Sparkles } from "lucide-react";
  */
 const revealFrom = (hidden: TargetAndTransition) => (IS_PRERENDER ? false : hidden);
 
-const SKILLS = [
-  // Frontend
-  "React", "TypeScript", "JavaScript", "Vite", "Tailwind CSS", "Framer Motion", "HTML5", "CSS3",
-  // CMS & WordPress
-  "WordPress", "Divi", "ACF",
-  // Tools & Services
-  "Cloudinary", "Netlify", "Git", "GitHub", "Figma",
-  // Specializations
-  "Performance Optimization", "Lighthouse", "Core Web Vitals", "Responsive Design", "Accessibility", "SEO", "GA4",
+const GITHUB_URL = "https://github.com/DiFrescoTisha-FS";
+const LINKEDIN_URL = "https://linkedin.com/in/tisha-di-fresco-b8aba6309";
+
+/**
+ * Résumé link for the professional-links row at the foot of the page.
+ *
+ * Deliberately unset. The PDF in public/assets (Tisha-DiFresco-Resume.pdf)
+ * predates the current positioning — it is headed "WordPress Developer" and
+ * leads with Divi — so it isn't linked. Drop the updated file into
+ * public/assets and set this to its path (e.g. "/assets/Tisha-DiFresco-Resume.pdf");
+ * the link appears automatically.
+ */
+const RESUME_URL: string | null = null;
+
+const PROFESSIONAL_LINKS: Array<{ label: string; href: string; icon: LucideIcon }> = [
+  ...(RESUME_URL ? [{ label: "Résumé", href: RESUME_URL, icon: FileText }] : []),
+  { label: "GitHub", href: GITHUB_URL, icon: Github },
+  { label: "LinkedIn", href: LINKEDIN_URL, icon: Linkedin },
+];
+
+// Every entry is backed by shipped project work (case studies, this site's own
+// codebase) or the existing skills list. Add only what a project demonstrates.
+const SKILL_GROUPS = [
+  {
+    title: "Frontend",
+    skills: ["React", "TypeScript", "JavaScript", "HTML5", "CSS3", "Tailwind CSS", "Framer Motion", "Vite"],
+  },
+  {
+    title: "Application Development",
+    skills: [
+      "API Integration",
+      "Authentication & Role-Based Access",
+      "State Management (Zustand)",
+      "Supabase",
+      "Firebase",
+      "Node.js / Express",
+      "MongoDB",
+      "Netlify Functions",
+    ],
+  },
+  {
+    title: "CMS & Platforms",
+    skills: ["WordPress", "Headless WordPress", "ACF", "Netlify", "Cloudinary"],
+  },
+  {
+    title: "Quality & Delivery",
+    skills: [
+      "Performance Optimization",
+      "Core Web Vitals",
+      "Lighthouse",
+      "Accessibility",
+      "Responsive Design",
+      "SEO & Structured Data",
+      "GA4",
+      "Git & GitHub",
+      "Figma",
+    ],
+  },
+];
+
+const SELECTED_WORK = [
+  {
+    title: "AweStruck Intelligence",
+    label: "Custom React + TypeScript Build",
+    description:
+      "A custom site for a Biblically-centered SEL curriculum, built from scratch in React and TypeScript. It features an interactive, audio-driven AMP wheel and video walkthroughs, on a performance-first architecture that keeps heavy scroll animation fast on mobile.",
+    stack: ["React", "TypeScript", "Vite", "Tailwind CSS", "Framer Motion"],
+    href: "/portfolio/awestruck-intelligence",
+  },
+  {
+    title: "Dale Tiffany Retailer Portal & CRM",
+    label: "Legacy Platform Modernization",
+    description:
+      "Rebuilt a 20-year-old PHP platform as a modern React and TypeScript system. Retailers sign in to a secure B2B portal for wholesale ordering, with role-based access giving retailers and admins different tools, and the team runs leads and its sales pipeline in an integrated CRM.",
+    stack: ["React", "TypeScript", "Supabase", "Zustand", "Tailwind CSS"],
+    // Stopgap: the web/B2B case study has no dedicated route yet, so this
+    // opens it on the portfolio page — the same link the homepage uses.
+    href: "/portfolio?project=dale-tiffany",
+  },
 ];
 
 const VALUES = [
   {
-    title: "Vision-Driven",
-    description: "I take time to deeply understand your business goals and brand identity. Your website should be an authentic extension of your vision, not a generic template.",
-    icon: Heart,
+    title: "Business First",
+    description: "Before I design or write any code, I learn how your business works, who your customers are, and what you need your website to do. The build follows from that, not from a template.",
+    icon: Briefcase,
   },
   {
     title: "Clear Communication",
@@ -50,9 +129,9 @@ const VALUES = [
     icon: Users,
   },
   {
-    title: "Craft & Quality",
-    description: "Every detail counts — from pixel-perfect designs to optimized performance. I build sites that look great and work flawlessly.",
-    icon: Sparkles,
+    title: "Built to Last",
+    description: "Clean, well-structured code, fast load times and accessibility built in from the start, so your site keeps working well long after launch.",
+    icon: ShieldCheck,
   },
 ];
 
@@ -88,39 +167,47 @@ const AboutPage = () => {
 
   const timelineEvents = [
     {
-      title: "A Journey of Dedication and Achievement",
+      title: "Where It Started",
       description:
-        "Graduating from Full Sail University was a defining moment in my journey. Combining creativity with technology led me to web development, and my dedication to the craft earned me the honor of class valedictorian.",
+        "I earned my Bachelor of Science in Web Development from Full Sail University in June 2024, graduating as class valedictorian with the Advanced Achievement Award and two Director's Awards.",
       imageUrl: "/images/boysandme.webp",
-      highlightColor: "#F2C94C",
     },
     {
       title: "The Lighthouse That Started It All",
       description:
         "At my graduation, one of my instructors gifted me a lighthouse, symbolizing guidance, resilience, and perseverance. It was a reminder that even in the darkest times, we can find our way forward. This symbol became the foundation for BrightPath Web Studio LLC, inspiring me to help businesses navigate the digital world with confidence and clarity.",
       imageUrl: cloudinaryAssets.lighthouseGift,
-      highlightColor: "#F2C94C",
     },
     {
-      title: "My Approach",
+      title: "Building for Real Businesses",
       description:
-        "I believe in thoughtful design, seamless functionality, and strategic branding. A website should do more than just exist—it should engage, inspire, and convert.",
+        "Since graduating, I've been building production work through BrightPath and contract work: marketing sites, custom React applications, and business systems with authentication, role-based access and real data behind them. It's work that has to hold up after launch, not just on launch day.",
+      imageUrl: "/images/brightpath-hero-image.webp",
+    },
+    {
+      title: "How I Approach Every Project",
+      description:
+        "Start with the business: who its customers are, what they need to do, and where the website can help. Then build what solves it well, with clean, component-based code that's fast, accessible and easy to maintain.",
       imageUrl: "/images/brightpath-logo-dark.png",
-      highlightColor: "#F2C94C",
     },
   ];
+
+  const cardSurface =
+    theme === 'dark'
+      ? 'bg-[#1A2238] border border-primary/20 shadow-glow-primary'
+      : 'bg-white border border-primary/50 shadow-xl';
 
   return (
     <div className="min-h-screen overflow-x-hidden">
       <PageMeta
-        title="About"
-        description="Meet Tisha Di Fresco — Full Sail valedictorian, front-end developer, and founder of BrightPath Web Studio. Her journey from creativity to code, and the story behind the studio."
+        title="About Tisha Di Fresco"
+        description="Tisha Di Fresco, founder and frontend engineer at BrightPath Web Studio, builds websites and React + TypeScript applications around how each business works."
         path="/about"
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'Person',
           name: 'Tisha Di Fresco',
-          jobTitle: 'Front-End Developer & Web Designer',
+          jobTitle: 'Founder & Frontend Engineer',
           worksFor: {
             '@type': 'ProfessionalService',
             name: 'BrightPath Web Studio',
@@ -130,7 +217,35 @@ const AboutPage = () => {
             '@type': 'CollegeOrUniversity',
             name: 'Full Sail University',
           },
-          knowsAbout: ['React', 'TypeScript', 'WordPress', 'Divi', 'Web Performance', 'Responsive Design'],
+          hasCredential: {
+            '@type': 'EducationalOccupationalCredential',
+            credentialCategory: 'degree',
+            name: 'Bachelor of Science in Web Development',
+            recognizedBy: {
+              '@type': 'CollegeOrUniversity',
+              name: 'Full Sail University',
+            },
+          },
+          award: [
+            'Class Valedictorian, Full Sail University',
+            'Advanced Achievement Award, Full Sail University',
+            "Two Director's Awards, Full Sail University",
+          ],
+          knowsAbout: [
+            'React',
+            'TypeScript',
+            'JavaScript',
+            'Frontend Development',
+            'Web Application Development',
+            'API Integration',
+            'Authentication and Access Control',
+            'State Management',
+            'Web Performance',
+            'Accessibility',
+            'Responsive Design',
+            'WordPress',
+          ],
+          sameAs: [GITHUB_URL, LINKEDIN_URL],
           url: 'https://brightpathwebstudio.org/about',
         }}
       />
@@ -149,6 +264,10 @@ const AboutPage = () => {
           ease: "easeInOut",
         }}
       >
+        {/* Copy protection — a soft gradient behind the text only. Styled by
+            `.about-hero__scrim` in globals.css. */}
+        <div aria-hidden="true" className="about-hero__scrim absolute inset-0 pointer-events-none" />
+
         {/* Bottom fade gradient to blend into timeline section */}
         <div
           className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none z-10"
@@ -161,27 +280,28 @@ const AboutPage = () => {
           {/* Left Column: Text Content */}
           <div className="text-white text-center md:text-left">
             <p className="font-lato text-sm md:text-lg mb-2 tracking-wider text-shadow-md">ABOUT ME</p>
-            <h1 className="font-poppins text-3xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 text-primary drop-shadow-lg text-shadow-md">
+            <h1 className="font-poppins text-3xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 text-primary drop-shadow-lg text-shadow-md">
               TISHA <span className="whitespace-nowrap">DI FRESCO</span>
             </h1>
-            <p className="font-lato text-sm md:text-xl mb-6 md:mb-8 leading-normal md:leading-relaxed text-shadow-md">
-              Like the mountains that shape my home, my journey in web
-              development and design is built on strong foundations and endless
-              creativity.
+            <p className="font-poppins font-semibold text-base md:text-xl lg:text-2xl mb-4 md:mb-6 text-shadow-md">
+              Founder &amp; Frontend Engineer, BrightPath Web Studio
             </p>
-            <motion.button
-              onClick={() => {
-                document.getElementById('story')?.scrollIntoView({
-                  behavior: 'smooth',
-                });
-              }}
-              className="bg-primary text-white font-bold font-lato py-2 px-6 md:py-3 md:px-8 rounded-md text-sm md:text-lg hover:bg-yellow-400 transition-colors shadow-lg text-shadow-md"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Read My Story
-            </motion.button>
-
+            <p className="font-lato text-sm md:text-lg mb-6 md:mb-8 leading-normal md:leading-relaxed text-shadow-md">
+              I build websites and web applications around how a business actually works:
+              who its customers are, what they need to do, and what's getting in the way.
+              Most of that work happens in React and TypeScript, and every project starts
+              with understanding the business first.
+            </p>
+            {/* Styled by `.about-hero__cta` in globals.css — filled, not
+                outlined, because these sit on the photograph in both themes. */}
+            <div className="about-hero__cta flex flex-wrap items-center justify-center md:justify-start gap-x-6 gap-y-3">
+              <Link to="/contact" className="studio-cta studio-cta--primary">
+                Let’s Talk <span className="studio-cta__arrow" aria-hidden="true">→</span>
+              </Link>
+              <Link to="/portfolio" className="studio-cta studio-cta--ghost">
+                View My Work <span className="studio-cta__arrow" aria-hidden="true">→</span>
+              </Link>
+            </div>
           </div>
 
           {/* Right Column: Arched Image
@@ -239,7 +359,7 @@ const AboutPage = () => {
           {/* H2 Title with Theme Awareness */}
 
           <BrightPathGradientTitle as="h2" className="font-extrabold text-center mb-8 md:mb-12 pt-0 font-poppins text-2xl md:text-3xl lg:text-4xl" gradientWords={["Journey"]}
-          >My Digital Journey Timeline
+          >My Journey
           </BrightPathGradientTitle>
 
           {timelineEvents.map((event, index) => (
@@ -268,7 +388,7 @@ const AboutPage = () => {
                   className="shadow-2xl overflow-hidden
                              relative flex flex-col items-center"
                   style={{
-                    background: `linear-gradient(#1A2238, #1A2238) padding-box, 
+                    background: `linear-gradient(#1A2238, #1A2238) padding-box,
                                  linear-gradient(to right, #F2C94C, #1A2238, #F2C94C) border-box`,
                     border: "2px solid transparent",
                   }}
@@ -301,7 +421,7 @@ const AboutPage = () => {
         </div>
       </motion.section>
 
-      {/* --- SKILLS SECTION --- */}
+      {/* --- SELECTED WORK SECTION --- */}
       <motion.section
         className={`py-12 md:py-20 px-4 md:px-8 ${theme === 'light' ? 'bg-gray-100' : 'bg-[#1A2238]'}`}
         initial={revealFrom({ opacity: 0, y: 50 })}
@@ -309,29 +429,58 @@ const AboutPage = () => {
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="container mx-auto max-w-4xl text-center">
-          <BrightPathGradientTitle
-            as="h2"
-            className="font-poppins font-bold mb-4 md:mb-6 text-2xl md:text-3xl lg:text-4xl"
-            gradientWords={["Expertise"]}
-          >
-            Skills & Expertise
-          </BrightPathGradientTitle>
-          <p className="font-lato text-muted-foreground text-sm md:text-lg mb-8 md:mb-10 max-w-2xl mx-auto leading-normal md:leading-relaxed">
-            The tools and technologies I use to bring your vision to life.
-          </p>
-          <div className="flex flex-wrap justify-center gap-2 md:gap-3">
-            {SKILLS.map((skill) => (
-              <motion.span
-                key={skill}
-                className={`px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium border border-primary/40 ${
-                  theme === 'dark' ? 'bg-[#273442] text-foreground' : 'bg-white text-foreground'
-                }`}
-                whileHover={{ scale: 1.05, borderColor: 'rgba(242, 201, 76, 0.8)' }}
-                transition={{ duration: 0.2 }}
+        <div className="container mx-auto max-w-5xl">
+          <div className="text-center mb-8 md:mb-12">
+            <BrightPathGradientTitle
+              as="h2"
+              className="font-poppins font-bold mb-4 md:mb-6 text-2xl md:text-3xl lg:text-4xl"
+              gradientWords={["Work"]}
+            >
+              Selected Work
+            </BrightPathGradientTitle>
+            <p className="font-lato text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto leading-normal md:leading-relaxed">
+              A closer look at two recent builds. The full case studies, and more projects, are in the portfolio.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            {SELECTED_WORK.map((project, index) => (
+              <motion.article
+                key={project.title}
+                className={`flex flex-col p-5 md:p-6 rounded-lg ${cardSurface}`}
+                initial={revealFrom({ opacity: 0, y: 30 })}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                {skill}
-              </motion.span>
+                <p className="font-poppins text-xs md:text-sm font-semibold uppercase tracking-[0.14em] text-primary mb-2">
+                  {project.label}
+                </p>
+                <h3 className="font-poppins font-semibold text-lg md:text-xl mb-3 text-foreground">
+                  {project.title}
+                </h3>
+                <p className="font-lato text-sm md:text-base text-muted-foreground leading-relaxed mb-5">
+                  {project.description}
+                </p>
+                <ul aria-label={`${project.title} technologies`} className="flex flex-wrap gap-2 mb-6">
+                  {project.stack.map((tech) => (
+                    <li
+                      key={tech}
+                      className={`px-3 py-1 rounded-full text-xs font-medium border border-primary/40 text-foreground ${
+                        theme === 'dark' ? 'bg-[#273442]' : 'bg-gray-50'
+                      }`}
+                    >
+                      {tech}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to={project.href}
+                  className="mt-auto inline-flex items-center gap-2 self-start rounded-sm font-poppins font-semibold text-sm md:text-base text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                >
+                  View case study<span className="sr-only">: {project.title}</span>
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              </motion.article>
             ))}
           </div>
         </div>
@@ -355,7 +504,7 @@ const AboutPage = () => {
               Why Work With Me
             </BrightPathGradientTitle>
             <p className="font-lato text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto leading-normal md:leading-relaxed">
-              More than just code — it's about building something meaningful together.
+              Good websites start with understanding the business behind them.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -364,11 +513,7 @@ const AboutPage = () => {
               return (
                 <motion.div
                   key={value.title}
-                  className={`p-5 md:p-6 rounded-lg ${
-                    theme === 'dark'
-                      ? 'bg-[#1A2238] border border-primary/20 shadow-glow-primary'
-                      : 'bg-white border border-primary/50 shadow-xl'
-                  }`}
+                  className={`p-5 md:p-6 rounded-lg ${cardSurface}`}
                   initial={revealFrom({ opacity: 0, y: 30 })}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -393,6 +538,53 @@ const AboutPage = () => {
         </div>
       </motion.section>
 
+      {/* --- SKILLS SECTION --- */}
+      <motion.section
+        className={`py-12 md:py-20 px-4 md:px-8 ${theme === 'light' ? 'bg-gray-100' : 'bg-[#1A2238]'}`}
+        initial={revealFrom({ opacity: 0, y: 50 })}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="container mx-auto max-w-5xl">
+          <div className="text-center mb-8 md:mb-12">
+            <BrightPathGradientTitle
+              as="h2"
+              className="font-poppins font-bold mb-4 md:mb-6 text-2xl md:text-3xl lg:text-4xl"
+              gradientWords={["Expertise"]}
+            >
+              Skills & Expertise
+            </BrightPathGradientTitle>
+            <p className="font-lato text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto leading-normal md:leading-relaxed">
+              The technologies behind the work. You don't need to know any of them, but they're why the sites I build are fast, reliable and ready to grow.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+            {SKILL_GROUPS.map((group) => (
+              <div key={group.title}>
+                <h3 className="font-poppins font-semibold text-sm md:text-base uppercase tracking-[0.12em] text-foreground mb-3 md:mb-4">
+                  {group.title}
+                </h3>
+                <ul className="flex flex-wrap gap-2 md:gap-3">
+                  {group.skills.map((skill) => (
+                    <motion.li
+                      key={skill}
+                      className={`px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium border border-primary/40 hover:border-primary transition-colors text-foreground ${
+                        theme === 'dark' ? 'bg-[#273442]' : 'bg-white'
+                      }`}
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {skill}
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
       {/* --- CTA SECTION --- */}
       <motion.section
         className={`py-12 md:py-20 px-4 md:px-8 ${theme === 'light' ? 'bg-gray-200' : 'bg-[#273442]'}`}
@@ -405,27 +597,46 @@ const AboutPage = () => {
           <BrightPathGradientTitle
             as="h2"
             className="font-poppins font-bold mb-4 md:mb-6 leading-tight text-2xl md:text-3xl lg:text-4xl"
-            gradientWords={["Action"]}
+            gradientWords={["Project"]}
           >
-            Ready to See My Work in Action?
+            Have a Project in Mind?
           </BrightPathGradientTitle>
           <p className="font-lato text-muted-foreground text-sm md:text-lg mb-6 md:mb-8 leading-normal md:leading-relaxed">
-            From concept to completion, every project tells a story. Explore my portfolio to see how I've helped businesses shine online.
+            Tell me about your business and what you need your website to do.
           </p>
-          {/* The <button> here is presentational — the <Link> is the real
-              control. Left focusable it produced two tab stops and two
-              announcements ("link Explore My Portfolio", then "button Explore
-              My Portfolio") for one action, so it's removed from the tab order
-              and the accessibility tree. The Link carries the accessible name. */}
-          <Link to="/portfolio" aria-label="Explore My Portfolio">
-            <BrightPathGradientButton
-              tabIndex={-1}
-              aria-hidden
-              className="bg-primary text-primary-foreground font-bold font-lato py-2 px-6 md:py-3 md:px-8 rounded-md text-sm md:text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+            <Link
+              to="/contact"
+              className="inline-flex min-w-[200px] items-center justify-center rounded-md bg-primary text-primary-foreground font-bold font-lato py-2 px-6 md:py-3 md:px-8 text-sm md:text-lg shadow-lg transition-all hover:brightness-[0.88] hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            >
+              Let’s Talk
+            </Link>
+            <Link
+              to="/portfolio"
+              className="inline-flex min-w-[200px] items-center justify-center rounded-md border border-primary text-foreground font-bold font-lato py-2 px-6 md:py-3 md:px-8 text-sm md:text-lg transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               Explore My Portfolio
-            </BrightPathGradientButton>
-          </Link>
+            </Link>
+          </div>
+
+          <nav aria-label="Professional profiles" className="mt-10 md:mt-12 pt-6 border-t border-primary/25 max-w-sm mx-auto">
+            <ul className="flex flex-wrap justify-center gap-x-8 gap-y-3">
+              {PROFESSIONAL_LINKS.map(({ label, href, icon: Icon }) => (
+                <li key={label}>
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-sm font-lato text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                  >
+                    <Icon className="h-4 w-4" aria-hidden="true" />
+                    {label}
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
       </motion.section>
     </div>

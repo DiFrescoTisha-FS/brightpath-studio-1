@@ -1,14 +1,36 @@
 ---
 name: hero-injection-mirror-fact
-description: Homepage hero markup lives in two synchronized places (vite.config.ts injected string + ClarityHero.tsx mirror) for LCP; changing hero copy requires editing both.
+description: Homepage hero markup lives in two synchronized places (STATIC_HERO_HTML in vite.config.ts + ClarityHero.tsx); since 2026-10-05 ClarityHero is RENDERED as a fallback, so drift is visible to visitors. Edit both.
 metadata:
   type: project
 ---
 
-**Status:** Current implementation fact, verified directly in code on 2026-08-31.
+**Status:** Current implementation fact. Re-verified and changed on 2026-10-05 (see the
+top section); the 2026-08-31 description below it is history.
 
-`src/components/ClarityHero.tsx` (`ClarityHeroStructureMirror`) is **not imported or
-rendered anywhere** in the app. Its own file header explains why: the real hero is
+**Current (2026-10-05, [[about-page-refresh]]): `ClarityHero.tsx` is load-bearing.**
+- The injected markup is the module constant `STATIC_HERO_HTML` in `vite.config.ts`, used
+  by `injectStaticHero()` (puts it in `index.html` before `#root`) and by
+  `snapshotSpaFallback()` (strips exactly that string from `app.html`; the build throws if
+  it can't find it).
+- The static hero now exists **only in the `/` HTML**. Every other prerendered route drops
+  it during the snapshot (`StaticHeroRouteGate` in `App.tsx` calls `hero.remove()` when
+  `IS_PRERENDER` and the path isn't `/`), and `app.html` (served for `/services`,
+  `/reviews`, unknown URLs) is written without it. Reason: a `display:none` hero still
+  shipped the homepage `<h1>` to crawlers on every non-home route.
+- Consequence: a visitor who lands on any non-home page and then navigates home in-app
+  has no static hero in the DOM. `HomePage.tsx` checks once per mount
+  (`document.getElementById('hero-clarity-static')`) and renders `<ClarityHero />` in its
+  place. So **ClarityHero.tsx is what those visitors see**; if it drifts from
+  `STATIC_HERO_HTML`, the homepage looks different depending on the entry page.
+- `verifyPrerender` fails the build if `/` lacks the hero or any other prerendered route
+  or `app.html` contains it.
+- Rule: change hero copy/markup in `STATIC_HERO_HTML` and `ClarityHero.tsx` together, and
+  keep the same id/classes (the CSS and `StaticHeroRouteGate` key off
+  `#hero-clarity-static`).
+
+**History (2026-08-31):** `src/components/ClarityHero.tsx` (`ClarityHeroStructureMirror`)
+was **not imported or rendered anywhere** in the app. Its own file header explains why: the real hero is
 injected as a static HTML string directly into `index.html` by the
 `brightpath-inject-static-hero` Vite plugin in `vite.config.ts`, so hero text paints
 before React boots (LCP optimization). The component file exists purely so the injected

@@ -149,6 +149,31 @@ async function preflightChrome(executablePath: string): Promise<void> {
 }
 
 /**
+ * The homepage hero, injected into index.html at build time by
+ * injectStaticHero(). Shared as a constant so snapshotSpaFallback() can strip
+ * exactly this markup from app.html. Keep src/components/ClarityHero.tsx in
+ * step with it — see injectStaticHero() for why.
+ */
+const STATIC_HERO_HTML = `
+<section id="hero-clarity-static" class="studio-hero">
+  <div class="studio-hero__inner">
+    <div class="studio-hero__copy">
+      <p class="studio-hero__eyebrow">BUILT AROUND YOUR BUSINESS</p>
+      <h1 class="studio-hero__title">Websites That Work <span class="studio-hero__accent">Beautifully.</span></h1>
+      <p class="studio-hero__lede">Your business isn&#8217;t one-size-fits-all. Your website shouldn&#8217;t be either. I take the time to understand how your business works, what your customers need, and where your website can work harder for you.</p>
+      <div class="studio-hero__cta">
+        <a href="/contact" class="studio-cta studio-cta--primary">Let&#8217;s Talk <span class="studio-cta__arrow" aria-hidden="true">&#8594;</span></a>
+        <a href="/portfolio" class="studio-cta studio-cta--ghost">View Our Work <span class="studio-cta__arrow" aria-hidden="true">&#8594;</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="studio-hero__media">
+    <img src="/images/brightpath-hero-image.webp" width="1672" height="941" fetchpriority="high" decoding="async" class="studio-hero__img" alt="A laptop on a studio desk showing a BrightPath-built client website, beside a BrightPath mug and design books." />
+    <span class="studio-hero__scrim" aria-hidden="true"></span>
+  </div>
+</section>`;
+
+/**
  * Copies the freshly built index.html to app.html before the prerenderer
  * overwrites index.html with the rendered homepage.
  *
@@ -158,7 +183,8 @@ async function preflightChrome(executablePath: string): Promise<void> {
  * homepage content, then hydrate against it and blow up with a mismatch.
  *
  * app.html keeps `#root` empty, so main.tsx takes the createRoot() branch
- * exactly as it does today.
+ * exactly as it does today. It also drops the static homepage hero — see
+ * the comment in writeBundle().
  */
 function snapshotSpaFallback(): Plugin {
   let outDir = 'dist';
@@ -175,7 +201,19 @@ function snapshotSpaFallback(): Plugin {
     writeBundle() {
       const source = path.join(outDir, 'index.html');
       if (!fs.existsSync(source)) return;
-      fs.copyFileSync(source, path.join(outDir, 'app.html'));
+      const html = fs.readFileSync(source, 'utf8');
+      // The static homepage hero is hidden at runtime on these routes, but a
+      // hidden <h1> still ships in the HTML, and crawlers that ignore CSS read
+      // "Websites That Work Beautifully." as the heading of /services and
+      // /reviews. HomePage renders ClarityHero when the static hero is absent,
+      // so visitors who start here and navigate home still get it.
+      if (!html.includes(STATIC_HERO_HTML)) {
+        throw new Error(
+          '[spa-fallback] The static homepage hero was not found in the built index.html, ' +
+            'so it cannot be stripped from app.html. Did injectStaticHero() change?',
+        );
+      }
+      fs.writeFileSync(path.join(outDir, 'app.html'), html.replace(STATIC_HERO_HTML, ''));
     },
   };
 }
@@ -236,8 +274,30 @@ function verifyPrerender(routes: string[]): Plugin {
       problems.push(`${route}: canonical is ${canonical} — route-specific metadata did not render`);
     }
 
+    // The static hero belongs to "/" only. Other routes drop it before the
+    // snapshot (StaticHeroRouteGate in App.tsx); if it survives, crawlers that
+    // ignore CSS read the homepage <h1> as that page's first heading.
+    const hasStaticHero = html.includes('id="hero-clarity-static"');
+    if (route === '/' ? !hasStaticHero : hasStaticHero) {
+      problems.push(
+        route === '/'
+          ? `${route}: the static homepage hero is missing`
+          : `${route}: contains the hidden homepage hero (and its <h1>)`,
+      );
+    }
+
     return problems;
   };
+
+  /** app.html serves /services, /reviews and unknown URLs; it must not carry the homepage hero. */
+  const checkSpaFallback = (): string[] => {
+    const file = path.join(outDir, 'app.html');
+    if (!fs.existsSync(file)) return ['app.html (SPA fallback) was not generated'];
+    return fs.readFileSync(file, 'utf8').includes('id="hero-clarity-static"')
+      ? ['app.html: contains the hidden homepage hero (and its <h1>), served on /services and /reviews']
+      : [];
+  };
+  const checkAll = () => [...routes.flatMap(checkRoute), ...checkSpaFallback()];
 
   return {
     name: 'brightpath-verify-prerender',
@@ -250,11 +310,11 @@ function verifyPrerender(routes: string[]): Plugin {
     },
     async closeBundle() {
       const deadline = Date.now() + TIMEOUT_MS;
-      let problems = routes.flatMap(checkRoute);
+      let problems = checkAll();
 
       while (problems.length > 0 && Date.now() < deadline) {
         await new Promise((resolve) => setTimeout(resolve, POLL_MS));
-        problems = routes.flatMap(checkRoute);
+        problems = checkAll();
       }
 
       if (problems.length > 0) {
@@ -267,7 +327,7 @@ function verifyPrerender(routes: string[]): Plugin {
         );
       }
 
-      console.log(`[verify-prerender] ${routes.length} routes verified.`);
+      console.log(`[verify-prerender] ${routes.length} routes and the SPA fallback verified.`);
     },
   };
 }
@@ -279,10 +339,12 @@ function verifyPrerender(routes: string[]): Plugin {
  * `awestruck-inject-static-hero` on the AweStruck site.
  *
  * Styling lives in the `.studio-hero` block of src/styles/globals.css.
- * `ClarityHero.tsx` mirrors this markup for reference; it is not rendered
- * anywhere. The hero uses dedicated CSS classes rather than Tailwind
- * utilities, because Tailwind's content scanner never reads this string —
- * utilities here would survive only as long as the mirror file stayed exact.
+ * `ClarityHero.tsx` is a React copy of STATIC_HERO_HTML, and it IS rendered:
+ * HomePage falls back to it whenever this static copy isn't in the document
+ * (every page except "/" is built without it — see StaticHeroRouteGate in
+ * App.tsx and snapshotSpaFallback below). Edit both together. The hero uses
+ * dedicated CSS classes rather than Tailwind utilities, because Tailwind's
+ * content scanner never reads this string.
  *
  * Navbar is already `fixed top-0 z-50`, so it overlays the static hero
  * cleanly from the very first paint.
@@ -293,25 +355,7 @@ function injectStaticHero(): Plugin {
     transformIndexHtml: {
       order: 'pre',
       handler(html: string) {
-        const heroHtml = `
-<section id="hero-clarity-static" class="studio-hero">
-  <div class="studio-hero__inner">
-    <div class="studio-hero__copy">
-      <p class="studio-hero__eyebrow">BUILT AROUND YOUR BUSINESS</p>
-      <h1 class="studio-hero__title">Websites That Work <span class="studio-hero__accent">Beautifully.</span></h1>
-      <p class="studio-hero__lede">Your business isn&#8217;t one-size-fits-all. Your website shouldn&#8217;t be either. I take the time to understand how your business works, what your customers need, and where your website can work harder for you.</p>
-      <div class="studio-hero__cta">
-        <a href="/contact" class="studio-cta studio-cta--primary">Let&#8217;s Talk <span class="studio-cta__arrow" aria-hidden="true">&#8594;</span></a>
-        <a href="/portfolio" class="studio-cta studio-cta--ghost">View Our Work <span class="studio-cta__arrow" aria-hidden="true">&#8594;</span></a>
-      </div>
-    </div>
-  </div>
-  <div class="studio-hero__media">
-    <img src="/images/brightpath-hero-image.webp" width="1672" height="941" fetchpriority="high" decoding="async" class="studio-hero__img" alt="A laptop on a studio desk showing a BrightPath-built client website, beside a BrightPath mug and design books." />
-    <span class="studio-hero__scrim" aria-hidden="true"></span>
-  </div>
-</section>`;
-        return html.replace('<!-- HERO_PLACEHOLDER -->', heroHtml);
+        return html.replace('<!-- HERO_PLACEHOLDER -->', STATIC_HERO_HTML);
       },
     },
   };

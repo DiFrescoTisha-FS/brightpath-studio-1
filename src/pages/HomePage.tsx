@@ -1,10 +1,11 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useState } from "react";
 import { RefreshCcw, Zap, Code } from "lucide-react";
 import { useAppStore } from '@/store/appStore';
 import { Link } from 'react-router-dom';
 import BrightPathGradientTitle from "@/components/BrightPathGradientTitle";
 import { PageMeta } from "@/components/PageMeta";
 import { cloudinaryAssets } from "@/data/cloudinaryAssets";
+import ClarityHero from "@/components/ClarityHero";
 
 // Lazy load heavy components to reduce critical path
 const ReviewWidget = React.lazy(() => import('../components/ReviewWidget'));
@@ -148,17 +149,27 @@ const BrandStorySection = () => (
 
 const HomePage = () => {
   const theme = useAppStore(state => state.theme);
+  // The static hero is absent when the visitor entered on another
+  // prerendered route — those snapshots drop it (see StaticHeroRouteGate in
+  // App.tsx). Render the mirror in its place. Checked once per mount, so the
+  // mirror's own matching id can never flip this back.
+  const [renderHero] = useState(
+    () => typeof document !== 'undefined' && !document.getElementById('hero-clarity-static'),
+  );
 
   return (
     <div className="min-h-screen">
       <PageMeta
-        title="BrightPath Web Studio — Front-End Developer & Web Designer"
-        description="Portfolio of Tisha Di Fresco — front-end developer and designer building modern, responsive, high-performance websites in React and WordPress."
+        title="BrightPath Web Studio — Websites Built Around Your Business"
+        description="Websites and web applications built around how your business works and what your customers need. Designed and built by frontend engineer Tisha Di Fresco."
         path="/"
       />
       {/* ClarityHero is rendered statically into index.html by the
           brightpath-inject-static-hero Vite plugin so the LCP text paints
-          before React boots. <main> starts at ServicesSection. */}
+          before React boots. The React mirror only renders as a fallback
+          when that static copy isn't in the document. <main> starts at
+          ServicesSection. */}
+      {renderHero && <ClarityHero />}
       <main>
         <ServicesSection theme={theme} />
 

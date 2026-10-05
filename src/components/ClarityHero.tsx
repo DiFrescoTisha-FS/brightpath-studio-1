@@ -3,10 +3,12 @@
  *
  * The hero is rendered as static HTML directly into index.html by the
  * `brightpath-inject-static-hero` Vite plugin (see vite.config.ts) so its
- * text paints before React boots. This file is NOT imported or rendered
- * anywhere — it exists so the markup is reviewable as JSX alongside the rest
- * of the components, and so changes to the injected string have an obvious
- * second place to keep in step.
+ * text paints before React boots. HomePage renders this mirror only as a
+ * fallback, when the static copy isn't in the document: non-home routes are
+ * prerendered without it (see StaticHeroRouteGate in App.tsx), so a visitor
+ * who lands on /about and then navigates home gets the hero from here. It
+ * must therefore stay an exact match for the injected string — a drift is
+ * now visible to visitors, not just to reviewers.
  *
  * The hero styles itself with dedicated `.studio-hero` / `.studio-cta`
  * classes from src/styles/globals.css rather than Tailwind utilities:

@@ -5,8 +5,8 @@
 - [Social media metrics policy approved](social-media-metrics-policy-approved.md) — durable outcomes surfaced prominently; social analytics only as dated historical snapshots, never current results.
 - [Trust evidence integrity open issues](trust-evidence-integrity-open-issues.md) — Living Better Life + Dale Tiffany web/B2B issues; coordinator reports Phase 1 fixed both, not independently re-verified.
 - [Dale Tiffany social stats deferred review](dale-tiffany-social-stats-deferred-review.md) — self-consistent but unverified social numbers; scheduled future re-check, not a known contradiction.
-- [Hero injection mirror fact](hero-injection-mirror-fact.md) — hero copy lives in vite.config.ts injected string + ClarityHero.tsx mirror; edit both. Current copy: Phase 5.
-- [Prerender architecture facts](prerender-architecture-facts.md) — 12-route allowlist verified, /services+/reviews excluded, createRoot-always confirmed.
+- [Hero injection mirror fact](hero-injection-mirror-fact.md) — hero lives in STATIC_HERO_HTML (vite.config.ts) + ClarityHero.tsx; ClarityHero is RENDERED as a fallback since 2026-10-05 — edit both. Current copy: Phase 5.
+- [Prerender architecture facts](prerender-architecture-facts.md) — 12-route allowlist verified, /services+/reviews excluded, createRoot-always confirmed; static hero only in / (app.html stripped), guarded by verifyPrerender.
 - [Blackmont consultant recommendations](blackmont-consultant-recommendations.md) — Grace Lo feedback on copy/trust-evidence/support visibility; NOT approved.
 - [Strategy gap analysis](strategy-gap-analysis.md) — prior session's repo review re Blackmont feedback; recommendation only, not approved.
 - [Rejected explorations](rejected-explorations.md) — metallic gold gradient and scroll parallax were tested and explicitly not adopted.
@@ -19,3 +19,4 @@
 - [Phase 4 conversion paths approved](phase-4-conversion-paths-approved.md) — Brand Story CTA → Contact, Reviews page gains "Start Your Project" CTA, Contact success message adds 24hr line; user-approved.
 - [Contact form architecture debt deferred](contact-form-architecture-debt-deferred.md) — hardcoded Apps Script URL, no dev/prod split, opaque no-cors failures, unused GoHighLevel Netlify function; discovered, not actioned.
 - [Phase 5 business-first copy approved](phase-5-business-first-copy-approved.md) — homepage + Services copy rewrite, "Let's Talk" CTAs, metrics off homepage/Services cards, phase cards stay WordPress-driven; live on main f66aa58. Lists deferred loose ends.
+- [About page refresh](about-page-refresh.md) — Founder & Frontend Engineer positioning, 2 Selected Work projects, grouped skills, no Divi, résumé link disabled (RESUME_URL=null), hero scrim; on feature/about-page-refresh, NOT committed yet.
