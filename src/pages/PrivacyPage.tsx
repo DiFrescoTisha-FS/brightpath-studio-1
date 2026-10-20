@@ -65,7 +65,7 @@ const PrivacyPage = () => {
             <ExternalLink href="https://tools.google.com/dlpage/gaoptout">Google Analytics Opt-out Browser Add-on</ExternalLink>.
           </li>
           <li><strong>Theme preference:</strong> the Website saves your light or dark mode choice in your browser’s local storage so it’s remembered on your next visit. This stays on your device and isn’t sent to us.</li>
-          <li><strong>Security cookie:</strong> some images on our Services page load from our content management system, which is protected by Cloudflare. Cloudflare may set a short-lived security cookie, <code>__cf_bm</code>, to help tell people from automated traffic. It expires after about 30 minutes.</li>
+          <li><strong>Security cookie:</strong> some images — currently on our Home, Services, and Reviews pages — load from our WordPress content management system, which is protected by Cloudflare. When those images load, Cloudflare may set a short-lived security cookie, <code>__cf_bm</code>, to help tell people from automated traffic. It expires after about 30 minutes.</li>
         </ul>
         <p className="mb-4">We do not use advertising or retargeting cookies.</p>
 
