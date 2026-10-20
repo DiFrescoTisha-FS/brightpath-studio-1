@@ -9,12 +9,20 @@ Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with Re
 - **CMS Integration**: WordPress REST API for some content (flip cards on Services page)
 - **Hosting**: Netlify
 - **Images**: Cloudinary for optimized delivery
-- **Analytics**: GA4
+- **Analytics**: GA4, U.S. visitors only. On `feature/newsletter-signup` (not yet on `main`)
+  it loads only on the production hostname, after a device time-zone check and a Netlify
+  region check, with advertising storage denied. See "Contact form, Analytics and newsletter"
+  below. On `main`, GA4 has recorded nothing since March 2026 (see Known issues)
 - **Prerendering**: `vite-plugin-prerender` + Puppeteer, 12 static routes (see below)
 - **Local dev**: `npm run dev` (Vite, :5173) has no Netlify functions, so `/api/phases` and
   `/api/reviews` fail there. To review the WordPress-driven phase cards or reviews, run
   `npx netlify dev` (:8888) — it pulls `WORDPRESS_API_URL`/`WORDPRESS_APP_PASSWORD` from the
   linked Netlify site, no `.env` needed. The global `netlify` binary isn't on PATH; use `npx`.
+  Exception: the new contact form needs `CONTACT_SCRIPT_URL` / `CONTACT_SHARED_SECRET` for a
+  **TEST** Apps Script deployment in a gitignored `.env` (see "Environment variables").
+- **Tests**: `npm test` runs Node's built-in test runner on `tests/*.test.js` (no extra
+  dependencies). It covers the Netlify functions, an emulated Apps Script and the shared
+  origin validator. There are no UI unit tests; browser checks are done ad hoc with Puppeteer.
 - **Decision log**: detailed approved decisions and deferred items live in
   `.claude/agent-memory/brightpath-project-steward/` (index: `MEMORY.md`). This file is the
   overview; check there before reopening anything marked approved.
@@ -56,7 +64,21 @@ Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with Re
   fallback, prerender config, Chrome resolution, build-time verification
 - `src/pages/ServicesPage.tsx` - Services, process flip cards, pricing
 - `src/pages/PortfolioDemoPage.tsx` - Portfolio grid with case study views
-- `src/pages/ContactPage.tsx` - Contact form with Google Apps Script integration + honeypot spam protection
+- `src/pages/ContactPage.tsx` - Contact form. **On `main`** it posts straight to Google
+  Apps Script (`no-cors`, can't confirm success). **On `feature/newsletter-signup`** it
+  posts to `/api/contact-inquiry` and shows success only after a confirmed save. On both, the
+  honeypot is `bp_contact_extra`, and Send is disabled in the prerendered HTML (`IS_PRERENDER`)
+- `netlify/functions/contact-inquiry.js` + `google-apps-script/contact-form-handler/` -
+  Contact form v2: Netlify Function → Apps Script v2 (`Code.gs`, rollout guide in its README)
+- `netlify/functions/newsletter-subscribe.js` + `src/components/NewsletterSignup.tsx` -
+  MailerLite signup in the footer, off unless its flags are set (`NEWSLETTER-SETUP.md`)
+- `netlify/lib/allowed-origin.js` - Strict Origin check shared by the contact and newsletter
+  functions. It lives outside `netlify/functions` so Netlify doesn't deploy it as a function
+- `src/utils/analytics.ts` + `netlify/functions/analytics-region.js` - GA4 loader and its
+  U.S.-only region check
+- `src/config/contact.ts` - `BUSINESS`, the single source for public contact details
+  (`index.html` JSON-LD must be kept in sync by hand)
+- `src/components/legal/` - Shared layout for the Privacy Policy and Terms of Service
 - `src/components/PageMeta.tsx` - Per-route title/description/canonical/OG/JSON-LD; also fires the `prerender-ready` signal
 - `src/utils/isPrerender.ts` - `IS_PRERENDER` flag: build-time snapshot vs. real visit
 - `netlify.toml` / `public/_headers` - SPA fallback to `/app.html`, `PUPPETEER_CACHE_DIR`, cache rules
@@ -356,6 +378,170 @@ Do not reopen these without a specific reason:
 - Metallic gradient — **not production**
 - Parallax — **not implemented**
 
+## Contact form, Analytics and newsletter (October 19–20, 2026)
+
+### Where things stand
+
+- **Live on `main` / production**: `20b331a` (deploy `6ad7916293e90352aa2b531e`). Two small
+  contact-form hotfixes shipped on their own branches and were verified with real
+  submissions:
+  - `ffd41b6` renamed the honeypot from `website` (which browser autofill filled, so the form
+    faked success and sent nothing) to `bp_contact_extra`, with password-manager ignore hints.
+  - `20b331a` disables the prerendered Send button via `IS_PRERENDER`. Before that, pressing
+    Send before React took over submitted the form natively and put the visitor's name,
+    email and message in the URL.
+
+  The production Apps Script deployment was also corrected by the owner: its notification
+  recipient pointed at an address on `brightpathwebstudio.com`, a domain that doesn't exist,
+  and now goes to `contact@brightpathwebstudio.org`.
+- **Committed locally on `feature/newsletter-signup`, not yet pushed or deployed**:
+  - `e81ffb5`: contact details, Privacy Policy and Terms
+  - `a867fd6`: Analytics fix and U.S.-only safeguards, plus `npm test`
+  - `bb787c1`: contact form v2 and the shared origin validator
+  - `b09e6c3`: the newsletter behind its flags
+
+  None of this is live. Release follows the reviewed rollout plan: a deploy preview first,
+  then production with explicit approval at each step.
+
+### Contact form v2 — confirmed submissions
+
+Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`Code.gs`) → 302 to
+`script.googleusercontent.com` → JSON reply.
+
+- **Success means confirmed.** The visitor sees "Thank you" only when the script replies
+  `{ ok: true, code: 'saved' | 'duplicate' }` for the **same submission ID**. Never trust
+  the HTTP status: Apps Script answers 200 even when the script throws.
+- **Order of operations.** The script saves the row first (under a lock, deduplicated by
+  submission ID), reads it back, then emails `NOTIFY_TO`. An email failure is recorded in
+  the Sheet's Notification column; it doesn't fail the inquiry.
+- **Spreadsheet formulas** (`=`, `+`, `-`, `@`, tab, CR) are stored as plain text.
+- **On failure** (20 s browser timeout, 15 s script timeout) the form keeps the visitor's
+  text and shows `contact@` and the phone number as alternatives. A retry reuses the
+  submission ID; editing the message gets a new one.
+- **Logs** carry submission IDs and outcome codes only, never names, emails or messages.
+- **Apps Script properties**: `SHARED_SECRET`, `NOTIFY_TO`, and optionally `SHEET_NAME`.
+  Requests without the shared secret are refused, so the public `/exec` URL can't be used
+  to spam the Sheet.
+- **Rule: test before replacing the working integration.** The live form still posts to the
+  existing production deployment, which must stay active and untouched until v2 is proven.
+  The replacement goes live as a **new** Apps Script deployment, never a new version of the
+  existing one: v2 rejects requests without the secret, so updating the live deployment
+  would break the live form. After a 48-hour watch, archive the old deployment. The full
+  sequence and rollback are in `google-apps-script/contact-form-handler/README.md`.
+  - All five checks passed against a separate TEST Sheet and TEST deployment on Oct 19–20:
+    normal, duplicate retry, email failure, Sheet failure, formula injection.
+  - Not yet run on Netlify's servers (deploy preview) or against production.
+
+### Google Analytics — U.S.-only privacy safeguards (on the feature branch)
+
+- **Root cause of the outage.** `gtag()` pushed a rest-parameter **array** onto `dataLayer`,
+  and gtag.js only processes the `arguments` object. So **production GA4 has recorded
+  nothing since `468f363` (March 2026)**; the fix is in `a867fd6`. Keep
+  `dataLayer.push(arguments)` and its `eslint-disable prefer-rest-params` comment.
+- **Load order.** Analytics loads only after the first interaction, and only if every check
+  passes. Any failure means it doesn't load: fail closed.
+  1. The hostname is `brightpathwebstudio.org` or `www.` (never localhost or deploy
+     previews).
+  2. The **device time zone** is one of the 29 U.S. IANA zones (plus legacy aliases). This
+     is read on the device only. Non-U.S. zones, UTC, and missing or unrecognised values
+     stop here without even calling the region check.
+  3. `/api/analytics-region` returns `{ analytics: true }`. It's an **allowlist (`US` only)**
+     based on Netlify's IP geolocation. Unknown locations, errors and timeouts mean no
+     Analytics. The function stores nothing and returns no country.
+- **Consent Mode.** `ad_storage`, `ad_user_data` and `ad_personalization` are denied
+  everywhere. `analytics_storage` is denied by default and granted only for region `US`
+  (Google's own location check). Google signals and ad personalization are off in the
+  config; the GA property also has signals off, 2-month retention and Form interactions
+  off.
+- **Known limitation.** If our checks say U.S. but Google's location doesn't, Google still
+  receives **cookieless** pings (`gcs=G100`, no cookies). This was tested and is disclosed in
+  the Privacy Policy. Don't describe the setup as "zero Google requests for every non-U.S.
+  visitor".
+- **Never send form data.** Page addresses sent to GA keep only `project` and `utm_*`.
+  `contact_submit` fires only after a confirmed save, via `loadAnalytics().then(trackEvent)`.
+
+### Newsletter (MailerLite) — off by default
+
+- **Two flags.** `VITE_NEWSLETTER_ENABLED=true` (build time) renders the footer form.
+  `NEWSLETTER_ENABLED=true` (function runtime) accepts signups; otherwise the function
+  answers "unavailable".
+- **Double opt-in.** API signups rely on MailerLite's account-level "Double opt-in for API
+  and integrations" setting, which is enabled. The function must **never send `status`**:
+  `status: 'active'` skips confirmation.
+- **Not yet tested against real MailerLite.** Follow the checklist in
+  `NEWSLETTER-SETUP.md`.
+- **Styling** reuses existing values only: `.studio-cta--primary` filled as on the About hero,
+  `.services-body` tints, theme gold via `--primary`, and site reds `red-400` / `red-700`.
+
+### Shared origin validator — `netlify/lib/allowed-origin.js`
+
+- **Allowed:**
+  - the production origins and Netlify's runtime `URL`;
+  - **this site's** Netlify deploys: `https://<SITE_NAME>.netlify.app` and
+    `https://<prefix>--<SITE_NAME>.netlify.app`;
+  - `http://localhost|127.0.0.1:<port>`, only when `NETLIFY_DEV=true`.
+- **Refused:** look-alikes, other sites' previews, extra ports, paths, credentials and the
+  `null` origin.
+- **Why `SITE_NAME`.** Functions only get `URL`, `SITE_NAME` and `SITE_ID` at runtime;
+  `DEPLOY_PRIME_URL` and `DEPLOY_URL` are build-time only.
+- **Requests with no Origin header are allowed.** Non-browser clients can omit or forge it,
+  so the check only stops other websites using a visitor's browser.
+
+### Environment variables (names only — values live in Netlify or a gitignored `.env`)
+
+| Variable | Local dev (`.env`) | Deploy preview | Production | Notes |
+|---|---|---|---|---|
+| `CONTACT_SCRIPT_URL` | TEST deployment `/exec` | TEST deployment | new **production v2** deployment | Functions scope; must be a `script.google.com/macros/s/…/exec` URL (localhost allowed only under `netlify dev`) |
+| `CONTACT_SHARED_SECRET` | TEST secret | TEST secret | production secret (different) | Mark secret; must equal that script's `SHARED_SECRET` |
+| `NEWSLETTER_ENABLED` | unset / `false` | `true` only while testing | `false` until launch | Runtime switch |
+| `MAILERLITE_API_KEY` | unset | test only | set at launch | Mark secret; full account access |
+| `MAILERLITE_GROUP_ID` | unset | test only | set at launch | BrightPath Updates group |
+| `VITE_NEWSLETTER_ENABLED` | optional for review | `true` only while testing | `false` until launch | **Build time**; needs a rebuild |
+| `WORDPRESS_API_URL`, `WORDPRESS_APP_PASSWORD` | from the linked site | existing | existing | Unchanged |
+
+- **Placeholders** are in `.env.example`.
+- **Never** prefix a credential with `VITE_`: those values are compiled into public
+  JavaScript.
+- **Set preview values for the `deploy-preview` context only**, so production can never pick
+  up TEST values.
+- **The repo is public.** Before any commit, scan for the TEST secret and deployment ID.
+
+### Abuse-protection limits (read before public activation)
+
+- **Rate limits are per function instance and in memory**: contact 8 and newsletter 5
+  requests per IP per 10 minutes. Netlify runs and recycles several instances, so this is
+  best-effort only.
+- **What actually protects each endpoint:**
+  - contact: the shared secret, validation, the honeypot, and Apps Script deduplication;
+  - newsletter: double opt-in, plus validation and the honeypot.
+- **Remaining risk.** A scripted client can still post junk to the Sheet, or trigger
+  MailerLite confirmation emails to addresses it doesn't own. That could hurt sender
+  reputation.
+- **Before activating the newsletter publicly**, evaluate stronger protection (Netlify rate
+  limiting rules, or a challenge such as Cloudflare Turnstile) as its own decision.
+
+### Content and legal pages (on the feature branch)
+
+- **Official contact details** live in `src/config/contact.ts` (`BUSINESS`): BrightPath Web
+  Studio, LLC, contact@brightpathwebstudio.org, (828) 388-5743, "North Carolina, United
+  States". There's deliberately no street address. Confirmed by the owner on Oct 19, 2026.
+- **The Privacy Policy and Terms** share `src/components/legal/`, on the cream / near-black
+  grounds. This replaced the `bg-stone` grey slab, which put white text on `#9CA5AF` in dark
+  mode.
+- **Terms decisions confirmed by the owner:**
+  - 18+ applies only to entering a service agreement;
+  - the Henderson County, NC venue is kept;
+  - the written agreement or quote governs pricing.
+- **The Privacy Policy discloses:**
+  - the contact form (Google Workspace) and the newsletter (MailerLite);
+  - U.S.-only Analytics, including the time-zone check and its limits;
+  - the Cloudflare `__cf_bm` security cookie on Services page images from the WordPress CMS;
+  - the service providers.
+- **Bump `LAST_UPDATED`** on both legal pages to the real release date.
+- **Contact page refinements** (approved): balanced card spacing; the email field uses the
+  input text colour instead of the gold gradient class; new "Why Choose BrightPath?" copy;
+  response time "one business day" everywhere.
+
 ## Recent Session Work (October 5, 2026) — approved, merged to `main` and deployed
 
 Branch `feature/about-page-refresh` (from `main` at `4d9d80f`); commits `6f54b89` (refresh,
@@ -552,8 +738,19 @@ pixel-identical throughout (maxDelta 0).
   near-duplicate `src/components/portfolio/BrightPathGradientTitle.tsx` used by the
   portfolio/case-study components — it does *not* have the `emphasis` prop. Any site-wide
   rollout has to reconcile both files.
-- **Pre-existing TypeScript error**: `src/pages/ContactPage.tsx:16` — TS2717, conflicting
+- **Pre-existing TypeScript error**: `src/pages/ContactPage.tsx` — TS2717, conflicting
   `gtag` declarations. Predates this work; deliberately not fixed in `7927270`.
+  **Resolved on `feature/newsletter-signup`** (`bb787c1`: the Contact page sends its event
+  through `utils/analytics`). Still present on `main` until that branch merges.
+- **GA4 has recorded nothing since March 2026 on production** (`dataLayer.push(args)` instead
+  of `arguments`, from `468f363`). It's fixed on `feature/newsletter-signup` (`a867fd6`),
+  not yet on `main`. See "Contact form, Analytics and newsletter".
+- **The live contact form can still show "Thank you" when Google fails.** It uses
+  `mode: 'no-cors'`, so it can't read the reply. Contact form v2 (on the feature branch)
+  fixes this. Until it ships, the Sheet and the `contact@` inbox are the source of truth.
+- **The function rate limits are per instance (best-effort)**, and no-Origin requests are
+  allowed. Evaluate stronger abuse protection before the newsletter is activated publicly.
+  See "Abuse-protection limits".
 - **Pre-existing lint**: `netlify/functions/get-case-studies.ts:178` unused `_context`
   (error) and `src/components/ui/GuidingLight.tsx:230` missing hook dependency (warning).
   Both predate this work and were left alone.
@@ -623,7 +820,26 @@ pixel-identical throughout (maxDelta 0).
 - AweStruck case study content corrections
 
 ## Commit History (Recent)
-- `f66aa58` - feat: update services page copy for business-first positioning (current `main`)
+
+**On `feature/newsletter-signup` only (local, not yet pushed or merged):**
+- `b09e6c3` - feat: add MailerLite newsletter signup behind feature flags
+- `bb787c1` - feat: confirm contact form submissions before showing success
+- `a867fd6` - fix: restore Google Analytics with U.S.-only privacy safeguards
+- `e81ffb5` - content: unify contact details and rewrite Privacy Policy and Terms
+
+**On `main`:**
+- `20b331a` - fix: prevent the contact form submitting before the app loads (current
+  `main`; production deploy `6ad7916293e90352aa2b531e`, Oct 20, 2026)
+- `ffd41b6` - fix: stop browser autofill from triggering the contact form honeypot
+  (production deploy `6ad6dfec3fd8b421609a530c`, Oct 20, 2026)
+- `4fbfb88` - docs: record 6a43b8a deploy retry and intermittent prerender failure
+  (production deploy `6ac3fcb1c6dc0d00087d9f74`, Oct 5, 2026)
+- `6a43b8a` - fix: pass fetchpriority as a lowercase attribute (first deploy failed
+  intermittently on verify-prerender; retry of the same commit succeeded)
+- `0f8dae7` - style: unify About section backgrounds on the timeline artwork
+- `6f54b89` - feat: refresh About page and frontend positioning (+ metadata, hidden-hero
+  `<h1>` fix, hero accessibility)
+- `f66aa58` - feat: update services page copy for business-first positioning
 - `3dd1df7` - feat: update homepage copy for business-first positioning
 - `62154f5` / `d2c77e2` / `d5751a3` / `e94c235` - Phases 4 / 3 / 2 / 1 (conversion paths,
   hero + support visibility, portfolio trust evidence, evidence-integrity cleanup)
