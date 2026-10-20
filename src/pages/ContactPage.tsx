@@ -3,6 +3,7 @@ import { Mail, Phone, MapPin } from 'lucide-react';
 import { useAppStore } from '@/store/appStore'; // Import the store
 import BrightPathGradientTitle from '@/components/BrightPathGradientTitle';
 import { PageMeta } from '@/components/PageMeta';
+import { IS_PRERENDER } from '@/utils/isPrerender';
 
 // Define the shape of the form data
 interface FormData {
@@ -367,7 +368,10 @@ const ContactPage: React.FC = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={loading}
+                // Disabled in the prerendered HTML: a form submitted before the
+                // app takes over would reload the page with the visitor's
+                // details in the URL instead of sending them.
+                disabled={loading || IS_PRERENDER}
                 className={`w-full bg-primary hover:bg-yellow-400 text-shadow-md text-slate-800 font-lato font-bold py-3 px-6 rounded-lg transition-all duration-300 transform shadow-lg hover:shadow-xl
                 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-yellow-400 hover:scale-105'}`}
               >
