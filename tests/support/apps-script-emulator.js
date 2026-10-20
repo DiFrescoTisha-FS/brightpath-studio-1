@@ -12,11 +12,15 @@ const CODE_PATH = new URL('../../google-apps-script/contact-form-handler/Code.gs
  * @param {object} [options.faults]  { lockBusy, appendThrows, appendDrops, mailThrows, flushThrows }
  * @param {Array<Array<unknown>>} [options.rows]   pre-existing sheet rows
  * @param {string[]} [options.tabs]                tab names (first is default)
+ * @param {boolean} [options.bound]                 true (default): the project is bound to the
+ *                                                  spreadsheet; false: standalone (no active spreadsheet)
+ * @param {string} [options.spreadsheetId]          ID that SpreadsheetApp.openById() accepts
  */
-export function createAppsScript({ props = {}, faults = {}, rows = [], tabs = ['Sheet1'] } = {}) {
+export function createAppsScript({ props = {}, faults = {}, rows = [], tabs = ['Sheet1'], bound = true, spreadsheetId = 'test-spreadsheet-id' } = {}) {
   const sheets = Object.fromEntries(tabs.map((name, i) => [name, i === 0 ? rows : []]));
   const mails = [];
   const logs = [];
+  const calls = { openById: [] };
 
   const makeSheet = (data) => ({
     getLastRow: () => data.length,
@@ -52,6 +56,11 @@ export function createAppsScript({ props = {}, faults = {}, rows = [], tabs = ['
     },
   });
 
+  const spreadsheet = {
+    getSheets: () => tabs.map((t) => makeSheet(sheets[t])),
+    getSheetByName: (name) => (name in sheets ? makeSheet(sheets[name]) : null),
+  };
+
   const context = vm.createContext({
     console: {
       log: (...a) => logs.push(['log', ...a]),
@@ -70,10 +79,13 @@ export function createAppsScript({ props = {}, faults = {}, rows = [], tabs = ['
       }),
     },
     SpreadsheetApp: {
-      getActiveSpreadsheet: () => ({
-        getSheets: () => tabs.map((t) => makeSheet(sheets[t])),
-        getSheetByName: (name) => (name in sheets ? makeSheet(sheets[name]) : null),
-      }),
+      getActiveSpreadsheet: () => (bound ? spreadsheet : null),
+      openById(id) {
+        calls.openById.push(id);
+        // Apps Script throws (it doesn't return null) for an unknown or inaccessible ID.
+        if (id !== spreadsheetId) throw new Error('Unexpected error while getting the method or property openById on object SpreadsheetApp.');
+        return spreadsheet;
+      },
       flush: () => {
         if (faults.flushThrows) throw new Error('flush failed');
       },
@@ -110,5 +122,6 @@ export function createAppsScript({ props = {}, faults = {}, rows = [], tabs = ['
     mails,
     logs,
     faults,
+    calls,
   };
 }

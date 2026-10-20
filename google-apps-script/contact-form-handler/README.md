@@ -46,7 +46,8 @@ Browser ──POST /api/contact-inquiry──▶ Netlify Function `contact-inqui
 |---|---|
 | `SHARED_SECRET` | 64 random hex characters, e.g. from `openssl rand -hex 32`. Use different values for test and production. |
 | `NOTIFY_TO` | `contact@brightpathwebstudio.org` (once the alias is verified, see step 1) |
-| `SHEET_NAME` | Optional tab name. If set but missing, the request fails rather than writing elsewhere. |
+| `SPREADSHEET_ID` | **Required for a standalone project** (production): the ID in the Sheet's URL, `docs.google.com/spreadsheets/d/<ID>/edit`. Optional for a project bound to the Sheet (the TEST setup), which falls back to that Sheet. Kept as a property so the production ID never appears in this public repo. A wrong or inaccessible ID fails without writing or emailing. |
+| `SHEET_NAME` | Tab name. Optional, but **set it in production** (`Sheet1`) so v2 can never write to the wrong tab. If set but missing, the request fails rather than writing elsewhere. |
 
 Script properties take effect immediately, without a redeploy.
 
@@ -90,24 +91,41 @@ add a Gmail filter or use the primary address in `NOTIFY_TO`.
    - Restore the properties afterwards.
 
 ### 3. Production rollout (each step needs your approval)
-1. Open the **production** script, "Contact Form Handler" in the "Contact Form Submissions"
-   Sheet. In the Sheet, add `Submission ID` and `Notification` to E1/F1 if a header row exists.
-2. Paste the new `Code.gs`, save, and set the production script properties (a new secret).
-   Saving doesn't change the live Version 1 deployment: deployments run the version they were
-   created with.
-3. **Deploy → New deployment → Web app** (Execute as Me, Anyone), authorize, and copy the new
-   `/exec` URL. **Don't edit the existing deployment.** Its URL is what the live site posts to,
-   and v2 would reject those posts, since they don't carry the secret.
-4. Set `CONTACT_SCRIPT_URL` and `CONTACT_SHARED_SECRET` in Netlify. Use the test deployment for
-   deploy previews first, then the production deployment for production.
-5. Merge and deploy the site. Send one real test inquiry and confirm the row and the email.
-6. After a day or two with no problems, **archive Version 1** under Deploy → Manage deployments.
-   Its URL is public in older site code and git history.
+Production v2 runs in its **own standalone Apps Script project** ("BrightPath Contact Form —
+Production v2"). The original project bound to the Sheet, and its active deployment, stay
+**completely untouched** until after the release has been watched; that deployment is what the
+live site still posts to.
 
-**Why not keep the existing URL?** You could publish v2 as a new version of the existing
-deployment, but from that moment the live site's posts would be rejected until the new site
-went live. That would be a gap during which inquiries fail. A new deployment avoids the gap,
-and its URL only ever lives server-side in Netlify, so visitors never see it change.
+1. In the "Contact Form Submissions" Sheet, add `Submission ID` and `Notification` to E1/F1 of
+   the submissions tab (`Sheet1`). v1 writes columns A–D only, so this doesn't affect it.
+2. In the standalone project, paste this `Code.gs` and save. Then set the Script properties:
+   - a **new** production `SHARED_SECRET`;
+   - `NOTIFY_TO`;
+   - `SPREADSHEET_ID` (the production Sheet's ID);
+   - `SHEET_NAME` = `Sheet1`.
+3. **Deploy → New deployment → Web app** (Execute as Me, Who has access: Anyone). Authorize,
+   then copy the `/exec` URL.
+   - A standalone script that opens a spreadsheet by ID asks for permission to "see, edit,
+     create and delete all your Google Sheets spreadsheets". A bound script's prompt names its
+     own Sheet, but it uses the same Sheets permission, so this isn't a wider permission.
+   - The account it runs as must be able to edit the production Sheet.
+4. Verify the new deployment without writing anything:
+   - a GET returns `method_not_allowed`;
+   - a POST with a wrong secret returns `unauthorized`;
+   - a POST with the correct secret but an incomplete request returns `invalid_request`.
+5. Optional, with approval: one clearly labelled test submission straight to the new
+   deployment. Confirm the row (Submission ID, Notification = `sent`) and the email, then
+   delete the row.
+6. Set `CONTACT_SCRIPT_URL` and `CONTACT_SHARED_SECRET` in Netlify for the **Production context
+   only**, marked secret. The test deployment stays the deploy-preview value.
+7. Merge and deploy the site. Send one real test inquiry and confirm the row and the email.
+8. After 48 hours with no problems, **archive the original project's deployment** under Deploy →
+   Manage deployments. Its URL is public in older site code and git history.
+
+**Why a new deployment, not a new version of the existing one?** v2 rejects requests without
+the secret. Publishing it into the deployment the live site posts to would break the live form
+until the new site went live. A separate deployment avoids that gap, and its URL only ever lives
+server-side in Netlify, so visitors never see it change.
 
 ### Rollback
 Until Version 1 is archived, roll back by republishing the previous Netlify deploy. The old site

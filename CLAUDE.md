@@ -419,7 +419,10 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
   text and shows `contact@` and the phone number as alternatives. A retry reuses the
   submission ID; editing the message gets a new one.
 - **Logs** carry submission IDs and outcome codes only, never names, emails or messages.
-- **Apps Script properties**: `SHARED_SECRET`, `NOTIFY_TO`, and optionally `SHEET_NAME`.
+- **Apps Script properties**: `SHARED_SECRET`, `NOTIFY_TO`, `SPREADSHEET_ID` (required for
+  the standalone production project; it's kept out of the repo), and `SHEET_NAME`
+  (production: `Sheet1`). Production v2 runs in its own standalone project; the original
+  project bound to the Sheet stays untouched.
   Requests without the shared secret are refused, so the public `/exec` URL can't be used
   to spam the Sheet.
 - **Rule: test before replacing the working integration.** The live form still posts to the

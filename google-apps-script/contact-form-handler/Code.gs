@@ -1,7 +1,8 @@
 /**
  * BrightPath Web Studio — Contact Form Handler (v2)
  *
- * Container-bound to the "Contact Form Submissions" Google Sheet. Called only
+ * Works as a standalone project (production: set SPREADSHEET_ID) or bound to
+ * the Sheet (the TEST project). Called only
  * by the Netlify Function `contact-inquiry`, never directly by browsers. That
  * function decides what the visitor sees from the JSON this returns, so every
  * path returns structured JSON and success is reported only after the row has
@@ -12,6 +13,11 @@
  *                  CONTACT_SHARED_SECRET in Netlify. Requests without it are
  *                  refused, so the public /exec URL can't be used to spam the Sheet.
  *   NOTIFY_TO      required — notification recipient(s), comma-separated.
+ *   SPREADSHEET_ID required for a standalone project — the ID from the Sheet's
+ *                  URL (docs.google.com/spreadsheets/d/<ID>/edit). Optional for
+ *                  a project bound to the Sheet, which falls back to that Sheet.
+ *                  Kept out of the code so the production ID never reaches the
+ *                  public repository.
  *   SHEET_NAME     optional — tab to write to. If set and missing, the request
  *                  fails rather than writing somewhere unexpected. Defaults to
  *                  the first tab.
@@ -37,8 +43,9 @@ function doPost(e) {
     var props = PropertiesService.getScriptProperties();
     var secret = props.getProperty('SHARED_SECRET');
     var notifyTo = props.getProperty('NOTIFY_TO');
-    if (!secret || !notifyTo) {
-      console.error('contact: SHARED_SECRET or NOTIFY_TO script property is missing');
+    var hasSpreadsheet = Boolean(props.getProperty('SPREADSHEET_ID')) || Boolean(SpreadsheetApp.getActiveSpreadsheet());
+    if (!secret || !notifyTo || !hasSpreadsheet) {
+      console.error('contact: SHARED_SECRET, NOTIFY_TO or SPREADSHEET_ID script property is missing');
       return respond_({ ok: false, code: 'not_configured' });
     }
 
@@ -134,7 +141,11 @@ function parseBody_(e) {
 }
 
 function getSheet_(props) {
-  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  // A standalone project names its spreadsheet explicitly; a project bound to
+  // the Sheet can fall back to it. An unknown or inaccessible ID throws, which
+  // doPost reports as server_error without writing or emailing.
+  var spreadsheetId = props.getProperty('SPREADSHEET_ID');
+  var spreadsheet = spreadsheetId ? SpreadsheetApp.openById(spreadsheetId) : SpreadsheetApp.getActiveSpreadsheet();
   var name = props.getProperty('SHEET_NAME');
   if (!name) return spreadsheet.getSheets()[0];
   var sheet = spreadsheet.getSheetByName(name);

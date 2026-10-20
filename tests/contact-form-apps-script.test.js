@@ -119,6 +119,66 @@ test('writes to the configured tab when it exists', () => {
   assert.equal(app.sheet('Notes').length, 0);
 });
 
+// Standalone production project: no bound spreadsheet, so SPREADSHEET_ID names it.
+const STANDALONE = { bound: false, spreadsheetId: 'prod-sheet-id-123', tabs: ['Sheet1'] };
+
+test('standalone project with SPREADSHEET_ID saves to that spreadsheet and notifies', () => {
+  const app = createAppsScript({ ...STANDALONE, props: { ...PROPS, SPREADSHEET_ID: 'prod-sheet-id-123', SHEET_NAME: 'Sheet1' } });
+  const { body } = app.doPost(request());
+  assert.deepEqual(body, { ok: true, code: 'saved', submissionId: ID, notification: 'sent' });
+  assert.deepEqual(app.sheet('Sheet1')[0].slice(1), [VISITOR.fullName, VISITOR.email, VISITOR.message, ID, 'sent']);
+  assert.equal(app.mails.length, 1);
+  assert.ok(app.calls.openById.every((id) => id === 'prod-sheet-id-123'));
+});
+
+test('standalone project keeps duplicate protection', () => {
+  const app = createAppsScript({ ...STANDALONE, props: { ...PROPS, SPREADSHEET_ID: 'prod-sheet-id-123', SHEET_NAME: 'Sheet1' } });
+  app.doPost(request());
+  assert.deepEqual(app.doPost(request()).body, { ok: true, code: 'duplicate', submissionId: ID, notification: 'sent' });
+  assert.equal(app.sheet('Sheet1').length, 1);
+  assert.equal(app.mails.length, 1);
+});
+
+test('standalone project with existing v1 rows and new E/F headers appends below them', () => {
+  const header = ['Timestamp', 'Full Name', 'Email', 'Message', 'Submission ID', 'Notification'];
+  const v1Row = [new Date(), 'Earlier Visitor', 'earlier@example.com', 'Older v1 inquiry'];
+  const app = createAppsScript({ ...STANDALONE, rows: [header, v1Row], props: { ...PROPS, SPREADSHEET_ID: 'prod-sheet-id-123', SHEET_NAME: 'Sheet1' } });
+  assert.equal(app.doPost(request()).body.code, 'saved');
+  const rows = app.sheet('Sheet1');
+  assert.equal(rows.length, 3);
+  assert.deepEqual(rows[0], header);                 // header untouched
+  assert.deepEqual(rows[1].slice(1), v1Row.slice(1)); // v1 row untouched
+  assert.equal(rows[2][4], ID);
+});
+
+test('standalone project without SPREADSHEET_ID is not_configured: no write, no email', () => {
+  const app = createAppsScript({ ...STANDALONE, props: { ...PROPS, SHEET_NAME: 'Sheet1' } });
+  assert.deepEqual(app.doPost(request()).body, { ok: false, code: 'not_configured' });
+  assert.equal(app.sheet('Sheet1').length, 0);
+  assert.equal(app.mails.length, 0);
+});
+
+test('a wrong or inaccessible SPREADSHEET_ID fails without writing, emailing or leaking details', () => {
+  const app = createAppsScript({ ...STANDALONE, props: { ...PROPS, SPREADSHEET_ID: 'wrong-id', SHEET_NAME: 'Sheet1' } });
+  const { body } = app.doPost(request());
+  assert.deepEqual(body, { ok: false, code: 'server_error' });
+  assert.equal(app.sheet('Sheet1').length, 0);
+  assert.equal(app.mails.length, 0);
+  assert.ok(!JSON.stringify(body).includes('openById'));
+});
+
+test('SPREADSHEET_ID takes precedence even in a bound project', () => {
+  const app = createAppsScript({ spreadsheetId: 'explicit-id', props: { ...PROPS, SPREADSHEET_ID: 'explicit-id' } });
+  assert.equal(app.doPost(request()).body.code, 'saved');
+  assert.ok(app.calls.openById.includes('explicit-id'));
+});
+
+test('bound project without SPREADSHEET_ID still works (TEST setup unchanged)', () => {
+  const app = createAppsScript({ props: PROPS });
+  assert.equal(app.doPost(request()).body.code, 'saved');
+  assert.equal(app.calls.openById.length, 0);
+});
+
 test('a spreadsheet write error is reported as a failure, with no email', () => {
   const app = createAppsScript({ props: PROPS, faults: { appendThrows: true } });
   const { body } = app.doPost(request());
