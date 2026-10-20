@@ -1346,6 +1346,213 @@ html.light .site-footer::before {
 }
 
 /* ====================================
+   NEWSLETTER SIGNUP (footer)
+   ------------------------------------
+   Sits at the top of `.site-footer`, so it inherits that ground in both
+   themes. Everything reuses existing values: cream/midnight text tints from
+   `.services-body`, the theme's single gold (via --primary) for the button
+   fill and focus rings, and the Tailwind reds the site already uses for
+   errors — red-400 on dark, red-700 on cream (red-500 would fail there).
+   The button reuses `.studio-cta--primary`, filled the way the About hero
+   fills it, so it reads as the same primary CTA as the rest of the site.
+   ==================================== */
+.newsletter {
+  max-width: 46rem;
+  margin: 0 auto 3rem;
+  padding-bottom: 3rem;
+  position: relative;
+}
+
+/* Same faded hairline as the top of the footer, separating the signup from
+   the brand block below it. */
+.newsletter::after {
+  content: "";
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(to right,
+    rgba(242, 201, 76, 0) 0%,
+    rgba(242, 201, 76, 0.22) 24%,
+    rgba(242, 201, 76, 0.22) 76%,
+    rgba(242, 201, 76, 0) 100%);
+}
+
+html.light .newsletter::after {
+  background: linear-gradient(to right,
+    rgba(132, 99, 0, 0) 0%,
+    rgba(132, 99, 0, 0.24) 24%,
+    rgba(132, 99, 0, 0.24) 76%,
+    rgba(132, 99, 0, 0) 100%);
+}
+
+.newsletter__form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  text-align: left;
+}
+
+@media (min-width: 768px) {
+  .newsletter__form {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) auto;
+    align-items: end;
+  }
+}
+
+.newsletter__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.newsletter__label {
+  font-family: Lato, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: rgba(245, 240, 232, 0.9);
+}
+
+.newsletter__optional {
+  font-weight: 400;
+  color: rgba(245, 240, 232, 0.74);
+}
+
+html.light .newsletter__label { color: rgba(26, 34, 56, 0.9); }
+html.light .newsletter__optional { color: rgba(26, 34, 56, 0.74); }
+
+.newsletter__input {
+  width: 100%;
+  height: 3.25rem;
+  padding: 0 1rem;
+  border: 1px solid rgba(245, 240, 232, 0.5);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #f5f0e8;
+  font-family: Lato, sans-serif;
+  font-size: 1rem; /* 16px keeps iOS Safari from zooming on focus */
+  transition: border-color 0.2s ease;
+}
+
+.newsletter__input:hover { border-color: rgba(245, 240, 232, 0.72); }
+
+.newsletter__input:focus-visible {
+  outline: 2px solid #f2c94c;
+  outline-offset: 2px;
+  border-color: #f2c94c;
+}
+
+.newsletter__input[aria-invalid="true"] { border-color: #f87171; }
+
+html.light .newsletter__input {
+  border-color: rgba(26, 34, 56, 0.55);
+  background: #ffffff;
+  color: #1a2238;
+}
+
+html.light .newsletter__input:hover { border-color: rgba(26, 34, 56, 0.8); }
+
+html.light .newsletter__input:focus-visible {
+  outline-color: #846300;
+  border-color: #846300;
+}
+
+html.light .newsletter__input[aria-invalid="true"] { border-color: #b91c1c; }
+
+/* Filled with the theme's gold and its approved label colour, as the About
+   hero does: 10.13:1 dark, 5.18:1 light. Repeated under html.light only to
+   outrank the outlined light-theme `.studio-cta--primary` rules. */
+.newsletter__form .newsletter__submit,
+html.light .newsletter__form .newsletter__submit {
+  justify-content: center;
+  height: 3.25rem;
+  padding: 0 1.75rem;
+  background: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.newsletter__form .newsletter__submit:hover,
+html.light .newsletter__form .newsletter__submit:hover {
+  background: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  filter: brightness(0.88);
+}
+
+.newsletter__form .newsletter__submit:disabled {
+  cursor: progress;
+  filter: none;
+  opacity: 0.75;
+}
+
+.newsletter__error {
+  margin-top: 0.25rem;
+  color: #f87171;
+  text-align: left;
+}
+
+.newsletter__error--field {
+  grid-column: 1 / -1;
+  margin-top: 0;
+}
+
+html.light .newsletter__error { color: #b91c1c; }
+
+.newsletter__success {
+  padding: 1rem 1.25rem;
+  border-left: 2px solid hsl(var(--primary));
+  color: #f5f0e8;
+  text-align: left;
+}
+
+.newsletter__success:focus { outline: none; }
+.newsletter__success:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+html.light .newsletter__success { color: #1a2238; }
+
+.newsletter__privacy {
+  margin-top: 1rem;
+  color: rgba(245, 240, 232, 0.74);
+}
+
+html.light .newsletter__privacy { color: rgba(26, 34, 56, 0.74); }
+
+.newsletter__privacy a,
+.newsletter__error a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.newsletter__privacy a { color: hsl(var(--primary)); }
+
+.newsletter__privacy a:focus-visible,
+.newsletter__error a:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+/* Honeypot: off-screen rather than display:none, which some bots skip. */
+.newsletter__trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .newsletter__input { transition: none; }
+}
+
+/* ====================================
    BRAND GOLD EMPHASIS
    ------------------------------------
    One flat, theme-aware gold for emphasised words, replacing the legacy

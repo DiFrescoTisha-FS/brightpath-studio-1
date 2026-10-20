@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import type { Theme } from '@/store/appStore';
 import BrightPathGradientTitle from '../BrightPathGradientTitle';
 import { cloudinaryAssets } from '@/data/cloudinaryAssets';
+import NewsletterSignup, { NEWSLETTER_ENABLED } from '../NewsletterSignup';
 import { BUSINESS } from '@/config/contact';
 
 // The Footer component now includes the "Inspired" section content
@@ -26,6 +27,8 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
   return (
     <footer className={`site-footer py-12 ${footerClasses}`}>
       <div className="container mx-auto px-4 text-center">
+        {NEWSLETTER_ENABLED && <NewsletterSignup />}
+
         {/* === START OF THE NEW CONSOLIDATED SECTION === */}
         <BrightPathGradientTitle
           as="h3"
