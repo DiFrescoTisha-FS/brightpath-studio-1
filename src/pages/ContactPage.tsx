@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import { useAppStore } from '@/store/appStore'; // Import the store
 import BrightPathGradientTitle from '@/components/BrightPathGradientTitle';
 import { PageMeta } from '@/components/PageMeta';
+import { BUSINESS } from '@/config/contact';
+import { analyticsSafeUrl, loadAnalytics, trackEvent } from '@/utils/analytics';
 import { IS_PRERENDER } from '@/utils/isPrerender';
 
 // Define the shape of the form data
@@ -12,19 +14,31 @@ interface FormData {
   message: string;
 }
 
-declare global {
-  interface Window {
-    gtag?: (
-      command: 'event',
-      eventName: string,
-      params?: Record<string, string>
-    ) => void;
-  }
-}
+// Submissions go to the `contact-inquiry` Netlify Function, which saves them
+// through the Google Apps Script and only reports success once the script
+// confirms the row was written. The script URL and secret stay server-side.
+const CONTACT_ENDPOINT = `${import.meta.env.VITE_API_URL || ''}/api/contact-inquiry`;
+const SUBMIT_TIMEOUT_MS = 20000;
 
-// Google Apps Script endpoint for contact form submissions
-// Saves to Google Sheet + sends email notification to Google Workspace
-const CONTACT_FORM_URL = 'https://script.google.com/macros/s/AKfycbyW1GDPbHkKNiwAM5iFnydDKq8y76bz3Gk3t9BoNGL7A3KqDmHZ_J-6AS3XFKuY2dgm/exec';
+type SubmitError = 'invalid' | 'rate_limited' | 'timeout' | 'failed' | 'unavailable';
+
+const ERROR_MESSAGES: Record<SubmitError, string> = {
+  invalid: 'Please check that your name, email address, and message are filled in correctly.',
+  rate_limited: 'There have been too many attempts in a short time. Please wait a few minutes and try again.',
+  timeout: 'We didn’t get confirmation in time. Your message may still have reached us — trying again won’t send a duplicate.',
+  failed: 'We couldn’t confirm your message was received. Your message is still here — please try again.',
+  unavailable: 'Our contact form isn’t available right now. Your message is still here.',
+};
+
+// One ID per distinct message. Resending the same content reuses it, so the
+// server can recognise a retry and won't save the inquiry twice; editing the
+// message after a failure gets a fresh ID so the edit is never discarded.
+const newSubmissionId = (): string => {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+};
 
 
 // Background images by theme and device
@@ -48,7 +62,9 @@ const ContactPage: React.FC = () => {
   });
   const [honeypot, setHoneypot] = useState(''); // Spam protection - bots fill this, humans don't see it
   const [loading, setLoading] = useState<boolean>(false);
-  const [status, setStatus] = useState<'success' | 'error' | null>(null);
+  const [status, setStatus] = useState<'success' | SubmitError | null>(null);
+  const inFlight = useRef(false);
+  const submission = useRef<{ key: string; id: string } | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -60,52 +76,62 @@ const ContactPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // A ref, not just state: a fast double-click can fire twice before React
+    // re-renders the disabled button.
+    if (inFlight.current) return;
+    inFlight.current = true;
     setLoading(true);
-    setStatus(null); // Reset status on new submission
+    setStatus(null);
 
-    // Honeypot spam check - if filled, a bot submitted the form
-    // Silently "succeed" without actually sending to avoid tipping off the bot
-    if (honeypot) {
-      setTimeout(() => {
-        setStatus('success');
-        setFormData({ fullName: '', email: '', message: '' });
-        setLoading(false);
-      }, 1000); // Fake delay to seem real
-      return;
-    }
+    const fields = {
+      fullName: formData.fullName.trim(),
+      email: formData.email.trim(),
+      message: formData.message.trim(),
+    };
+    const key = JSON.stringify(fields);
+    if (submission.current?.key !== key) submission.current = { key, id: newSubmissionId() };
 
+    let outcome: 'success' | SubmitError = 'failed';
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), SUBMIT_TIMEOUT_MS);
     try {
-      // Send to Google Apps Script using fetch with no-cors mode
-      // This avoids CORS preflight issues with Google Apps Script
-      await fetch(CONTACT_FORM_URL, {
+      const response = await fetch(CONTACT_ENDPOINT, {
         method: 'POST',
-        mode: 'no-cors', // Required for Google Apps Script
-        headers: {
-          'Content-Type': 'text/plain', // Avoids preflight
-        },
-        body: JSON.stringify(formData),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...fields, bp_contact_extra: honeypot, submissionId: submission.current.id }),
+        signal: controller.signal,
       });
-
-      // With no-cors mode, we can't read the response, so we assume success
-      // if no network error was thrown. The Apps Script logs to Sheet + sends email.
-
-      // Track in Google Analytics
-      if (typeof window !== 'undefined' && window.gtag) {
-        window.gtag('event', 'contact_submit', {
-          form_name: 'contact_form',
-          page_location: window.location.href,
-          page_title: document.title
-        });
+      const result = await response.json().catch(() => null);
+      // Success only when the server confirms this exact submission was saved.
+      if (response.ok && result?.status === 'received' && result.submissionId === submission.current.id) {
+        outcome = 'success';
+      } else if (result && typeof result.status === 'string' && result.status in ERROR_MESSAGES) {
+        outcome = result.status as SubmitError;
       }
-
-      setStatus('success');
-      setFormData({ fullName: '', email: '', message: '' }); // Clear the form
     } catch (error) {
-      console.error('Form submission error:', error);
-      setStatus('error');
+      outcome = error instanceof DOMException && error.name === 'AbortError' ? 'timeout' : 'failed';
     } finally {
-      setLoading(false);
+      window.clearTimeout(timer);
     }
+
+    if (outcome === 'success') {
+      // Track in Google Analytics — confirmed submissions only. Waits for
+      // Analytics to finish loading (or be refused for this region) so a quick
+      // submission isn't dropped; sends nothing where Analytics isn't allowed.
+      void loadAnalytics().then(() => {
+        trackEvent('contact_submit', {
+          form_name: 'contact_form',
+          page_location: analyticsSafeUrl(),
+          page_title: document.title,
+        });
+      });
+      setFormData({ fullName: '', email: '', message: '' }); // Clear the form
+      submission.current = null;
+    }
+    // On any failure the visitor's name, email and message stay in the form.
+    setStatus(outcome);
+    setLoading(false);
+    inFlight.current = false;
   };
 
   const themeClasses = {
@@ -171,7 +197,7 @@ const ContactPage: React.FC = () => {
 
           {/* Left Column - Contact Info */}
           <div className="flex flex-col gap-8">
-            <div className={`${themeClasses.cardBg} p-8 rounded-lg border ${themeClasses.cardBorder} flex-1`}>
+            <div className={`${themeClasses.cardBg} p-8 rounded-lg border ${themeClasses.cardBorder} flex-1 flex flex-col`}>
               <BrightPathGradientTitle as="h2" className="gradient-text-dark text-2xl font-poppins font-semibold mb-6"
                 textColor="text-neutral-800 dark:gray-200"
                 gradientWords={["Touch"]}
@@ -179,7 +205,11 @@ const ContactPage: React.FC = () => {
                 Get In Touch
               </BrightPathGradientTitle>
 
-              <div className="space-y-6">
+              {/* When this card stretches to match the form beside it, the
+                  extra height is shared between the items rather than left
+                  as a gap under the last one. Stacked on mobile it doesn't
+                  stretch, so the spacing stays at gap-6. */}
+              <div className="flex flex-1 flex-col justify-between gap-6">
                 {/* Business Name */}
                 <div className="flex items-center space-x-4">
                   <img
@@ -193,7 +223,7 @@ const ContactPage: React.FC = () => {
                       textColor="text-neutral-800"
                       gradientWords={["BrightPath"]}
                     >
-                      BrightPath Web Studio, LLC
+                      {BUSINESS.legalName}
                     </BrightPathGradientTitle>
                     <p className={`font-lato ${theme === 'dark' ? 'text-gray-700' : 'text-gray-700'}`}>
                       Your beacon in the digital landscape
@@ -209,11 +239,10 @@ const ContactPage: React.FC = () => {
                       as="h3"
                       className="font-poppins font-semibold text-lg mb-1"
                     >
-                      Address
+                      Location
                     </BrightPathGradientTitle>
                     <p className={`font-lato ${theme === 'dark' ? 'text-gray-700' : 'text-gray-700'}`}>
-                      129 Maybin Rd.<br />
-                      Zirconia, NC 28790
+                      {BUSINESS.location}
                     </p>
                   </div>
                 </div>
@@ -226,7 +255,7 @@ const ContactPage: React.FC = () => {
                       Phone
                     </BrightPathGradientTitle>
                     <p className={`font-lato ${theme === 'dark' ? 'text-gray-700' : 'text-gray-700'}`}>
-                      (704) 453-3973
+                      <a href={BUSINESS.phoneHref} className="hover:underline underline-offset-2">{BUSINESS.phoneDisplay}</a>
                     </p>
                   </div>
                 </div>
@@ -239,7 +268,7 @@ const ContactPage: React.FC = () => {
                       Email
                     </BrightPathGradientTitle>
                     <p className={`font-lato ${theme === 'dark' ? 'text-gray-700' : 'text-gray-700'}`}>
-                      tishdifresco@brightpathstudio.com
+                      <a href={`mailto:${BUSINESS.email}`} className="hover:underline underline-offset-2 break-words">{BUSINESS.email}</a>
                     </p>
                   </div>
                 </div>
@@ -252,8 +281,8 @@ const ContactPage: React.FC = () => {
                 Why Choose BrightPath?
               </BrightPathGradientTitle>
               <p className={`font-lato text-sm leading-relaxed ${themeClasses.textMuted}`}>
-                We're not just another web agency. We're your strategic partner in navigating the digital landscape,
-                providing clear direction and brilliant solutions that help your business shine bright online.
+                We don’t just build websites. We help businesses create better online experiences that attract
+                customers, build trust, and support real business goals.
               </p>
             </div>
           </div>
@@ -305,6 +334,8 @@ const ContactPage: React.FC = () => {
                   value={formData.fullName}
                   onChange={handleInputChange}
                   required
+                  maxLength={200}
+                  autoComplete="name"
                   className={`w-full px-4 py-3 ${themeClasses.inputBg} border ${themeClasses.inputBorder} rounded-lg ${themeClasses.inputText} font-lato ${themeClasses.inputPlaceholder} focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors`}
                   placeholder="Enter your full name"
                 />
@@ -327,7 +358,9 @@ const ContactPage: React.FC = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
-                  className={`w-full px-4 py-3 ${themeClasses.inputBg} border ${themeClasses.inputBorder} rounded-lg ${themeClasses.text} font-lato ${themeClasses.inputPlaceholder} focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors`}
+                  maxLength={254}
+                  autoComplete="email"
+                  className={`w-full px-4 py-3 ${themeClasses.inputBg} border ${themeClasses.inputBorder} rounded-lg ${themeClasses.inputText} font-lato ${themeClasses.inputPlaceholder} focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors`}
                   placeholder="Enter your email address"
                 />
               </div>
@@ -348,6 +381,7 @@ const ContactPage: React.FC = () => {
                   value={formData.message}
                   onChange={handleInputChange}
                   required
+                  maxLength={5000}
                   rows={6}
                   className={`w-full px-4 py-3 ${themeClasses.inputBg} border ${themeClasses.inputBorder} rounded-lg ${themeClasses.inputText} font-lato ${themeClasses.inputPlaceholder} focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors resize-vertical`}
                   placeholder="Tell us about your project and how we can help illuminate your path to success..."
@@ -358,12 +392,25 @@ const ContactPage: React.FC = () => {
               {loading && (
                 <div className="text-center text-gold font-lato">Sending message...</div>
               )}
-              {status === 'success' && (
-                <div className="text-center text-green-500 font-lato">Thank you! Your message has been sent successfully. We typically respond within 24 hours.</div>
-              )}
-              {status === 'error' && (
-                <div className="text-center text-red-500 font-lato">An error occurred. Please try again later.</div>
-              )}
+              {/* Live regions stay mounted so screen readers announce the
+                  outcome, but take no space until there's a message. */}
+              <div className={status ? 'space-y-2' : 'sr-only'}>
+                <div role="status">
+                  {status === 'success' && (
+                    <p className="text-center text-green-800 font-lato">Thank you! Your message has been sent successfully. We typically respond within one business day.</p>
+                  )}
+                </div>
+                <div role="alert">
+                  {status && status !== 'success' && (
+                    <p className="text-center text-red-700 font-lato">
+                      {ERROR_MESSAGES[status]} You can also email{' '}
+                      <a href={`mailto:${BUSINESS.email}`} className="underline underline-offset-2 font-semibold break-words">{BUSINESS.email}</a>
+                      {' '}or call{' '}
+                      <a href={BUSINESS.phoneHref} className="underline underline-offset-2 font-semibold whitespace-nowrap">{BUSINESS.phoneDisplay}</a>.
+                    </p>
+                  )}
+                </div>
+              </div>
 
               {/* Submit Button */}
               <button
@@ -381,8 +428,8 @@ const ContactPage: React.FC = () => {
 
             {/* Form Footer */}
             <div className={`mt-6 pt-6 border-t ${themeClasses.cardBorder}`}>
-              <p className={`font-lato text-sm text-center ${themeClasses.textMuted}`}>
-                We typically respond within 24 hours. Let's start building something brilliant together!
+              <p className="font-lato text-sm text-center text-gray-700">
+                We typically respond within one business day. Let's start building something brilliant together!
               </p>
             </div>
           </div>

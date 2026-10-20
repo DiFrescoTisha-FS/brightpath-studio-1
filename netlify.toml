@@ -33,6 +33,11 @@
   to = "/.netlify/functions/get-case-studies"
   status = 200
 
+[[redirects]]
+  from = "/api/contact-inquiry"
+  to = "/.netlify/functions/contact-inquiry"
+  status = 200
+
 # SPA fallback for every route without its own prerendered HTML — /services
 # and /reviews (both load live data from the functions above), plus any
 # unknown URL. app.html is a copy of the built shell with an empty #root,
