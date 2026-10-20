@@ -266,17 +266,24 @@ const ContactPage: React.FC = () => {
             </BrightPathGradientTitle>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Honeypot field - hidden from humans, bots will fill it */}
+              {/* Honeypot field - hidden from humans, bots will fill it.
+                  Named so browser autofill and password managers don't
+                  recognise it: as "website" it was being autofilled, which
+                  made real messages look like spam and silently dropped them. */}
               <div className="absolute -left-[9999px]" aria-hidden="true">
-                <label htmlFor="website">Website</label>
+                <label htmlFor="bp_contact_extra">Leave this field empty</label>
                 <input
                   type="text"
-                  id="website"
-                  name="website"
+                  id="bp_contact_extra"
+                  name="bp_contact_extra"
                   value={honeypot}
                   onChange={(e) => setHoneypot(e.target.value)}
                   tabIndex={-1}
                   autoComplete="off"
+                  data-1p-ignore="true"
+                  data-lpignore="true"
+                  data-bwignore="true"
+                  data-form-type="other"
                 />
               </div>
 
