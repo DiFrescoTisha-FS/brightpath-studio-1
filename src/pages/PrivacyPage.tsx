@@ -5,7 +5,7 @@ import { BUSINESS } from '@/config/contact';
 
 // Update LAST_UPDATED whenever the policy text changes, and set it to the date
 // the change actually goes live.
-const LAST_UPDATED = 'October 19, 2026';
+const LAST_UPDATED = 'October 21, 2026';
 
 const PrivacyPage = () => {
   return (
