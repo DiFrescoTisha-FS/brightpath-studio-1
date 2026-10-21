@@ -471,8 +471,19 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
 - **Double opt-in.** API signups rely on MailerLite's account-level "Double opt-in for API
   and integrations" setting, which is enabled. The function must **never send `status`**:
   `status: 'active'` skips confirmation.
-- **Not yet tested against real MailerLite.** Follow the checklist in
-  `NEWSLETTER-SETUP.md`.
+- **Launch hardening on PR #23** (`feature/newsletter-launch-hardening`, not yet merged): the
+  function looks the address up first and **never writes to an address MailerLite already
+  knows** (any status); every accepted signup gets the same reply (no enumeration); Origin
+  is required; signups under 3 s after the form appeared are ignored (the form waits out the
+  rest, so people are never refused). Unsubscribed or unconfirmed people need manual help to
+  rejoin — an accepted trade-off.
+- **Verified end to end on Deploy Preview #23 (Oct 21, 2026)** with a TEST group and
+  Deploy-Preview-only variables: new address with a first name → confirmation email →
+  Active, name saved; known address → untouched. MailerLite records subscription date,
+  signup IP, opt-in IP and opt-in date. Remaining tests, launch steps and the Privacy Policy
+  wording still to update are in `NEWSLETTER-SETUP.md`.
+- **Deploy-preview function logs aren't visible** in Netlify's dashboard; check outcomes in
+  MailerLite. The function logs nothing on a successful creation.
 - **Styling** reuses existing values only: `.studio-cta--primary` filled as on the About hero,
   `.services-body` tints, theme gold via `--primary`, and site reds `red-400` / `red-700`.
 

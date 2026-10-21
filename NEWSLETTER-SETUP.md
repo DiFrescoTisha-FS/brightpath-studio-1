@@ -1,9 +1,10 @@
 # The BrightPath Update (MailerLite) — Setup and Launch
 
-**Status:** On `main` since `aa1bec5`, **off by default**. Nothing appears on the live site
-and the function refuses all signups until the flags below are set. Launch hardening (no
-profile overwrites, no enumeration, tests) is on `feature/newsletter-launch-hardening`.
-**Not yet verified against live MailerLite.** No real subscriber has been created.
+**Status:** **Off in production.** Nothing appears on the live site and the production function
+refuses all signups. Launch hardening (no profile overwrites, no enumeration, required Origin,
+minimum submission time, tests) is on `feature/newsletter-launch-hardening` (PR #23, not yet
+merged). **Verified end to end against live MailerLite on a Deploy Preview (Oct 21, 2026)** —
+see "Test log". Not yet launched: see the remaining items in "Launch checklist".
 
 ---
 
@@ -154,23 +155,49 @@ up — the same approach as the contact form's `CONTACT_*` variables.
    *sending* newsletters, not testing the signup.
 4. Privacy Policy review for launch (newsletter frequency, data kept after unsubscribing, and
    that a confirmation email goes to *new* subscriptions). Bump `LAST_UPDATED` if it changes.
-5. In MailerLite, create a **TEST** group and a test-only API token.
-6. Set the four variables for the **Deploy Preview** context only, pointing at the TEST group.
+5. ✅ In MailerLite, create a **TEST** group and a test-only API token (group
+   "BrightPath Newsletter — TEST", Oct 21, 2026).
+6. ✅ Set the four variables for the **Deploy Preview** context only, pointing at the TEST
+   group (Oct 21, 2026; production has none of them).
 7. On the deploy preview, test with addresses you own:
-   - New address with a first name: you get the confirmation email, the subscriber shows as
-     *unconfirmed* in the TEST group with the name, and becomes *active* after you click
-     confirm. Note which of `ip_address`, `subscribed_at`, `optin_ip` and `opted_in_at` are
-     filled in (see "Privacy Policy" below).
-   - New address with no first name.
-   - The same address again with a different first name: same message, **no** second
+   - ✅ New address with a first name: confirmation email received and confirmed; subscriber
+     **Active** in the TEST group with the first name in the Name field (Oct 21, 2026 — see
+     "Test log").
+   - ✅ Subscriber data fields checked: subscription date, signup IP, opt-in IP and opt-in date
+     are all recorded (see "Privacy Policy" below).
+   - ✅ An address already in MailerLite: same message, no duplicate, no group change, no
+     confirmation email (Oct 21, 2026).
+   - ☐ New address with no first name.
+   - ☐ The same address again with a different first name: same message, **no** second
      confirmation email, and the name in MailerLite is **unchanged**.
-   - An unconfirmed address submitted again: same message, no new email.
-   - An address you've unsubscribed: same message, still unsubscribed.
-   - An invalid address, and a submission with the server flag switched off.
-   - If a welcome automation exists, check that it runs only after confirmation.
+   - ☐ An unconfirmed address submitted again: same message, no new email.
+   - ☐ An address you've unsubscribed: same message, still unsubscribed.
+   - ☐ An invalid address, and a submission with the server flag switched off.
+   - ☐ If a welcome automation exists, check that it runs only after confirmation.
 8. Delete the test subscribers and the TEST group's token.
 9. Set the production variables (Production context only), server flag first, then rebuild
    with the build flag on, then one live signup with your own address.
+
+## Test log
+
+**Oct 21, 2026 — Deploy Preview #23** (deploy `6ad8ee522254dbad2f7d2c59`, commit `405decb`,
+TEST group, Deploy-Preview-only variables; production untouched). Test addresses and IPs are
+deliberately not recorded here.
+
+| Test | Result |
+|---|---|
+| Form appears on the preview (footer, "The BrightPath Update") | ✅ |
+| New Gmail plus-address submitted, with a first name | ✅ Success message shown |
+| MailerLite double opt-in email | ✅ Received; confirmation clicked |
+| Subscriber in "BrightPath Newsletter — TEST" | ✅ 1 Active; activity shows activation by email confirmation |
+| First name | ✅ Saved in the subscriber's Name field |
+| Subscriber data fields | ✅ Subscription date, signup IP, opt-in IP and opt-in date all recorded |
+| Address already in MailerLite submitted | ✅ Same message; no duplicate, no group change, no confirmation email |
+
+What this establishes: the lookup returns 404 for a new address (so new signups are created),
+known addresses are left untouched, API double opt-in is on, the first name reaches
+MailerLite, and the preview's token, group ID and flags are correct. Function logs for deploy
+previews aren't visible in Netlify's dashboard, so outcomes were checked in MailerLite.
 
 **To disable** in an emergency, set `NEWSLETTER_ENABLED` to anything except `true`. This
 takes effect without a rebuild, and the form shows "isn't available right now". To hide the
@@ -181,16 +208,31 @@ form as well, set `VITE_NEWSLETTER_ENABLED=false` and redeploy.
 `src/pages/PrivacyPage.tsx` was rewritten on Oct 19, 2026 to match what the site actually
 does. Its newsletter section is `#newsletter`, and the form's privacy link points there.
 
-**Signup IP and timestamp — what's verified:**
+**Signup and opt-in data — what's verified:**
 
 - The function sends MailerLite `ip_address`, taken from Netlify's
   `x-nf-client-connection-ip` header, and only when Node's `net.isIP` accepts it. It sends no
   timestamps and no `status`.
-- MailerLite's API documents `ip_address` and `subscribed_at` as fields on the subscriber
-  record, and fills in `subscribed_at` itself.
-- **Not verified:** whether MailerLite records the *confirmation* click's IP and time
-  (`optin_ip` / `opted_in_at`) for API double opt-in. The Privacy Policy therefore claims only
-  the signup IP and subscription time.
+- **Verified on Oct 21, 2026** (test subscriber, Deploy Preview #23): MailerLite records all
+  four fields for an API double opt-in signup —
+  - subscription date (`subscribed_at`),
+  - signup IP (`ip_address`, from the function),
+  - opt-in IP (`optin_ip`, from the confirmation click),
+  - opt-in date (`opted_in_at`).
+
+**Privacy Policy wording to update before launch** (not changed yet; bump `LAST_UPDATED` when
+it is):
+
+- *What we collect* says MailerLite gets "the IP address your signup came from" and "the date
+  and time you subscribed". It should also say MailerLite records the IP address and date and
+  time when you **confirm** your subscription.
+- *Double opt-in* says "after you sign up, we send you an email asking you to confirm". That's
+  now true only for **new** subscriptions: an address MailerLite already knows gets no email,
+  so the wording should cover that (for example, "if you're not already subscribed").
+- *What you'll receive* says "occasional updates"; the newsletter is now **monthly** and named
+  **The BrightPath Update** (the section also calls it "the BrightPath newsletter").
+- Nothing says how long subscriber data is kept after unsubscribing; consider adding one
+  sentence.
 
 ## Local review
 
