@@ -4,7 +4,8 @@ import BrightPathGradientTitle from './BrightPathGradientTitle';
 import { IS_PRERENDER } from '@/utils/isPrerender';
 
 /**
- * Newsletter signup for the MailerLite "BrightPath Updates" group.
+ * Signup for The BrightPath Update, our monthly newsletter (MailerLite
+ * "BrightPath Updates" group).
  *
  * Posts to the `newsletter-subscribe` Netlify function, which holds the
  * MailerLite credentials — nothing secret ever reaches the browser.
@@ -148,11 +149,11 @@ const NewsletterSignup: React.FC = () => {
         gradientWords={['BrightPath']}
         emphasis="solid"
       >
-        Stay Connected with BrightPath
+        The BrightPath Update
       </BrightPathGradientTitle>
       <p className="services-body font-lato text-sm md:text-base leading-normal md:leading-relaxed mb-6">
-        Get occasional updates on our latest projects, helpful website tips, and what’s happening at
-        BrightPath Web Studio.
+        Our monthly newsletter, with our latest projects, practical website tips, and what’s happening
+        at BrightPath Web Studio.
       </p>
 
       {success ? (
@@ -260,7 +261,7 @@ const NewsletterSignup: React.FC = () => {
       )}
 
       <p id={privacyId} className="newsletter__privacy font-lato text-xs md:text-sm">
-        We’ll only use your details to send BrightPath updates, delivered through our email provider,
+        We’ll only use your details to send The BrightPath Update, delivered through our email provider,
         MailerLite. Unsubscribe anytime. See our <Link to="/privacy-policy#newsletter">Privacy Policy</Link>.
       </p>
     </section>
