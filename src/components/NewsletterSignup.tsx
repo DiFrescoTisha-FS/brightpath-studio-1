@@ -1,4 +1,4 @@
-import React, { useId, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import BrightPathGradientTitle from './BrightPathGradientTitle';
 import { IS_PRERENDER } from '@/utils/isPrerender';
@@ -18,23 +18,22 @@ export const NEWSLETTER_ENABLED = import.meta.env.VITE_NEWSLETTER_ENABLED === 't
 const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 const SUBSCRIBE_URL = `${API_BASE_URL}/api/newsletter-subscribe`;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Bot check: the function ignores signups sent sooner than this after the form
+// appeared. Rather than refuse a quick visitor (autofill makes 1-2 s possible),
+// the form waits out the remainder while showing "Subscribing…". Kept a little
+// above MIN_ELAPSED_MS (3000) in netlify/functions/newsletter-subscribe.js so
+// timer jitter can't land a real signup just under it.
+const NEWSLETTER_MIN_FILL_MS = 3250;
 
+// The function answers 'pending_confirmation' for every accepted signup —
+// new or already on the list — so the form never reveals who is subscribed.
 type ResultStatus =
   | 'pending_confirmation'
-  | 'already_subscribed'
-  | 'cannot_subscribe'
   | 'missing_email'
   | 'invalid_email'
   | 'rate_limited'
   | 'unavailable'
   | 'error';
-
-const SUCCESS_MESSAGES: Partial<Record<ResultStatus, string>> = {
-  pending_confirmation:
-    'Thanks for signing up! Please check your inbox for an email to confirm your subscription.',
-  already_subscribed:
-    'You’re already subscribed to BrightPath updates — thanks for staying connected!',
-};
 
 const ERROR_MESSAGES: Partial<Record<ResultStatus, string>> = {
   missing_email: 'Please enter your email address.',
@@ -56,13 +55,18 @@ const NewsletterSignup: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [formError, setFormError] = useState<ResultStatus | null>(null);
-  const [success, setSuccess] = useState<ResultStatus | null>(null);
+  const [success, setSuccess] = useState(false);
 
   // A ref, not just state: a fast double-click can fire twice before React
   // re-renders the disabled button.
   const inFlight = useRef(false);
   const emailRef = useRef<HTMLInputElement>(null);
   const successRef = useRef<HTMLParagraphElement>(null);
+  // performance.now() is monotonic, so a clock change can't shorten the wait.
+  const shownAt = useRef<number | null>(null);
+  useEffect(() => {
+    shownAt.current = performance.now();
+  }, []);
 
   const validateEmail = (value: string): string | null => {
     const trimmed = value.trim();
@@ -88,6 +92,10 @@ const NewsletterSignup: React.FC = () => {
 
     let status: ResultStatus = 'error';
     try {
+      const startedAt = shownAt.current ?? performance.now();
+      const remaining = NEWSLETTER_MIN_FILL_MS - (performance.now() - startedAt);
+      if (remaining > 0) await new Promise((resolve) => window.setTimeout(resolve, remaining));
+
       const controller = new AbortController();
       const timeout = window.setTimeout(() => controller.abort(), 15000);
       const response = await fetch(SUBSCRIBE_URL, {
@@ -97,7 +105,12 @@ const NewsletterSignup: React.FC = () => {
           email: email.trim(),
           firstName: firstName.trim(),
           bp_newsletter_extra: honeypot,
+          elapsedMs: Math.round(performance.now() - startedAt),
         }),
+        // The function requires an Origin header. Browsers send it on POSTs,
+        // but a stricter page-wide policy (no-referrer) would turn it into
+        // "null"; this request-level policy keeps it.
+        referrerPolicy: 'strict-origin-when-cross-origin',
         signal: controller.signal,
       });
       window.clearTimeout(timeout);
@@ -110,8 +123,8 @@ const NewsletterSignup: React.FC = () => {
     inFlight.current = false;
     setSubmitting(false);
 
-    if (status === 'pending_confirmation' || status === 'already_subscribed') {
-      setSuccess(status);
+    if (status === 'pending_confirmation') {
+      setSuccess(true);
       setFirstName('');
       setEmail('');
       // Move focus to the confirmation so keyboard and screen-reader users
@@ -149,7 +162,8 @@ const NewsletterSignup: React.FC = () => {
           role="status"
           className="newsletter__success font-lato text-sm md:text-base"
         >
-          {SUCCESS_MESSAGES[success]}
+          Thanks for signing up! If this is a new subscription, you’ll get an email shortly asking you
+          to confirm it. Nothing arrived? Check your spam folder, or <Link to="/contact">contact us</Link>.
         </p>
       ) : (
         <form
@@ -241,14 +255,7 @@ const NewsletterSignup: React.FC = () => {
 
       {formError && !success && (
         <p className="newsletter__error font-lato text-sm" role="alert">
-          {formError === 'cannot_subscribe' ? (
-            <>
-              We couldn’t add this address automatically. If you’d like to receive updates, please{' '}
-              <Link to="/contact">contact us</Link>.
-            </>
-          ) : (
-            ERROR_MESSAGES[formError] ?? ERROR_MESSAGES.error
-          )}
+          {ERROR_MESSAGES[formError] ?? ERROR_MESSAGES.error}
         </p>
       )}
 
