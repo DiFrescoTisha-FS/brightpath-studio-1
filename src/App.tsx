@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./components/ui/Navbar";
 import Footer from "./components/ui/Footer";
@@ -63,10 +63,17 @@ function ScrollToTop() {
  * HomePage renders the ClarityHero mirror when the static hero is absent,
  * which covers a visitor who lands on one of those pages and then navigates
  * home.
+ *
+ * Must be a layout effect. The top-level <Suspense> in main.tsx makes this
+ * gate commit together with the lazy page and its PageMeta, whose Helmet
+ * callback fires `prerender-ready` on the next animation frame. A passive
+ * useEffect can run after that frame, so the snapshot would sometimes still
+ * contain the hero and fail verifyPrerender (seen on Netlify on Oct 5 and
+ * Oct 21, 2026). Layout effects finish inside the commit, before any frame.
  */
 function StaticHeroRouteGate() {
   const { pathname } = useLocation();
-  useEffect(() => {
+  useLayoutEffect(() => {
     const hero = document.getElementById('hero-clarity-static');
     if (!hero) return;
     if (IS_PRERENDER && pathname !== '/') {
