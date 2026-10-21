@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { useCallback, useRef } from 'react';
+import { useEffect } from 'react';
 
 interface PageMetaProps {
   /** Page title — gets " — BrightPath Web Studio" appended automatically (unless it already includes the site name). */
@@ -21,6 +21,41 @@ const SITE_URL = 'https://brightpathwebstudio.org';
  *  those tags carry `data-rh`, so Helmet owns them and always overwrites them. */
 const DEFAULT_SOCIAL_IMAGE = `${SITE_URL}/social-preview.png`;
 
+// Signals the prerenderer (vite-plugin-prerender) that the route's <head> is
+// final and its page has committed, so the DOM can be snapshotted. Both are
+// needed, and they can happen in either order:
+//
+// • Helmet writes the tags in a requestAnimationFrame scheduled from its
+//   *render*, so `onChangeClientState` (which runs once every tag is in the
+//   document) can fire while React is still rendering a lazy route in slices,
+//   before the page — or StaticHeroRouteGate's hero removal — is committed.
+//   Signalling there alone let snapshots catch the Suspense fallback with the
+//   homepage hero still present (failed verifyPrerender on Oct 5 and Oct 21,
+//   2026).
+// • A useEffect alone runs before Helmet's frame, when <head> may still hold
+//   only index.html's defaults.
+//
+// Module-level rather than refs: on mount Helmet may call back only once, from
+// a render React can still discard (concurrent rendering, StrictMode's double
+// render), and a ref from a discarded render would never see the commit. Per
+// document, which is all the prerenderer loads; it fires at most once.
+//
+// The event must be dispatched on `document`, not `window`: the renderer
+// registers `document.addEventListener('prerender-ready', ...)`, and an event
+// dispatched on `window` is never in that listener's propagation path.
+let headWritten = false;
+let pageCommitted = false;
+let readySignalled = false;
+const signalIfReady = () => {
+  if (readySignalled || !headWritten || !pageCommitted) return;
+  readySignalled = true;
+  document.dispatchEvent(new Event('prerender-ready'));
+};
+const handleHelmetCommit = () => {
+  headWritten = true;
+  signalIfReady();
+};
+
 /**
  * Per-page meta block — sets title, description, canonical URL, and the
  * Open Graph / Twitter Card overrides for a single route. Sits next to
@@ -33,24 +68,10 @@ export function PageMeta({ title, description, path = '/', image, jsonLd }: Page
   const jsonLdBlocks = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
   const socialImage = image ?? DEFAULT_SOCIAL_IMAGE;
 
-  // Signals the prerenderer (vite-plugin-prerender) that this route's <head>
-  // is final and the DOM can be snapshotted.
-  //
-  // Timing is the whole point here. Helmet defers its DOM writes to a
-  // requestAnimationFrame, so a plain useEffect fires *before* the
-  // route-specific description/canonical/JSON-LD exist in <head> — the
-  // snapshot would capture only index.html's defaults. `onChangeClientState`
-  // runs at the end of Helmet's commit, so by the time it fires every tag is
-  // in the document.
-  //
-  // The event must be dispatched on `document`, not `window`: the renderer
-  // registers `document.addEventListener('prerender-ready', ...)`, and an
-  // event dispatched on `window` is never in that listener's propagation path.
-  const signalled = useRef(false);
-  const handleHelmetCommit = useCallback(() => {
-    if (signalled.current || typeof document === 'undefined') return;
-    signalled.current = true;
-    document.dispatchEvent(new Event('prerender-ready'));
+  // Runs after the commit that mounted this page (see signalIfReady above).
+  useEffect(() => {
+    pageCommitted = true;
+    signalIfReady();
   }, []);
 
   return (
