@@ -168,12 +168,19 @@ up — the same approach as the contact form's `CONTACT_*` variables.
      are all recorded (see "Privacy Policy" below).
    - ✅ An address already in MailerLite: same message, no duplicate, no group change, no
      confirmation email (Oct 21, 2026).
-   - ☐ New address with no first name.
-   - ☐ The same address again with a different first name: same message, **no** second
-     confirmation email, and the name in MailerLite is **unchanged**.
-   - ☐ An unconfirmed address submitted again: same message, no new email.
-   - ☐ An address you've unsubscribed: same message, still unsubscribed.
-   - ☐ An invalid address, and a submission with the server flag switched off.
+   - ✅ New address with no first name: created **Unconfirmed** in the TEST group, confirmation
+     email received; confirming made it **Active** and recorded the opt-in date and IP (see
+     "Test log", second round).
+   - ◐ The same address again: an **Active** address got the same message and **no** second
+     confirmation email (verified). Not yet verified: submitting it with a **different first
+     name** and checking that the name in MailerLite is **unchanged**.
+   - ✅ An unconfirmed address submitted again: same message, no new email, still Unconfirmed.
+   - ✅ An address you've unsubscribed: same message, no new email, still Unsubscribed.
+   - ✅ An unconfirmed address removed with **Delete**, then submitted again: same message, a
+     **new** confirmation email, and the address is back in the TEST group as Unconfirmed. So
+     the monthly Delete cleanup doesn't stop people re-subscribing through the form.
+   - ☐ An invalid address, and a submission with the server flag switched off (both covered by
+     `npm test`, but not yet checked on a deploy preview).
    - ☐ If a welcome automation exists, check that it runs only after confirmation.
 8. Delete the test subscribers and the TEST group's token.
 9. Set the production variables (Production context only), server flag first, then rebuild
@@ -199,6 +206,23 @@ What this establishes: the lookup returns 404 for a new address (so new signups 
 known addresses are left untouched, API double opt-in is on, the first name reaches
 MailerLite, and the preview's token, group ID and flags are correct. Function logs for deploy
 previews aren't visible in Netlify's dashboard, so outcomes were checked in MailerLite.
+
+**Second round, Deploy Preview #23** (TEST group). Verified by the owner and recorded here on
+Oct 22, 2026. The test date, deploy and commit weren't recorded. No addresses, names or IPs
+are kept here.
+
+| Test | Result |
+|---|---|
+| New address, no first name | ✅ Created Unconfirmed in "BrightPath Newsletter — TEST"; confirmation email arrived |
+| Confirmation link clicked | ✅ Status Active; opt-in date and IP recorded |
+| Same **Active** address submitted again | ✅ Generic success message; no second confirmation email |
+| **Unconfirmed** address submitted again | ✅ Generic success message; no new email; still Unconfirmed |
+| **Unsubscribed** address submitted again | ✅ Still Unsubscribed; no new confirmation email |
+| Unconfirmed address **Deleted** in MailerLite, then submitted again | ✅ Success message **and** a new confirmation email; shown as Unconfirmed in the TEST group |
+
+The Delete → re-subscribe result shows that after **Delete**, the function's lookup no longer
+finds the address (it's treated as new), so the monthly cleanup is safe for the form. No code
+change was needed.
 
 **To disable** in an emergency, set `NEWSLETTER_ENABLED` to anything except `true`. This
 takes effect without a rebuild, and the form shows "isn't available right now". To hide the
@@ -261,6 +285,8 @@ Once a month, in MailerLite (production group). Don't copy subscriber details an
    - Delete takes them off the mailing list, but MailerLite keeps their history in case they
      re-subscribe. The policy says only that they're removed from our list, not that their
      data is erased.
+   - Verified on the TEST group: a Deleted address that signs up again through the form gets
+     a new confirmation email (see "Test log").
    - **Don't use Forget for this cleanup.** Forget permanently erases a subscriber within 30
      days, can't be undone, and blocks the address from being re-added for 30 days. It's for
      individual erasure requests (step 3).
