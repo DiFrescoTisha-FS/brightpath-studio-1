@@ -10,7 +10,7 @@ see "Test log". Not yet launched: see the remaining items in "Launch checklist".
 
 ## What it is
 
-A signup for **The BrightPath Update**, our monthly newsletter, at the top of the site footer,
+A signup for **The BrightPath Update**, our newsletter (sent approximately once a month), at the top of the site footer,
 so it appears on every page. It has an optional first name, a required email, a **Keep Me
 Updated** button, and a short privacy note linking to `/privacy-policy#newsletter`. There's no
 popup or entrance animation.
@@ -153,8 +153,9 @@ up — the same approach as the contact form's `CONTACT_*` variables.
    in every commercial email, and MailerLite requires one in its campaign footer. The site
    deliberately shows no street address; a P.O. box or virtual mailbox is planned. This blocks
    *sending* newsletters, not testing the signup.
-4. Privacy Policy review for launch (newsletter frequency, data kept after unsubscribing, and
-   that a confirmation email goes to *new* subscriptions). Bump `LAST_UPDATED` if it changes.
+4. ◐ Privacy Policy updated for launch on Oct 22, 2026 (frequency, consent records, double
+   opt-in for new addresses only, email tracking, retention). See "Privacy Policy" below. Still
+   to do: bump `LAST_UPDATED` to the date the change goes live.
 5. ✅ In MailerLite, create a **TEST** group and a test-only API token (group
    "BrightPath Newsletter — TEST", Oct 21, 2026).
 6. ✅ Set the four variables for the **Deploy Preview** context only, pointing at the TEST
@@ -220,19 +221,65 @@ does. Its newsletter section is `#newsletter`, and the form's privacy link point
   - opt-in IP (`optin_ip`, from the confirmation click),
   - opt-in date (`opted_in_at`).
 
-**Privacy Policy wording to update before launch** (not changed yet; bump `LAST_UPDATED` when
-it is):
+**MailerLite settings the policy relies on** (checked by the owner, Oct 22, 2026). If any of
+these change, update Section 3 of the policy:
 
-- *What we collect* says MailerLite gets "the IP address your signup came from" and "the date
-  and time you subscribed". It should also say MailerLite records the IP address and date and
-  time when you **confirm** your subscription.
-- *Double opt-in* says "after you sign up, we send you an email asking you to confirm". That's
-  now true only for **new** subscriptions: an address MailerLite already knows gets no email,
-  so the wording should cover that (for example, "if you're not already subscribed").
-- *What you'll receive* says "occasional updates"; the newsletter is now **monthly** and named
-  **The BrightPath Update** (the section also calls it "the BrightPath newsletter").
-- Nothing says how long subscriber data is kept after unsubscribing; consider adding one
-  sentence.
+- Campaign open tracking: **on**.
+- Google Analytics tracking in the campaign defaults: **off**. The policy doesn't say newsletter
+  clicks reach Google Analytics.
+- E-commerce link tracking: **off**.
+- Link tracking has UTM values configured, but it hasn't been verified that sent emails carry
+  them, so the policy doesn't mention UTM tags.
+- Click tracking: MailerLite's documentation says regular clicks are always tracked, but this
+  hasn't been verified in our reports. The policy says MailerLite "may" record clicks.
+
+**What the policy says** (Section 3 `#newsletter` and Section 8; updated Oct 22, 2026):
+
+- The newsletter is **The BrightPath Update**, sent **approximately once a month**. The form
+  says the same.
+- **Consent records:** subscription date, signup IP, confirmation date and confirmation IP.
+- **Double opt-in for new addresses only.** An address already on the list isn't changed and
+  gets no email.
+- **Unsubscribing withdraws consent.** The form can't reactivate an unsubscribed address;
+  people email us instead.
+- **Retention:**
+  - active subscribers: kept while subscribed;
+  - unconfirmed signups: removed from the list (MailerLite **Delete**) by the **manual** monthly
+    review below, once more than 30 days old. The policy says this doesn't necessarily erase
+    MailerLite's history;
+  - unsubscribed records: kept as reasonably necessary to honor the opt-out and document
+    consent. They are **not** removed automatically;
+  - deletion requests: handled individually.
+- **No response deadline is promised** for privacy requests.
+
+## Monthly maintenance
+
+Once a month, in MailerLite (production group). Don't copy subscriber details anywhere else.
+
+1. **Subscribers → Unconfirmed.** Find signups that have been unconfirmed for more than 30
+   days (MailerLite documents no automatic expiry) and remove them with **Delete**.
+   - Delete takes them off the mailing list, but MailerLite keeps their history in case they
+     re-subscribe. The policy says only that they're removed from our list, not that their
+     data is erased.
+   - **Don't use Forget for this cleanup.** Forget permanently erases a subscriber within 30
+     days, can't be undone, and blocks the address from being re-added for 30 days. It's for
+     individual erasure requests (step 3).
+
+   Basis: MailerLite's help docs (Delete keeps information; Forget erases it), plus guidance
+   from MailerLite's AI support assistant, LiteBot (Oct 2026, not a human representative): use
+   Delete for routine cleanup of unconfirmed subscribers, and keep Forget for erasure requests.
+2. **Subscribers → Unsubscribed.** Review the list only. Don't reactivate anyone, and don't
+   delete or forget unsubscribed records in bulk: the record is what stops them being emailed
+   again, and the signup form never re-subscribes a known address.
+3. **Privacy requests** (access, correction, deletion) come in by email. Handle each one
+   individually, in MailerLite.
+   - **Correction:** edit the subscriber's name or email address.
+   - **Deletion / erasure:** use **Forget**, MailerLite's permanent erasure, on that one
+     subscriber's profile. Delete would keep their data. After Forget there's no record of an
+     earlier unsubscribe, so tell the person a future signup would start fresh.
+4. **Record that the review was done:** the date, and the number of records removed. Keep this
+   in a private admin note, never in this public repository, and never record email addresses,
+   names or IP addresses.
 
 ## Local review
 

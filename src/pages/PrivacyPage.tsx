@@ -40,23 +40,31 @@ const PrivacyPage = () => {
         <p className="mb-4">We use the information we collect to:</p>
         <ul className={listClass}>
           <li>Respond to your inquiries and communicate with you about our services.</li>
-          <li>Send our newsletter to people who have signed up and confirmed their subscription.</li>
+          <li>Send The BrightPath Update, our newsletter, to people who have signed up and confirmed their subscription.</li>
           <li>Understand how the Website is used so we can improve it.</li>
           <li>Operate, maintain, and protect the Website, including preventing spam and abuse.</li>
         </ul>
 
         <h2 id="newsletter" className={`${h2Class} scroll-mt-24`}>3. Our Newsletter</h2>
         <p className="mb-4">
-          Signing up for the BrightPath newsletter is entirely voluntary, and you don’t need to subscribe to use the Website or work with us.
+          The BrightPath Update is our email newsletter, with news from BrightPath Web Studio, our recent projects, and practical website tips. It’s sent approximately once a month, so the timing can vary. Subscribing is entirely voluntary, and you don’t need to subscribe to use the Website or work with us.
         </p>
         <ul className={listClass}>
-          <li><strong>What we collect:</strong> your email address (required) and your first name (optional). When you sign up, we also pass MailerLite the IP address your signup came from, and MailerLite records the date and time you subscribed.</li>
-          <li><strong>What you’ll receive:</strong> occasional updates about our latest projects, helpful website tips, and news about BrightPath Web Studio.</li>
-          <li><strong>Double opt-in:</strong> after you sign up, we send you an email asking you to confirm your subscription. You won’t receive newsletters unless you click the confirmation link.</li>
-          <li><strong>Our email provider:</strong> newsletter subscriptions are managed and delivered through MailerLite, which stores your subscription details and sends our emails on our behalf. MailerLite may also record whether our emails are opened and which links are clicked. You can read{' '}
+          <li><strong>What we collect:</strong> your email address (required) and your first name (optional). When you sign up, we pass MailerLite the IP address your signup came from, and MailerLite records the date and time you subscribed. When you confirm your subscription, MailerLite also records the date, time, and IP address of your confirmation. These records help document your consent to receive the newsletter.</li>
+          <li><strong>Confirming your subscription (double opt-in):</strong> if your email address is new to our list, we send you an email asking you to confirm your subscription. You won’t receive the newsletter unless you click the confirmation link. If your address is already on our list — for example, because you’ve subscribed before, signed up without confirming, or unsubscribed — signing up again doesn’t change your existing record and doesn’t send another email. Contact us if you need help with an existing subscription.</li>
+          <li><strong>Our email provider:</strong> newsletter subscriptions are managed and delivered through MailerLite, which stores your subscription details and sends our emails on our behalf. You can read{' '}
             <ExternalLink href="https://www.mailerlite.com/legal/privacy-policy">MailerLite’s Privacy Policy</ExternalLink>.
           </li>
-          <li><strong>Unsubscribing:</strong> every newsletter includes an unsubscribe link, and you can use it at any time. You can also email us at <EmailLink /> and we’ll unsubscribe you.</li>
+          <li><strong>Email engagement:</strong> our newsletter emails contain a small invisible image that tells MailerLite when an email is opened, along with the IP address and type of email program used to open it. MailerLite uses that IP address to estimate the country where the email was opened. MailerLite may also record which links in our emails are clicked. We use this information to understand which content is most useful. Some email programs load images automatically, so these records aren’t always accurate.</li>
+          <li><strong>Unsubscribing:</strong> every newsletter includes an unsubscribe link, and you can use it at any time to stop receiving the newsletter and withdraw your consent. You can also email us at <EmailLink /> and we’ll unsubscribe you. Our signup form can’t reactivate an address that has unsubscribed, so if you’d like to subscribe again later, please email us.</li>
+        </ul>
+
+        <h3 className={h3Class}>How long we keep newsletter information</h3>
+        <ul className={listClass}>
+          <li><strong>While you’re subscribed:</strong> we keep your subscription details.</li>
+          <li><strong>If you don’t confirm:</strong> each month, we review unconfirmed signups and remove those that have stayed unconfirmed for more than 30 days from our mailing list, so a signup may remain until the next review after that point. This review is our own procedure, not an automatic MailerLite feature. Removing a signup from our list doesn’t necessarily erase the historical information MailerLite keeps about it.</li>
+          <li><strong>If you unsubscribe:</strong> MailerLite keeps your record and its status history, which can include the dates you subscribed and confirmed, your signup and confirmation IP addresses, your list membership, and your email activity. We keep the information reasonably necessary to honor your unsubscribe request and to document your subscription and consent history, subject to any legal obligations that apply. This information isn’t removed automatically.</li>
+          <li><strong>If you ask us to delete your information:</strong> we’ll review and honor your request as applicable, keeping only what is necessary for legitimate legal or compliance purposes.</li>
         </ul>
 
         <h2 className={h2Class}>4. Cookies and Similar Technologies</h2>
@@ -97,8 +105,8 @@ const PrivacyPage = () => {
         <h2 className={h2Class}>8. Your Choices and Rights</h2>
         <p className="mb-4">You can:</p>
         <ul className={listClass}>
-          <li>Unsubscribe from our newsletter at any time using the link in any newsletter email.</li>
-          <li>Ask us what personal information we hold about you, or ask us to correct or delete it.</li>
+          <li>Unsubscribe from The BrightPath Update at any time using the link in any newsletter email, or by emailing us.</li>
+          <li>Ask us what personal information we hold about you, including your newsletter subscription details such as your name and email address, or ask us to correct or delete it.</li>
           <li>Limit analytics tracking by blocking cookies or using the Google Analytics opt-out add-on.</li>
         </ul>
         <p className="mb-4">

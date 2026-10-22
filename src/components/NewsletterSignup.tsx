@@ -4,7 +4,7 @@ import BrightPathGradientTitle from './BrightPathGradientTitle';
 import { IS_PRERENDER } from '@/utils/isPrerender';
 
 /**
- * Signup for The BrightPath Update, our monthly newsletter (MailerLite
+ * Signup for The BrightPath Update, our newsletter, sent approximately once a month (MailerLite
  * "BrightPath Updates" group).
  *
  * Posts to the `newsletter-subscribe` Netlify function, which holds the
@@ -152,8 +152,8 @@ const NewsletterSignup: React.FC = () => {
         The BrightPath Update
       </BrightPathGradientTitle>
       <p className="services-body font-lato text-sm md:text-base leading-normal md:leading-relaxed mb-6">
-        Our monthly newsletter, with our latest projects, practical website tips, and what’s happening
-        at BrightPath Web Studio.
+        Our newsletter, sent approximately once a month, with our latest projects, practical website
+        tips, and news from BrightPath Web Studio.
       </p>
 
       {success ? (
