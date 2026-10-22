@@ -471,17 +471,37 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
 - **Double opt-in.** API signups rely on MailerLite's account-level "Double opt-in for API
   and integrations" setting, which is enabled. The function must **never send `status`**:
   `status: 'active'` skips confirmation.
-- **Launch hardening on PR #23** (`feature/newsletter-launch-hardening`, not yet merged): the
-  function looks the address up first and **never writes to an address MailerLite already
-  knows** (any status); every accepted signup gets the same reply (no enumeration); Origin
-  is required; signups under 3 s after the form appeared are ignored (the form waits out the
-  rest, so people are never refused). Unsubscribed or unconfirmed people need manual help to
-  rejoin — an accepted trade-off.
-- **Verified end to end on Deploy Preview #23 (Oct 21, 2026)** with a TEST group and
-  Deploy-Preview-only variables: new address with a first name → confirmation email →
-  Active, name saved; known address → untouched. MailerLite records subscription date,
-  signup IP, opt-in IP and opt-in date. Remaining tests, launch steps and the Privacy Policy
-  wording still to update are in `NEWSLETTER-SETUP.md`.
+- **Launch hardening (PR #23, `feature/newsletter-launch-hardening`):**
+  - The function looks the address up first and **never writes to an address MailerLite
+    already knows** (any status).
+  - Every accepted signup gets the same reply (no enumeration).
+  - Origin is required.
+  - Signups under 3 s after the form appeared are ignored. The form waits out the rest, so
+    people are never refused.
+  - Unsubscribed or unconfirmed people need manual help to rejoin — an accepted trade-off. An
+    address removed with MailerLite **Delete** can sign up again normally.
+- **Production status:** off. As verified Oct 22, 2026, both flags and both MailerLite
+  variables are set for Deploy Previews only, and Production has none of them. `CONTACT_*` has
+  separate Production and Deploy Preview values. Activation steps are in
+  `NEWSLETTER-SETUP.md`, "Launch checklist".
+- **Verified end to end on Deploy Preview #23** (TEST group, Deploy-Preview-only variables).
+  - Oct 21: a new address with a first name → confirmation email → Active, name saved; a
+    known address was left untouched.
+  - Second round, recorded Oct 22, all passed:
+    - a new address with no first name;
+    - Active, Unconfirmed and Unsubscribed addresses resubmitted (no new email, status
+      unchanged);
+    - Delete → re-subscribe (a new confirmation email).
+  - MailerLite records subscription date, signup IP, opt-in IP and opt-in date. Results and
+    the remaining unverified checks are in `NEWSLETTER-SETUP.md`.
+- **Privacy Policy** (Section 3 `#newsletter`, `LAST_UPDATED` Oct 22, 2026):
+  - "approximately once a month";
+  - consent records;
+  - double opt-in for new addresses only;
+  - open tracking;
+  - retention, including a **manual monthly Delete** of signups unconfirmed for over 30 days.
+    **Forget** is only for individual erasure requests. The procedure is in
+    `NEWSLETTER-SETUP.md`, "Monthly maintenance".
 - **Deploy-preview function logs aren't visible** in Netlify's dashboard; check outcomes in
   MailerLite. The function logs nothing on a successful creation.
 - **Styling** reuses existing values only: `.studio-cta--primary` filled as on the About hero,
