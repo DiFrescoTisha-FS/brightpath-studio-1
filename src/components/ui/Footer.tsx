@@ -25,10 +25,23 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
   const smallTextClasses = theme === 'dark' ? 'text-gray-400' : 'text-gray-600';
 
   return (
-    <footer className={`site-footer py-12 ${footerClasses}`}>
-      <div className="container mx-auto px-4 text-center">
-        {NEWSLETTER_ENABLED && <NewsletterSignup />}
+    <footer className={`site-footer ${NEWSLETTER_ENABLED ? 'pb-12' : 'py-12'} ${footerClasses}`}>
+      {/* Full-width artwork band behind the signup (`newsletter-band` in
+          globals.css): lighthouse artwork as real layers, like the homepage
+          sections — the Services artwork, except light mode from 1440px,
+          which has its own. The band supplies the top padding the footer
+          would otherwise have. */}
+      {NEWSLETTER_ENABLED && (
+        <div className="newsletter-band">
+          <div aria-hidden="true" className="newsletter-band__art" />
+          <div aria-hidden="true" className="newsletter-band__veil" />
+          <div className="newsletter-band__inner container mx-auto px-4 text-center">
+            <NewsletterSignup />
+          </div>
+        </div>
+      )}
 
+      <div className="container mx-auto px-4 text-center">
         {/* === START OF THE NEW CONSOLIDATED SECTION === */}
         <BrightPathGradientTitle
           as="h3"

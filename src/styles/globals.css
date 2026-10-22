@@ -180,6 +180,11 @@
     --home-art-services-dark-mobile: url('https://res.cloudinary.com/djqw1de3s/image/upload/f_auto/q_auto:good/w_1200/c_limit/dpr_auto/brightpath/background-images/775767A6-F757-46B8-BEDB-07E2CAFAE02A_tzca8a.png');
     --home-art-compass-light-mobile: url('https://res.cloudinary.com/djqw1de3s/image/upload/f_auto/q_auto:good/w_1200/c_limit/dpr_auto/brightpath/background-images/E163A136-43C0-4F7A-A3BC-D9F60A029A6E_nonghd');
     --home-art-compass-dark-mobile: url('https://res.cloudinary.com/djqw1de3s/image/upload/f_auto/q_auto:good/w_1200/c_limit/dpr_auto/brightpath/background-images/786F78DB-EC9D-478E-9F21-52905E7BEB81_rsel8f');
+
+    /* The newsletter band's own light artwork (lighthouse left, contours and
+       glow right), used from 1440px only. Separate from the Services art so
+       neither can change the other. */
+    --newsletter-art-light: url('https://res.cloudinary.com/djqw1de3s/image/upload/f_auto/q_auto:good/w_1920/c_limit/dpr_auto/brightpath/background-images/Optimized_Golden_Lighthouse_on_Topographic_Coast_imar8l');
   }
 
   .dark {
@@ -1345,6 +1350,15 @@ html.light .site-footer::before {
     rgba(132, 99, 0, 0) 100%);
 }
 
+/* Replaces the browser's default blue focus ring on the footer links (Terms,
+   Privacy, Contact, email, phone) with the theme gold, the same ring as the
+   newsletter's Privacy Policy link. */
+.site-footer a:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
 /* ====================================
    NEWSLETTER SIGNUP (footer)
    ------------------------------------
@@ -1385,6 +1399,159 @@ html.light .newsletter::after {
     rgba(132, 99, 0, 0.24) 24%,
     rgba(132, 99, 0, 0.24) 76%,
     rgba(132, 99, 0, 0) 100%);
+}
+
+/* --- Artwork band behind the signup ------------------------------------ */
+/* Real layers, as on the homepage: __art, then __veil for copy protection,
+   then the form. Grades match .home-services__art.
+   • Below 1440px the form spans the width, so the homepage Services artwork
+     (--home-art-services-*) is drawn at half size with only its lighthouse
+     emblem showing, centred above the heading in space reserved for it. A
+     radial mask fades it into the footer ground before any edge of the image.
+   • From 1440px the artwork runs full width behind the band, unmasked, with
+     the lighthouse in the open space left of the centred form. Dark mode
+     keeps the Services artwork; light mode uses the newsletter's own
+     (--newsletter-art-light). See the media query below. */
+.newsletter-band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin-bottom: 3rem;
+  padding-top: 13.5rem;
+}
+
+.newsletter-band .newsletter {
+  margin-bottom: 0;
+}
+
+/* Keep the footer's top hairline above the band's artwork. */
+.site-footer:has(> .newsletter-band)::before {
+  z-index: 3;
+}
+
+.newsletter-band__inner {
+  position: relative;
+  z-index: 2;
+}
+
+.newsletter-band__art {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  /* Half size (960 × 400): emblem centre at (118.5px, 111px) of the layer.
+     The image's own edge is only ~24px beyond the emblem's rings, so the
+     fade has to finish inside that margin. */
+  top: 0.75rem;
+  left: calc(50% - 118.5px);
+  width: 960px;
+  height: 400px;
+  background-size: 100% 100%;
+  -webkit-mask-image: radial-gradient(ellipse 118px 110px at 118.5px 111px, #000 78%, transparent 100%);
+  mask-image: radial-gradient(ellipse 118px 110px at 118.5px 111px, #000 78%, transparent 100%);
+}
+
+html.dark .newsletter-band__art {
+  background-image: var(--home-art-services-dark);
+  filter: brightness(0.9) saturate(0.82) contrast(1.12);
+}
+
+html.light .newsletter-band__art {
+  background-image: var(--home-art-services-light);
+  filter: brightness(0.955) saturate(1.18);
+}
+
+.newsletter-band__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Localized protection for the heading and description only; the fields and
+   button carry their own solid surfaces. */
+html.dark .newsletter-band__veil {
+  background: radial-gradient(ellipse 30rem 8.5rem at 50% 18rem,
+    rgba(10, 15, 24, 0.66) 0%,
+    rgba(10, 15, 24, 0.36) 54%,
+    rgba(10, 15, 24, 0) 100%);
+}
+
+html.light .newsletter-band__veil {
+  background: radial-gradient(ellipse 30rem 8.5rem at 50% 18rem,
+    rgba(250, 246, 239, 0.74) 0%,
+    rgba(250, 246, 239, 0.42) 54%,
+    rgba(250, 246, 239, 0) 100%);
+}
+
+@media (min-width: 1440px) {
+  .newsletter-band {
+    padding-top: 3rem;
+  }
+
+  /* Full width at the image's own aspect ratio (1440 × ~600 at 1440px), so
+     the ~347px band shows a horizontal slice of it. The mask is dropped:
+     the image spans the band, so there's no image edge inside it to hide. */
+  .newsletter-band__art {
+    inset: 0;
+    width: auto;
+    height: auto;
+    background-size: 100% auto;
+    background-position: left top;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  /* The newsletter's own artwork. Its lighthouse sits lower than the
+     Services emblem, so the image is anchored at 42% rather than the top to
+     keep the lighthouse whole from 1440 to 1920px. It's already rich, so it
+     takes the standard light grade; a stronger saturate turned the glow
+     lemon-yellow. */
+  html.light .newsletter-band__art {
+    background-image: var(--newsletter-art-light);
+    background-position: left 42%;
+    filter: brightness(0.955) saturate(1.18);
+  }
+
+  /* Heading protection moves up with the shorter band, and the band's top
+     and bottom edges feather into the footer ground with the same short
+     ramps as light mode below, so the full-width artwork never reads as a
+     hard-edged strip. */
+  html.dark .newsletter-band__veil {
+    background:
+      radial-gradient(ellipse 30rem 7rem at 50% 6.5rem,
+        rgba(10, 15, 24, 0.66) 0%,
+        rgba(10, 15, 24, 0.36) 54%,
+        rgba(10, 15, 24, 0) 100%),
+      linear-gradient(to bottom,
+        #0a0f18 0%,
+        rgba(10, 15, 24, 0.42) 5%,
+        rgba(10, 15, 24, 0) 15%),
+      /* Ends on #0b1220, the footer's own ground where the band meets it
+         (its gradient's 42% stop), so there's no step at the boundary. */
+      linear-gradient(to top,
+        #0b1220 0%,
+        rgba(11, 18, 32, 0.46) 5%,
+        rgba(11, 18, 32, 0) 16%);
+  }
+
+  /* Light also feathers the band's edges, into cream, with the same kind of
+     short ramps as .home-reviews__veil. */
+  html.light .newsletter-band__veil {
+    background:
+      radial-gradient(ellipse 30rem 7rem at 50% 6.5rem,
+        rgba(250, 246, 239, 0.74) 0%,
+        rgba(250, 246, 239, 0.42) 54%,
+        rgba(250, 246, 239, 0) 100%),
+      linear-gradient(to bottom,
+        #faf6ef 0%,
+        rgba(250, 246, 239, 0.42) 5%,
+        rgba(250, 246, 239, 0) 15%),
+      linear-gradient(to top,
+        #faf6ef 0%,
+        rgba(250, 246, 239, 0.46) 5%,
+        rgba(250, 246, 239, 0) 16%);
+  }
 }
 
 .newsletter__form {
@@ -1428,7 +1595,9 @@ html.light .newsletter__optional { color: rgba(26, 34, 56, 0.74); }
   padding: 0 1rem;
   border: 1px solid rgba(245, 240, 232, 0.5);
   border-radius: 2px;
-  background: rgba(255, 255, 255, 0.04);
+  /* Opaque so the artwork band can't show through. It's the colour the old
+     rgba(255, 255, 255, 0.04) produced over the #0a0f18 footer ground. */
+  background: #141921;
   color: #f5f0e8;
   font-family: Lato, sans-serif;
   font-size: 1rem; /* 16px keeps iOS Safari from zooming on focus */

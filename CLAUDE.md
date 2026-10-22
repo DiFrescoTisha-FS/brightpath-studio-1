@@ -486,6 +486,36 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
   MailerLite. The function logs nothing on a successful creation.
 - **Styling** reuses existing values only: `.studio-cta--primary` filled as on the About hero,
   `.services-body` tints, theme gold via `--primary`, and site reds `red-400` / `red-700`.
+- **Artwork band (approved Oct 22, 2026)** — `.newsletter-band*` in globals.css, real layers
+  (`__art`, `__veil`, `__inner`) in `Footer.tsx`, rendered only when the newsletter flag is on.
+  Treat it as approved; don't re-tune it without a specific reason.
+  - **Below 1440px** (both themes): the homepage Services artwork at half size, masked to its
+    lighthouse emblem, centred above the heading.
+  - **1440px and up, light**: its **own** image, `--newsletter-art-light` → Cloudinary
+    `brightpath/background-images/Optimized_Golden_Lighthouse_on_Topographic_Coast_imar8l`
+    (1942×810; the bare public ID 404s, the folder is required). Full width
+    (`100% auto`), anchored `left 42%` so the lighthouse stays whole, standard light grade
+    `saturate(1.18)` (`1.6` turned the glow lemon-yellow). Never point it at the Services art.
+  - **1440px and up, dark**: the Services dark artwork, top-anchored. The veil feathers the top
+    edge to `#0A0F18` and the bottom to **`#0B1220`**, the footer gradient's own colour at
+    that boundary. Feathering to `#0A0F18` left a visible step.
+  - The dark input fill is the opaque `#141921`, so the artwork can't show through it.
+  - `.site-footer:has(> .newsletter-band)::before` keeps the footer hairline above the artwork.
+    Browsers without `:has()` (Firefox < 121) draw the artwork over it; cosmetic only.
+  - **Known and accepted**: at 2560px the light image is stretched ~1.32× (the source is
+    1942px wide) and its ring is trimmed into the feathers; below 1440px the emblem mask reads
+    as a soft disc.
+- **Footer link focus**: `.site-footer a:focus-visible` gives every footer link the theme-gold
+  ring (2px, +2px offset) in place of the browser's blue: 4.8:1 on the light ground, 12.3:1 on
+  the dark one.
+- **Visual QA (Oct 22, 2026)**, measured on rendered pixels in Chrome at 375 / 768 / 1280 /
+  1440 / 1920 / 2560, both themes, on `localhost:8888` with the flag on:
+  - no horizontal overflow at any width;
+  - all text passes. Lowest: light Privacy Policy link 4.58:1, light gold heading word 4.8:1
+    (large text), light input border 3.45:1;
+  - keyboard order is First name → Email → button → Privacy link, each with a visible ring;
+  - the empty-email error is `role="alert"`, sets `aria-invalid`, and focus moves to the field;
+  - the art and veil layers are `aria-hidden`.
 
 ### Shared origin validator — `netlify/lib/allowed-origin.js`
 
