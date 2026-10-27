@@ -5,7 +5,7 @@ import { BUSINESS } from '@/config/contact';
 
 // Update LAST_UPDATED whenever the policy text changes, and set it to the date
 // the change actually goes live.
-const LAST_UPDATED = 'October 22, 2026';
+const LAST_UPDATED = 'October 27, 2026';
 
 const PrivacyPage = () => {
   return (
@@ -51,7 +51,7 @@ const PrivacyPage = () => {
         </p>
         <ul className={listClass}>
           <li><strong>What we collect:</strong> your email address (required) and your first name (optional). When you sign up, we pass MailerLite the IP address your signup came from, and MailerLite records the date and time you subscribed. When you confirm your subscription, MailerLite also records the date, time, and IP address of your confirmation. These records help document your consent to receive the newsletter.</li>
-          <li><strong>Confirming your subscription (double opt-in):</strong> if your email address is new to our list, we send you an email asking you to confirm your subscription. You won’t receive the newsletter unless you click the confirmation link. If your address is already on our list — for example, because you’ve subscribed before, signed up without confirming, or unsubscribed — signing up again doesn’t change your existing record and doesn’t send another email. Contact us if you need help with an existing subscription.</li>
+          <li><strong>Confirming your subscription (double opt-in):</strong> if your email address is new to our list, we send you an email asking you to confirm your subscription. You won’t receive the newsletter unless you click the confirmation link. After you confirm, we send you a welcome email. If your address is already on our list — for example, because you’ve subscribed before, signed up without confirming, or unsubscribed — signing up again doesn’t change your existing record and doesn’t send another email. Contact us if you need help with an existing subscription.</li>
           <li><strong>Our email provider:</strong> newsletter subscriptions are managed and delivered through MailerLite, which stores your subscription details and sends our emails on our behalf. You can read{' '}
             <ExternalLink href="https://www.mailerlite.com/legal/privacy-policy">MailerLite’s Privacy Policy</ExternalLink>.
           </li>

@@ -382,6 +382,10 @@ Do not reopen these without a specific reason:
 
 ### Where things stand
 
+> **Historical snapshot (Oct 19–20, 2026)**; it predates the later releases. For the
+> newsletter, the code reached `main` with PR #23 on Oct 22, 2026 (`ff46a89`). The current
+> newsletter status is under "Newsletter (MailerLite)" below.
+
 - **Live on `main` / production**: `20b331a` (deploy `6ad7916293e90352aa2b531e`). Two small
   contact-form hotfixes shipped on their own branches and were verified with real
   submissions:
@@ -480,10 +484,23 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
     people are never refused.
   - Unsubscribed or unconfirmed people need manual help to rejoin — an accepted trade-off. An
     address removed with MailerLite **Delete** can sign up again normally.
-- **Production status:** off. As verified Oct 22, 2026, both flags and both MailerLite
-  variables are set for Deploy Previews only, and Production has none of them. `CONTACT_*` has
-  separate Production and Deploy Preview values. Activation steps are in
-  `NEWSLETTER-SETUP.md`, "Launch checklist".
+- **Production status:** off. The code shipped to `main` with PR #23 on Oct 22, 2026
+  (`ff46a89`, deploy `6ada6341dbc60eb37fa3173d`); production answers 503 and shows no band.
+  - Per the owner on Oct 27, 2026: `MAILERLITE_API_KEY` (a production token) and
+    `MAILERLITE_GROUP_ID` (**BrightPath Updates**) are set for **Production**, and the TEST
+    values stay in Deploy Previews.
+  - `NEWSLETTER_ENABLED` and `VITE_NEWSLETTER_ENABLED` are still **unset** in Production.
+  - `CONTACT_*` has separate Production and Deploy Preview values.
+- **MailerLite setup (owner, recorded Oct 27, 2026):**
+  - the sending domain `brightpathwebstudio.org` is authenticated;
+  - the company details use the official mailing address **PO Box 186, Edneyville, NC 28727**
+    (email footers only; the website still shows no street address);
+  - the welcome email is designed and tested (website button and footer checked);
+  - the **"Simple welcome email"** automation is **active** on joining BrightPath Updates.
+- **Before launch:** check the confirmation-email footer and the automation trigger timing;
+  run one live signup → confirm → welcome test; clean up TEST; verify after the redeploy.
+  Details are in `NEWSLETTER-SETUP.md`, "Remaining checks before launch". The welcome email
+  can't be tested on a preview, because previews use the TEST group.
 - **Verified end to end on Deploy Preview #23** (TEST group, Deploy-Preview-only variables).
   - Oct 21: a new address with a first name → confirmation email → Active, name saved; a
     known address was left untouched.
@@ -494,10 +511,12 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
     - Delete → re-subscribe (a new confirmation email).
   - MailerLite records subscription date, signup IP, opt-in IP and opt-in date. Results and
     the remaining unverified checks are in `NEWSLETTER-SETUP.md`.
-- **Privacy Policy** (Section 3 `#newsletter`, `LAST_UPDATED` Oct 22, 2026):
+- **Privacy Policy** (Section 3 `#newsletter`, live version `LAST_UPDATED` Oct 22, 2026):
   - "approximately once a month";
   - consent records;
-  - double opt-in for new addresses only;
+  - double opt-in for new addresses only, followed by a welcome email after
+    confirming (added on `docs/newsletter-launch-status`; `LAST_UPDATED` must be set to its
+    publication date);
   - open tracking;
   - retention, including a **manual monthly Delete** of signups unconfirmed for over 30 days.
     **Forget** is only for individual erasure requests. The procedure is in

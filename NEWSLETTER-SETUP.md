@@ -1,10 +1,15 @@
 # The BrightPath Update (MailerLite) — Setup and Launch
 
 **Status:** **Off in production.** Nothing appears on the live site and the production function
-refuses all signups. Launch hardening (no profile overwrites, no enumeration, required Origin,
-minimum submission time, tests) is on `feature/newsletter-launch-hardening` (PR #23, not yet
-merged). **Verified end to end against live MailerLite on a Deploy Preview (Oct 21, 2026)** —
-see "Test log". Not yet launched: see the remaining items in "Launch checklist".
+refuses all signups (503).
+
+- **Code:** the launch hardening (no profile overwrites, no enumeration, required Origin,
+  minimum submission time, tests) is **on `main`**. It was merged with PR #23 on Oct 22, 2026
+  (`ff46a89`, production deploy `6ada6341dbc60eb37fa3173d`).
+- **Production MailerLite credentials are set**, but both activation flags are still unset.
+- **Signups verified against live MailerLite on Deploy Preview #23** (TEST group). See
+  "Test log".
+- **Not yet launched:** see "Remaining checks before launch" under "Launch checklist".
 
 ---
 
@@ -149,18 +154,32 @@ up — the same approach as the contact form's `CONTACT_*` variables.
    is verified (confirmed by the owner, Oct 19, 2026).
 2. ✅ "Double opt-in for API and integrations" is **on** (free plan: default confirmation
    template).
-3. ❌ **Postal address for email footers.** CAN-SPAM requires a valid physical postal address
-   in every commercial email, and MailerLite requires one in its campaign footer. The site
-   deliberately shows no street address; a P.O. box or virtual mailbox is planned. This blocks
-   *sending* newsletters, not testing the signup.
-4. ◐ Privacy Policy updated for launch on Oct 22, 2026 (frequency, consent records, double
-   opt-in for new addresses only, email tracking, retention). See "Privacy Policy" below. Still
-   to do: bump `LAST_UPDATED` to the date the change goes live.
-5. ✅ In MailerLite, create a **TEST** group and a test-only API token (group
+3. ✅ **Postal address for email footers.** CAN-SPAM requires a valid physical postal address
+   in every commercial email, and MailerLite requires one in its campaign footer. BrightPath's
+   official business mailing address is **PO Box 186, Edneyville, NC 28727**. It's set in
+   MailerLite's company details (recorded Oct 27, 2026). The website deliberately still shows no
+   street address.
+4. ◐ **Privacy Policy.** The launch version went live on Oct 22, 2026 (frequency, consent
+   records, double opt-in for new addresses only, email tracking, retention). A follow-up adds
+   the **welcome email** sent after confirmation.
+   - Still to do when that follow-up is released: set `LAST_UPDATED` in
+     `src/pages/PrivacyPage.tsx` to the **publication date** (not the editing date).
+5. ✅ **Production MailerLite credentials** (recorded Oct 27, 2026):
+   - `MAILERLITE_API_KEY` (a separate production token) and `MAILERLITE_GROUP_ID` (the
+     **BrightPath Updates** group) are set for the **Production** context;
+   - the TEST token and TEST group stay in **Deploy Previews**;
+   - `NEWSLETTER_ENABLED` and `VITE_NEWSLETTER_ENABLED` remain **unset** in Production.
+6. ✅ **Welcome email** (recorded Oct 27, 2026):
+   - designed and test-sent, with its website button and its footer (PO Box) checked;
+   - the **"Simple welcome email"** automation is **active**, triggered when a subscriber
+     joins **BrightPath Updates**.
+   - It has **not** yet been seen running after a real API signup; see "Remaining checks
+     before launch".
+7. ✅ In MailerLite, create a **TEST** group and a test-only API token (group
    "BrightPath Newsletter — TEST", Oct 21, 2026).
-6. ✅ Set the four variables for the **Deploy Preview** context only, pointing at the TEST
+8. ✅ Set the four variables for the **Deploy Preview** context only, pointing at the TEST
    group (Oct 21, 2026; production has none of them).
-7. On the deploy preview, test with addresses you own:
+9. On the deploy preview, test with addresses you own:
    - ✅ New address with a first name: confirmation email received and confirmed; subscriber
      **Active** in the TEST group with the first name in the Name field (Oct 21, 2026 — see
      "Test log").
@@ -181,10 +200,53 @@ up — the same approach as the contact form's `CONTACT_*` variables.
      the monthly Delete cleanup doesn't stop people re-subscribing through the form.
    - ☐ An invalid address, and a submission with the server flag switched off (both covered by
      `npm test`, but not yet checked on a deploy preview).
-   - ☐ If a welcome automation exists, check that it runs only after confirmation.
-8. Delete the test subscribers and the TEST group's token.
-9. Set the production variables (Production context only), server flag first, then rebuild
-   with the build flag on, then one live signup with your own address.
+   - ☐ Welcome email timing: this **can't be tested on a deploy preview**, because the
+     automation watches **BrightPath Updates** and previews use the TEST group. It's covered by
+     the live signup test below.
+10. ☐ **TEST cleanup:**
+    - delete the TEST subscribers and revoke the TEST token in MailerLite;
+    - then set the Deploy Preview `NEWSLETTER_ENABLED` to off (or remove the Deploy Preview
+      newsletter variables). Otherwise later PR previews show a form that can't subscribe
+      anyone.
+11. ☐ **Activate** (Production context only, one step at a time):
+    - set `NEWSLETTER_ENABLED=true` (takes effect without a rebuild);
+    - then set `VITE_NEWSLETTER_ENABLED=true` and redeploy production (build time).
+
+### Remaining checks before launch
+
+1. ☐ **Confirmation email footer.** API double opt-in sends MailerLite's own confirmation
+   email, not the welcome email's template. Check that its footer shows the updated company
+   details and the PO Box.
+2. ☐ **Automation trigger timing.** The function adds new subscribers to BrightPath Updates
+   while they're still **Unconfirmed**. MailerLite's documentation says automations don't run
+   for unconfirmed subscribers, but it doesn't state that "joins a group" then fires **on
+   confirmation**. Confirm the welcome email arrives **after** confirming, never before, and
+   check the automation's re-entry setting:
+   - an address removed with Delete that signs up again re-joins the group, so it may get the
+     welcome email again;
+   - a known address that resubmits never re-joins, so it doesn't.
+3. ☐ **Complete signup-to-welcome test** on production, after step 11, with an address you own:
+   form → generic success message → confirmation email → confirm → status **Active** in
+   BrightPath Updates → **welcome email** arrives, with the website button and PO Box footer
+   working. Then Delete the test subscriber if you don't want it on the list.
+4. ☐ **TEST environment cleanup** (step 10).
+5. ☐ **Launch verification** after the production redeploy:
+   - the band and form appear in both themes;
+   - all 12 prerendered routes load;
+   - the newsletter function no longer answers 503;
+   - the **contact form** still loads and its function answers normally;
+   - the Privacy Policy shows the welcome-email sentence and its publication date;
+   - there are no console errors.
+
+   Only then announce the newsletter.
+
+**Rollback at any time:**
+- set `NEWSLETTER_ENABLED` to anything except `true` to stop signups at once;
+- set `VITE_NEWSLETTER_ENABLED=false` and redeploy (or republish the previous deploy) to hide
+  the form.
+
+**Before the first campaign:** set each campaign's tracking to match the policy (open tracking
+on, Google Analytics off).
 
 ## Test log
 
