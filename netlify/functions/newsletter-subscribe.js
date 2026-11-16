@@ -79,6 +79,18 @@ const cleanText = (value, maxLength) =>
     ? value.replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0, maxLength)
     : '';
 
+// MailerLite's subscriber statuses. Anything else is logged as 'other', so
+// unexpected data can never reach the logs.
+const KNOWN_STATUSES = new Set(['active', 'unconfirmed', 'unsubscribed', 'bounced', 'junk']);
+
+// 'in-group' / 'not-in-group' for this newsletter's group, or 'group-unknown'
+// when MailerLite's reply has no groups list (so it's never wrongly reported
+// as missing).
+const groupMembership = (groups, groupId) => {
+  if (!Array.isArray(groups)) return 'group-unknown';
+  return groups.some((g) => g && String(g.id) === String(groupId)) ? 'in-group' : 'not-in-group';
+};
+
 const readJson = async (response) => {
   try {
     return await response.json();
@@ -194,9 +206,18 @@ export const handler = async (event) => {
     });
 
     if (lookup.status === 200) {
+      // Nothing is written either way. The log says whether the address is
+      // already in this newsletter's group, so a "signed up but nothing
+      // arrived" enquiry can be matched to the manual procedure in
+      // NEWSLETTER-SETUP.md. Only fixed words are logged: never the address,
+      // name, IP or group ID.
       const existing = await readJson(lookup);
-      const existingStatus = (existing && existing.data && existing.data.status) || 'unknown';
-      console.log('newsletter: address already known, left unchanged', existingStatus);
+      const data = (existing && existing.data) || {};
+      console.log(
+        'newsletter: address already known, left unchanged',
+        KNOWN_STATUSES.has(data.status) ? data.status : 'other',
+        groupMembership(data.groups, MAILERLITE_GROUP_ID)
+      );
       return accepted();
     }
     if (lookup.status === 429) {
