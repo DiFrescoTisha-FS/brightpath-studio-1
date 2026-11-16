@@ -54,7 +54,12 @@ an existing address updates that subscriber. Without the lookup, anyone who knew
 subscriber's address could overwrite their name, add them to the group without consent, or
 trigger repeat confirmation emails. The trade-off: a person who has unsubscribed, or who lost
 their confirmation email, can't fix that through the form. The success message points them to
-the contact page, and they can be handled by hand in MailerLite.
+the contact page, and they're handled by hand. See "Signup enquiries" below.
+
+This applies to the **whole MailerLite account**, not just BrightPath Updates. Someone who is
+already in the account but **not in BrightPath Updates** (for example, only in another group)
+is also left unchanged and not added. Adding them automatically would skip double opt-in for
+this newsletter, and would let anyone put a stranger's active address on the list.
 
 **Why every accepted signup gets the same answer.** If the form said "already subscribed", it
 would tell a stranger whether an address is on the list. Response code, body and headers are
@@ -75,8 +80,17 @@ timing: a new address makes two MailerLite calls instead of one.
 | No Origin header, `null`, or another website's origin | 403 `forbidden` | Generic error |
 
 **Logs** carry outcome codes, MailerLite status codes and (for 422s) the names of rejected
-fields only. They never contain email addresses, names, IP addresses or the token; a test
-checks this.
+fields only. They never contain email addresses, names, IP addresses, the group ID or the
+token; tests check this.
+
+For a known address the line reads
+`newsletter: address already known, left unchanged <status> <membership>`:
+- `<status>` is `active`, `unconfirmed`, `unsubscribed`, `bounced`, `junk`, or `other` for
+  anything unexpected;
+- `<membership>` is `in-group`, `not-in-group`, or `group-unknown` (MailerLite's reply had no
+  groups list).
+
+The log can't tell you *who* signed up, only what kind of case it was.
 
 **Abuse protection:**
 
@@ -388,6 +402,34 @@ Once a month, in MailerLite (production group). Don't copy subscriber details an
 4. **Record that the review was done:** the date, and the number of records removed. Keep this
    in a private admin note, never in this public repository, and never record email addresses,
    names or IP addresses.
+
+## Signup enquiries ("I signed up but nothing arrived")
+
+The form gives everyone the same success message, so some people will write in. Handle each
+enquiry **by hand, one person at a time**. The function never does any of this automatically.
+
+**Consent rules for every case:**
+- Act only on a request that comes **by email from the address in question**, clearly asking to
+  receive The BrightPath Update. A request from someone else, or for someone else, isn't
+  consent.
+- **Keep that email** in the `contact@` mailbox as the consent record. Don't copy it, or any
+  address, name or IP, into this repository or other notes.
+- **Never change a subscriber's status on our own initiative**, never move anyone to Active by
+  hand (MailerLite says that isn't a confirmation), and never act in bulk.
+
+**First look the address up in MailerLite** (Subscribers → search, all statuses). Then:
+
+| What you find | What to do |
+|---|---|
+| **Not in MailerLite at all** | Ask them to sign up again on the website. That sends a fresh confirmation email. Don't add them by hand. |
+| **Active, already in BrightPath Updates** | They're subscribed. Suggest checking spam or promotions folders, and adding the sender to their contacts. Change nothing. |
+| **Active, but not in BrightPath Updates** | With their emailed request, add them to **BrightPath Updates** from their profile (add to group). This doesn't change their status. It triggers the welcome automation, which is expected. Keep the email as the consent record. |
+| **Unconfirmed** | Don't activate them. With their emailed request, **Delete** them, then ask them to sign up again on the website, which starts a fresh confirmation (verified on Oct 22, 2026). |
+| **Unsubscribed** | They opted out, so do nothing unless their email explicitly asks to be resubscribed. Resubscribing changes their status, so treat it as your own decision each time. MailerLite also requires clear, documented permission (their email) before using its **Subscribe** action on the profile. Never resubscribe anyone because of a form submission alone. |
+| **Bounced** or **Junk** | Don't resubscribe. Bounced addresses can't receive mail. Junk means they reported an email as spam. Reply directly if appropriate. |
+
+The function's log line ("Logs" above) shows how often each kind of case happens, but not who
+it was. Always identify the case from the person's own email and the MailerLite lookup.
 
 ## Local review
 

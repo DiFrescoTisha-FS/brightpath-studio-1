@@ -489,6 +489,11 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
     people are never refused.
   - Unsubscribed or unconfirmed people need manual help to rejoin — an accepted trade-off. An
     address removed with MailerLite **Delete** can sign up again normally.
+  - "Known" means anywhere in the **MailerLite account**, so someone in another group but
+    not in BrightPath Updates is also left out. **Never auto-add them** (it would skip double
+    opt-in). The log line records status plus `in-group` / `not-in-group` / `group-unknown`,
+    never personal data. Enquiries are handled by hand, with consent kept as the person's own
+    email: `NEWSLETTER-SETUP.md`, "Signup enquiries".
 - **Production status:** off. The code shipped to `main` with PR #23 on Oct 22, 2026
   (`ff46a89`, deploy `6ada6341dbc60eb37fa3173d`); production answers 503 and shows no band.
   - Per the owner on Oct 27, 2026: `MAILERLITE_API_KEY` (a production token) and
