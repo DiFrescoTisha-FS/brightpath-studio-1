@@ -131,6 +131,45 @@ for (const existingStatus of ['active', 'unconfirmed', 'unsubscribed', 'bounced'
   });
 }
 
+// Known addresses: the log records status and group membership as fixed words,
+// so an enquiry can be handled by hand. Nothing is ever written.
+const knownLog = () => logs.map((l) => l.join(' ')).find((l) => l.includes('address already known'));
+
+for (const [label, groups, expected] of [
+  ['in this newsletter\'s group', [{ id: '999' }, { id: GROUP_ID, name: 'BrightPath Updates' }], 'in-group'],
+  ['in another group only', [{ id: '999', name: 'BrightPath Newsletter — TEST' }], 'not-in-group'],
+  ['in no group', [], 'not-in-group'],
+  ['with no groups list in the reply', undefined, 'group-unknown'],
+]) {
+  test(`existing active subscriber ${label} → logged "${expected}", nothing written`, async () => {
+    const calls = mailerLite({ lookup: () => json(200, { data: { status: 'active', groups } }) });
+    const res = await signup();
+    assert.deepEqual(parse(res), { status: 'pending_confirmation' });
+    assert.equal(created(calls).length, 0, 'never added to the group');
+    assert.equal(knownLog(), `newsletter: address already known, left unchanged active ${expected}`);
+  });
+}
+
+test('group IDs are compared as strings (a numeric ID in the reply still matches)', async () => {
+  process.env.MAILERLITE_GROUP_ID = '42';
+  mailerLite({ lookup: () => json(200, { data: { status: 'unsubscribed', groups: [{ id: 7 }, { id: 42 }] } }) });
+  await signup();
+  assert.equal(knownLog(), 'newsletter: address already known, left unchanged unsubscribed in-group');
+});
+
+test('unexpected status or malformed groups → logged as "other" / "group-unknown", never echoed', async () => {
+  mailerLite({ lookup: () => json(200, { data: { status: 'ada@example.com', groups: 'oops' } }) });
+  await signup();
+  assert.equal(knownLog(), 'newsletter: address already known, left unchanged other group-unknown');
+});
+
+test('known-address log never contains the email, name, IP, group ID or group names', async () => {
+  mailerLite({ lookup: () => json(200, { data: { status: 'active', email: 'ada@example.com', groups: [{ id: GROUP_ID, name: 'Ada list' }] } }) });
+  await signup({}, { ip: IP });
+  const all = logs.map((l) => l.join(' ')).join('\n');
+  for (const secret of ['ada@example.com', 'Ada', IP, GROUP_ID, API_KEY]) assert.ok(!all.includes(secret), `log contains ${secret}`);
+});
+
 test('existing and new addresses get byte-identical responses (no enumeration)', async () => {
   mailerLite();
   const fresh = await signup({}, { ip: '198.51.100.1' });
