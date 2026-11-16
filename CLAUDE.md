@@ -469,9 +469,14 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
 
 ### Newsletter (MailerLite) — off by default
 
-- **Two flags.** `VITE_NEWSLETTER_ENABLED=true` (build time) renders the footer form.
-  `NEWSLETTER_ENABLED=true` (function runtime) accepts signups; otherwise the function
-  answers "unavailable".
+- **Two flags.**
+  - `VITE_NEWSLETTER_ENABLED=true` (compiled in at build time) renders the footer form.
+  - `NEWSLETTER_ENABLED=true` (read by the function) accepts signups; otherwise the function
+    answers "unavailable".
+  - **Both take effect only on a new deploy.** Netlify gives each deploy the variable values
+    from when it was built, so changing either one does nothing to the live site until you
+    redeploy. The fastest rollback is republishing an earlier flags-off deploy, which takes
+    effect instantly.
 - **Double opt-in.** API signups rely on MailerLite's account-level "Double opt-in for API
   and integrations" setting, which is enabled. The function must **never send `status`**:
   `status: 'active'` skips confirmation.
@@ -576,13 +581,16 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
 |---|---|---|---|---|
 | `CONTACT_SCRIPT_URL` | TEST deployment `/exec` | TEST deployment | new **production v2** deployment | Functions scope; must be a `script.google.com/macros/s/…/exec` URL (localhost allowed only under `netlify dev`) |
 | `CONTACT_SHARED_SECRET` | TEST secret | TEST secret | production secret (different) | Mark secret; must equal that script's `SHARED_SECRET` |
-| `NEWSLETTER_ENABLED` | unset / `false` | `true` only while testing | `false` until launch | Runtime switch |
+| `NEWSLETTER_ENABLED` | unset / `false` | `true` only while testing | `false` until launch | Read by the function; still needs a **redeploy** to change |
 | `MAILERLITE_API_KEY` | unset | test only | set at launch | Mark secret; full account access |
 | `MAILERLITE_GROUP_ID` | unset | test only | set at launch | BrightPath Updates group |
 | `VITE_NEWSLETTER_ENABLED` | optional for review | `true` only while testing | `false` until launch | **Build time**; needs a rebuild |
 | `WORDPRESS_API_URL`, `WORDPRESS_APP_PASSWORD` | from the linked site | existing | existing | Unchanged |
 
 - **Placeholders** are in `.env.example`.
+- **Any variable change needs a new deploy**, functions included (`CONTACT_*`,
+  `MAILERLITE_*`, `NEWSLETTER_ENABLED`). Each Netlify deploy keeps the values it was built
+  with. Republishing an older deploy restores *its* values instantly.
 - **Never** prefix a credential with `VITE_`: those values are compiled into public
   JavaScript.
 - **Set preview values for the `deploy-preview` context only**, so production can never pick
