@@ -1,11 +1,13 @@
 import React, { useRef, useState } from 'react';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin, Share2, Facebook, Linkedin } from 'lucide-react';
 import { useAppStore } from '@/store/appStore'; // Import the store
 import BrightPathGradientTitle from '@/components/BrightPathGradientTitle';
 import { PageMeta } from '@/components/PageMeta';
-import { BUSINESS } from '@/config/contact';
+import { BUSINESS, SOCIAL_LINKS } from '@/config/contact';
 import { analyticsSafeUrl, loadAnalytics, trackEvent } from '@/utils/analytics';
 import { IS_PRERENDER } from '@/utils/isPrerender';
+
+const SOCIAL_ICONS = { Facebook, LinkedIn: Linkedin } as const;
 
 // Define the shape of the form data
 interface FormData {
@@ -270,6 +272,35 @@ const ContactPage: React.FC = () => {
                     <p className={`font-lato ${theme === 'dark' ? 'text-gray-700' : 'text-gray-700'}`}>
                       <a href={`mailto:${BUSINESS.email}`} className="hover:underline underline-offset-2 break-words">{BUSINESS.email}</a>
                     </p>
+                  </div>
+                </div>
+
+                {/* Follow — business social pages, same layout as the items above */}
+                <div className="flex items-start space-x-4">
+                  <Share2 aria-hidden="true" className={`w-6 h-6 ${themeClasses.iconColor} mt-1 flex-shrink-0`} />
+                  <div>
+                    <BrightPathGradientTitle as="h3" className="font-poppins font-semibold text-lg mb-1">
+                      Follow BrightPath
+                    </BrightPathGradientTitle>
+                    <ul className="flex flex-wrap gap-x-6 gap-y-1 font-lato text-gray-700">
+                      {SOCIAL_LINKS.map(({ network, href }) => {
+                        const Icon = SOCIAL_ICONS[network];
+                        return (
+                          <li key={network}>
+                            <a
+                              href={href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 py-1 hover:underline underline-offset-2"
+                            >
+                              <Icon aria-hidden="true" className="h-4 w-4 flex-shrink-0" />
+                              {network}
+                              <span className="sr-only"> (opens in a new tab)</span>
+                            </a>
+                          </li>
+                        );
+                      })}
+                    </ul>
                   </div>
                 </div>
               </div>
