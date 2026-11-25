@@ -15,7 +15,7 @@ export const BUSINESS = {
   // profiles and deliberately stay separate.
   social: {
     facebook: 'https://www.facebook.com/profile.php?id=61596895259377',
-    linkedin: 'https://www.linkedin.com/company/111891574/',
+    linkedin: 'https://www.linkedin.com/company/brightpathwebstudio/',
   },
 } as const;
 

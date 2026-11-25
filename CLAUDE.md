@@ -39,8 +39,9 @@ edition (MailerLite).
      `feature/social-links-launch-docs` (Nov 25):
      - footer icon row, Contact page "Follow BrightPath", `index.html` JSON-LD `sameAs`;
      - URLs in `BUSINESS.social` / `SOCIAL_LINKS`;
-     - Facebook verified loading publicly. LinkedIn refuses automated access (403), so the
-       owner verifies it in a browser.
+     - Facebook verified loading publicly. LinkedIn refuses automated access (403); the
+       owner verified it in a browser and chose the clean URL
+       `linkedin.com/company/brightpathwebstudio/` over the numeric one.
   2. Open the PR, review the deploy preview, merge, deploy with flags off, run live checks.
   3. Activate: set both Production flags, then one redeploy.
   4. Run the final test immediately, with a genuinely new address through the live form
