@@ -1,5 +1,65 @@
 # BrightPath Web Studio - Project Context
 
+## Resume Here (updated November 25, 2026 — launch day for The BrightPath Update)
+
+**Goal:** launch the newsletter signup publicly and send the first campaign, the Thanksgiving
+edition (MailerLite).
+
+- **Production now** (verified Nov 25):
+  - `main` = `4974213` (PR #26 merge); the live deploy is **`6afb454209385463bd75d2d0`**.
+  - `NEWSLETTER_ENABLED` and `VITE_NEWSLETTER_ENABLED` are both **unset** in Production. The
+    function answers 503, no band shows, and contact GET answers 405.
+  - That deploy is the **rollback target**.
+- **The Nov 16 mystery is solved** (verified Nov 25 from MailerLite activity and the Gmail
+  welcome email).
+  - The test address wasn't new. It had been confirmed in the TEST group on Oct 21, was
+    **Deleted** in MailerLite at 18:49 UTC, and was then submitted again.
+  - MailerLite **restored** the old record: still Active, with the old opt-in date and no new
+    confirmation. It added the record to BrightPath Updates, and the welcome email went out at
+    18:51:47.
+  - The function behaved as designed. No code change is needed.
+  - **New rule: Delete only Unconfirmed subscribers.** To take Active or test accounts off the
+    list, remove them from the group; for erasure, use Forget. Details are in
+    `NEWSLETTER-SETUP.md`, "Deleted subscribers are restored, not recreated".
+- **Proven in production:**
+  - a new signup creates an Unconfirmed subscriber in BrightPath Updates;
+  - confirming makes it Active;
+  - the welcome email follows about 6 s later (Oct 27).
+- **Owner decisions (Nov 25):**
+  - all four social-link placements approved: footer icon row, Contact page card,
+    `index.html` JSON-LD `sameAs`, and URLs held in `BUSINESS`;
+  - personal GitHub/LinkedIn on About stay as they are;
+  - Turnstile deferred until after launch;
+  - test subscribers kept until final testing;
+  - campaign tracking: opens and clicks on, Google Analytics off;
+  - no contacts imported without opt-in;
+  - fresh-branch + PR workflow.
+- **Next steps, in order** (each needs approval):
+  1. ✅ Business page URLs received and the social links built on
+     `feature/social-links-launch-docs` (Nov 25):
+     - footer icon row, Contact page "Follow BrightPath", `index.html` JSON-LD `sameAs`;
+     - URLs in `BUSINESS.social` / `SOCIAL_LINKS`;
+     - Facebook verified loading publicly. LinkedIn refuses automated access (403), so the
+       owner verifies it in a browser.
+  2. Open the PR, review the deploy preview, merge, deploy with flags off, run live checks.
+  3. Activate: set both Production flags, then one redeploy.
+  4. Run the final test immediately, with a genuinely new address through the live form
+     (`NEWSLETTER-SETUP.md`, "Final test requirements").
+  5. Launch verification.
+  6. Decide whether the two test accounts stay in BrightPath Updates for the campaign.
+  7. Set the campaign's tracking.
+  8. Send.
+- **Uncommitted right now:** documentation only (`CLAUDE.md`, `NEWSLETTER-SETUP.md`). They're
+  on the already-merged `feature/newsletter-known-subscriber-handling` branch. Carry them to
+  the new branch with `git switch -c`.
+- **Environment note (Nov 25).** The project lives on the iCloud-synced Desktop, and macOS had
+  offloaded about 47,000 files. That made `npx netlify` look hung, because each file had to
+  download first. Fixed by setting the folder to **Keep Downloaded**, and `git fsck` is
+  clean. Leftover iCloud conflict copies (`.git/index 2`, `public/videos/video-1 2.mp4`,
+  `… 2` / `… 3` folders in `dist/` and `.netlify/`) are harmless. Clean them up only with
+  approval. Moving the repo out of iCloud is deferred.
+- Fuller running log: the Claude auto-memory file `brightpath-state-2026-10.md`.
+
 ## Project Overview
 Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with React + TypeScript + Vite + Tailwind CSS + Framer Motion.
 
@@ -76,8 +136,10 @@ Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with Re
   functions. It lives outside `netlify/functions` so Netlify doesn't deploy it as a function
 - `src/utils/analytics.ts` + `netlify/functions/analytics-region.js` - GA4 loader and its
   U.S.-only region check
-- `src/config/contact.ts` - `BUSINESS`, the single source for public contact details
-  (`index.html` JSON-LD must be kept in sync by hand)
+- `src/config/contact.ts` - `BUSINESS`, the single source for public contact details and the
+  business social URLs (`BUSINESS.social`, rendered via `SOCIAL_LINKS` in the footer and on the
+  Contact page). `index.html` JSON-LD, including `sameAs`, must be kept in sync by hand. The
+  About page's GitHub/LinkedIn are Tisha's **personal** profiles and stay separate
 - `src/components/legal/` - Shared layout for the Privacy Policy and Terms of Service
 - `src/components/PageMeta.tsx` - Per-route title/description/canonical/OG/JSON-LD; also fires the `prerender-ready` signal
 - `src/utils/isPrerender.ts` - `IS_PRERENDER` flag: build-time snapshot vs. real visit
@@ -487,8 +549,13 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
   - Origin is required.
   - Signups under 3 s after the form appeared are ignored. The form waits out the rest, so
     people are never refused.
-  - Unsubscribed or unconfirmed people need manual help to rejoin — an accepted trade-off. An
-    address removed with MailerLite **Delete** can sign up again normally.
+  - Unsubscribed or unconfirmed people need manual help to rejoin — an accepted trade-off.
+  - An address removed with MailerLite **Delete** is restored with its **old status** when it
+    is submitted again:
+    - Unconfirmed comes back Unconfirmed, with a new confirmation email;
+    - Active comes back Active **without** confirmation (verified Nov 16, 2026).
+
+    Hence: Delete only Unconfirmed subscribers.
   - "Known" means anywhere in the **MailerLite account**, so someone in another group but
     not in BrightPath Updates is also left out. **Never auto-add them** (it would skip double
     opt-in). The log line records status plus `in-group` / `not-in-group` / `group-unknown`,
@@ -501,6 +568,29 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
     values stay in Deploy Previews.
   - `NEWSLETTER_ENABLED` and `VITE_NEWSLETTER_ENABLED` are still **unset** in Production.
   - `CONTACT_*` has separate Production and Deploy Preview values.
+  - **Nov 16, 2026:**
+    - PR #26 merged (`4974213`, deploy `6afb454209385463bd75d2d0`). It adds the
+      known-address log (status + `in-group` / `not-in-group` / `group-unknown`, 115 tests)
+      and the "Signup enquiries" consent procedure.
+    - Controlled server-flag-only window: deploy `6afb4bcfa57471cb75d72d10`, 18:31–18:58 UTC.
+    - Rolled back by republishing `6afb4542…`; the flag is removed again (verified Nov 17).
+    - **Result (verified Nov 25):** the address was not new. It had been confirmed in the
+      TEST group on Oct 21 and was Deleted in MailerLite just before resubmitting. MailerLite
+      **restored** it as Active (original opt-in, no new confirmation), added it to BrightPath
+      Updates, and sent the welcome email.
+    - The function behaved as designed: its lookup returns 404 for Deleted records.
+    - **Rule: Delete only Unconfirmed subscribers;** remove Active or test accounts from the
+      group instead. See `NEWSLETTER-SETUP.md`, "Deleted subscribers are restored, not
+      recreated".
+  - **Oct 27, 2026 controlled window** (`6ae10bf4…`, rolled back to `6ae1056e…` at 21:51 UTC):
+    - the first attempt was silently dropped as "submitted too fast" (no numeric `elapsedMs`);
+    - the retest succeeded end to end (see `NEWSLETTER-SETUP.md`, "Test log").
+  - **Subscriber review (owner, Nov 16, counts only):**
+    - TEST group: 3 Active, 2 Unconfirmed, 1 Unsubscribed, all test accounts;
+    - BrightPath Updates: 1 Active, the Oct 27 test account.
+
+    The review deleted nothing. Since the Nov 16 restore, BrightPath Updates has **2 Active**
+    owner test accounts, both kept until final testing.
 - **MailerLite setup (owner, recorded Oct 27, 2026):**
   - the sending domain `brightpathwebstudio.org` is authenticated;
   - the company details use the official mailing address **PO Box 186, Edneyville, NC 28727**
@@ -917,7 +1007,15 @@ pixel-identical throughout (maxDelta 0).
 
 ## Commit History (Recent)
 
-**On `feature/newsletter-signup` only (local, not yet pushed or merged):**
+**Newer `main` history (Oct 21 – Nov 16, 2026), most recent first:**
+- `4974213` - Merge PR #26: known-address group logging + signup-enquiry procedure (live,
+  deploy `6afb454209385463bd75d2d0`)
+- `d594690` - Merge PR #25: welcome-email policy sentence, `LAST_UPDATED` October 27, 2026
+- `ff46a89` - PR #23: newsletter launch hardening + artwork band (flags off)
+- `180cec7` - PR #24: prerender hero race fix
+- `aa1bec5` - contact form v2, U.S.-only Analytics, legal pages (from `feature/newsletter-signup`)
+
+**Historical — `feature/newsletter-signup` before it merged (hashes later rewritten):**
 - `b09e6c3` - feat: add MailerLite newsletter signup behind feature flags
 - `bb787c1` - feat: confirm contact form submissions before showing success
 - `a867fd6` - fix: restore Google Analytics with U.S.-only privacy safeguards

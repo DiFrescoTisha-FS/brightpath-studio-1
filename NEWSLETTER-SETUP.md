@@ -10,6 +10,13 @@ refuses all signups (503).
 - **Signups verified against live MailerLite on Deploy Preview #23** (TEST group). See
   "Test log".
 - **Not yet launched:** see "Remaining checks before launch" under "Launch checklist".
+- **Production signups proven** on Oct 27, 2026 (see "Test log").
+- **Nov 16, 2026 window explained** (verified Nov 25). The test address had been confirmed in
+  the TEST group on Oct 21, then **Deleted** in MailerLite. Submitting it again **restored** the
+  old record: still Active, with its Oct 21 opt-in and no new confirmation. MailerLite then added
+  it to BrightPath Updates, and the welcome email went out. This is how MailerLite behaves, not
+  a code fault. The rule that follows: **only ever Delete Unconfirmed subscribers** (see
+  "Deleted subscribers are restored, not recreated").
 
 ---
 
@@ -60,6 +67,53 @@ This applies to the **whole MailerLite account**, not just BrightPath Updates. S
 already in the account but **not in BrightPath Updates** (for example, only in another group)
 is also left unchanged and not added. Adding them automatically would skip double opt-in for
 this newsletter, and would let anyone put a stranger's active address on the list.
+
+**Deleted subscribers are restored, not recreated** (verified in production, Nov 16, 2026).
+MailerLite's **Delete** hides a subscriber but keeps the record. The function's lookup doesn't
+find a Deleted address (it gets 404), so it treats the address as new and posts it. MailerLite
+then **restores the old record with its previous status and history**, instead of creating a
+fresh one:
+
+| Status when Deleted | Submitting the address again | Verified |
+|---|---|---|
+| **Unconfirmed** | Restored as Unconfirmed. A **new confirmation email** is sent, so double opt-in still applies | ✅ Oct 22, 2026 (TEST group) |
+| **Active** | Restored as **Active**, with the **original** opt-in date. **No confirmation email.** It's added to BrightPath Updates, and the welcome automation fires | ✅ Nov 16, 2026 (production) |
+| **Unsubscribed** | Not tested | — |
+
+**Confirmed vs. untested.**
+- **Confirmed** by observation (MailerLite activity):
+  - an Unconfirmed subscriber that was Deleted and resubmitted gets a new confirmation email
+    (TEST group, Oct 22);
+  - an Active subscriber that was Deleted and resubmitted is restored as Active with its
+    original opt-in, no confirmation, added to the group, and the welcome email is sent
+    (production, Nov 16).
+- **Inferred, not tested:** the function's lookup returns 404 for a Deleted address. That's the
+  only way it could have posted on both occasions, but the 404 itself wasn't logged.
+- **Untested:**
+  - Deleted **Unsubscribed** subscribers;
+  - how long MailerLite keeps Deleted records restorable;
+  - what happens after **Forget** once its 30-day block ends;
+  - the HTTP status MailerLite returns for a restore (the function accepts both 200 and 201).
+
+  Don't rely on any of these without testing first.
+
+So deleting an Active subscriber would let *anyone* who submits that address put it straight
+back on the list without that person confirming. The function can't prevent this, because
+MailerLite's lookup doesn't report Deleted records. **The safeguard is procedural: Delete only
+Unconfirmed subscribers.**
+- Never Delete Active or Unsubscribed subscribers.
+- To take a test or Active account off the newsletter, **remove it from the BrightPath Updates
+  group** instead (the record stays known, so the form won't re-add it).
+  - **Consequence:** that person **can't rejoin through the form by themselves**. The address
+    is still known (Active, not in the group), so the function leaves it unchanged; it logs
+    `active not-in-group`, and the visitor sees the generic success message with no email.
+  - To rejoin, they email us, and we add them back to the group by hand with that email as the
+    consent record ("Signup enquiries", the row for Active but not in BrightPath Updates).
+  - This is the same accepted trade-off as for unsubscribed people. For the owner's own test
+    accounts it doesn't matter.
+- For erasure requests, use **Forget**.
+
+See "Monthly maintenance".
 
 **Why every accepted signup gets the same answer.** If the form said "already subscribed", it
 would tell a stranger whether an address is on the list. Response code, body and headers are
@@ -188,11 +242,11 @@ up — the same approach as the contact form's `CONTACT_*` variables.
    official business mailing address is **PO Box 186, Edneyville, NC 28727**. It's set in
    MailerLite's company details (recorded Oct 27, 2026). The website deliberately still shows no
    street address.
-4. ◐ **Privacy Policy.** The launch version went live on Oct 22, 2026 (frequency, consent
-   records, double opt-in for new addresses only, email tracking, retention). A follow-up adds
-   the **welcome email** sent after confirmation.
-   - Still to do when that follow-up is released: set `LAST_UPDATED` in
-     `src/pages/PrivacyPage.tsx` to the **publication date** (not the editing date).
+4. ✅ **Privacy Policy.**
+   - The launch version went live on Oct 22, 2026: frequency, consent records, double opt-in
+     for new addresses only, email tracking, retention.
+   - The **welcome email** sentence followed with PR #25 (`LAST_UPDATED` October 27, 2026, live).
+   - Bump `LAST_UPDATED` again only if the policy text changes.
 5. ✅ **Production MailerLite credentials** (recorded Oct 27, 2026):
    - `MAILERLITE_API_KEY` (a separate production token) and `MAILERLITE_GROUP_ID` (the
      **BrightPath Updates** group) are set for the **Production** context;
@@ -202,8 +256,11 @@ up — the same approach as the contact form's `CONTACT_*` variables.
    - designed and test-sent, with its website button and its footer (PO Box) checked;
    - the **"Simple welcome email"** automation is **active**, triggered when a subscriber
      joins **BrightPath Updates**.
-   - It has **not** yet been seen running after a real API signup; see "Remaining checks
-     before launch".
+   - Seen running in production:
+     - Oct 27, 2026: about 6 s **after** a new subscriber confirmed;
+     - Nov 16, 2026: when a restored **Active** subscriber was added to the group.
+
+     See "Test log".
 7. ✅ In MailerLite, create a **TEST** group and a test-only API token (group
    "BrightPath Newsletter — TEST", Oct 21, 2026).
 8. ✅ Set the four variables for the **Deploy Preview** context only, pointing at the TEST
@@ -227,39 +284,91 @@ up — the same approach as the contact form's `CONTACT_*` variables.
    - ✅ An unconfirmed address removed with **Delete**, then submitted again: same message, a
      **new** confirmation email, and the address is back in the TEST group as Unconfirmed. So
      the monthly Delete cleanup doesn't stop people re-subscribing through the form.
+     - ⚠️ This holds only for **Unconfirmed** addresses. A Deleted **Active** address is
+       restored as Active with **no** confirmation (production, Nov 16, 2026). See "Deleted
+       subscribers are restored, not recreated".
    - ☐ An invalid address, and a submission with the server flag switched off (both covered by
      `npm test`, but not yet checked on a deploy preview).
    - ☐ Welcome email timing: this **can't be tested on a deploy preview**, because the
      automation watches **BrightPath Updates** and previews use the TEST group. It's covered by
      the live signup test below.
 10. ☐ **TEST cleanup:**
-    - delete the TEST subscribers and revoke the TEST token in MailerLite;
+    - revoke the TEST token in MailerLite;
+    - **don't Delete Active TEST subscribers.** A Deleted Active address comes back Active if it's
+      ever submitted again. Leave them in the TEST group (it's never mailed), or use **Forget**.
+      Unconfirmed ones can be Deleted;
     - then set the Deploy Preview `NEWSLETTER_ENABLED` to off (or remove the Deploy Preview
       newsletter variables). Otherwise later PR previews show a form that can't subscribe
       anyone.
-11. ☐ **Activate** (Production context only, one step at a time):
-    - set `NEWSLETTER_ENABLED=true` and **redeploy** production (nothing changes until the
-      new deploy is live);
-    - then set `VITE_NEWSLETTER_ENABLED=true` and **redeploy** again (build time).
+11. ☐ **Activate** (Production context only). Note the published flags-off deploy ID first:
+    it's the rollback target.
+    - Set `NEWSLETTER_ENABLED=true` **and** `VITE_NEWSLETTER_ENABLED=true`, then **redeploy**
+      production once. Nothing changes until the new deploy is live.
+    - Run the final test ("Remaining checks", item 3) immediately.
+    - The server-only step was already proven twice (Oct 27 and Nov 16), so one deploy is
+      enough. The cautious alternative is the server flag first, then the form flag, with a
+      redeploy after each.
 
 ### Remaining checks before launch
 
-1. ☐ **Confirmation email footer.** API double opt-in sends MailerLite's own confirmation
-   email, not the welcome email's template. Check that its footer shows the updated company
-   details and the PO Box.
-2. ☐ **Automation trigger timing.** The function adds new subscribers to BrightPath Updates
-   while they're still **Unconfirmed**. MailerLite's documentation says automations don't run
-   for unconfirmed subscribers, but it doesn't state that "joins a group" then fires **on
-   confirmation**. Confirm the welcome email arrives **after** confirming, never before, and
-   check the automation's re-entry setting:
-   - an address removed with Delete that signs up again re-joins the group, so it may get the
-     welcome email again;
-   - a known address that resubmits never re-joins, so it doesn't.
-3. ☐ **Complete signup-to-welcome test** on production, after step 11, with an address you own:
-   form → generic success message → confirmation email → confirm → status **Active** in
-   BrightPath Updates → **welcome email** arrives, with the website button and PO Box footer
-   working. Then Delete the test subscriber if you don't want it on the list.
-4. ☐ **TEST environment cleanup** (step 10).
+*Updated Nov 25, 2026.*
+
+1. ☐ **Email verification items.** Each one stays open until it's verified **individually**
+   during the final test (item 3). API double opt-in sends MailerLite's own confirmation email,
+   not the welcome email's template. No production confirmation email has been inspected yet:
+   the Oct 27 one wasn't recorded, and Nov 16 sent none.
+   - ☐ Confirmation email **sender** is `contact@brightpathwebstudio.org`.
+   - ☐ Confirmation email **content** reads correctly: subject, wording, confirm button.
+   - ☐ Confirmation email **footer** shows the company details and **PO Box 186, Edneyville, NC
+     28727**.
+   - ☐ **SPF** = PASS (Gmail: ⋮ → Show original).
+   - ☐ **DKIM** = PASS.
+   - ☐ **DMARC** = PASS.
+   - ☐ **Confirmation thank-you page** appears after clicking confirm, and reads correctly.
+   - ☐ **Welcome email button** opens the website.
+   - ☐ **Welcome email footer** shows the PO Box and a working unsubscribe link.
+2. ◐ **Automation trigger timing.**
+   - ✅ Fires **after** confirmation, never before: about 6 s after confirming (Oct 27).
+   - ✅ Also fires when an **Active** subscriber is added to BrightPath Updates (Nov 16 restore;
+     the same happens when adding someone by hand, see "Signup enquiries").
+   - ☐ Check the automation's **re-entry** setting in MailerLite (read-only): would someone
+     who leaves and re-joins the group get the welcome email again? It matters little under
+     the rule "Delete only Unconfirmed".
+3. ☐ **Final signup-to-welcome test** with a **genuinely new address** (see the requirements
+   below), through the real footer form, right after activation (step 11).
+4. ☐ **Test accounts in BrightPath Updates.** Two Active owner test accounts, from Oct 27 and
+   the Nov 16 restore, will receive every campaign.
+   - Keep them as seed copies, or **remove them from the group**.
+   - **Don't Delete them** (see "Deleted subscribers are restored, not recreated").
+5. ☐ **TEST environment cleanup** (step 10). It can wait until after launch.
+
+**Final test requirements (genuinely new address):**
+- **The address.** It must never have existed **anywhere in this MailerLite account**: any
+  group, any status, and never Deleted or Forgotten.
+  - A MailerLite search doesn't show Deleted records, so search alone can't prove this.
+  - Use an address that has certainly never been used, such as a Gmail plus-address with a tag
+    never used before. Don't record it in this repository.
+- **How to submit.** Use the **footer form on the live site** (not the console), with a first
+  name, so the form, success message and Name field are all checked.
+- **Expected, in order:**
+  1. The form shows the generic success message.
+  2. MailerLite: a new profile with today's date, "via API", status **Unconfirmed**, group
+     **BrightPath Updates** only, and activity "Added to BrightPath Updates".
+  3. The confirmation email arrives (item 1 checks).
+  4. **No welcome email** while it's unconfirmed (wait about 5 minutes).
+  5. Click confirm: the thank-you page appears.
+  6. MailerLite: status **Active**, "activated by confirming signup", today's opt-in date, and
+     the first name saved.
+  7. The welcome email arrives within seconds; check its content, website button and PO Box
+     footer.
+  8. The Netlify function log has **no** "address already known" or "submitted too fast" line
+     for that time.
+- **Fails, so roll back** by republishing the flags-off deploy:
+  - Active immediately without a confirmation event;
+  - a welcome email before confirming;
+  - no confirmation email within about 10 minutes;
+  - the wrong group;
+  - a 5xx reply.
 5. ☐ **Launch verification** after the production redeploy:
    - the band and form appear in both themes;
    - all 12 prerendered routes load;
@@ -317,6 +426,70 @@ are kept here.
 The Delete → re-subscribe result shows that after **Delete**, the function's lookup no longer
 finds the address (it's treated as new), so the monthly cleanup is safe for the form. No code
 change was needed.
+
+**Oct 27, 2026 — production, controlled window.** Server flag only, form hidden: deploy
+`6ae10bf4adf4fc92ea2a7e85`, commit `d594690`. It was rolled back at 21:51 UTC by republishing
+`6ae1056e6047a2149586d237`. Recorded Nov 16, 2026 from the owner's MailerLite activity view;
+no addresses kept here.
+
+| Step | Result |
+|---|---|
+| First console attempt | ⚠️ `pending_confirmation` but nothing created. The body lacked a numeric `elapsedMs`, so the function treated it as "submitted too fast" (by design) |
+| Retest with `elapsedMs: 5000` (number), brand-new address | ✅ 21:44:14 UTC: added to **BrightPath Updates** (Unconfirmed) |
+| Confirmation link clicked | ✅ 21:47:35: activated by email confirmation |
+| Welcome automation | ✅ 21:47:41: sent about 6 s **after** confirming, never before; opened 21:47:54 |
+
+What this establishes in production: the production token and group are correct, account-level
+API double opt-in applies, and the welcome automation fires on confirmation (this answers
+"Remaining checks" item 2, apart from the re-entry setting). The confirmation email's sender
+and PO Box footer, the thank-you page, and the current welcome email content weren't recorded,
+so they're still to check.
+
+**Subscriber review, Nov 16, 2026** (owner, counts only).
+- TEST group "BrightPath Newsletter — TEST": 3 Active, 2 Unconfirmed, 1 Unsubscribed, all
+  owner test accounts.
+- BrightPath Updates: 1 Active, the Oct 27 test account above.
+
+Nothing was deleted by this review. (The test account in the Nov 16 entry below was Deleted
+separately, during that test.) Before the first campaign, decide whether the test accounts in
+BrightPath Updates should receive it. To exclude one, **remove it from the group; don't Delete
+it.**
+
+**Nov 16, 2026 — production, second controlled window.** Server flag only, form hidden: deploy
+`6afb4bcfa57471cb75d72d10`, commit `4974213`, live 18:31–18:58 UTC.
+- The pre-checks passed: a malformed request got 400 (not 503), no band was shown, and contact
+  GET returned 405.
+- It was rolled back by republishing `6afb454209385463bd75d2d0`, and `NEWSLETTER_ENABLED` was
+  removed (verified Nov 17: 503, both flags unset).
+- **Result** (verified Nov 25, 2026 from the owner's MailerLite profile activity and the Gmail
+  welcome email; no address recorded). The address wasn't new: it was an owner test account
+  first subscribed through Deploy Preview #23.
+
+| Time (UTC) | Event |
+|---|---|
+| Oct 21, 18:00:11 | Added to "BrightPath Newsletter — TEST" via API (preview test) |
+| Oct 21, 18:00:43 | Activated by confirming signup (its original opt-in) |
+| Nov 16, 18:49:31 | **Deleted** in MailerLite. The function has no delete call, so this was done in MailerLite, during the test |
+| Nov 16, 18:51:42 | Submitted again; MailerLite **restored** the subscriber and added it to **BrightPath Updates** |
+| Nov 16, 18:51:47 | Welcome automation email sent (received in Gmail, Promotions tab) |
+| Nov 16, 18:51:56 | Email open recorded |
+
+- Afterwards the profile is **Active**, still showing the Oct 21 subscription and opt-in date,
+  in **both** the TEST group and BrightPath Updates.
+- **No confirmation event on Nov 16, and no confirmation email.** The email first remembered as
+  a confirmation was this welcome email.
+
+What this establishes:
+1. The function behaved as designed. The lookup didn't find the Deleted address (404), so it
+   posted it as new.
+2. **MailerLite restores a Deleted subscriber with its old status.** For a previously Active
+   one, that means no new double opt-in.
+3. The welcome automation fires when an Active subscriber joins BrightPath Updates.
+4. It did **not** test a genuinely new signup. That was already proven on Oct 27, and it's
+   repeated in the final test.
+
+Rule adopted: **Delete only Unconfirmed subscribers.** See "Deleted subscribers are restored,
+not recreated". No code change was needed.
 
 **To disable in an emergency,** republish the last deploy built with the flags off. It takes
 effect immediately, with no build, and the function answers "unavailable" again. Then set
@@ -383,6 +556,10 @@ Once a month, in MailerLite (production group). Don't copy subscriber details an
      data is erased.
    - Verified on the TEST group: a Deleted address that signs up again through the form gets
      a new confirmation email (see "Test log").
+   - **Only ever Delete *Unconfirmed* subscribers.** A Deleted subscriber is restored with its
+     old status if the address is submitted again. A Deleted **Active** subscriber comes back
+     Active with no new confirmation (production, Nov 16, 2026). To take an Active or test
+     account off the newsletter, remove it from the group instead.
    - **Don't use Forget for this cleanup.** Forget permanently erases a subscriber within 30
      days, can't be undone, and blocks the address from being re-added for 30 days. It's for
      individual erasure requests (step 3).
