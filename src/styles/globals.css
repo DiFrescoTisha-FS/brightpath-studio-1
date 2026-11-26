@@ -1752,6 +1752,15 @@ html.dark .text-brand-gold {
   color: #f2c94c;
 }
 
+/* Contact page "Get In Touch" card: a light ground in BOTH themes (gray-50
+   light, #F3F4F6 dark), so it takes the deep gold in dark mode as well — the
+   same "the ground picks the gold" exception as the About hero name, in
+   reverse. #F2C94C measures ~1.3:1 here; #846300 measures 5.07:1 on #F3F4F6
+   and 5.34:1 on gray-50 (approved Nov 25, 2026). Scoped to this card only. */
+html.dark .contact-info-card .text-brand-gold {
+  color: #846300;
+}
+
 /* --- Tailwind `--primary` as text, light theme only --------------------
    `--primary` (#F4BC1F) is deliberately identical in both themes because it
    is also the fill behind the header CTA, the Featured badge and the

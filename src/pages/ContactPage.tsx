@@ -199,10 +199,14 @@ const ContactPage: React.FC = () => {
 
           {/* Left Column - Contact Info */}
           <div className="flex flex-col gap-8">
-            <div className={`${themeClasses.cardBg} p-8 rounded-lg border ${themeClasses.cardBorder} flex-1 flex flex-col`}>
-              <BrightPathGradientTitle as="h2" className="gradient-text-dark text-2xl font-poppins font-semibold mb-6"
+            {/* `contact-info-card` (globals.css) keeps the deep gold #846300 on
+                this card in dark mode too: the card is a light ground in both
+                themes, and #F2C94C measures ~1.3:1 on it. */}
+            <div className={`contact-info-card ${theme === 'dark' ? 'bg-gray-100' : themeClasses.cardBg} p-8 rounded-lg border ${themeClasses.cardBorder} flex-1 flex flex-col`}>
+              <BrightPathGradientTitle as="h2" className="text-2xl font-poppins font-semibold mb-6"
                 textColor="text-neutral-800 dark:gray-200"
                 gradientWords={["Touch"]}
+                emphasis="solid"
               >
                 Get In Touch
               </BrightPathGradientTitle>
@@ -224,6 +228,7 @@ const ContactPage: React.FC = () => {
                       className="font-poppins font-semibold text-lg"
                       textColor="text-neutral-800"
                       gradientWords={["BrightPath"]}
+                      emphasis="solid"
                     >
                       {BUSINESS.legalName}
                     </BrightPathGradientTitle>
@@ -235,11 +240,11 @@ const ContactPage: React.FC = () => {
 
                 {/* Address */}
                 <div className="flex items-start space-x-4">
-                  <MapPin className={`w-6 h-6 ${themeClasses.iconColor} mt-1 flex-shrink-0`} />
+                  <MapPin className={`w-6 h-6 text-brand-gold mt-1 flex-shrink-0`} />
                   <div>
                     <BrightPathGradientTitle
                       as="h3"
-                      className="font-poppins font-semibold text-lg mb-1"
+                      className="font-poppins font-semibold text-lg mb-1" emphasis="solid"
                     >
                       Location
                     </BrightPathGradientTitle>
@@ -251,9 +256,9 @@ const ContactPage: React.FC = () => {
 
                 {/* Phone */}
                 <div className="flex items-start space-x-4">
-                  <Phone className={`w-6 h-6 ${themeClasses.iconColor} mt-1 flex-shrink-0`} />
+                  <Phone className={`w-6 h-6 text-brand-gold mt-1 flex-shrink-0`} />
                   <div>
-                    <BrightPathGradientTitle as="h3" className="font-poppins font-semibold text-lg mb-1">
+                    <BrightPathGradientTitle as="h3" className="font-poppins font-semibold text-lg mb-1" emphasis="solid">
                       Phone
                     </BrightPathGradientTitle>
                     <p className={`font-lato ${theme === 'dark' ? 'text-gray-700' : 'text-gray-700'}`}>
@@ -264,9 +269,9 @@ const ContactPage: React.FC = () => {
 
                 {/* Email */}
                 <div className="flex items-start space-x-4">
-                  <Mail className={`w-6 h-6 ${themeClasses.iconColor} mt-1 flex-shrink-0`} />
+                  <Mail className={`w-6 h-6 text-brand-gold mt-1 flex-shrink-0`} />
                   <div>
-                    <BrightPathGradientTitle as="h3" className="font-poppins font-semibold text-lg mb-1">
+                    <BrightPathGradientTitle as="h3" className="font-poppins font-semibold text-lg mb-1" emphasis="solid">
                       Email
                     </BrightPathGradientTitle>
                     <p className={`font-lato ${theme === 'dark' ? 'text-gray-700' : 'text-gray-700'}`}>
@@ -277,9 +282,9 @@ const ContactPage: React.FC = () => {
 
                 {/* Follow — business social pages, same layout as the items above */}
                 <div className="flex items-start space-x-4">
-                  <Share2 aria-hidden="true" className={`w-6 h-6 ${themeClasses.iconColor} mt-1 flex-shrink-0`} />
+                  <Share2 aria-hidden="true" className={`w-6 h-6 text-brand-gold mt-1 flex-shrink-0`} />
                   <div>
-                    <BrightPathGradientTitle as="h3" className="font-poppins font-semibold text-lg mb-1">
+                    <BrightPathGradientTitle as="h3" className="font-poppins font-semibold text-lg mb-1" emphasis="solid">
                       Follow BrightPath
                     </BrightPathGradientTitle>
                     <ul className="flex flex-wrap gap-x-6 gap-y-1 font-lato text-gray-700">
