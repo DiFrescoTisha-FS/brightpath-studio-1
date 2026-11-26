@@ -1,5 +1,67 @@
 # BrightPath Web Studio - Project Context
 
+## Resume Here (updated November 25, 2026 — launch day for The BrightPath Update)
+
+**Goal:** launch the newsletter signup publicly and send the first campaign, the Thanksgiving
+edition (MailerLite).
+
+- **Production now** (verified Nov 25):
+  - `main` = `4974213` (PR #26 merge); the live deploy is **`6afb454209385463bd75d2d0`**.
+  - `NEWSLETTER_ENABLED` and `VITE_NEWSLETTER_ENABLED` are both **unset** in Production. The
+    function answers 503, no band shows, and contact GET answers 405.
+  - That deploy is the **rollback target**.
+- **The Nov 16 mystery is solved** (verified Nov 25 from MailerLite activity and the Gmail
+  welcome email).
+  - The test address wasn't new. It had been confirmed in the TEST group on Oct 21, was
+    **Deleted** in MailerLite at 18:49 UTC, and was then submitted again.
+  - MailerLite **restored** the old record: still Active, with the old opt-in date and no new
+    confirmation. It added the record to BrightPath Updates, and the welcome email went out at
+    18:51:47.
+  - The function behaved as designed. No code change is needed.
+  - **New rule: Delete only Unconfirmed subscribers.** To take Active or test accounts off the
+    list, remove them from the group; for erasure, use Forget. Details are in
+    `NEWSLETTER-SETUP.md`, "Deleted subscribers are restored, not recreated".
+- **Proven in production:**
+  - a new signup creates an Unconfirmed subscriber in BrightPath Updates;
+  - confirming makes it Active;
+  - the welcome email follows about 6 s later (Oct 27).
+- **Owner decisions (Nov 25):**
+  - all four social-link placements approved: footer icon row, Contact page card,
+    `index.html` JSON-LD `sameAs`, and URLs held in `BUSINESS`;
+  - personal GitHub/LinkedIn on About stay as they are;
+  - Turnstile deferred until after launch;
+  - test subscribers kept until final testing;
+  - campaign tracking: opens and clicks on, Google Analytics off;
+  - no contacts imported without opt-in;
+  - fresh-branch + PR workflow.
+- **Next steps, in order** (each needs approval):
+  1. ✅ Business page URLs received and the social links built on
+     `feature/social-links-launch-docs` (Nov 25):
+     - footer icon row, Contact page "Follow BrightPath", `index.html` JSON-LD `sameAs`;
+     - URLs in `BUSINESS.social` / `SOCIAL_LINKS`;
+     - Facebook verified loading publicly. LinkedIn refuses automated access (403); the
+       owner verified it in a browser and chose the clean URL
+       `linkedin.com/company/brightpathwebstudio/` over the numeric one.
+  2. PR #27 is open with the social links, the docs and the Contact page surface-based gold
+     (see "Surface-based gold"). Next: owner approval of the preview, then merge, deploy
+     with flags off, and run live checks.
+  3. Activate: set both Production flags, then one redeploy.
+  4. Run the final test immediately, with a genuinely new address through the live form
+     (`NEWSLETTER-SETUP.md`, "Final test requirements").
+  5. Launch verification.
+  6. Decide whether the two test accounts stay in BrightPath Updates for the campaign.
+  7. Set the campaign's tracking.
+  8. Send.
+- **Branch:** everything is committed on `feature/social-links-launch-docs` (PR #27). The
+  Nov 25 docs went in as `d7e9e55`.
+- **Environment note (Nov 25).** The project lives on the iCloud-synced Desktop, and macOS had
+  offloaded about 47,000 files. That made `npx netlify` look hung, because each file had to
+  download first. Fixed by setting the folder to **Keep Downloaded**, and `git fsck` is
+  clean. Leftover iCloud conflict copies (`.git/index 2`, `public/videos/video-1 2.mp4`,
+  `… 2` / `… 3` folders in `dist/` and `.netlify/`) are harmless. Clean them up only with
+  approval. Moving the repo out of iCloud is deferred.
+- Fuller running log: the Claude auto-memory file `brightpath-state-2026-10.md`.
+
 ## Project Overview
 Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with React + TypeScript + Vite + Tailwind CSS + Framer Motion.
 
@@ -34,7 +96,8 @@ Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with Re
 - **Colors**: Midnight blue `#1A2238`, near-black ground `#0A0F18`, warm cream ground
   `#FAF6EF`. **One gold per theme** — dark `#F2C94C`, light `#846300`. Both are driven
   by the `--primary` token so every gold role resolves from a single value. See
-  "Gold System" below; do not reintroduce per-role gold shades.
+  "Gold System" below; do not reintroduce per-role gold shades. On light
+  surfaces inside a dark page, the surface picks the gold: see "Surface-based gold".
 - **Text on mobile**: 14px (`text-sm`) for paragraphs, `leading-normal` for tighter line spacing
 
 ## Important Files
@@ -76,8 +139,10 @@ Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with Re
   functions. It lives outside `netlify/functions` so Netlify doesn't deploy it as a function
 - `src/utils/analytics.ts` + `netlify/functions/analytics-region.js` - GA4 loader and its
   U.S.-only region check
-- `src/config/contact.ts` - `BUSINESS`, the single source for public contact details
-  (`index.html` JSON-LD must be kept in sync by hand)
+- `src/config/contact.ts` - `BUSINESS`, the single source for public contact details and the
+  business social URLs (`BUSINESS.social`, rendered via `SOCIAL_LINKS` in the footer and on the
+  Contact page). `index.html` JSON-LD, including `sameAs`, must be kept in sync by hand. The
+  About page's GitHub/LinkedIn are Tisha's **personal** profiles and stay separate
 - `src/components/legal/` - Shared layout for the Privacy Policy and Terms of Service
 - `src/components/PageMeta.tsx` - Per-route title/description/canonical/OG/JSON-LD; also fires the `prerender-ready` signal
 - `src/utils/isPrerender.ts` - `IS_PRERENDER` flag: build-time snapshot vs. real visit
@@ -226,6 +291,55 @@ consequences follow from the same fact: the flip-card light back face overrides 
 hard-coded `text-[#10192b]` to cream, and `html.light h1.text-primary` (the About hero name,
 which sits on a *dark*, scrimmed photograph even in light mode) keeps `#F2C94C`, since a dark ground
 takes the luminous value.
+
+## Surface-based gold (owner decision Nov 25, 2026 — Contact page only so far)
+
+**The surface an element sits on picks its gold, not the site theme.** This extends the
+Gold System above. It was decided because the Contact page puts light cards on a dark page in
+dark mode, where theme-based gold measured about 1.3–1.9:1.
+
+| Surface | Emphasised title words (`gradientWords`) | Small labels, form labels, icons |
+|---|---|---|
+| **Light** (cream, gray-50, `#F3F4F6`, light artwork) | **Deep gold gradient** `#846300 → #604400` (`emphasis="deep-gradient"` → `.text-gold-deep-gradient`) | **Solid `#846300`** (`emphasis="solid"` / `.text-brand-gold`) |
+| **Dark** (navy, near-black, gray-700, dark artwork) | The **original bright gold gradient** (`emphasis="gradient"`, yellow-500 → yellow-600), where it passes | Theme gold `#F2C94C` |
+
+- **Contrast:** the deep gradient's weakest stop is `#846300`, so it is ≥ 5.07:1 on
+  `#F3F4F6` and ≥ 5.34:1 on gray-50, which passes AA even for small text. `#604400` measures
+  8.21–8.65:1. The bright gradient's weakest stop, yellow-600, measures 3.51:1 on gray-700,
+  which passes only as **large text** (≥ 24px, or ≥ 18.66px bold), so keep it to headings.
+  On any light surface it fails (1.2–2.8:1).
+- **Selective highlighting stays.** Only the chosen words get the gradient. Small labels are
+  solid, because a gradient across small type reads as uneven colour.
+- **Light-ground cards keep the deep gold in dark mode too.** `.contact-light-card` scopes
+  `html.dark … .text-brand-gold` to `#846300`. Theme-switched surfaces (the "Why Choose" box,
+  the "Contact Us" heading on the artwork) pick `emphasis` by theme in the component.
+- **Contact page (PR #27).**
+  - Both cards are `#F3F4F6` in dark mode and gray-50 in light mode. The form card used to be
+    gray-200 in dark mode.
+  - Deep gradient: "Touch", "BrightPath" in the legal name, "Message"; in light mode only,
+    "Contact" in the page heading and "BrightPath" in "Why Choose BrightPath?".
+  - Solid `#846300`: the four card headings, the three form labels and the card icons.
+  - Measured on rendered pixels at 375/768/1280 in both themes: all solid marks 5.07:1 (dark)
+    and 5.34:1 (light); deep-gradient words 6.1–6.8:1. The light "Contact" heading rose from
+    1.7:1 to 6.1:1; in dark mode it keeps the bright gradient at about 9.5:1.
+- **Not yet rolled out elsewhere.** About 60 legacy-gradient headings remain site-wide (see
+  Known issues). Extending this rule beyond the Contact page needs its own approval. Measure
+  each surface; don't assume it from the theme.
+- **Owner approved** the final Contact page design on Nov 25, 2026: the deep gradient, the
+  matching card backgrounds, solid labels and icons, and the "Contact Us" heading
+  correction. It shipped with PR #27.
+- **Future enhancement, deferred by the owner on Nov 25, 2026: a site-wide gradient
+  accessibility review.** Deliberately left out of the launch, so don't start it without
+  approval.
+  1. Inventory every remaining legacy-gradient heading and its actual surface in both themes.
+  2. Measure rendered pixels at 375/768/1280.
+  3. Apply this table where a heading fails.
+  4. Reconcile the duplicate `src/components/portfolio/BrightPathGradientTitle.tsx`, which
+     has no `emphasis` prop.
+  5. Get visual approval page by page.
+- **Not the metallic experiment.** The deep gradient stays within the dark end of the brand
+  gold family. The rejected metallic gradient (below) fails on cream because of its light
+  highlight.
 
 ## Background System (approved Aug 15, 2026)
 
@@ -487,8 +601,13 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
   - Origin is required.
   - Signups under 3 s after the form appeared are ignored. The form waits out the rest, so
     people are never refused.
-  - Unsubscribed or unconfirmed people need manual help to rejoin — an accepted trade-off. An
-    address removed with MailerLite **Delete** can sign up again normally.
+  - Unsubscribed or unconfirmed people need manual help to rejoin — an accepted trade-off.
+  - An address removed with MailerLite **Delete** is restored with its **old status** when it
+    is submitted again:
+    - Unconfirmed comes back Unconfirmed, with a new confirmation email;
+    - Active comes back Active **without** confirmation (verified Nov 16, 2026).
+
+    Hence: Delete only Unconfirmed subscribers.
   - "Known" means anywhere in the **MailerLite account**, so someone in another group but
     not in BrightPath Updates is also left out. **Never auto-add them** (it would skip double
     opt-in). The log line records status plus `in-group` / `not-in-group` / `group-unknown`,
@@ -501,6 +620,29 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
     values stay in Deploy Previews.
   - `NEWSLETTER_ENABLED` and `VITE_NEWSLETTER_ENABLED` are still **unset** in Production.
   - `CONTACT_*` has separate Production and Deploy Preview values.
+  - **Nov 16, 2026:**
+    - PR #26 merged (`4974213`, deploy `6afb454209385463bd75d2d0`). It adds the
+      known-address log (status + `in-group` / `not-in-group` / `group-unknown`, 115 tests)
+      and the "Signup enquiries" consent procedure.
+    - Controlled server-flag-only window: deploy `6afb4bcfa57471cb75d72d10`, 18:31–18:58 UTC.
+    - Rolled back by republishing `6afb4542…`; the flag is removed again (verified Nov 17).
+    - **Result (verified Nov 25):** the address was not new. It had been confirmed in the
+      TEST group on Oct 21 and was Deleted in MailerLite just before resubmitting. MailerLite
+      **restored** it as Active (original opt-in, no new confirmation), added it to BrightPath
+      Updates, and sent the welcome email.
+    - The function behaved as designed: its lookup returns 404 for Deleted records.
+    - **Rule: Delete only Unconfirmed subscribers;** remove Active or test accounts from the
+      group instead. See `NEWSLETTER-SETUP.md`, "Deleted subscribers are restored, not
+      recreated".
+  - **Oct 27, 2026 controlled window** (`6ae10bf4…`, rolled back to `6ae1056e…` at 21:51 UTC):
+    - the first attempt was silently dropped as "submitted too fast" (no numeric `elapsedMs`);
+    - the retest succeeded end to end (see `NEWSLETTER-SETUP.md`, "Test log").
+  - **Subscriber review (owner, Nov 16, counts only):**
+    - TEST group: 3 Active, 2 Unconfirmed, 1 Unsubscribed, all test accounts;
+    - BrightPath Updates: 1 Active, the Oct 27 test account.
+
+    The review deleted nothing. Since the Nov 16 restore, BrightPath Updates has **2 Active**
+    owner test accounts, both kept until final testing.
 - **MailerLite setup (owner, recorded Oct 27, 2026):**
   - the sending domain `brightpathwebstudio.org` is authenticated;
   - the company details use the official mailing address **PO Box 186, Edneyville, NC 28727**
@@ -829,8 +971,11 @@ pixel-identical throughout (maxDelta 0).
   snapshot catches them mid-fade is a timing race. Only ~10 words of decorative text; left
   alone.
 - **Legacy gradient text still site-wide**: ~60 occurrences remain outside the homepage
-  (ServicesPage, ContactPage, AboutPage, ReviewsPage, PortfolioDemoPage,
-  SocialMediaPortfolioPage and the case-study components). Not migrated. There is also a
+  (ServicesPage, AboutPage, ReviewsPage, PortfolioDemoPage, SocialMediaPortfolioPage and the
+  case-study components; ContactPage was converted on Nov 25, 2026). Not migrated. Many of
+  them fail contrast on light surfaces (the bright gradient measures 1.2–2.8:1 there). This
+  is the deferred **site-wide gradient accessibility review**; see "Surface-based gold" for
+  the rule and plan. There is also a
   near-duplicate `src/components/portfolio/BrightPathGradientTitle.tsx` used by the
   portfolio/case-study components — it does *not* have the `emphasis` prop. Any site-wide
   rollout has to reconcile both files.
@@ -917,7 +1062,15 @@ pixel-identical throughout (maxDelta 0).
 
 ## Commit History (Recent)
 
-**On `feature/newsletter-signup` only (local, not yet pushed or merged):**
+**Newer `main` history (Oct 21 – Nov 16, 2026), most recent first:**
+- `4974213` - Merge PR #26: known-address group logging + signup-enquiry procedure (live,
+  deploy `6afb454209385463bd75d2d0`)
+- `d594690` - Merge PR #25: welcome-email policy sentence, `LAST_UPDATED` October 27, 2026
+- `ff46a89` - PR #23: newsletter launch hardening + artwork band (flags off)
+- `180cec7` - PR #24: prerender hero race fix
+- `aa1bec5` - contact form v2, U.S.-only Analytics, legal pages (from `feature/newsletter-signup`)
+
+**Historical — `feature/newsletter-signup` before it merged (hashes later rewritten):**
 - `b09e6c3` - feat: add MailerLite newsletter signup behind feature flags
 - `bb787c1` - feat: confirm contact form submissions before showing success
 - `a867fd6` - fix: restore Google Analytics with U.S.-only privacy safeguards

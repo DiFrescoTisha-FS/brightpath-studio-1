@@ -6,7 +6,10 @@ import type { Theme } from '@/store/appStore';
 import BrightPathGradientTitle from '../BrightPathGradientTitle';
 import { cloudinaryAssets } from '@/data/cloudinaryAssets';
 import NewsletterSignup, { NEWSLETTER_ENABLED } from '../NewsletterSignup';
-import { BUSINESS } from '@/config/contact';
+import { Facebook, Linkedin } from 'lucide-react';
+import { BUSINESS, SOCIAL_LINKS } from '@/config/contact';
+
+const SOCIAL_ICONS = { Facebook, LinkedIn: Linkedin } as const;
 
 // The Footer component now includes the "Inspired" section content
 interface FooterProps {
@@ -92,7 +95,30 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
           {' | '}
           <a href={BUSINESS.phoneHref} className="hover:underline underline-offset-2">{BUSINESS.phoneDisplay}</a>
         </p>
-        <p className={`mt-6 text-sm ${smallTextClasses}`}>
+        {/* Business social pages. Icon-only, so each link carries its own
+            accessible name; the icons are decorative. Same greys as the links
+            above (well over 3:1 on both grounds), 44px tap targets, and the
+            gold focus ring from `.site-footer a:focus-visible`. */}
+        <ul className="mt-4 flex justify-center gap-2" aria-label="BrightPath Web Studio on social media">
+          {SOCIAL_LINKS.map(({ network, href }) => {
+            const Icon = SOCIAL_ICONS[network];
+            return (
+              <li key={network}>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`BrightPath Web Studio on ${network} (opens in a new tab)`}
+                  title={network}
+                  className={`inline-flex h-11 w-11 items-center justify-center transition-colors ${linkClasses}`}
+                >
+                  <Icon aria-hidden="true" className="h-5 w-5" />
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+        <p className={`mt-4 text-sm ${smallTextClasses}`}>
           &copy; {new Date().getFullYear()} {BUSINESS.legalName}. All Rights Reserved.
         </p>
       </div>

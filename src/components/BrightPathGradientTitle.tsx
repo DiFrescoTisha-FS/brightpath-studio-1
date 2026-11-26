@@ -30,9 +30,12 @@ interface BrightPathGradientTitleProps {
    * - "solid": one flat warm gold, theme-aware, matching the approved hero
    * - "none": no emphasis at all — the whole title uses `textColor`. Needed
    *   because omitting `gradientWords` makes the *entire* title gradient.
+   * - "deep-gradient": the deep gold gradient #846300 → #604400, for
+   *   emphasis on LIGHT surfaces (≥ 5.07:1 on gray-50/100). See
+   *   "Surface-based gold" in CLAUDE.md. Currently used on the Contact page only.
    * Default: "gradient", so existing call sites are unaffected.
    */
-  emphasis?: 'gradient' | 'solid' | 'none';
+  emphasis?: 'gradient' | 'solid' | 'none' | 'deep-gradient';
   /**
    * HTML tag to render
    * Default: "h2"
@@ -84,8 +87,13 @@ export default function BrightPathGradientTitle({
   };
 
   // `text-brand-gold` is defined in globals.css and resolves per theme.
+  // `text-gold-deep-gradient` is also defined in globals.css.
   const gradientClass =
-    emphasis === 'solid' ? 'text-brand-gold' : gradientClasses[gradientStyle];
+    emphasis === 'solid'
+      ? 'text-brand-gold'
+      : emphasis === 'deep-gradient'
+        ? 'text-gold-deep-gradient'
+        : gradientClasses[gradientStyle];
 
   // Plain title, no emphasised words.
   if (emphasis === 'none') {
