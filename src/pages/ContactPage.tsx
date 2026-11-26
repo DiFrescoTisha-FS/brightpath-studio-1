@@ -141,7 +141,9 @@ const ContactPage: React.FC = () => {
     pageText: theme === 'dark' ? 'text-gray-100' : 'text-neutral-900',
     text: theme === 'dark' ? 'gradient-text-dark' : 'gradient-text-light',
     textMuted: theme === 'dark' ? 'text-gray-200' : 'text-gray-600',
-    cardBg: theme === 'dark' ? 'bg-gray-200' : 'bg-gray-50',
+    // Both Contact cards share one light ground per theme (#F3F4F6 dark,
+    // gray-50 light). See `.contact-light-card` in globals.css.
+    cardBg: theme === 'dark' ? 'bg-gray-100' : 'bg-gray-50',
     cardBorder: theme === 'dark' ? 'border-primary' : 'border-gray-200',
     inputBg: theme === 'dark' ? 'bg-midnight' : 'bg-gray-100',
     inputBorder: theme === 'dark' ? 'border-stone/30' : 'border-gray-300',
@@ -184,8 +186,11 @@ const ContactPage: React.FC = () => {
       />
       {/* Header Section */}
       <div className="text-center pt-28 pb-12 px-4">
+        {/* Sits on the page artwork: light cream in light mode (the bright
+            gradient measured 1.7:1 there), dark in dark mode (~9.5:1). */}
         <BrightPathGradientTitle as="h1" className="text-4xl md:text-5xl font-poppins font-bold mb-4"
           gradientWords={["Contact"]}
+          emphasis={theme === 'dark' ? 'gradient' : 'deep-gradient'}
         >Contact Us
         </BrightPathGradientTitle>
         <p className={`text-lg font-lato ${themeClasses.textMuted} max-w-2xl mx-auto`}>
@@ -199,14 +204,15 @@ const ContactPage: React.FC = () => {
 
           {/* Left Column - Contact Info */}
           <div className="flex flex-col gap-8">
-            {/* `contact-info-card` (globals.css) keeps the deep gold #846300 on
-                this card in dark mode too: the card is a light ground in both
-                themes, and #F2C94C measures ~1.3:1 on it. */}
-            <div className={`contact-info-card ${theme === 'dark' ? 'bg-gray-100' : themeClasses.cardBg} p-8 rounded-lg border ${themeClasses.cardBorder} flex-1 flex flex-col`}>
+            {/* Surface-based gold: both Contact cards are a light ground in
+                both themes, so emphasised title words use the deep gold
+                gradient and small labels and icons solid #846300, in dark
+                mode too (`.contact-light-card`, globals.css). */}
+            <div className={`contact-light-card contact-info-card ${themeClasses.cardBg} p-8 rounded-lg border ${themeClasses.cardBorder} flex-1 flex flex-col`}>
               <BrightPathGradientTitle as="h2" className="text-2xl font-poppins font-semibold mb-6"
                 textColor="text-neutral-800 dark:gray-200"
                 gradientWords={["Touch"]}
-                emphasis="solid"
+                emphasis="deep-gradient"
               >
                 Get In Touch
               </BrightPathGradientTitle>
@@ -228,7 +234,7 @@ const ContactPage: React.FC = () => {
                       className="font-poppins font-semibold text-lg"
                       textColor="text-neutral-800"
                       gradientWords={["BrightPath"]}
-                      emphasis="solid"
+                      emphasis="deep-gradient"
                     >
                       {BUSINESS.legalName}
                     </BrightPathGradientTitle>
@@ -313,7 +319,11 @@ const ContactPage: React.FC = () => {
 
             {/* Additional Info Box */}
             <div className={`p-6 rounded-lg border border-gold/20 ${themeClasses.textBoxBG}`}>
-              <BrightPathGradientTitle as="h3" className="font-poppins font-semibold text-2xl mb-1" gradientWords={["BrightPath"]}>
+              {/* Light surface in light mode → deep gold gradient; dark
+                  gray-700 in dark mode → the original bright gradient, which
+                  passes there (min 3.51:1, large text). */}
+              <BrightPathGradientTitle as="h3" className="font-poppins font-semibold text-2xl mb-1" gradientWords={["BrightPath"]}
+                emphasis={theme === 'dark' ? 'gradient' : 'deep-gradient'}>
                 Why Choose BrightPath?
               </BrightPathGradientTitle>
               <p className={`font-lato text-sm leading-relaxed ${themeClasses.textMuted}`}>
@@ -324,10 +334,11 @@ const ContactPage: React.FC = () => {
           </div>
 
           {/* Right Column - Contact Form */}
-          <div className={`${themeClasses.cardBg} p-8 rounded-lg border ${themeClasses.cardBorder}`}>
+          <div className={`contact-light-card ${themeClasses.cardBg} p-8 rounded-lg border ${themeClasses.cardBorder}`}>
             <BrightPathGradientTitle as="h2" className="text-2xl font-poppins font-semibold mb-6"
               textColor='text-neutral-800'
-              gradientWords={["Message"]}>
+              gradientWords={["Message"]}
+              emphasis="deep-gradient">
               Send Us a Message
             </BrightPathGradientTitle>
 
@@ -359,6 +370,7 @@ const ContactPage: React.FC = () => {
                   <BrightPathGradientTitle
                     as="span"
                     className="font-poppins font-semibold text-lg"
+                    emphasis="solid"
                   >
                     Full Name
                   </BrightPathGradientTitle>
@@ -383,6 +395,7 @@ const ContactPage: React.FC = () => {
                   <BrightPathGradientTitle
                     as="span"
                     className="font-poppins font-semibold text-lg"
+                    emphasis="solid"
                   >
                     Email
                   </BrightPathGradientTitle>
@@ -407,6 +420,7 @@ const ContactPage: React.FC = () => {
                   <BrightPathGradientTitle
                     as="span"
                     className="font-poppins font-semibold text-lg"
+                    emphasis="solid"
                   >
                     Message
                   </BrightPathGradientTitle>

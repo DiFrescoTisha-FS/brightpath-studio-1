@@ -42,7 +42,9 @@ edition (MailerLite).
      - Facebook verified loading publicly. LinkedIn refuses automated access (403); the
        owner verified it in a browser and chose the clean URL
        `linkedin.com/company/brightpathwebstudio/` over the numeric one.
-  2. Open the PR, review the deploy preview, merge, deploy with flags off, run live checks.
+  2. PR #27 is open with the social links, the docs and the Contact page surface-based gold
+     (see "Surface-based gold"). Next: owner approval of the preview, then merge, deploy
+     with flags off, and run live checks.
   3. Activate: set both Production flags, then one redeploy.
   4. Run the final test immediately, with a genuinely new address through the live form
      (`NEWSLETTER-SETUP.md`, "Final test requirements").
@@ -50,9 +52,8 @@ edition (MailerLite).
   6. Decide whether the two test accounts stay in BrightPath Updates for the campaign.
   7. Set the campaign's tracking.
   8. Send.
-- **Uncommitted right now:** documentation only (`CLAUDE.md`, `NEWSLETTER-SETUP.md`). They're
-  on the already-merged `feature/newsletter-known-subscriber-handling` branch. Carry them to
-  the new branch with `git switch -c`.
+- **Branch:** everything is committed on `feature/social-links-launch-docs` (PR #27). The
+  Nov 25 docs went in as `d7e9e55`.
 - **Environment note (Nov 25).** The project lives on the iCloud-synced Desktop, and macOS had
   offloaded about 47,000 files. That made `npx netlify` look hung, because each file had to
   download first. Fixed by setting the folder to **Keep Downloaded**, and `git fsck` is
@@ -95,7 +96,8 @@ Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with Re
 - **Colors**: Midnight blue `#1A2238`, near-black ground `#0A0F18`, warm cream ground
   `#FAF6EF`. **One gold per theme** — dark `#F2C94C`, light `#846300`. Both are driven
   by the `--primary` token so every gold role resolves from a single value. See
-  "Gold System" below; do not reintroduce per-role gold shades.
+  "Gold System" below; do not reintroduce per-role gold shades. On light
+  surfaces inside a dark page, the surface picks the gold: see "Surface-based gold".
 - **Text on mobile**: 14px (`text-sm`) for paragraphs, `leading-normal` for tighter line spacing
 
 ## Important Files
@@ -289,6 +291,43 @@ consequences follow from the same fact: the flip-card light back face overrides 
 hard-coded `text-[#10192b]` to cream, and `html.light h1.text-primary` (the About hero name,
 which sits on a *dark*, scrimmed photograph even in light mode) keeps `#F2C94C`, since a dark ground
 takes the luminous value.
+
+## Surface-based gold (owner decision Nov 25, 2026 — Contact page only so far)
+
+**The surface an element sits on picks its gold, not the site theme.** This extends the
+Gold System above. It was decided because the Contact page puts light cards on a dark page in
+dark mode, where theme-based gold measured about 1.3–1.9:1.
+
+| Surface | Emphasised title words (`gradientWords`) | Small labels, form labels, icons |
+|---|---|---|
+| **Light** (cream, gray-50, `#F3F4F6`, light artwork) | **Deep gold gradient** `#846300 → #604400` (`emphasis="deep-gradient"` → `.text-gold-deep-gradient`) | **Solid `#846300`** (`emphasis="solid"` / `.text-brand-gold`) |
+| **Dark** (navy, near-black, gray-700, dark artwork) | The **original bright gold gradient** (`emphasis="gradient"`, yellow-500 → yellow-600), where it passes | Theme gold `#F2C94C` |
+
+- **Contrast:** the deep gradient's weakest stop is `#846300`, so it is ≥ 5.07:1 on
+  `#F3F4F6` and ≥ 5.34:1 on gray-50, which passes AA even for small text. `#604400` measures
+  8.21–8.65:1. The bright gradient's weakest stop, yellow-600, measures 3.51:1 on gray-700,
+  which passes only as **large text** (≥ 24px, or ≥ 18.66px bold), so keep it to headings.
+  On any light surface it fails (1.2–2.8:1).
+- **Selective highlighting stays.** Only the chosen words get the gradient. Small labels are
+  solid, because a gradient across small type reads as uneven colour.
+- **Light-ground cards keep the deep gold in dark mode too.** `.contact-light-card` scopes
+  `html.dark … .text-brand-gold` to `#846300`. Theme-switched surfaces (the "Why Choose" box,
+  the "Contact Us" heading on the artwork) pick `emphasis` by theme in the component.
+- **Contact page (PR #27).**
+  - Both cards are `#F3F4F6` in dark mode and gray-50 in light mode. The form card used to be
+    gray-200 in dark mode.
+  - Deep gradient: "Touch", "BrightPath" in the legal name, "Message"; in light mode only,
+    "Contact" in the page heading and "BrightPath" in "Why Choose BrightPath?".
+  - Solid `#846300`: the four card headings, the three form labels and the card icons.
+  - Measured on rendered pixels at 375/768/1280 in both themes: all solid marks 5.07:1 (dark)
+    and 5.34:1 (light); deep-gradient words 6.1–6.8:1. The light "Contact" heading rose from
+    1.7:1 to 6.1:1; in dark mode it keeps the bright gradient at about 9.5:1.
+- **Not yet rolled out elsewhere.** About 60 legacy-gradient headings remain site-wide (see
+  Known issues). Extending this rule beyond the Contact page needs its own approval. Measure
+  each surface; don't assume it from the theme.
+- **Not the metallic experiment.** The deep gradient stays within the dark end of the brand
+  gold family. The rejected metallic gradient (below) fails on cream because of its light
+  highlight.
 
 ## Background System (approved Aug 15, 2026)
 
