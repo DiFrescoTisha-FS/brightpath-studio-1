@@ -325,6 +325,18 @@ dark mode, where theme-based gold measured about 1.3–1.9:1.
 - **Not yet rolled out elsewhere.** About 60 legacy-gradient headings remain site-wide (see
   Known issues). Extending this rule beyond the Contact page needs its own approval. Measure
   each surface; don't assume it from the theme.
+- **Owner approved** the final Contact page design on Nov 25, 2026: the deep gradient, the
+  matching card backgrounds, solid labels and icons, and the "Contact Us" heading
+  correction. It shipped with PR #27.
+- **Future enhancement, deferred by the owner on Nov 25, 2026: a site-wide gradient
+  accessibility review.** Deliberately left out of the launch, so don't start it without
+  approval.
+  1. Inventory every remaining legacy-gradient heading and its actual surface in both themes.
+  2. Measure rendered pixels at 375/768/1280.
+  3. Apply this table where a heading fails.
+  4. Reconcile the duplicate `src/components/portfolio/BrightPathGradientTitle.tsx`, which
+     has no `emphasis` prop.
+  5. Get visual approval page by page.
 - **Not the metallic experiment.** The deep gradient stays within the dark end of the brand
   gold family. The rejected metallic gradient (below) fails on cream because of its light
   highlight.
@@ -959,8 +971,11 @@ pixel-identical throughout (maxDelta 0).
   snapshot catches them mid-fade is a timing race. Only ~10 words of decorative text; left
   alone.
 - **Legacy gradient text still site-wide**: ~60 occurrences remain outside the homepage
-  (ServicesPage, ContactPage, AboutPage, ReviewsPage, PortfolioDemoPage,
-  SocialMediaPortfolioPage and the case-study components). Not migrated. There is also a
+  (ServicesPage, AboutPage, ReviewsPage, PortfolioDemoPage, SocialMediaPortfolioPage and the
+  case-study components; ContactPage was converted on Nov 25, 2026). Not migrated. Many of
+  them fail contrast on light surfaces (the bright gradient measures 1.2–2.8:1 there). This
+  is the deferred **site-wide gradient accessibility review**; see "Surface-based gold" for
+  the rule and plan. There is also a
   near-duplicate `src/components/portfolio/BrightPathGradientTitle.tsx` used by the
   portfolio/case-study components — it does *not* have the `emphasis` prop. Any site-wide
   rollout has to reconcile both files.
