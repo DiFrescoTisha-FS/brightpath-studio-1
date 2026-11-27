@@ -80,7 +80,7 @@ const Navbar = ({ theme }: NavbarProps) => {
             <NavLink to="/" end onClick={closeMenu} className={mobileLinkClass}>Home</NavLink>
             <NavLink to="/services" onClick={closeMenu} className={mobileLinkClass}>Services</NavLink>
             <NavLink to="/about" onClick={closeMenu} className={mobileLinkClass}>About</NavLink>
-            <NavLink to="/review" onClick={closeMenu} className={mobileLinkClass}>Reviews</NavLink>
+            <NavLink to="/reviews" onClick={closeMenu} className={mobileLinkClass}>Reviews</NavLink>
             <NavLink to="/portfolio" onClick={closeMenu} className={mobileLinkClass}>Portfolio</NavLink>
             <Link to="/contact" onClick={closeMenu} className="nav-cta justify-center mt-4">Contact Us</Link>
           </div>
