@@ -5,15 +5,24 @@
 **Goal:** launch the newsletter signup publicly and send the first campaign, the Thanksgiving
 edition (MailerLite).
 
-- **Production now** (newsletter activated Nov 26, 2026 03:12 UTC; verified Nov 27):
-  - `main` = `42b847e` (PR #27 merge). The live deploy is
-    **`6b07a38fd4a87a8d14616ced`**, the **current known-good production deploy with newsletter
-    subscriptions enabled**.
+- **Production now** (newsletter activated Nov 26, 2026 03:12 UTC; verified again Nov 27):
+  - `main` = `0047d2e` (PR #28 merge: mobile Reviews link fixed, `/review` → `/reviews` 301).
+  - The live deploy is **`6b09c7be81d23d577cc9be3c`**, published 2026-11-27 18:11:56 UTC. It
+    is the **current known-good production deploy with newsletter subscriptions enabled**,
+    verified Nov 27:
+    - navigation at 320–1280px;
+    - the 301 redirect;
+    - the band, with the function answering 400 to a malformed request;
+    - layout pixel-identical to `6b07a38f`;
+    - no console errors.
   - `NEWSLETTER_ENABLED` and `VITE_NEWSLETTER_ENABLED` are **`true` in Production only**.
-    The band shows, the function accepts signups, and contact GET answers 405.
+    Production uses the BrightPath Updates group (`…5756`); deploy previews use TEST (`…8041`).
   - **Rollback targets** (`NEWSLETTER-SETUP.md`, "Rollback at any time"):
-    - a problem with a later deploy, newsletter staying on → republish `6b07a38fd4a87a8d14616ced`;
-    - turn subscriptions **off** → republish `6b07a2691286132cf6f47cc2` (same code, `42b847e`,
+    - a problem with a later deploy, newsletter staying on → republish `6b09c7be81d23d577cc9be3c`;
+    - immediate newsletter-enabled fallback (before the Reviews fix) → republish
+      `6b07a38fd4a87a8d14616ced` (`42b847e`). It brings back the mobile `/review` 404 and
+      removes the 301;
+    - emergency: turn subscriptions **off** → republish `6b07a2691286132cf6f47cc2` (`42b847e`,
       built with the flags unset), **and** blank both Production flags so a later build can't
       turn them back on.
   - Replace these IDs only after a newer production deploy has been verified.
