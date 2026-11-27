@@ -1,22 +1,40 @@
 # BrightPath Web Studio - Project Context
 
-## Resume Here (updated November 25, 2026 — launch day for The BrightPath Update)
+## Resume Here (updated November 27, 2026 — The BrightPath Update is live)
 
-**Goal:** launch the newsletter signup publicly and send the first campaign, the Thanksgiving
-edition (MailerLite).
+**Current focus:** subscriber acquisition and preparing the **inaugural edition** of The
+BrightPath Update (MailerLite). No application changes are planned for this phase. Each item in
+"Outstanding maintenance" below is picked up individually, in its own session, with approval.
 
-- **Production now** (newsletter activated Nov 26, 2026 03:12 UTC; verified again Nov 27):
-  - `main` = `0047d2e` (PR #28 merge: mobile Reviews link fixed, `/review` → `/reviews` 301).
-  - The live deploy is **`6b09c7be81d23d577cc9be3c`**, published 2026-11-27 18:11:56 UTC. It
-    is the **current known-good production deploy with newsletter subscriptions enabled**,
-    verified Nov 27:
+- **Newsletter status: LIVE in production** since **Nov 26, 2026, 03:12 UTC**.
+  - Activated by setting `NEWSLETTER_ENABLED` and `VITE_NEWSLETTER_ENABLED` to `true` in the
+    **Production context only**, followed by one production deploy (`6b07a38f…`).
+  - Before activating, the production group was confirmed as **BrightPath Updates** (`…5756`),
+    not TEST (`…8041`). The ID has been unchanged since Oct 23, and both earlier production
+    signups landed in BrightPath Updates.
+  - **Final manual subscription test: passed** (owner-reported, after activation). It used a
+    genuinely new address through the live footer form. The details are in
+    `NEWSLETTER-SETUP.md`, "Test log".
+  - **Welcome email redesigned** by the owner after launch (owner-reported). The "Simple welcome
+    email" automation stays active on joining BrightPath Updates.
+  - Real subscribers are being invited. **Never create, delete or edit subscribers** during
+    verification. Probe the endpoint only with a malformed request: a 400 means it's on, a 503
+    means it's off.
+- **Production now** (verified Nov 27, 2026):
+  - `main` = `b7526f6` (PR #29, docs only, merged with `[skip netlify]`, so it built nothing).
+  - The live deploy is **`6b09c7be81d23d577cc9be3c`**, built from `0047d2e` (PR #28) and
+    published 2026-11-27 18:11:56 UTC. It is the **current known-good production deploy with
+    newsletter subscriptions enabled**. Verified:
     - navigation at 320–1280px;
-    - the 301 redirect;
-    - the band, with the function answering 400 to a malformed request;
+    - `/review` → `/reviews`, a single 301 that keeps the query string;
+    - footer and social links;
+    - the band in both themes, with the function answering 400 to a malformed request;
+    - the contact form;
     - layout pixel-identical to `6b07a38f`;
     - no console errors.
-  - `NEWSLETTER_ENABLED` and `VITE_NEWSLETTER_ENABLED` are **`true` in Production only**.
-    Production uses the BrightPath Updates group (`…5756`); deploy previews use TEST (`…8041`).
+  - Flags `true` in **Production only**. Production group: BrightPath Updates (`…5756`). Deploy
+    previews: TEST group (`…8041`), also with flags `true`, so a PR preview's footer form
+    subscribes into **TEST**. Never use a real or final-test address on a preview.
   - **Rollback targets** (`NEWSLETTER-SETUP.md`, "Rollback at any time"):
     - a problem with a later deploy, newsletter staying on → republish `6b09c7be81d23d577cc9be3c`;
     - immediate newsletter-enabled fallback (before the Reviews fix) → republish
@@ -26,57 +44,91 @@ edition (MailerLite).
       built with the flags unset), **and** blank both Production flags so a later build can't
       turn them back on.
   - Replace these IDs only after a newer production deploy has been verified.
-- **The Nov 16 mystery is solved** (verified Nov 25 from MailerLite activity and the Gmail
-  welcome email).
-  - The test address wasn't new. It had been confirmed in the TEST group on Oct 21, was
-    **Deleted** in MailerLite at 18:49 UTC, and was then submitted again.
-  - MailerLite **restored** the old record: still Active, with the old opt-in date and no new
-    confirmation. It added the record to BrightPath Updates, and the welcome email went out at
-    18:51:47.
-  - The function behaved as designed. No code change is needed.
-  - **New rule: Delete only Unconfirmed subscribers.** To take Active or test accounts off the
-    list, remove them from the group; for erasure, use Forget. Details are in
-    `NEWSLETTER-SETUP.md`, "Deleted subscribers are restored, not recreated".
-- **Proven in production:**
-  - a new signup creates an Unconfirmed subscriber in BrightPath Updates;
-  - confirming makes it Active;
-  - the welcome email follows about 6 s later (Oct 27).
-- **Owner decisions (Nov 25):**
-  - all four social-link placements approved: footer icon row, Contact page card,
-    `index.html` JSON-LD `sameAs`, and URLs held in `BUSINESS`;
+  - **Docs-only merges:** put `[skip netlify]` in the merge commit message, so production stays
+    on the verified deploy. Confirmed working on this site on Nov 27.
+- **Shipped Nov 25–27, 2026:**
+  - **PR #27** (`42b847e`):
+    - Facebook and LinkedIn business links: footer icon row, Contact page "Follow BrightPath",
+      `index.html` JSON-LD `sameAs`, `BUSINESS.social`;
+    - the Contact page **surface-based gold** (see "Surface-based gold");
+    - the launch docs.
+  - **Newsletter activation:** the Nov 26 production deploy `6b07a38f…`.
+  - **PR #28** (`0047d2e`):
+    - the mobile Reviews link pointed to `/review` from Jan 23, 2026 (`40fa508` renamed the
+      route but updated only the desktop link); it now points to `/reviews`;
+    - a forced 301 `/review` → `/reviews` in `netlify.toml`;
+    - `tests/navigation-routes.test.js` (121 tests in total).
+  - **PR #29** (`b7526f6`): rollback docs.
+- **Newsletter rules that still apply:**
+  - **Delete only Unconfirmed subscribers.** A Deleted Active subscriber who is submitted again
+    is restored as Active, with **no** double opt-in. To take someone off the list, remove them
+    from the group; for erasure, use **Forget**.
+  - Never import contacts without opt-in.
+  - Campaign tracking: opens and clicks **on**, Google Analytics **off**. Set this on **each**
+    campaign.
+  - The function never sends `status` to MailerLite, and never writes to an address MailerLite
+    already knows.
+- **Owner decisions still in force:**
+  - **TEST environment and token retained** (Nov 27). The long-term testing strategy will be
+    decided separately;
+  - Turnstile deferred;
+  - the custom 404 page deferred;
+  - the site-wide gradient review deferred;
   - personal GitHub/LinkedIn on About stay as they are;
-  - Turnstile deferred until after launch;
-  - test subscribers kept until final testing;
-  - campaign tracking: opens and clicks on, Google Analytics off;
-  - no contacts imported without opt-in;
-  - fresh-branch + PR workflow.
-- **Next steps, in order** (each needs approval):
-  1. ✅ Business page URLs received and the social links built on
-     `feature/social-links-launch-docs` (Nov 25):
-     - footer icon row, Contact page "Follow BrightPath", `index.html` JSON-LD `sameAs`;
-     - URLs in `BUSINESS.social` / `SOCIAL_LINKS`;
-     - Facebook verified loading publicly. LinkedIn refuses automated access (403); the
-       owner verified it in a browser and chose the clean URL
-       `linkedin.com/company/brightpathwebstudio/` over the numeric one.
-  2. PR #27 is open with the social links, the docs and the Contact page surface-based gold
-     (see "Surface-based gold"). Next: owner approval of the preview, then merge, deploy
-     with flags off, and run live checks.
-  3. Activate: set both Production flags, then one redeploy.
-  4. Run the final test immediately, with a genuinely new address through the live form
-     (`NEWSLETTER-SETUP.md`, "Final test requirements").
-  5. Launch verification.
-  6. Decide whether the two test accounts stay in BrightPath Updates for the campaign.
-  7. Set the campaign's tracking.
-  8. Send.
-- **Branch:** everything is committed on `feature/social-links-launch-docs` (PR #27). The
-  Nov 25 docs went in as `d7e9e55`.
-- **Environment note (Nov 25).** The project lives on the iCloud-synced Desktop, and macOS had
-  offloaded about 47,000 files. That made `npx netlify` look hung, because each file had to
-  download first. Fixed by setting the folder to **Keep Downloaded**, and `git fsck` is
-  clean. Leftover iCloud conflict copies (`.git/index 2`, `public/videos/video-1 2.mp4`,
-  `… 2` / `… 3` folders in `dist/` and `.netlify/`) are harmless. Clean them up only with
-  approval. Moving the repo out of iCloud is deferred.
+  - fresh-branch + PR workflow, and never merge without approval.
+- **Environment note.** The repo lives on the iCloud-synced Desktop, set to **Keep Downloaded**
+  (Nov 25). If the CLI looks hung, check for offloaded files first (see auto-memory
+  `icloud-desktop-offloading.md`).
 - Fuller running log: the Claude auto-memory file `brightpath-state-2026-10.md`.
+
+### Outstanding maintenance (each is its own future session; nothing here is approved yet)
+
+Newsletter and email:
+1. **Record the individual email checks** from the final test: confirmation email sender,
+   content and PO Box footer; SPF, DKIM and DMARC = PASS; the thank-you page; the welcome
+   button and footer. The test passed, but these items weren't individually recorded (see
+   `NEWSLETTER-SETUP.md`, "Remaining checks").
+2. **Welcome automation re-entry setting**: a read-only check in MailerLite.
+3. **Owner test accounts in BrightPath Updates.** There are two Active ones (Oct 27, and the
+   Nov 16 restore), plus the final-test address. Decide before the first send whether they stay
+   as seed copies or are **removed from the group** (never Deleted).
+4. **TEST environment strategy.** It's retained for now. The options to weigh:
+   - keep it as is: previews subscribe into TEST;
+   - turn the preview flags off;
+   - revoke the TEST token.
+
+   Don't Delete Active TEST subscribers.
+5. **Abuse protection** (Turnstile or Netlify rate-limit rules). The current rate limits are
+   per instance and best-effort, and double opt-in is the main safeguard.
+6. **Monthly maintenance** (`NEWSLETTER-SETUP.md`): Delete only signups that have stayed
+   Unconfirmed for over 30 days. The first run is due late December 2026.
+
+Site:
+
+7. **Custom 404 page.** Unknown URLs show React Router's developer error screen, because
+   `src/main.tsx` has no `errorElement` or catch-all. Netlify still answers HTTP 200 for them
+   (soft 404).
+8. **Site-wide gradient accessibility review.** About 60 legacy-gradient headings remain
+   outside the Contact page, and many fail on light surfaces. The plan is under
+   "Surface-based gold".
+9. **Production ships React's development build** (`NODE_ENV=development` in the Netlify
+   environment).
+10. **Image weight.** `public/images` is about 116 MB, mostly unreferenced, and `/case-study`
+    ships 10.6 MB.
+11. **Theme pinning.** The first visit stores the theme in `localStorage` permanently.
+12. **`SocialMediaCard.tsx`** still passes camelCase `fetchPriority`, which logs a React warning
+    on the portfolio and social pages.
+13. **Pre-existing lint**: `get-case-studies.ts` (unused `_context`) and `GuidingLight.tsx`
+    (hook dependency). `npm run lint` also scans generated `.netlify/` and `dist/` files.
+14. **Outdated résumé PDF.** `RESUME_URL` stays `null` until a new React/TypeScript résumé
+    exists.
+
+Environment:
+
+15. **iCloud cleanup.** Remove the conflict copies (`.git/index 2`,
+    `public/videos/video-1 2.mp4`, `… 2` / `… 3` folders in `dist/` and `.netlify/`), with
+    approval.
+16. **Move the repo out of iCloud.**
 
 ## Project Overview
 Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with React + TypeScript + Vite + Tailwind CSS + Framer Motion.
@@ -597,7 +649,7 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
 - **Never send form data.** Page addresses sent to GA keep only `project` and `utm_*`.
   `contact_submit` fires only after a confirmed save, via `loadAnalytics().then(trackEvent)`.
 
-### Newsletter (MailerLite) — off by default
+### Newsletter (MailerLite) — LIVE since Nov 26, 2026 (see "Resume Here" for current state)
 
 - **Two flags.**
   - `VITE_NEWSLETTER_ENABLED=true` (compiled in at build time) renders the footer form.
@@ -629,8 +681,10 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
     opt-in). The log line records status plus `in-group` / `not-in-group` / `group-unknown`,
     never personal data. Enquiries are handled by hand, with consent kept as the person's own
     email: `NEWSLETTER-SETUP.md`, "Signup enquiries".
-- **Production status:** off. The code shipped to `main` with PR #23 on Oct 22, 2026
-  (`ff46a89`, deploy `6ada6341dbc60eb37fa3173d`); production answers 503 and shows no band.
+- **Production status: live since Nov 26, 2026, 03:12 UTC.** Both flags are `true` in
+  Production only; the current deploy and rollback IDs are in "Resume Here". History: the code
+  shipped to `main` with PR #23 on Oct 22, 2026 (`ff46a89`, deploy `6ada6341dbc60eb37fa3173d`)
+  and stayed off, answering 503 with no band, until activation.
   - Per the owner on Oct 27, 2026: `MAILERLITE_API_KEY` (a production token) and
     `MAILERLITE_GROUP_ID` (**BrightPath Updates**) are set for **Production**, and the TEST
     values stay in Deploy Previews.
@@ -665,10 +719,11 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
     (email footers only; the website still shows no street address);
   - the welcome email is designed and tested (website button and footer checked);
   - the **"Simple welcome email"** automation is **active** on joining BrightPath Updates.
-- **Before launch:** check the confirmation-email footer and the automation trigger timing;
-  run one live signup → confirm → welcome test; clean up TEST; verify after the redeploy.
-  Details are in `NEWSLETTER-SETUP.md`, "Remaining checks before launch". The welcome email
-  can't be tested on a preview, because previews use the TEST group.
+- **Launch (done):** the live signup → confirm → welcome test passed after activation
+  (owner-reported), and launch verification passed on Nov 26 and Nov 27. Still open: recording
+  the individual email checks, and the TEST environment, which is kept by owner decision. See
+  "Outstanding maintenance" in "Resume Here". The welcome email can't be tested on a preview,
+  because previews use the TEST group.
 - **Verified end to end on Deploy Preview #23** (TEST group, Deploy-Preview-only variables).
   - Oct 21: a new address with a first name → confirmation email → Active, name saved; a
     known address was left untouched.
@@ -744,10 +799,10 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
 |---|---|---|---|---|
 | `CONTACT_SCRIPT_URL` | TEST deployment `/exec` | TEST deployment | new **production v2** deployment | Functions scope; must be a `script.google.com/macros/s/…/exec` URL (localhost allowed only under `netlify dev`) |
 | `CONTACT_SHARED_SECRET` | TEST secret | TEST secret | production secret (different) | Mark secret; must equal that script's `SHARED_SECRET` |
-| `NEWSLETTER_ENABLED` | unset / `false` | `true` only while testing | `false` until launch | Read by the function; still needs a **redeploy** to change |
-| `MAILERLITE_API_KEY` | unset | test only | set at launch | Mark secret; full account access |
-| `MAILERLITE_GROUP_ID` | unset | test only | set at launch | BrightPath Updates group |
-| `VITE_NEWSLETTER_ENABLED` | optional for review | `true` only while testing | `false` until launch | **Build time**; needs a rebuild |
+| `NEWSLETTER_ENABLED` | unset / `false` | `true` (TEST group; kept, Nov 27) | **`true`** since Nov 26, 2026 | Read by the function; still needs a **redeploy** to change |
+| `MAILERLITE_API_KEY` | unset | TEST token | production token | Mark secret; full account access |
+| `MAILERLITE_GROUP_ID` | unset | TEST group (`…8041`) | BrightPath Updates (`…5756`) | Never swap these |
+| `VITE_NEWSLETTER_ENABLED` | optional for review | `true` (kept, Nov 27) | **`true`** since Nov 26, 2026 | **Build time**; needs a rebuild |
 | `WORDPRESS_API_URL`, `WORDPRESS_APP_PASSWORD` | from the linked site | existing | existing | Unchanged |
 
 - **Placeholders** are in `.env.example`.
@@ -771,8 +826,9 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
 - **Remaining risk.** A scripted client can still post junk to the Sheet, or trigger
   MailerLite confirmation emails to addresses it doesn't own. That could hurt sender
   reputation.
-- **Before activating the newsletter publicly**, evaluate stronger protection (Netlify rate
-  limiting rules, or a challenge such as Cloudflare Turnstile) as its own decision.
+- **Stronger protection** (Netlify rate-limiting rules, or a challenge such as Cloudflare
+  Turnstile) was deferred by the owner until after launch. The newsletter went live on Nov 26,
+  2026 without it. It's still open as its own decision ("Outstanding maintenance", item 5).
 
 ### Content and legal pages (on the feature branch)
 
@@ -1006,8 +1062,8 @@ pixel-identical throughout (maxDelta 0).
   `mode: 'no-cors'`, so it can't read the reply. Contact form v2 (on the feature branch)
   fixes this. Until it ships, the Sheet and the `contact@` inbox are the source of truth.
 - **The function rate limits are per instance (best-effort)**, and no-Origin requests are
-  allowed. Evaluate stronger abuse protection before the newsletter is activated publicly.
-  See "Abuse-protection limits".
+  allowed. Stronger abuse protection was deferred past launch (newsletter live Nov 26, 2026).
+  See "Abuse-protection limits" and "Outstanding maintenance", item 5.
 - **Pre-existing lint**: `netlify/functions/get-case-studies.ts:178` unused `_context`
   (error) and `src/components/ui/GuidingLight.tsx:230` missing hook dependency (warning).
   Both predate this work and were left alone.
@@ -1078,9 +1134,16 @@ pixel-identical throughout (maxDelta 0).
 
 ## Commit History (Recent)
 
-**Newer `main` history (Oct 21 – Nov 16, 2026), most recent first:**
-- `4974213` - Merge PR #26: known-address group logging + signup-enquiry procedure (live,
-  deploy `6afb454209385463bd75d2d0`)
+**Newer `main` history (Oct 21 – Nov 27, 2026), most recent first:**
+- `b7526f6` - Merge PR #29: rollback docs after the Reviews fix `[skip netlify]` (built
+  nothing; production stays on `6b09c7be…`)
+- `0047d2e` - Merge PR #28: mobile Reviews link → `/reviews`, 301 `/review` → `/reviews`,
+  navigation regression tests (live, deploy `6b09c7be81d23d577cc9be3c`, Nov 27, 2026)
+- `42b847e` - Merge PR #27: business social links, Contact page surface-based gold, launch docs
+  (deploy `6b07a2691286132cf6f47cc2` flags off, Nov 26 03:08 UTC; then the newsletter
+  activation deploy `6b07a38fd4a87a8d14616ced` flags on, 03:12 UTC)
+- `4974213` - Merge PR #26: known-address group logging + signup-enquiry procedure (deploy
+  `6afb454209385463bd75d2d0`)
 - `d594690` - Merge PR #25: welcome-email policy sentence, `LAST_UPDATED` October 27, 2026
 - `ff46a89` - PR #23: newsletter launch hardening + artwork band (flags off)
 - `180cec7` - PR #24: prerender hero race fix

@@ -1,22 +1,28 @@
 # The BrightPath Update (MailerLite) — Setup and Launch
 
-**Status:** **Off in production.** Nothing appears on the live site and the production function
-refuses all signups (503).
+**Status: LIVE in production since Nov 26, 2026, 03:12 UTC.** The footer band appears on
+every page, and new signups go to **BrightPath Updates** with double opt-in, then the welcome
+email. Current focus: subscriber acquisition and the inaugural edition.
 
-- **Code:** the launch hardening (no profile overwrites, no enumeration, required Origin,
-  minimum submission time, tests) is **on `main`**. It was merged with PR #23 on Oct 22, 2026
-  (`ff46a89`, production deploy `6ada6341dbc60eb37fa3173d`).
-- **Production MailerLite credentials are set**, but both activation flags are still unset.
-- **Signups verified against live MailerLite on Deploy Preview #23** (TEST group). See
-  "Test log".
-- **Not yet launched:** see "Remaining checks before launch" under "Launch checklist".
-- **Production signups proven** on Oct 27, 2026 (see "Test log").
-- **Nov 16, 2026 window explained** (verified Nov 25). The test address had been confirmed in
-  the TEST group on Oct 21, then **Deleted** in MailerLite. Submitting it again **restored** the
-  old record: still Active, with its Oct 21 opt-in and no new confirmation. MailerLite then added
-  it to BrightPath Updates, and the welcome email went out. This is how MailerLite behaves, not
-  a code fault. The rule that follows: **only ever Delete Unconfirmed subscribers** (see
-  "Deleted subscribers are restored, not recreated").
+- **Activation:** `NEWSLETTER_ENABLED` and `VITE_NEWSLETTER_ENABLED` were set to `true` in the
+  **Production context only**, followed by one production deploy (`6b07a38fd4a87a8d14616ced`).
+  Deploy previews keep the TEST group.
+- **Final manual subscription test: passed** (owner-reported, after activation), with a
+  genuinely new address through the live footer form. See "Test log".
+- **Welcome email redesigned** by the owner after launch (owner-reported). The "Simple welcome
+  email" automation is still active.
+- **Current production deploy and rollback options:** "Rollback at any time" below.
+- **Real subscribers are being invited.** During any verification, never create, delete or
+  edit subscribers. A malformed request to the endpoint is the safe probe: 400 means on, 503
+  means off.
+- **Still open:** recording the individual email checks, the welcome re-entry setting, a
+  decision on the test accounts in BrightPath Updates, and the TEST environment, which is
+  retained by owner decision on Nov 27. See "Outstanding newsletter maintenance".
+- **History:**
+  - the launch-hardening code reached `main` with PR #23 (Oct 22, 2026, `ff46a89`);
+  - production signups were proven on Oct 27;
+  - the Nov 16 restore was explained on Nov 25 (**only ever Delete Unconfirmed subscribers**;
+    see "Deleted subscribers are restored, not recreated").
 
 ---
 
@@ -251,7 +257,8 @@ up — the same approach as the contact form's `CONTACT_*` variables.
    - `MAILERLITE_API_KEY` (a separate production token) and `MAILERLITE_GROUP_ID` (the
      **BrightPath Updates** group) are set for the **Production** context;
    - the TEST token and TEST group stay in **Deploy Previews**;
-   - `NEWSLETTER_ENABLED` and `VITE_NEWSLETTER_ENABLED` remain **unset** in Production.
+   - `NEWSLETTER_ENABLED` and `VITE_NEWSLETTER_ENABLED` stayed **unset** in Production until
+     activation on Nov 26, 2026 (step 11).
 6. ✅ **Welcome email** (recorded Oct 27, 2026):
    - designed and test-sent, with its website button and its footer (PO Box) checked;
    - the **"Simple welcome email"** automation is **active**, triggered when a subscriber
@@ -292,7 +299,9 @@ up — the same approach as the contact form's `CONTACT_*` variables.
    - ☐ Welcome email timing: this **can't be tested on a deploy preview**, because the
      automation watches **BrightPath Updates** and previews use the TEST group. It's covered by
      the live signup test below.
-10. ☐ **TEST cleanup:**
+10. ⏸ **TEST cleanup: deferred.** The owner decided on Nov 27, 2026 to **retain the TEST
+    environment and token** while the long-term testing strategy is decided separately. When
+    it's revisited:
     - revoke the TEST token in MailerLite;
     - **don't Delete Active TEST subscribers.** A Deleted Active address comes back Active if it's
       ever submitted again. Leave them in the TEST group (it's never mailed), or use **Forget**.
@@ -300,8 +309,9 @@ up — the same approach as the contact form's `CONTACT_*` variables.
     - then set the Deploy Preview `NEWSLETTER_ENABLED` to off (or remove the Deploy Preview
       newsletter variables). Otherwise later PR previews show a form that can't subscribe
       anyone.
-11. ☐ **Activate** (Production context only). Note the published flags-off deploy ID first:
-    it's the rollback target.
+11. ✅ **Activated Nov 26, 2026, 03:12 UTC** (Production context only). The flags-off
+    deploy at the time was `6b07a2691286132cf6f47cc2`, and the activation deploy was
+    `6b07a38fd4a87a8d14616ced`. See "Test log". The original procedure:
     - Set `NEWSLETTER_ENABLED=true` **and** `VITE_NEWSLETTER_ENABLED=true`, then **redeploy**
       production once. Nothing changes until the new deploy is live.
     - Run the final test ("Remaining checks", item 3) immediately.
@@ -311,10 +321,11 @@ up — the same approach as the contact form's `CONTACT_*` variables.
 
 ### Remaining checks before launch
 
-*Updated Nov 25, 2026.*
+*Updated Nov 27, 2026, after launch. Items still open are also listed under "Outstanding
+newsletter maintenance".*
 
-1. ☐ **Email verification items.** Each one stays open until it's verified **individually**
-   during the final test (item 3). API double opt-in sends MailerLite's own confirmation email,
+1. ◐ **Email verification items.** The final test passed (item 3), but these items weren't
+   recorded one by one, so each stays ☐ until it's confirmed and written down **individually**. API double opt-in sends MailerLite's own confirmation email,
    not the welcome email's template. No production confirmation email has been inspected yet:
    the Oct 27 one wasn't recorded, and Nov 16 sent none.
    - ☐ Confirmation email **sender** is `contact@brightpathwebstudio.org`.
@@ -334,13 +345,14 @@ up — the same approach as the contact form's `CONTACT_*` variables.
    - ☐ Check the automation's **re-entry** setting in MailerLite (read-only): would someone
      who leaves and re-joins the group get the welcome email again? It matters little under
      the rule "Delete only Unconfirmed".
-3. ☐ **Final signup-to-welcome test** with a **genuinely new address** (see the requirements
-   below), through the real footer form, right after activation (step 11).
+3. ✅ **Final signup-to-welcome test: passed** (owner-reported, after the Nov 26 activation),
+   with a genuinely new address through the live footer form. See "Test log".
 4. ☐ **Test accounts in BrightPath Updates.** Two Active owner test accounts, from Oct 27 and
-   the Nov 16 restore, will receive every campaign.
+   the Nov 16 restore, plus the final-test address, will receive every campaign. Decide before
+   the inaugural send.
    - Keep them as seed copies, or **remove them from the group**.
    - **Don't Delete them** (see "Deleted subscribers are restored, not recreated").
-5. ☐ **TEST environment cleanup** (step 10). It can wait until after launch.
+5. ⏸ **TEST environment cleanup** (step 10): **retained** by owner decision, Nov 27, 2026.
 
 **Final test requirements (genuinely new address):**
 - **The address.** It must never have existed **anywhere in this MailerLite account**: any
@@ -369,7 +381,8 @@ up — the same approach as the contact form's `CONTACT_*` variables.
   - no confirmation email within about 10 minutes;
   - the wrong group;
   - a 5xx reply.
-5. ☐ **Launch verification** after the production redeploy:
+5. ✅ **Launch verification** after the production redeploy, passed Nov 26 (deploy
+   `6b07a38f…`) and again Nov 27 (deploy `6b09c7be…`):
    - the band and form appear in both themes;
    - all 12 prerendered routes load;
    - the newsletter function no longer answers 503;
@@ -395,8 +408,26 @@ up — the same approach as the contact form's `CONTACT_*` variables.
   `VITE_NEWSLETTER_ENABLED=false` to hide the form), then **redeploy** so future deploys stay
   off. Changing the variables alone does nothing until a new deploy.
 
-**Before the first campaign:** set each campaign's tracking to match the policy (open tracking
-on, Google Analytics off).
+**Before the first campaign:** set each campaign's tracking to match the policy: opens and
+clicks on, Google Analytics off.
+
+### Outstanding newsletter maintenance
+
+Recorded Nov 27, 2026. Each item is its own future session and needs approval; the site-wide
+register is "Outstanding maintenance" in `CLAUDE.md`.
+
+1. **Record the individual email checks** ("Remaining checks", item 1): confirmation sender,
+   content and PO Box footer; SPF, DKIM and DMARC; the thank-you page; the welcome button and
+   footer. Use a real confirmation or welcome email already received; no new signup is needed.
+2. **Welcome automation re-entry setting**, a read-only check in MailerLite.
+3. **Test accounts in BrightPath Updates**: keep them as seed copies, or remove them from the
+   group (never Delete). Decide before the inaugural send.
+4. **TEST environment strategy** (retained for now). PR deploy previews show a working form
+   that subscribes into TEST, so never use a real address there.
+5. **Abuse protection** (Turnstile or Netlify rate-limit rules); see `CLAUDE.md`,
+   "Abuse-protection limits".
+6. **Monthly maintenance**: the first run is due in late December 2026 (see "Monthly
+   maintenance").
 
 ## Test log
 
@@ -499,6 +530,47 @@ What this establishes:
 
 Rule adopted: **Delete only Unconfirmed subscribers.** See "Deleted subscribers are restored,
 not recreated". No code change was needed.
+
+**Nov 26, 2026 — production activation.** Owner-approved; no test subscription was made by
+the agent.
+- **Pre-checks.**
+  - Production group ID `…5756` differs from the Deploy Preview TEST ID `…8041`.
+  - It has been unchanged since Oct 23, and both earlier production signups (Oct 27 and the
+    Nov 16 restore) landed in **BrightPath Updates**.
+  - `netlify env:get` returns a masked placeholder for the secret API key, so a CLI-side
+    MailerLite lookup answers 401. That isn't a fault.
+- **Change.** Both flags were set to `true` in the Production context only. Every other
+  context was unchanged.
+- **Deploy.** One production build of `42b847e`, deploy `6b07a38fd4a87a8d14616ced`, published
+  03:12:55 UTC.
+- **Verified:**
+  - the band on Home, About, Services and Contact, in both themes and at 375px;
+  - the endpoint: malformed request → 400 (so it's on), GET → 405, a foreign origin → 403;
+  - the contact form and its function: GET → 405, empty POST → 400;
+  - social links;
+  - all routes;
+  - no console errors.
+
+**Final manual subscription test — passed** (owner-reported). The owner ran it after
+activation, with a genuinely new address through the live footer form, per "Final test
+requirements". The address, timestamps and individual email checks weren't recorded here, so
+"Remaining checks", item 1 stays open until they're written down.
+
+**Welcome email redesign** (owner, after launch). The welcome email was redesigned in
+MailerLite. The "Simple welcome email" automation on joining BrightPath Updates is unchanged.
+The details of the new design aren't recorded here.
+
+**Nov 27, 2026 — production deploy `6b09c7be81d23d577cc9be3c`** (PR #28, `0047d2e`, published
+18:11:56 UTC; flags still `true`).
+- Re-verified without touching any subscriber:
+  - the band in both themes;
+  - malformed request → 400, foreign origin → 403;
+  - the production group is still `…5756`, and previews are still TEST `…8041`;
+  - the contact form;
+  - social links;
+  - no console errors;
+  - layout pixel-identical to `6b07a38f`.
+- PR #29 (docs) merged with `[skip netlify]`, so no deploy was built.
 
 **To disable in an emergency,** republish the last deploy built with the flags off. It takes
 effect immediately, with no build, and the function answers "unavailable" again. Then set
