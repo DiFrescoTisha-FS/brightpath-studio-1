@@ -380,6 +380,14 @@ up — the same approach as the contact form's `CONTACT_*` variables.
    Only then announce the newsletter.
 
 **Rollback at any time:**
+- **Known deploys** (updated Nov 27, 2026; replace only after a newer production deploy has
+  been verified):
+
+  | Deploy | Commit | Newsletter | Use it to |
+  |---|---|---|---|
+  | `6b07a38fd4a87a8d14616ced` | `42b847e` | **on** (flags `true`) | **Current known-good production deploy with subscriptions enabled.** Undo a bad later deploy while keeping signups open. |
+  | `6b07a2691286132cf6f47cc2` | `42b847e` | off (flags unset) | Turn subscriptions off instantly. Same code as above. |
+
 - **Instantly:** republish the last deploy built with the flags off. That restores its code
   and variable values with no build.
 - **Permanently:** set `NEWSLETTER_ENABLED` to anything except `true` (and

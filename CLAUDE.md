@@ -5,11 +5,18 @@
 **Goal:** launch the newsletter signup publicly and send the first campaign, the Thanksgiving
 edition (MailerLite).
 
-- **Production now** (verified Nov 25):
-  - `main` = `4974213` (PR #26 merge); the live deploy is **`6afb454209385463bd75d2d0`**.
-  - `NEWSLETTER_ENABLED` and `VITE_NEWSLETTER_ENABLED` are both **unset** in Production. The
-    function answers 503, no band shows, and contact GET answers 405.
-  - That deploy is the **rollback target**.
+- **Production now** (newsletter activated Nov 26, 2026 03:12 UTC; verified Nov 27):
+  - `main` = `42b847e` (PR #27 merge). The live deploy is
+    **`6b07a38fd4a87a8d14616ced`**, the **current known-good production deploy with newsletter
+    subscriptions enabled**.
+  - `NEWSLETTER_ENABLED` and `VITE_NEWSLETTER_ENABLED` are **`true` in Production only**.
+    The band shows, the function accepts signups, and contact GET answers 405.
+  - **Rollback targets** (`NEWSLETTER-SETUP.md`, "Rollback at any time"):
+    - a problem with a later deploy, newsletter staying on → republish `6b07a38fd4a87a8d14616ced`;
+    - turn subscriptions **off** → republish `6b07a2691286132cf6f47cc2` (same code, `42b847e`,
+      built with the flags unset), **and** blank both Production flags so a later build can't
+      turn them back on.
+  - Replace these IDs only after a newer production deploy has been verified.
 - **The Nov 16 mystery is solved** (verified Nov 25 from MailerLite activity and the Gmail
   welcome email).
   - The test address wasn't new. It had been confirmed in the TEST group on Oct 21, was

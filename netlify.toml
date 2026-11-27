@@ -43,6 +43,17 @@
   to = "/.netlify/functions/contact-inquiry"
   status = 200
 
+# Legacy Reviews address. The route was renamed review → reviews in Jan 2026,
+# but the mobile menu kept linking to /review until Nov 2026, so the old URL
+# may be bookmarked or shared. Permanent redirect, `force = true` so no file
+# can shadow it. Netlify matches /review/ with the same rule. Must stay above
+# the /* SPA fallback.
+[[redirects]]
+  from = "/review"
+  to = "/reviews"
+  status = 301
+  force = true
+
 # SPA fallback for every route without its own prerendered HTML — /services
 # and /reviews (both load live data from the functions above), plus any
 # unknown URL. app.html is a copy of the built shell with an empty #root,
