@@ -9,13 +9,17 @@ email. Current focus: subscriber acquisition and the inaugural edition.
   Deploy previews keep the TEST group.
 - **Final manual subscription test: passed** (owner-reported, after activation), with a
   genuinely new address through the live footer form. See "Test log".
-- **Welcome email redesigned** by the owner after launch (owner-reported). The "Simple welcome
-  email" automation is still active.
+- **Welcome email redesigned and verified** by the owner on Nov 27, 2026. The "Simple welcome
+  email" automation was reactivated and is confirmed active. See "Test log".
+- **Inaugural edition:** features Angel City Massage; proposed send date **December 1, 2026**,
+  pending final approval. Personalized invitations are underway and the announcement graphic
+  is finished.
 - **Current production deploy and rollback options:** "Rollback at any time" below.
 - **Real subscribers are being invited.** During any verification, never create, delete or
   edit subscribers. A malformed request to the endpoint is the safe probe: 400 means on, 503
   means off.
-- **Still open:** recording the individual email checks, the welcome re-entry setting, a
+- **Still open:** the confirmation email checks, DMARC, a live unsubscribe test, the welcome
+  re-entry setting, a
   decision on the test accounts in BrightPath Updates, and the TEST environment, which is
   retained by owner decision on Nov 27. See "Outstanding newsletter maintenance".
 - **History:**
@@ -324,20 +328,27 @@ up — the same approach as the contact form's `CONTACT_*` variables.
 *Updated Nov 27, 2026, after launch. Items still open are also listed under "Outstanding
 newsletter maintenance".*
 
-1. ◐ **Email verification items.** The final test passed (item 3), but these items weren't
-   recorded one by one, so each stays ☐ until it's confirmed and written down **individually**. API double opt-in sends MailerLite's own confirmation email,
+1. ◐ **Email verification items.** The final test passed (item 3). The welcome email was
+   verified item by item on Nov 27 (a test email, about 11:42 AM ET); the others stay ☐ until
+   they're confirmed and written down **individually**. API double opt-in sends MailerLite's own confirmation email,
    not the welcome email's template. No production confirmation email has been inspected yet:
    the Oct 27 one wasn't recorded, and Nov 16 sent none.
    - ☐ Confirmation email **sender** is `contact@brightpathwebstudio.org`.
    - ☐ Confirmation email **content** reads correctly: subject, wording, confirm button.
    - ☐ Confirmation email **footer** shows the company details and **PO Box 186, Edneyville, NC
      28727**.
-   - ☐ **SPF** = PASS (Gmail: ⋮ → Show original).
-   - ☐ **DKIM** = PASS.
-   - ☐ **DMARC** = PASS.
+   - ✅ **SPF** = PASS on the welcome test email, Nov 27 (Gmail: ⋮ → Show original). Not
+     recorded for the confirmation email.
+   - ✅ **DKIM** = PASS on the welcome test email, Nov 27. Not recorded for the confirmation
+     email.
+   - ☐ **DMARC** = PASS. Not reported in the Nov 27 check; still unverified.
    - ☐ **Confirmation thank-you page** appears after clicking confirm, and reads correctly.
-   - ☐ **Welcome email button** opens the website.
-   - ☐ **Welcome email footer** shows the PO Box and a working unsubscribe link.
+   - ✅ **Welcome email sender and reply-to** are `contact@brightpathwebstudio.org` (Nov 27).
+   - ✅ **Welcome email links**: Explore BrightPath, Facebook, LinkedIn and view-in-browser
+     open the right destinations (the owner clicked each one, Nov 27).
+   - ◐ **Welcome email footer**: ✅ the mailing address and the subscription explanation
+     (Nov 27). ☐ The unsubscribe link: only its placeholder was seen in the test email, so
+     the **live** unsubscribe is unverified. Don't test it on a real subscriber.
 2. ◐ **Automation trigger timing.**
    - ✅ Fires **after** confirmation, never before: about 6 s after confirming (Oct 27).
    - ✅ Also fires when an **Active** subscriber is added to BrightPath Updates (Nov 16 restore;
@@ -416,9 +427,10 @@ clicks on, Google Analytics off.
 Recorded Nov 27, 2026. Each item is its own future session and needs approval; the site-wide
 register is "Outstanding maintenance" in `CLAUDE.md`.
 
-1. **Record the individual email checks** ("Remaining checks", item 1): confirmation sender,
-   content and PO Box footer; SPF, DKIM and DMARC; the thank-you page; the welcome button and
-   footer. Use a real confirmation or welcome email already received; no new signup is needed.
+1. **Finish the email checks** ("Remaining checks", item 1): the confirmation email's
+   sender, content and PO Box footer; the thank-you page; DMARC; and a live unsubscribe test.
+   The welcome email was verified on Nov 27. Use emails already received where possible; never
+   unsubscribe a real subscriber to test it.
 2. **Welcome automation re-entry setting**, a read-only check in MailerLite.
 3. **Test accounts in BrightPath Updates**: keep them as seed copies, or remove them from the
    group (never Delete). Decide before the inaugural send.
@@ -428,6 +440,7 @@ register is "Outstanding maintenance" in `CLAUDE.md`.
    "Abuse-protection limits".
 6. **Monthly maintenance**: the first run is due in late December 2026 (see "Monthly
    maintenance").
+7. **Newsletter archive** on the website (future enhancement), for past editions.
 
 ## Test log
 
@@ -553,12 +566,29 @@ the agent.
 
 **Final manual subscription test — passed** (owner-reported). The owner ran it after
 activation, with a genuinely new address through the live footer form, per "Final test
-requirements". The address, timestamps and individual email checks weren't recorded here, so
-"Remaining checks", item 1 stays open until they're written down.
+requirements". The address and timestamps aren't recorded here. The welcome email checks were recorded
+on Nov 27 (below); the confirmation email checks, DMARC and a live unsubscribe test keep
+"Remaining checks", item 1 open.
 
-**Welcome email redesign** (owner, after launch). The welcome email was redesigned in
-MailerLite. The "Simple welcome email" automation on joining BrightPath Updates is unchanged.
-The details of the new design aren't recorded here.
+**Nov 27, 2026 — welcome email redesign** (owner).
+- Custom HTML in MailerLite's Code block: cream background `#FAF7F2`, navy `#1B2845`, deep gold
+  `#846300`, Lato body type, a gold star divider and an "Explore BrightPath" button.
+- Preheader: "Your journey to a brighter digital presence starts here."
+- Desktop and mobile previews reviewed and approved.
+- The "Simple welcome email" automation was reactivated and confirmed **active** on joining
+  BrightPath Updates.
+
+**Nov 27, 2026 — welcome email verification** (owner; test email received about 11:42 AM ET).
+
+| Check | Result |
+|---|---|
+| Sender and reply-to `contact@brightpathwebstudio.org` | ✅ |
+| SPF | ✅ PASS |
+| DKIM | ✅ PASS |
+| DMARC | ☐ not reported; unverified |
+| Mailing address and footer subscription explanation | ✅ |
+| Unsubscribe | ◐ placeholder present; live unsubscribe unverified |
+| Explore BrightPath, Facebook, LinkedIn, view-in-browser links | ✅ the owner clicked each one and they worked |
 
 **Nov 27, 2026 — production deploy `6b09c7be81d23d577cc9be3c`** (PR #28, `0047d2e`, published
 18:11:56 UTC; flags still `true`).

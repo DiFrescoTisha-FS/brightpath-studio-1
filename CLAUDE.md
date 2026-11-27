@@ -15,8 +15,21 @@ BrightPath Update (MailerLite). No application changes are planned for this phas
   - **Final manual subscription test: passed** (owner-reported, after activation). It used a
     genuinely new address through the live footer form. The details are in
     `NEWSLETTER-SETUP.md`, "Test log".
-  - **Welcome email redesigned** by the owner after launch (owner-reported). The "Simple welcome
-    email" automation stays active on joining BrightPath Updates.
+  - **Welcome email redesigned** by the owner on **Nov 27, 2026**:
+    - custom HTML in MailerLite's Code block; cream `#FAF7F2`, navy `#1B2845`, deep gold
+      `#846300`, Lato body type;
+    - a gold star divider and an "Explore BrightPath" button;
+    - preheader: "Your journey to a brighter digital presence starts here.";
+    - desktop and mobile previews reviewed and approved;
+    - the "Simple welcome email" automation was reactivated and confirmed **active** on joining
+      BrightPath Updates.
+  - **Welcome email verified** (test email, about 11:42 AM ET, Nov 27):
+    - sender and reply-to `contact@brightpathwebstudio.org`; SPF and DKIM PASS;
+    - mailing address and the footer's subscription explanation;
+    - the Explore BrightPath, Facebook, LinkedIn and view-in-browser links (the owner clicked
+      each one);
+    - **still unverified:** DMARC (not reported), and whether the unsubscribe link works live
+      (only the placeholder was seen in the test email).
   - Real subscribers are being invited. **Never create, delete or edit subscribers** during
     verification. Probe the endpoint only with a malformed request: a 400 means it's on, a 503
     means it's off.
@@ -76,6 +89,11 @@ BrightPath Update (MailerLite). No application changes are planned for this phas
   - the site-wide gradient review deferred;
   - personal GitHub/LinkedIn on About stay as they are;
   - fresh-branch + PR workflow, and never merge without approval.
+- **Business priorities (Nov 27, 2026):**
+  - personalized subscriber invitations are underway;
+  - the newsletter announcement graphic is finished;
+  - the inaugural edition features **Angel City Massage**;
+  - proposed send date **December 1, 2026**, pending the owner's final approval.
 - **Environment note.** The repo lives on the iCloud-synced Desktop, set to **Keep Downloaded**
   (Nov 25). If the CLI looks hung, check for offloaded files first (see auto-memory
   `icloud-desktop-offloading.md`).
@@ -84,10 +102,13 @@ BrightPath Update (MailerLite). No application changes are planned for this phas
 ### Outstanding maintenance (each is its own future session; nothing here is approved yet)
 
 Newsletter and email:
-1. **Record the individual email checks** from the final test: confirmation email sender,
-   content and PO Box footer; SPF, DKIM and DMARC = PASS; the thank-you page; the welcome
-   button and footer. The test passed, but these items weren't individually recorded (see
-   `NEWSLETTER-SETUP.md`, "Remaining checks").
+1. **Finish the email checks.** The welcome email was verified on Nov 27 (sender, reply-to,
+   SPF, DKIM, footer, links). Still open:
+   - the **confirmation** email's sender, content and PO Box footer, and the thank-you page;
+   - **DMARC** (not reported);
+   - a **live unsubscribe** test, which must not use a real subscriber.
+
+   See `NEWSLETTER-SETUP.md`, "Remaining checks".
 2. **Welcome automation re-entry setting**: a read-only check in MailerLite.
 3. **Owner test accounts in BrightPath Updates.** There are two Active ones (Oct 27, and the
    Nov 16 restore), plus the final-test address. Decide before the first send whether they stay
@@ -129,6 +150,10 @@ Environment:
     `public/videos/video-1 2.mp4`, `… 2` / `… 3` folders in `dist/` and `.netlify/`), with
     approval.
 16. **Move the repo out of iCloud.**
+
+Future enhancement:
+
+17. **Newsletter archive** on the website, for past editions of The BrightPath Update.
 
 ## Project Overview
 Portfolio website for Tisha Di Fresco / BrightPath Web Studio LLC. Built with React + TypeScript + Vite + Tailwind CSS + Framer Motion.
@@ -717,11 +742,13 @@ Browser → `POST /api/contact-inquiry` (Netlify Function) → Apps Script v2 (`
   - the sending domain `brightpathwebstudio.org` is authenticated;
   - the company details use the official mailing address **PO Box 186, Edneyville, NC 28727**
     (email footers only; the website still shows no street address);
-  - the welcome email is designed and tested (website button and footer checked);
+  - the welcome email is designed and tested (website button and footer checked); it was
+    redesigned and re-verified on Nov 27, 2026 (see "Resume Here");
   - the **"Simple welcome email"** automation is **active** on joining BrightPath Updates.
 - **Launch (done):** the live signup → confirm → welcome test passed after activation
-  (owner-reported), and launch verification passed on Nov 26 and Nov 27. Still open: recording
-  the individual email checks, and the TEST environment, which is kept by owner decision. See
+  (owner-reported), and launch verification passed on Nov 26 and Nov 27. The welcome email was
+  re-verified on Nov 27. Still open: the confirmation email checks, DMARC, a live unsubscribe
+  test, and the TEST environment, which is kept by owner decision. See
   "Outstanding maintenance" in "Resume Here". The welcome email can't be tested on a preview,
   because previews use the TEST group.
 - **Verified end to end on Deploy Preview #23** (TEST group, Deploy-Preview-only variables).
